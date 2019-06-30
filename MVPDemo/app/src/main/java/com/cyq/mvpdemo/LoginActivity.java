@@ -2,7 +2,6 @@ package com.cyq.mvpdemo;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -37,13 +36,12 @@ public class LoginActivity extends BaseView<LoginPresenter, LoginContract.View> 
     public LoginContract.View getContract() {
         return new LoginContract.View<UserInfo>() {
             @Override
-            public Void handlerResult(UserInfo userInfo) {
+            public void handlerResult(UserInfo userInfo) {
                 if (userInfo != null) {
                     Toast.makeText(LoginActivity.this, userInfo.toString(), Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(LoginActivity.this, "登录失败！", Toast.LENGTH_SHORT).show();
                 }
-                return null;
             }
         };
     }

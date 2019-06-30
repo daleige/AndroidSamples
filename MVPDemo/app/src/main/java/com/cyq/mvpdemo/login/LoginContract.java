@@ -14,7 +14,7 @@ public interface LoginContract {
 
     interface View<T extends BaseEntity> {
         //真实项目中们，请求结果往往是JavaBean
-        Void handlerResult(T t);
+        void handlerResult(T t);
     }
 
     interface Presenter<T extends BaseEntity> {

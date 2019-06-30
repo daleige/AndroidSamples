@@ -13,7 +13,7 @@ public abstract class BasePresenter<V extends BaseView, M extends BaseModel, CON
     private WeakReference<V> vWeakReference;
 
     public BasePresenter() {
-        this.m = getModel();
+        m = getModel();
     }
 
     public void bindView(V v) {
