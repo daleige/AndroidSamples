@@ -17,9 +17,29 @@ public class LoginPresenter extends BasePresenter<LoginActivity, LoginModel,
         return new LoginContract.Presenter<UserInfo>() {
             @Override
             public void requestLogin(String name, String pwd) {
-                //三种风格
+                //P层三种风格
                 try {
-                    m.getContract().executeLogin(name,pwd);
+                    //第一种：P层不做事情，只做转发，交给M层做
+                    m.getContract().executeLogin(name, pwd);
+
+                    //第二种：让功能模块做(Library:下载，请求，图片加载等功能模块)
+                    //HttpEngine httpEngine = new HttpEngine<>(LoginPresenter.this);
+                    //httpEngine.post(name, pwd);
+
+                    //第三种：P层自己处理(google MVP samples就是这种)
+                    /*if ("zhangsan".equalsIgnoreCase(name) && "123456".equalsIgnoreCase(pwd)) {
+                        responseResult(new UserInfo("腾讯", "马化腾"));
+                    } else {
+                        responseResult(null);
+                    }*/
+
+                    //内存泄漏测试
+                    /*new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            SystemClock.sleep(60000);
+                        }
+                    }).start();*/
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
