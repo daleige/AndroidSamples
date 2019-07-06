@@ -1,6 +1,7 @@
 package com.cyq.ninegridview.nine_grid;
 
 import android.content.Context;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -52,10 +53,13 @@ public class NineGridView extends FrameLayout {
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             recyclerView.setAdapter(typeOneAdapter);
         } else if (datas.size() <= 4) {
-
-
+            TypeTowAdapter typeTowAdapter = new TypeTowAdapter(getContext(), datas);
+            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+            recyclerView.setAdapter(typeTowAdapter);
         } else if (datas.size() <= 9) {
-
+            TypeTowAdapter typeTowAdapter = new TypeTowAdapter(getContext(), datas);
+            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+            recyclerView.setAdapter(typeTowAdapter);
         }
     }
 }
