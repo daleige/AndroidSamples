@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.cyq.ninegridview.nine_grid.NineGridView;
+
 import java.util.List;
 
 /**
@@ -43,12 +45,12 @@ public class IndexAdapter extends RecyclerView.Adapter<IndexAdapter.MyViewHolder
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView titleTv;
-        RecyclerView nineGridViewRv;
+        NineGridView nineGridViewRv;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             titleTv = itemView.findViewById(R.id.tv_title);
-            nineGridViewRv = itemView.findViewById(R.id.rv_nine_grid);
+            nineGridViewRv = itemView.findViewById(R.id.nine_grid_view);
         }
     }
 }
