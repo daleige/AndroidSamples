@@ -55,10 +55,12 @@ public class NineGridView extends FrameLayout {
         } else if (datas.size() <= 4) {
             TypeTowAdapter typeTowAdapter = new TypeTowAdapter(getContext(), datas);
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+//            recyclerView.addItemDecoration(new SpaceItemDecoration());
             recyclerView.setAdapter(typeTowAdapter);
         } else if (datas.size() <= 9) {
             TypeTowAdapter typeTowAdapter = new TypeTowAdapter(getContext(), datas);
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+//            recyclerView.addItemDecoration(new SpaceItemDecoration());
             recyclerView.setAdapter(typeTowAdapter);
         }
     }

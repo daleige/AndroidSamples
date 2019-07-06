@@ -34,7 +34,7 @@ public class TypeOneAdapter extends RecyclerView.Adapter<TypeOneAdapter.TypeOneV
 
     @Override
     public void onBindViewHolder(@NonNull TypeOneViewHolder holder, int i) {
-        Glide.with(mContext).load(path).into(holder.imageView);
+        Glide.with(mContext).load(path).placeholder(R.mipmap.ic_launcher).into(holder.imageView);
     }
 
     @Override

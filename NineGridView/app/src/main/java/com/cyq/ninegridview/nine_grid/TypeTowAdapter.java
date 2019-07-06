@@ -36,7 +36,7 @@ public class TypeTowAdapter extends RecyclerView.Adapter<TypeTowAdapter.TypeTowV
 
     @Override
     public void onBindViewHolder(@NonNull TypeTowViewHolder holder, int i) {
-        Glide.with(mContext).load(list.get(i)).into(holder.squareImageView);
+        Glide.with(mContext).load(list.get(i)).placeholder(R.mipmap.ic_launcher).into(holder.squareImageView);
     }
 
     @Override

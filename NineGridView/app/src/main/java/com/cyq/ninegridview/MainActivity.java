@@ -25,9 +25,9 @@ public class MainActivity extends AppCompatActivity {
     private void initView() {
         recyclerView = findViewById(R.id.recyclerview);
         dates = new ArrayList<>();
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 1000; i++) {
             List<String> paths = new ArrayList<>();
-            for (int j = 0; j <= i; j++) {
+            for (int j = 0; j <= i % 9; j++) {
                 paths.add(img);
             }
             dates.add(paths);
