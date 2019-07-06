@@ -1,6 +1,7 @@
 package com.cyq.ninegridview.nine_grid;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -47,8 +48,11 @@ public class NineGridView extends FrameLayout {
     public void setData(List<String> datas) {
         this.datas = datas;
         if (datas.size() == 1) {
-
+            TypeOneAdapter typeOneAdapter = new TypeOneAdapter(getContext(), datas.get(0));
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.setAdapter(typeOneAdapter);
         } else if (datas.size() <= 4) {
+
 
         } else if (datas.size() <= 9) {
 

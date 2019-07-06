@@ -36,6 +36,7 @@ public class IndexAdapter extends RecyclerView.Adapter<IndexAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int i) {
         holder.titleTv.setText(i + 1 + "张图片");
+        holder.nineGridViewRv.setData(dates.get(i));
     }
 
     @Override
