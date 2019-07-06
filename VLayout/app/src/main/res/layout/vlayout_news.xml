@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhiteBg"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingBottom="8dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="8dp">
+
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_news" />
+
+    <View
+        android:layout_width="1px"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+
+            <com.sunfusheng.marqueeview.MarqueeView
+                android:id="@+id/marqueeView1"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_marginLeft="6dp"
+                app:mvAnimDuration="1000"
+                app:mvDirection="bottom_to_top"
+                app:mvInterval="3000"
+                app:mvSingleLine="true"
+                app:mvTextColor="#666"
+                app:mvTextSize="12sp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.sunfusheng.marqueeview.MarqueeView
+                android:id="@+id/marqueeView2"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_marginLeft="6dp"
+                app:mvAnimDuration="1000"
+                app:mvDirection="bottom_to_top"
+                app:mvInterval="5000"
+                app:mvSingleLine="false"
+                app:mvTextColor="#666"
+                app:mvTextSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
