@@ -53,16 +53,16 @@ public class NineGridViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int type) {
         if (type == ITEM_TYPE_ONE) {
-            View view = LayoutInflater.from(mContext).inflate(R.layout.grid_img_auto_size,
+            View view = LayoutInflater.from(mContext).inflate(R.layout.nine_grid_img_auto_size,
                     viewGroup,
                     false);
             return new TypeOneViewHolder(view);
         } else if (type == ITEM_TYPE_TOW) {
-            View view = LayoutInflater.from(mContext).inflate(R.layout.grid_img_square, viewGroup,
+            View view = LayoutInflater.from(mContext).inflate(R.layout.nine_grid_img_square, viewGroup,
                     false);
             return new TypeTowViewHolder(view);
         } else if (type == ITEM_TYPE_THREE) {
-            View view = LayoutInflater.from(mContext).inflate(R.layout.grid_img_square, viewGroup,
+            View view = LayoutInflater.from(mContext).inflate(R.layout.nine_grid_img_square, viewGroup,
                     false);
             return new TypeThreeViewHolder(view);
         }
