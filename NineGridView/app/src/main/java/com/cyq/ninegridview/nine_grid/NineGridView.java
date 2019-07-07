@@ -53,15 +53,17 @@ public class NineGridView extends FrameLayout {
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             recyclerView.setAdapter(typeOneAdapter);
         } else if (datas.size() == 4 || datas.size() == 2) {
+            recyclerView.getLayoutParams().width = getWidth() * 2 / 3;
             TypeTowAdapter typeTowAdapter = new TypeTowAdapter(getContext(), datas);
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 //            recyclerView.addItemDecoration(new SpaceItemDecoration());
             recyclerView.setAdapter(typeTowAdapter);
         } else if (datas.size() <= 9) {
-            TypeTowAdapter typeTowAdapter = new TypeTowAdapter(getContext(), datas);
+            recyclerView.getLayoutParams().width = getWidth();
+            TypeThreeAdapter typeThreeAdapter = new TypeThreeAdapter(getContext(), datas);
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
 //            recyclerView.addItemDecoration(new SpaceItemDecoration());
-            recyclerView.setAdapter(typeTowAdapter);
+            recyclerView.setAdapter(typeThreeAdapter);
         }
     }
 }

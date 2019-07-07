@@ -12,6 +12,10 @@ import com.cyq.ninegridview.R;
 
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
+import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
+
 /**
  * Create by 陈扬齐
  * Create on 2019-07-07
@@ -36,7 +40,10 @@ public class TypeTowAdapter extends RecyclerView.Adapter<TypeTowAdapter.TypeTowV
 
     @Override
     public void onBindViewHolder(@NonNull TypeTowViewHolder holder, int i) {
-        Glide.with(mContext).load(list.get(i)).placeholder(R.mipmap.ic_launcher).into(holder.squareImageView);
+        Glide.with(mContext).load(list.get(i)).placeholder(R.mipmap.ic_launcher)
+                .apply(bitmapTransform(new RoundedCornersTransformation(30, 0,
+                        RoundedCornersTransformation.CornerType.ALL)))
+                .into(holder.squareImageView);
     }
 
     @Override
