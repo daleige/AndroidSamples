@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="NineGridView">
+        <attr name="nine_grid_item_gap" format="dimension" />item之间间隔
+        <attr name="nine_grid_round_size" format="dimension" />图片圆角半径
+    </declare-styleable>
+</resources>

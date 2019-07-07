@@ -26,6 +26,8 @@ public class TypeOneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private final int ITEM_TYPE_TOW = 2;
     private final int ITEM_TYPE_THREE = 3;
 
+    private int roundSize;//圆角大小 单位px
+
     private Context mContext;
     private List<String> paths;
 
@@ -42,9 +44,10 @@ public class TypeOneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return 0;
     }
 
-    public TypeOneAdapter(Context mContext, List<String> paths) {
+    public TypeOneAdapter(Context mContext, List<String> paths, int roundSize) {
         this.mContext = mContext;
         this.paths = paths;
+        this.roundSize = roundSize;
     }
 
     @NonNull
@@ -71,17 +74,17 @@ public class TypeOneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int i) {
         if (holder instanceof TypeOneViewHolder) {
             Glide.with(mContext).load(paths.get(i)).placeholder(R.mipmap.ic_launcher)
-                    .apply(bitmapTransform(new RoundedCornersTransformation(30, 0,
+                    .apply(bitmapTransform(new RoundedCornersTransformation(roundSize, 0,
                             RoundedCornersTransformation.CornerType.ALL)))
                     .into(((TypeOneViewHolder) holder).imageView);
         } else if (holder instanceof TypeTowViewHolder) {
             Glide.with(mContext).load(paths.get(i)).placeholder(R.mipmap.ic_launcher)
-                    .apply(bitmapTransform(new RoundedCornersTransformation(30, 0,
+                    .apply(bitmapTransform(new RoundedCornersTransformation(roundSize, 0,
                             RoundedCornersTransformation.CornerType.ALL)))
                     .into(((TypeTowViewHolder) holder).squareImageView);
         } else if (holder instanceof TypeThreeViewHolder) {
             Glide.with(mContext).load(paths.get(i)).placeholder(R.mipmap.ic_launcher)
-                    .apply(bitmapTransform(new RoundedCornersTransformation(30, 0,
+                    .apply(bitmapTransform(new RoundedCornersTransformation(roundSize, 0,
                             RoundedCornersTransformation.CornerType.ALL)))
                     .into(((TypeThreeViewHolder) holder).squareImageView);
         }
