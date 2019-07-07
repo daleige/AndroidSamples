@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import com.cyq.ninegridview.R;
@@ -19,7 +20,7 @@ import java.util.List;
  */
 public class NineGridView extends FrameLayout {
     private RecyclerView recyclerView;
-    private List<String> datas;
+    private View placeholderView;
 
     public NineGridView(Context context) {
         super(context);
@@ -39,6 +40,7 @@ public class NineGridView extends FrameLayout {
     private void init() {
         LayoutInflater.from(getContext()).inflate(R.layout.nine_grid_layout, this, true);
         recyclerView = findViewById(R.id.rv_nine_grid_list);
+        placeholderView = findViewById(R.id.placeholder_view);
     }
 
     /**
@@ -47,7 +49,6 @@ public class NineGridView extends FrameLayout {
      * @param datas
      */
     public void setData(List<String> datas) {
-        this.datas = datas;
         GridItemDecoration.Builder builder = new GridItemDecoration.Builder(getContext());
         builder.dividerHorSize = 4;
         builder.dividerVerSize = 4;
@@ -57,20 +58,18 @@ public class NineGridView extends FrameLayout {
             recyclerView.addItemDecoration(gridItemDecoration);
         }
 
+        TypeOneAdapter typeOneAdapter = new TypeOneAdapter(getContext(), datas);
         if (datas.size() == 1) {
-            TypeOneAdapter typeOneAdapter = new TypeOneAdapter(getContext(), datas.get(0));
+            placeholderView.setVisibility(GONE);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            recyclerView.setAdapter(typeOneAdapter);
         } else if (datas.size() == 2 || datas.size() == 4) {
-            recyclerView.getLayoutParams().width = getWidth() * 2 / 3;
-            TypeTowAdapter typeTowAdapter = new TypeTowAdapter(getContext(), datas);
+            placeholderView.setVisibility(VISIBLE);
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-            recyclerView.setAdapter(typeTowAdapter);
         } else if (datas.size() <= 9) {
-            recyclerView.getLayoutParams().width = getWidth();
-            TypeThreeAdapter typeThreeAdapter = new TypeThreeAdapter(getContext(), datas);
+            placeholderView.setVisibility(GONE);
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-            recyclerView.setAdapter(typeThreeAdapter);
         }
+
+        recyclerView.setAdapter(typeOneAdapter);
     }
 }
