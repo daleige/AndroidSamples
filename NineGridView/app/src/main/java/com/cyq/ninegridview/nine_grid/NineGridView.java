@@ -52,7 +52,7 @@ public class NineGridView extends FrameLayout {
             TypeOneAdapter typeOneAdapter = new TypeOneAdapter(getContext(), datas.get(0));
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             recyclerView.setAdapter(typeOneAdapter);
-        } else if (datas.size() <= 4) {
+        } else if (datas.size() == 4 || datas.size() == 2) {
             TypeTowAdapter typeTowAdapter = new TypeTowAdapter(getContext(), datas);
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 //            recyclerView.addItemDecoration(new SpaceItemDecoration());
