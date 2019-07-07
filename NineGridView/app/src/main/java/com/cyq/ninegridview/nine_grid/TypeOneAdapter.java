@@ -10,6 +10,10 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.cyq.ninegridview.R;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
+import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
+
 /**
  * Create by 陈扬齐
  * Create on 2019-07-07
@@ -34,7 +38,10 @@ public class TypeOneAdapter extends RecyclerView.Adapter<TypeOneAdapter.TypeOneV
 
     @Override
     public void onBindViewHolder(@NonNull TypeOneViewHolder holder, int i) {
-        Glide.with(mContext).load(path).placeholder(R.mipmap.ic_launcher).into(holder.imageView);
+        Glide.with(mContext).load(path).placeholder(R.mipmap.ic_launcher)
+                .apply(bitmapTransform(new RoundedCornersTransformation(30, 0,
+                        RoundedCornersTransformation.CornerType.ALL)))
+                .into(holder.imageView);
     }
 
     @Override

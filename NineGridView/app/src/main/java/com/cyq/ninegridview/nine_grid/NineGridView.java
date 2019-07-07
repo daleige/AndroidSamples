@@ -48,6 +48,11 @@ public class NineGridView extends FrameLayout {
      */
     public void setData(List<String> datas) {
         this.datas = datas;
+
+        GridItemDecoration.Builder builder = new GridItemDecoration.Builder(getContext());
+        builder.dividerHorSize = 4;
+        builder.dividerVerSize = 4;
+        GridItemDecoration gridItemDecoration = new GridItemDecoration(builder);
         if (datas.size() == 1) {
             TypeOneAdapter typeOneAdapter = new TypeOneAdapter(getContext(), datas.get(0));
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -56,13 +61,13 @@ public class NineGridView extends FrameLayout {
             recyclerView.getLayoutParams().width = getWidth() * 2 / 3;
             TypeTowAdapter typeTowAdapter = new TypeTowAdapter(getContext(), datas);
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-//            recyclerView.addItemDecoration(new SpaceItemDecoration());
+            recyclerView.addItemDecoration(gridItemDecoration);
             recyclerView.setAdapter(typeTowAdapter);
         } else if (datas.size() <= 9) {
             recyclerView.getLayoutParams().width = getWidth();
             TypeThreeAdapter typeThreeAdapter = new TypeThreeAdapter(getContext(), datas);
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-//            recyclerView.addItemDecoration(new SpaceItemDecoration());
+            recyclerView.addItemDecoration(gridItemDecoration);
             recyclerView.setAdapter(typeThreeAdapter);
         }
     }
