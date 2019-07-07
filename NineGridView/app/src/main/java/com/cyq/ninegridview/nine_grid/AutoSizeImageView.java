@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 /**
  * Create by 陈扬齐
  * Create on 2019-07-07
- * description:宽高自适应ImageView
+ * description:宽高自适应ImageView，用于只有一张图片的情况
  */
 public class AutoSizeImageView extends AppCompatImageView {
     public AutoSizeImageView(Context context) {

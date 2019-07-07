@@ -18,12 +18,12 @@ import java.util.List;
 /**
  * Create by 陈扬齐
  * Create on 2019-07-07
- * description:自定义九宫格View,基于组合布局
+ * description:自定义九宫格ImageView,基于组合布局
  */
 public class NineGridView extends FrameLayout {
     private RecyclerView recyclerView;
     private View placeholderView;
-    private TypeOneAdapter typeOneAdapter;
+    private NineGridViewAdapter nineGridViewAdapter;
     private int itemGap = 4;//item之间的间隔 单位：dp
     private int roundSize = 10;//圆角大小 单位：dp
 
@@ -68,7 +68,7 @@ public class NineGridView extends FrameLayout {
         if (recyclerView.getItemDecorationCount() == 0) {
             recyclerView.addItemDecoration(gridItemDecoration);
         }
-        typeOneAdapter = new TypeOneAdapter(getContext(), datas, roundSize);
+        nineGridViewAdapter = new NineGridViewAdapter(getContext(), datas, roundSize);
         if (datas.size() == 1) {
             placeholderView.setVisibility(GONE);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -79,6 +79,6 @@ public class NineGridView extends FrameLayout {
             placeholderView.setVisibility(GONE);
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         }
-        recyclerView.setAdapter(typeOneAdapter);
+        recyclerView.setAdapter(nineGridViewAdapter);
     }
 }

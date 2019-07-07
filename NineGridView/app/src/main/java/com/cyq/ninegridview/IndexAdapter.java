@@ -19,11 +19,11 @@ import java.util.List;
  */
 public class IndexAdapter extends RecyclerView.Adapter<IndexAdapter.MyViewHolder> {
     private Context mContext;
-    private List<List<String>> dates;
+    private List<List<String>> datas;
 
     public IndexAdapter(Context mContext, List<List<String>> dates) {
         this.mContext = mContext;
-        this.dates = dates;
+        this.datas = dates;
     }
 
     @NonNull
@@ -35,13 +35,14 @@ public class IndexAdapter extends RecyclerView.Adapter<IndexAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int i) {
-        holder.titleTv.setText((i + 1) % 4 + "张图片,「今日头条」党建引领 因村施策 石拐区村集体经济发展迸发新活力");
-        holder.nineGridViewRv.setData(dates.get(i));
+        holder.titleTv.setText((i + 1) % 4 + "任正非：今年挖来的“天才少年”薪酬比谷歌还高");
+        //NineGridView设置数据
+        holder.nineGridViewRv.setData(datas.get(i));
     }
 
     @Override
     public int getItemCount() {
-        return dates.size();
+        return datas.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

@@ -14,7 +14,7 @@ import android.view.View;
 /**
  * Create by 陈扬齐
  * Create on 2019-07-07
- * description:
+ * description:通过自定义itemDecoration方式这是item之间边距
  */
 public class GridItemDecoration extends RecyclerView.ItemDecoration {
 

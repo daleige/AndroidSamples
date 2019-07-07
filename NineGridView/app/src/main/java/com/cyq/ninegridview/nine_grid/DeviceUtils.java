@@ -5,7 +5,7 @@ import android.content.Context;
 /**
  * Create by 陈扬齐
  * Create on 2019-07-07
- * description:
+ * description:处理自定义属性dp转px
  */
 public class DeviceUtils {
 

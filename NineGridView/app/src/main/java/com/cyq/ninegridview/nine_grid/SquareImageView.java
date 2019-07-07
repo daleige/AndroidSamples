@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 /**
  * Create by 陈扬齐
  * Create on 2019-07-07
- * description:
+ * description:正方形ImageView
  */
 public class SquareImageView extends AppCompatImageView {
 

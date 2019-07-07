@@ -21,7 +21,7 @@ import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
  * Create on 2019-07-07
  * description:
  */
-public class TypeOneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class NineGridViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int ITEM_TYPE_ONE = 1;
     private final int ITEM_TYPE_TOW = 2;
     private final int ITEM_TYPE_THREE = 3;
@@ -44,7 +44,7 @@ public class TypeOneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return 0;
     }
 
-    public TypeOneAdapter(Context mContext, List<String> paths, int roundSize) {
+    public NineGridViewAdapter(Context mContext, List<String> paths, int roundSize) {
         this.mContext = mContext;
         this.paths = paths;
         this.roundSize = roundSize;
