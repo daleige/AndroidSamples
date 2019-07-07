@@ -21,5 +21,4 @@
         android:layout_marginEnd="20dp"
         app:nine_grid_item_gap="3dp"
         app:nine_grid_round_size="10dp" />
-
 </RelativeLayout>

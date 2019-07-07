@@ -24,8 +24,9 @@ public class NineGridView extends FrameLayout {
     private RecyclerView recyclerView;
     private View placeholderView;
     private NineGridViewAdapter nineGridViewAdapter;
-    private int itemGap = 4;//item之间的间隔 单位：dp
-    private int roundSize = 10;//圆角大小 单位：dp
+    private int itemGap = 4;//item之间的间隔,默认4dp 单位：dp
+    private int roundSize = 10;//圆角大小,默认10dp 单位：dp
+    private OnNineGridViewEvent onNineGridViewEvent;
 
     public NineGridView(Context context) {
         this(context, null);
@@ -56,7 +57,7 @@ public class NineGridView extends FrameLayout {
     /**
      * 设置数据，初始化Recyclerview
      *
-     * @param datas
+     * @param datas 图片地址列表
      */
     public void setData(List<String> datas) {
         GridItemDecoration.Builder builder = new GridItemDecoration.Builder(getContext());
@@ -69,6 +70,21 @@ public class NineGridView extends FrameLayout {
             recyclerView.addItemDecoration(gridItemDecoration);
         }
         nineGridViewAdapter = new NineGridViewAdapter(getContext(), datas, roundSize);
+        nineGridViewAdapter.setOnEventListener(new NineGridViewAdapter.OnEventListener() {
+            @Override
+            public void onClick(int position) {
+                if (onNineGridViewEvent != null) {
+                    onNineGridViewEvent.onClick(position);
+                }
+            }
+
+            @Override
+            public void onLongClick(int position) {
+                if (onNineGridViewEvent != null) {
+                    onNineGridViewEvent.onLongClick(position);
+                }
+            }
+        });
         if (datas.size() == 1) {
             placeholderView.setVisibility(GONE);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -80,5 +96,23 @@ public class NineGridView extends FrameLayout {
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         }
         recyclerView.setAdapter(nineGridViewAdapter);
+    }
+
+    /**
+     * 设置事件监听
+     *
+     * @param onNineGridViewEvent
+     */
+    public void setOnNineGridViewEvent(OnNineGridViewEvent onNineGridViewEvent) {
+        this.onNineGridViewEvent = onNineGridViewEvent;
+    }
+
+    /**
+     * 定义事件监听的回调
+     */
+    public interface OnNineGridViewEvent {
+        void onClick(int position);
+
+        void onLongClick(int position);
     }
 }

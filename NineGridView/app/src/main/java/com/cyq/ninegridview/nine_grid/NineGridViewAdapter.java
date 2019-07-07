@@ -27,10 +27,9 @@ public class NineGridViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private final int ITEM_TYPE_THREE = 3;
 
     private int roundSize;//圆角大小 单位px
-
     private Context mContext;
     private List<String> paths;
-
+    private OnEventListener onEventListener;
 
     @Override
     public int getItemViewType(int position) {
@@ -71,22 +70,77 @@ public class NineGridViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int i) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof TypeOneViewHolder) {
-            Glide.with(mContext).load(paths.get(i)).placeholder(R.mipmap.ic_launcher)
+            Glide.with(mContext).load(paths.get(position)).placeholder(R.mipmap.ic_launcher)
                     .apply(bitmapTransform(new RoundedCornersTransformation(roundSize, 0,
                             RoundedCornersTransformation.CornerType.ALL)))
                     .into(((TypeOneViewHolder) holder).imageView);
+            ((TypeOneViewHolder) holder).imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onEventListener != null) {
+                        onEventListener.onClick(position);
+                    }
+                }
+            });
+
+            ((TypeOneViewHolder) holder).imageView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (onEventListener != null) {
+                        onEventListener.onLongClick(position);
+                    }
+                    return false;
+                }
+            });
+
         } else if (holder instanceof TypeTowViewHolder) {
-            Glide.with(mContext).load(paths.get(i)).placeholder(R.mipmap.ic_launcher)
+            Glide.with(mContext).load(paths.get(position)).placeholder(R.mipmap.ic_launcher)
                     .apply(bitmapTransform(new RoundedCornersTransformation(roundSize, 0,
                             RoundedCornersTransformation.CornerType.ALL)))
                     .into(((TypeTowViewHolder) holder).squareImageView);
+            ((TypeTowViewHolder) holder).squareImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onEventListener != null) {
+                        onEventListener.onClick(position);
+                    }
+                }
+            });
+
+            ((TypeTowViewHolder) holder).squareImageView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (onEventListener != null) {
+                        onEventListener.onLongClick(position);
+                    }
+                    return false;
+                }
+            });
         } else if (holder instanceof TypeThreeViewHolder) {
-            Glide.with(mContext).load(paths.get(i)).placeholder(R.mipmap.ic_launcher)
+            Glide.with(mContext).load(paths.get(position)).placeholder(R.mipmap.ic_launcher)
                     .apply(bitmapTransform(new RoundedCornersTransformation(roundSize, 0,
                             RoundedCornersTransformation.CornerType.ALL)))
                     .into(((TypeThreeViewHolder) holder).squareImageView);
+            ((TypeThreeViewHolder) holder).squareImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onEventListener != null) {
+                        onEventListener.onClick(position);
+                    }
+                }
+            });
+
+            ((TypeThreeViewHolder) holder).squareImageView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (onEventListener != null) {
+                        onEventListener.onLongClick(position);
+                    }
+                    return false;
+                }
+            });
         }
 
     }
@@ -121,5 +175,18 @@ public class NineGridViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             super(itemView);
             squareImageView = itemView.findViewById(R.id.iv_square);
         }
+    }
+
+    public void setOnEventListener(OnEventListener onEventListener) {
+        this.onEventListener = onEventListener;
+    }
+
+    /**
+     * 点击事件
+     */
+    public interface OnEventListener {
+        void onClick(int position);
+
+        void onLongClick(int position);
     }
 }

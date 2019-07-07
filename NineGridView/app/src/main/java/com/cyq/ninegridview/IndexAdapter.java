@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cyq.ninegridview.nine_grid.NineGridView;
 
@@ -38,6 +39,17 @@ public class IndexAdapter extends RecyclerView.Adapter<IndexAdapter.MyViewHolder
         holder.titleTv.setText((i + 1) % 4 + "任正非：今年挖来的“天才少年”薪酬比谷歌还高");
         //NineGridView设置数据
         holder.nineGridViewRv.setData(datas.get(i));
+        holder.nineGridViewRv.setOnNineGridViewEvent(new NineGridView.OnNineGridViewEvent() {
+            @Override
+            public void onClick(int position) {
+                Toast.makeText(mContext, "item" + position + "点击", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onLongClick(int position) {
+                Toast.makeText(mContext, "item" + position + "长按", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
