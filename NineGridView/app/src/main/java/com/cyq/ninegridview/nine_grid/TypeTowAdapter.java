@@ -40,6 +40,7 @@ public class TypeTowAdapter extends RecyclerView.Adapter<TypeTowAdapter.TypeTowV
 
     @Override
     public void onBindViewHolder(@NonNull TypeTowViewHolder holder, int i) {
+        holder.squareImageView.getLayoutParams().width=320;
         Glide.with(mContext).load(list.get(i)).placeholder(R.mipmap.ic_launcher)
                 .apply(bitmapTransform(new RoundedCornersTransformation(30, 0,
                         RoundedCornersTransformation.CornerType.ALL)))
