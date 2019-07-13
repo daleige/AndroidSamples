@@ -1,48 +1,33 @@
-apply plugin: 'com.android.application'
-
-println("app hello gradle")
-println "$rootProject.ext.username"
-println "${username}"
+apply plugin: 'com.android.library'
 
 //复值与引用
 def androidId = rootProject.ext.androidId
-def appId = rootProject.ext.appId
 def support = rootProject.ext.dependencies
 def url = rootProject.ext.url
 
 android {
     compileSdkVersion androidId.compileSdkVersion
+
     defaultConfig {
-        applicationId appId.applicationId
         minSdkVersion androidId.minSdkVersion
         targetSdkVersion androidId.targetSdkVersion
         versionCode androidId.versionCode
         versionName androidId.versionName
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-    buildTypes {
-        debug {
-            buildConfigField("String", "debug", "\"${url.debug}\"")
-        }
 
+    buildTypes {
         release {
             minifyEnabled false
-            buildConfigField("String", "debug", "\"${url.release}\"")
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    //标准写法
-    //implementation group: 'com.android.support', name: 'appcompat-v7', version: '28.0.0'
-
-//    implementation support.appcompat
-//    implementation support.recyclerview
-//    implementation support.constraint
-
-    //最简洁的方式
-    support.each { k, v -> implementation v }
+    support.each{k,v -> implementation v}
 }

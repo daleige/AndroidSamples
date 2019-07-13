@@ -1,0 +1,33 @@
+ext {
+    username = "simon"
+
+    //简历Map存储，对象名。key都可以自定义，groovy糖果语法，非常灵活
+    androidId = [
+            compileSdkVersion:28,
+            applicationId   : "com.netease.modelar.gradle",
+            minSdkVersion   : 21,
+            targetSdkVersion: 28,
+            versionCode     : 1,
+            versionName     : "1.0",
+    ]
+
+    appId = [
+            applicationId: "com.netease.modelar.gradle",
+            library      : "com.netease.modular.library"
+    ]
+
+    isRelease = true
+    //生成/测试环境Url
+    url = [
+            "debug"  : "https://11.22.33.44/debug",
+            "release": "https://11.22.33.44/release"
+    ]
+
+    supportLibrary = "28.0.0"//${xxx}
+    //第三方库
+    dependencies = [
+            "appcompat"   : "com.android.support:appcompat-v7:${supportLibrary}",
+            "recyclerview": "com.android.support:recyclerview-v7:${supportLibrary}",
+            "constraint"  : "com.android.support.constraint:constraint-layout:1.1.3"
+    ]
+}
