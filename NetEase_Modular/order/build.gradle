@@ -1,18 +1,32 @@
-apply plugin: 'com.android.application'
+if (isRelease) {
+    //如果是发布版本时，各个模块都不能独立运行
+    apply plugin: 'com.android.library'
+} else {
+    apply plugin: 'com.android.application'
+}
+
+def rootAndroidId = rootProject.ext.androidId
+def appId = rootProject.ext.appId
+def support = rootProject.ext.dependencies
+
 
 android {
-    compileSdkVersion 28
-
-
+    compileSdkVersion rootAndroidId.compileSdkVersion
+    buildToolsVersion rootAndroidId.buildToolsVersion
     defaultConfig {
-        applicationId "com.netease.modular.order"
-        minSdkVersion 21
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
-
+        if (!isRelease) { // 如果是集成化模式，不能有applicationId
+            applicationId appId.order // 组件化模式能独立运行才能有applicationId
+        }
+        minSdkVersion rootAndroidId.minSdkVersion
+        targetSdkVersion rootAndroidId.targetSdkVersion
+        versionCode rootAndroidId.versionCode
+        versionName rootAndroidId.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+        // 这个方法接收三个非空的参数，第一个：确定值的类型，第二个：指定key的名字，第三个：传值（必须是String）
+        // 为什么需要定义这个？因为src代码中有可能需要用到跨模块交互，如果是组件化模块显然不行
+        // 切记：不能在android根节点，只能在defaultConfig或buildTypes节点下
+        buildConfigField("boolean", "isRelease", String.valueOf(isRelease))
     }
 
     buildTypes {
@@ -22,14 +36,29 @@ android {
         }
     }
 
+    // 配置资源路径，方便测试环境，打包不集成到正式环境
+//    sourceSets {
+//        main {
+//            if (!isRelease) {
+//                // 如果是组件化模式，需要单独运行时
+//                manifest.srcFile 'src/main/debug/AndroidManifest.xml'
+//            } else {
+//                // 集成化模式，整个项目打包apk
+//                manifest.srcFile 'src/main/AndroidManifest.xml'
+//                java {
+//                    // release 时 debug 目录下文件不需要合并到主工程
+//                    exclude '**/debug/**'
+//                }
+//            }
+//        }
+//    }
+
+
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    // 循环引入第三方库
+    support.each { k, v -> implementation v }
+    implementation project(':common') // 公共基础库
 }

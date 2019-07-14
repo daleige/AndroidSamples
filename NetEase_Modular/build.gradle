@@ -1,5 +1,8 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
+// 非常重要，根目录的build.gradle头部加入自定义gradle，相当于layout布局中include
+apply from: "config.gradle"
+
 buildscript {
     repositories {
         google()
