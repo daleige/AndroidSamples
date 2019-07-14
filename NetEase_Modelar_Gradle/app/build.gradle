@@ -19,7 +19,74 @@ android {
         versionCode androidId.versionCode
         versionName androidId.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        //开启分包
+        multiDexEnabled true
+        //设置分包配置
+        //multiDexKeepFile file('multidex-config.txt')
+
+        //将svg图片生成 指定维度的png图片
+        //vectorDrawables.generatedDensities('xhdpi','xxhdpi')
+        //使用support-v7兼容（5.0版本以上）
+        vectorDrawables.useSupportLibrary = true
+        //只保留指定和默认资源
+        resConfig('zh-rCH')
+
+        //配置so库CPU架构（真机：arm,模拟器：x86）
+        // x86 x86_64 mips mips64
+        ndk {
+            //真机
+            //abiFilters('armeabi', 'armeabi-v7')
+            //为了模拟器启动
+            abiFilters('x86', 'x86_64')
+        }
+
+        //源集 - 设置源集的属性，更改源集的Java目录或者自由目录等
+        sourceSets {
+            main {
+                if (!isRelease) {
+                    // 如果是组件化模式，需要单独运行时
+                    manifest.srcFile 'src/main/AndroidManifest.xml'
+                    java.srcDirs = ['src/main/java']
+                    res.srcDirs = ['src/main/res']
+                    resources.srcDirs = ['src/main/resources']
+                    aidl.srcDirs = ['src/main/aidl']
+                    assets.srcDirs = ['src/main/assets']
+                } else {
+                    //集成化模式，整个项目打包
+                    manifest.srcFile 'src/main/AndroidManifest.xml'
+                }
+            }
+        }
     }
+
+    //签名配置（隐形坑：必须写在buildTypes之前）
+    signingConfigs {
+        debug {
+            //windows系统默认debug签名证书存储路径
+            //storeFile file("C://Users/Administrator/.android/debug.keystore")
+            //Mac系统默认debug签名证书存储路径
+            storeFile file("~/.android/debug.keystore")
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+        }
+        release {
+            //签名证书文件
+            storeFile file("../netease.jks")
+            //签名证书的类型
+            storeType "netease"
+            //签名证书文件的密码
+            storePassword "net163"
+            //签名证书中密码别名
+            keyAlias "netease"
+            //签名证书中该秘钥的密码
+            keyPassword "net163"
+            //是否开启v2打包
+            v2SigningEnabled true
+        }
+    }
+
     buildTypes {
         debug {
             buildConfigField("String", "debug", "\"${url.debug}\"")
@@ -38,6 +105,9 @@ dependencies {
 
     //标准写法
     //implementation group: 'com.android.support', name: 'appcompat-v7', version: '28.0.0'
+
+    //简写
+    implementation 'com.android.support:appcompat-v7:28.0.0'
 
 //    implementation support.appcompat
 //    implementation support.recyclerview
