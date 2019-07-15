@@ -1,13 +1,17 @@
 package com.netease.modular.order;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
-public class Order_MainActivity extends AppCompatActivity {
+import com.netease.common.base.BaseActivity;
+import com.netease.common.utils.Cons;
+
+public class Order_MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.order_activity_main);
+        Log.e(Cons.TAG, "Order/Order_MainActivity");
     }
 }
