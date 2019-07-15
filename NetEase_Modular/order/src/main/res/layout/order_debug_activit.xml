@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Personal_MainActivity">
+    tools:context=".debug.Order_DebugActivity">
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="21dp"
         android:layout_gravity="center"
-        android:text="Personal正式环境首页" />
-
+        android:text="Order Debug首页" />
 </FrameLayout>
