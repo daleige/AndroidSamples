@@ -57,6 +57,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     // 循环引入第三方库
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     support.each { k, v -> implementation v }
     implementation project(':common') // 公共基础库
 }

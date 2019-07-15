@@ -2,6 +2,7 @@ if (isRelease) {
     //如果是发布版本时，各个模块都不能独立运行
     apply plugin: 'com.android.library'
 } else {
+
     apply plugin: 'com.android.application'
 }
 
