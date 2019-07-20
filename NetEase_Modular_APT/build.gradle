@@ -16,9 +16,12 @@ buildscript {
 
 allprojects {
     repositories {
+        maven {
+            url "http://maven.aliyun.com/nexus/content/groups/public/"
+        }
         google()
         jcenter()
-        
+        // 超级实用：某某影响，很多被墙，强烈推荐阿里云镜像更新
     }
 }
 
