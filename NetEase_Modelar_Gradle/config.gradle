@@ -1,7 +1,7 @@
 ext {
     username = "simon"
 
-    //简历Map存储，对象名。key都可以自定义，groovy糖果语法，非常灵活
+    //建立Map存储，对象名。key都可以自定义，groovy糖果语法，非常灵活
     androidId = [
             compileSdkVersion:28,
             applicationId   : "com.netease.modelar.gradle",

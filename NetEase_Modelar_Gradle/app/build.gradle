@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
-println("app hello gradle")
+//println("hello wrold")
+//println "hell Gradle"
 println "$rootProject.ext.username"
 println "${username}"
 
@@ -94,7 +95,7 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "debug", "\"${url.debug}\"")
+            buildConfigField("String",  "debug", "\"${url.debug}\"")
         }
 
         release {
