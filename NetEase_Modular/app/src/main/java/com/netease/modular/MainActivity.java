@@ -18,26 +18,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void jumpOrder(View view) {
-        try {
-            //类加载方式交互
-            Class targetClass = Class.forName("com.netease.modular.order.Order_MainActivity");
-            Intent intent = new Intent(this, targetClass);
-            intent.putExtra("name", "simon");
-            startActivity(intent);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+
     }
 
     public void jumpPersonal(View view) {
-        try {
-            //类加载方式交互
-            Class targetClass = Class.forName("com.netease.modular.personal.Personal_MainActivity");
-            Intent intent = new Intent(this, targetClass);
-            intent.putExtra("name", "simon");
-            startActivity(intent);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+
     }
 }
