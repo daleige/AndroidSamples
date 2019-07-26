@@ -3,4 +3,13 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+
+    <color name="colorTransparent">#00000000</color>
+    <color name="colorPageBg">#f2f4f5</color>
+    <color name="colorTheme">#ffce3d3a</color>
+    <color name="colorContent">#ff333333</color>
+    <color name="colorRateRed">#FB5B81</color>
+    <color name="colorWhite">#ffffff</color>
+    <color name="tabBackground">#777D7D7D</color>
 </resources>

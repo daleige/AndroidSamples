@@ -1,0 +1,26 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+    <item
+        android:id="@+id/action_icon"
+        android:icon="@drawable/seacher"
+        android:title=""
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/sort"
+        android:title="选择歌曲并排序"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_notifications"
+        android:icon="@drawable/track"
+        android:title="清空下载文件"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@drawable/handle"
+        android:orderInCategory="100"
+        android:title="举报"
+        app:showAsAction="never" />
+</menu>
