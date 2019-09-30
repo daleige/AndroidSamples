@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         Log.e(TAG, "模拟接口请求……验证通过，登录成功！");
     }
 
-    // 用户行为统计（友盟统计？！后台要求自己统计）
+    // 用户行为统计
     @ClickBehavior("我的专区")
     @LoginCheck
     public void area(View view) {
