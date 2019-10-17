@@ -2,19 +2,15 @@ package com.wangyi.musicplayer;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.os.PersistableBundle;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -29,8 +25,6 @@ import com.wangyi.musicplayer.ui.UIUtils;
 import com.wangyi.musicplayer.ui.ViewCalculateUtil;
 import com.wangyi.musicplayer.util.StatusBarUtil;
 import com.wangyi.musicplayer.view.MyNestedScrollView;
-
-import java.lang.reflect.Method;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
@@ -172,10 +166,10 @@ public class MainActivity extends AppCompatActivity {
         lv_header_contail = findViewById(R.id.lv_header_contail);
         header_image_item = findViewById(R.id.header_image_item);
 
-        ViewCalculateUtil.setViewLayoutParam(toolbar, 1080, 164, 0, 0, 0, 0);
-        ViewCalculateUtil.setViewLinearLayoutParam(rv_header_container,1080,770,164,0,0,0);
-        ViewCalculateUtil.setViewLayoutParam(toolbar,1080, 164, 0, 0, 0, 0);
-        ViewCalculateUtil.setViewLayoutParam(toolbar_bg,1080,164+UIUtils.getInstance().getSystemBarHeight(this),0,0,0,0);
+        ViewCalculateUtil.setViewLayoutParam(toolbar, 1080, 124, 0, 0, 0, 0);
+        ViewCalculateUtil.setViewLinearLayoutParam(rv_header_container,1080,770,124,0,0,0);
+        ViewCalculateUtil.setViewLayoutParam(toolbar,1080, 124, 0, 0, 0, 0);
+        ViewCalculateUtil.setViewLayoutParam(toolbar_bg,1080,124+UIUtils.getInstance().getSystemBarHeight(this),0,0,0,0);
         ViewCalculateUtil.setViewLayoutParam(header_bg, 1080, 850, 0, 0, 0, 0);
         ViewCalculateUtil.setViewLayoutParam(lv_header_detail, 1080, 380, 72, 0, 52, 0);
         ViewCalculateUtil.setViewLinearLayoutParam(header_image_item,380,380);

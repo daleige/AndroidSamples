@@ -9,7 +9,7 @@
 
     </style>
     <style name="Theme.Toolbar.Title">
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/colorWhite</item>
     </style>
     <style name="Theme.Toolbar" parent="ThemeOverlay.AppCompat.ActionBar"></style>

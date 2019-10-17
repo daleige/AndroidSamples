@@ -26,6 +26,11 @@ public class LoginModel extends BaseModel<LoginPresenter, LoginContract.Model> {
                     p.getContract().responseResult(null);
                 }
             }
+
+            @Override
+            public void exexteLogin(String str) {
+
+            }
         };
     }
 }

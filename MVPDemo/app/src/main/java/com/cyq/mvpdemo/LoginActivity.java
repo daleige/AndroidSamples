@@ -43,6 +43,11 @@ public class LoginActivity extends BaseView<LoginPresenter, LoginContract.View> 
                     Toast.makeText(LoginActivity.this, "登录失败！", Toast.LENGTH_SHORT).show();
                 }
             }
+
+            @Override
+            public void getDataResult(UserInfo userInfo) {
+
+            }
         };
     }
 

@@ -10,11 +10,15 @@ import com.cyq.mvpdemo.bean.BaseEntity;
 public interface LoginContract {
     interface Model {
         void executeLogin(String name, String pwd) throws Exception;
+
+        void exexteLogin(String str);
     }
 
     interface View<T extends BaseEntity> {
         //真实项目中们，请求结果往往是JavaBean
         void handlerResult(T t);
+
+        void getDataResult(T t);
     }
 
     interface Presenter<T extends BaseEntity> {
