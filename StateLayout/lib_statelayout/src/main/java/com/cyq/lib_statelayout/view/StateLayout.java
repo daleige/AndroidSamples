@@ -15,7 +15,7 @@ import com.cyq.lib_statelayout.state.LoadingStateManager;
  */
 public class StateLayout extends FrameLayout {
     private ErrorStateManager mErrorStateManager;
-    private LoadingStateManager mLoadingStatemanager;
+    private LoadingStateManager mLoadingStateManager;
 
     public StateLayout(Context context) {
         super(context, null);
@@ -35,7 +35,7 @@ public class StateLayout extends FrameLayout {
      */
     private void init() {
         mErrorStateManager = new ErrorStateManager();
-        mLoadingStatemanager = new LoadingStateManager();
+        mLoadingStateManager = new LoadingStateManager();
     }
 
     /**
@@ -53,11 +53,11 @@ public class StateLayout extends FrameLayout {
      * 展示加载中状态布局
      */
     public void showLoading() {
-        if (mLoadingStatemanager == null) {
-            mLoadingStatemanager = new LoadingStateManager();
+        if (mLoadingStateManager == null) {
+            mLoadingStateManager = new LoadingStateManager();
         }
-        removeView(mLoadingStatemanager.getView(getContext()));
-        addView(mLoadingStatemanager.getView(getContext()));
+        removeView(mLoadingStateManager.getView(getContext()));
+        addView(mLoadingStateManager.getView(getContext()));
     }
 
     /**
@@ -71,6 +71,18 @@ public class StateLayout extends FrameLayout {
         }
         if (mErrorStateManager != null) {
             mErrorStateManager.setRetryClickListener(onRetryClickListener);
+        }
+    }
+
+    /**
+     * 展示内容
+     */
+    public void showContent() {
+        if (mErrorStateManager != null) {
+            removeView(mErrorStateManager.getView(getContext()));
+        }
+        if (mLoadingStateManager != null) {
+            removeView(mLoadingStateManager.getView(getContext()));
         }
     }
 }
