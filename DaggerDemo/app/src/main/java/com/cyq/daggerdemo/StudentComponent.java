@@ -11,5 +11,5 @@ import dagger.Component;
 public interface StudentComponent {
 
     //注入到的目标
-    void injectMainActivity(MainActivity mainActivity);
+//    void inject(MainActivity mainActivity);
 }

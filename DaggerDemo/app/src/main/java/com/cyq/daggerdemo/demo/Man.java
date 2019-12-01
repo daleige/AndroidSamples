@@ -6,4 +6,5 @@ package com.cyq.daggerdemo.demo;
  * Description:
  */
 public class Man {
+    public  final String sex = "男人";
 }
