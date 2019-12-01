@@ -11,7 +11,7 @@ import com.cyq.lib_statelayout.interfaces.ILoadingState;
  * Author: ChenYangQi
  * Description:加载中状态管理类
  */
-public class LoadingManagerState implements ILoadingState {
+public class LoadingStateManager implements ILoadingState {
     private View mView;
 
     @Override

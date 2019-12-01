@@ -11,7 +11,7 @@ import com.cyq.lib_statelayout.interfaces.IErrorState;
  * Author: ChenYangQi
  * Description:错误状态管理类
  */
-public class ErrorManagerState implements IErrorState {
+public class ErrorStateManager implements IErrorState {
 
     private OnRetryClickListener mOnRetryClickListener;
     private View mView;
