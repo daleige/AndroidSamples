@@ -379,6 +379,7 @@
 	<dimen name="dp_360">778.5600dp</dimen>
 	<dimen name="dp_365">789.3733dp</dimen>
 	<dimen name="dp_370">800.1867dp</dimen>
+	<dimen name="dp_375">811.0000dp</dimen>
 	<dimen name="dp_400">865.0667dp</dimen>
 	<dimen name="dp_410">886.6933dp</dimen>
 	<dimen name="dp_422">912.6453dp</dimen>
