@@ -3,6 +3,7 @@ package com.cyq.tbs;
 import android.app.Application;
 
 import com.tencent.smtt.sdk.QbSdk;
+import com.tencent.smtt.sdk.TbsListener;
 
 /**
  * Create by chenyangqi on 2019/4/21
@@ -13,7 +14,14 @@ public class APP extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        //搜集本地tbs内核信息并上报服务器，服务器返回结果决定使用哪个内核。
+        /**
+         * 非wifi条件下允许下载X5内核
+         */
+        QbSdk.setDownloadWithoutWifi(true);
+
+        /**
+         * 搜集本地tbs内核信息并上报服务器，服务器返回结果决定使用哪个内核。
+         */
         QbSdk.PreInitCallback callback = new QbSdk.PreInitCallback() {
             @Override
             public void onViewInitFinished(boolean arg) {
@@ -26,6 +34,19 @@ public class APP extends Application {
             public void onCoreInitFinished() {
             }
         };
+        QbSdk.setTbsListener(new TbsListener() {
+            @Override
+            public void onDownloadFinish(int i) {
+            }
+
+            @Override
+            public void onInstallFinish(int i) {
+            }
+
+            @Override
+            public void onDownloadProgress(int i) {
+            }
+        });
 
         QbSdk.initX5Environment(getApplicationContext(), callback);
     }

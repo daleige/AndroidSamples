@@ -1,10 +1,14 @@
 package com.cyq.tbs;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.tencent.smtt.export.external.interfaces.JsResult;
 import com.tencent.smtt.export.external.interfaces.SslError;
@@ -16,9 +20,13 @@ import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 
+/**
+ * auth:ChenYangQi
+ */
 public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private WebView webView;
+    private Button mBtnFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,23 +34,35 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         progressBar = findViewById(R.id.progressbar);
         webView = findViewById(R.id.webview);
+        mBtnFile = findViewById(R.id.btn_chow_file);
+
+        mBtnFile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ReadFileActivity.class));
+            }
+        });
+
+
         initWebView();
     }
 
+
+
     private void initWebView() {
-        WebSettings settings = webView.getSettings();           //和系统webview一样
-        settings.setJavaScriptEnabled(true);                    //支持Javascript 与js交互
-        settings.setJavaScriptCanOpenWindowsAutomatically(true);//支持通过JS打开新窗口
-        settings.setAllowFileAccess(true);                      //设置可以访问文件
-        settings.setSupportZoom(true);                          //支持缩放
-        settings.setBuiltInZoomControls(true);                  //设置内置的缩放控件
-        settings.setUseWideViewPort(true);                      //自适应屏幕
-        settings.setSupportMultipleWindows(true);               //多窗口
-        settings.setDefaultTextEncodingName("utf-8");            //设置编码格式
+        WebSettings settings = webView.getSettings();
+        settings.setJavaScriptEnabled(true);
+        settings.setJavaScriptCanOpenWindowsAutomatically(true);
+        settings.setAllowFileAccess(true);
+        settings.setSupportZoom(true);
+        settings.setBuiltInZoomControls(true);
+        settings.setUseWideViewPort(true);
+        settings.setSupportMultipleWindows(true);
+        settings.setDefaultTextEncodingName("utf-8");
         settings.setAppCacheEnabled(true);
         settings.setDomStorageEnabled(true);
         settings.setAppCacheMaxSize(Long.MAX_VALUE);
-        settings.setCacheMode(WebSettings.LOAD_NO_CACHE);       //缓存模式
+        settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         webView.setWebViewClient(new WebViewClient() {
 
             @Override
