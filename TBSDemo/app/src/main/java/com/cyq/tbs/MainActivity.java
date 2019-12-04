@@ -47,7 +47,9 @@ public class MainActivity extends AppCompatActivity {
         initWebView();
     }
 
-
+    public void showCustomFileReaderView(View view) {
+        startActivity(new Intent(this, CustomActivity.class));
+    }
 
     private void initWebView() {
         WebSettings settings = webView.getSettings();
