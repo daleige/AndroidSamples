@@ -15,16 +15,16 @@ import java.io.File;
  * @author ChenYangQi
  */
 public class ReadFileActivity extends AppCompatActivity implements TbsReaderView.ReaderCallback {
-    private FrameLayout mFl;
+    private FrameLayout mFrameLayout;
     private TbsReaderView mTbsReaderView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read_file);
-        mFl = findViewById(R.id.fl_file);
+        mFrameLayout = findViewById(R.id.fl_file);
         mTbsReaderView = new TbsReaderView(this, this);
-        mFl.addView(mTbsReaderView);
+        mFrameLayout.addView(mTbsReaderView);
         initReadFile();
     }
 

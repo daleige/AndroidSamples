@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
                                    }
         );
         webView.loadUrl("http://www.baidu.com");
+        //播放视频
 //        webView.loadUrl("https://quan.qq.com/video/1098_bb0279e62a0e493732a65f8223b6da92");
     }
 

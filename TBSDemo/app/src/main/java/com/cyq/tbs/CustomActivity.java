@@ -7,7 +7,6 @@ import android.os.Bundle;
 import com.cyq.tbs.view.FileReaderView;
 
 public class CustomActivity extends AppCompatActivity {
-
     private FileReaderView fileReaderView;
 
     @Override
