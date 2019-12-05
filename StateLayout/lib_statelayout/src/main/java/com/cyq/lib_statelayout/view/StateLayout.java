@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.cyq.lib_statelayout.interfaces.IErrorState;
+import com.cyq.lib_statelayout.state.EmptyStateManager;
 import com.cyq.lib_statelayout.state.ErrorStateManager;
 import com.cyq.lib_statelayout.state.LoadingStateManager;
 
@@ -19,15 +20,17 @@ public class StateLayout extends FrameLayout {
      * 展示自定义View的临时占位变量
      */
     private View tempCustomView;
+    private View tempView;
     private ErrorStateManager mErrorStateManager;
     private LoadingStateManager mLoadingStateManager;
+    private EmptyStateManager mEmptyStateManager;
 
     public StateLayout(Context context) {
-        super(context, null);
+        this(context, null);
     }
 
     public StateLayout(Context context, AttributeSet attrs) {
-        super(context, attrs, 0);
+        this(context, attrs, 0);
     }
 
     public StateLayout(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -41,6 +44,7 @@ public class StateLayout extends FrameLayout {
     private void init() {
         mErrorStateManager = new ErrorStateManager();
         mLoadingStateManager = new LoadingStateManager();
+        mEmptyStateManager = new EmptyStateManager();
     }
 
     /**
@@ -50,8 +54,12 @@ public class StateLayout extends FrameLayout {
         if (mErrorStateManager == null) {
             mErrorStateManager = new ErrorStateManager();
         }
+        if (tempView == mErrorStateManager.getView(getContext())) {
+            return;
+        }
+        tempView = mErrorStateManager.getView(getContext());
         removeStateView();
-        addView(mErrorStateManager.getView(getContext()));
+        addView(tempView);
     }
 
     /**
@@ -61,8 +69,12 @@ public class StateLayout extends FrameLayout {
         if (mLoadingStateManager == null) {
             mLoadingStateManager = new LoadingStateManager();
         }
+        if (tempView == mLoadingStateManager.getView(getContext())) {
+            return;
+        }
+        tempView = mLoadingStateManager.getView(getContext());
         removeStateView();
-        addView(mLoadingStateManager.getView(getContext()));
+        addView(tempView);
     }
 
     /**
@@ -72,17 +84,42 @@ public class StateLayout extends FrameLayout {
      */
     public void setOnRetryClickListener(IErrorState.OnRetryClickListener onRetryClickListener) {
         if (mErrorStateManager == null) {
-            showError();
+            mErrorStateManager = new ErrorStateManager();
         }
-        if (mErrorStateManager != null) {
-            mErrorStateManager.setRetryClickListener(onRetryClickListener);
+        mErrorStateManager.setRetryClickListener(onRetryClickListener);
+    }
+
+    /**
+     * 展示空数据状态
+     */
+    public void showEmpty() {
+        if (mEmptyStateManager == null) {
+            mEmptyStateManager = new EmptyStateManager();
         }
+        if (tempView == mEmptyStateManager.getView(getContext())) {
+            return;
+        }
+        tempView = mEmptyStateManager.getView(getContext());
+        removeStateView();
+        addView(tempView);
     }
 
     /**
      * 展示内容
      */
     public void showContent() {
+        if (mErrorStateManager != null) {
+            removeView(mErrorStateManager.getView(getContext()));
+        }
+        if (mLoadingStateManager != null) {
+            removeView(mLoadingStateManager.getView(getContext()));
+        }
+        if (mEmptyStateManager != null) {
+            removeView(mEmptyStateManager.getView(getContext()));
+        }
+        if (tempCustomView != null) {
+            removeView(tempCustomView);
+        }
         removeStateView();
     }
 
@@ -92,23 +129,30 @@ public class StateLayout extends FrameLayout {
     public void showCustomView(View view) {
         removeStateView();
         if (view == null) {
-            throw new NullPointerException("StateLayout custom view is empty");
+            throw new NullPointerException("StateLayout:custom view is empty");
         }
+        if (tempView == view) {
+            return;
+        }
+        tempView = view;
         tempCustomView = view;
-        addView(tempCustomView);
+        addView(tempView);
     }
 
     /**
      * 状态页面变更的时候，移除之前的状态页，避免重复addView造成内存泄漏
      */
     private void removeStateView() {
-        if (mErrorStateManager != null) {
+        if (mErrorStateManager != null && (tempView != mErrorStateManager.getView(getContext()))) {
             removeView(mErrorStateManager.getView(getContext()));
         }
-        if (mLoadingStateManager != null) {
+        if (mLoadingStateManager != null && (tempView != mLoadingStateManager.getView(getContext()))) {
             removeView(mLoadingStateManager.getView(getContext()));
         }
-        if (tempCustomView != null) {
+        if (mEmptyStateManager != null && (tempView != mEmptyStateManager.getView(getContext()))) {
+            removeView(mEmptyStateManager.getView(getContext()));
+        }
+        if (tempCustomView != null && (tempView != tempCustomView)) {
             removeView(tempCustomView);
         }
     }

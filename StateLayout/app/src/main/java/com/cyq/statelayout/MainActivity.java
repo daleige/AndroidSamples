@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mBtnShowLoading;
     private Button mBtnShowContent;
     private Button mBtnShowCustom;
+    private Button mBtnShowEmpty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +36,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBtnShowLoading = findViewById(R.id.btn_show_loading);
         mBtnShowContent = findViewById(R.id.btn_show_content);
         mBtnShowCustom = findViewById(R.id.btn_show_custom);
+        mBtnShowEmpty = findViewById(R.id.btn_show_empty);
         mBtnShowError.setOnClickListener(this);
         mBtnShowLoading.setOnClickListener(this);
         mBtnShowContent.setOnClickListener(this);
         mBtnShowCustom.setOnClickListener(this);
+        mBtnShowEmpty.setOnClickListener(this);
 
         //设置点击重试
         mStateLayout.setOnRetryClickListener(new IErrorState.OnRetryClickListener() {
@@ -57,6 +60,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_show_error:
                 mStateLayout.showError();
+                break;
+            case R.id.btn_show_empty:
+                mStateLayout.showEmpty();
                 break;
             case R.id.btn_show_content:
                 mStateLayout.showContent();

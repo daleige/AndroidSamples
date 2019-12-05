@@ -17,6 +17,6 @@
         android:layout_below="@+id/pb_loading"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:text="正在加载..." />
+        android:text="@string/loading_state_tip" />
 
 </RelativeLayout>

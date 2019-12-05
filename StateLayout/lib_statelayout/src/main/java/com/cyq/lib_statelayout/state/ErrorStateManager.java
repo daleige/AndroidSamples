@@ -26,20 +26,6 @@ public class ErrorStateManager implements IErrorState {
     }
 
     @Override
-    public void hide() {
-        if (mView != null) {
-            mView.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void show() {
-        if (mView != null) {
-            mView.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Override
     public void setRetryClickListener(OnRetryClickListener retryClickListener) {
         this.mOnRetryClickListener = retryClickListener;
         if (mView != null) {

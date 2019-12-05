@@ -12,10 +12,6 @@ public interface IErrorState {
 
     View getView(Context context);
 
-    void hide();
-
-    void show();
-
     void setRetryClickListener(OnRetryClickListener retryClickListener);
 
     interface OnRetryClickListener {

@@ -24,17 +24,24 @@
             android:text="错误状态" />
 
         <Button
-            android:id="@+id/btn_show_content"
+            android:id="@+id/btn_show_empty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/btn_show_error"
+            android:text="空状态" />
+
+        <Button
+            android:id="@+id/btn_show_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/btn_show_empty"
             android:text="展示内容" />
 
         <Button
             android:id="@+id/btn_show_custom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/btn_show_content"
+            android:layout_below="@+id/btn_show_loading"
             android:text="展示自定义布局" />
     </RelativeLayout>
 

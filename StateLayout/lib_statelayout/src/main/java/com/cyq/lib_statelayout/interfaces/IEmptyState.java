@@ -4,10 +4,10 @@ import android.content.Context;
 import android.view.View;
 
 /**
- * Time: 2019-12-01 22:21
- * Author: ChenYangQi
- * Description:加载中状态
+ * @author : ChenYangQi
+ * date   : 2019/12/5 9:56
+ * desc   : 数据空状态
  */
-public interface ILoadingState {
+public interface IEmptyState {
     View getView(Context context);
 }

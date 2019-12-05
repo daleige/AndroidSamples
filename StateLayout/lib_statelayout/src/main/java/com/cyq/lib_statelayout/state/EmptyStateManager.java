@@ -4,20 +4,20 @@ import android.content.Context;
 import android.view.View;
 
 import com.cyq.lib_statelayout.R;
-import com.cyq.lib_statelayout.interfaces.ILoadingState;
+import com.cyq.lib_statelayout.interfaces.IEmptyState;
 
 /**
- * Time: 2019-12-01 22:45
- * @Author: ChenYangQi
- * Description:加载中状态管理类
+ * @author : ChenYangQi
+ * date   : 2019/12/5 9:57
+ * desc   :
  */
-public class LoadingStateManager implements ILoadingState {
+public class EmptyStateManager implements IEmptyState {
     private View mView;
 
     @Override
     public View getView(Context context) {
         if (mView == null) {
-            mView = View.inflate(context, R.layout.loading_state_layout, null);
+            mView = View.inflate(context, R.layout.empty_state_layout, null);
         }
         return mView;
     }
