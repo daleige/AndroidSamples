@@ -3,6 +3,7 @@ package com.cyq.statelayout;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,11 +11,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.cyq.lib_statelayout.interfaces.IErrorState;
 import com.cyq.lib_statelayout.view.StateLayout;
 
+/**
+ * @author ChenYangQi
+ */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private StateLayout mStateLayout;
     private Button mBtnShowError;
     private Button mBtnShowLoading;
     private Button mBtnShowContent;
+    private Button mBtnShowCustom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +34,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBtnShowError = findViewById(R.id.btn_show_error);
         mBtnShowLoading = findViewById(R.id.btn_show_loading);
         mBtnShowContent = findViewById(R.id.btn_show_content);
+        mBtnShowCustom = findViewById(R.id.btn_show_custom);
         mBtnShowError.setOnClickListener(this);
         mBtnShowLoading.setOnClickListener(this);
         mBtnShowContent.setOnClickListener(this);
+        mBtnShowCustom.setOnClickListener(this);
 
         //设置点击重试
         mStateLayout.setOnRetryClickListener(new IErrorState.OnRetryClickListener() {
@@ -53,6 +60,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_show_content:
                 mStateLayout.showContent();
+                break;
+            case R.id.btn_show_custom:
+                FrameLayout customStateView = (FrameLayout) getLayoutInflater().inflate(R.layout.custom_layout, null, false);
+                mStateLayout.showCustomView(customStateView);
                 break;
             default:
         }

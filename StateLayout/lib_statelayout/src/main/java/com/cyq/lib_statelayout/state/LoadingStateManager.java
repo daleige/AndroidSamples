@@ -8,7 +8,7 @@ import com.cyq.lib_statelayout.interfaces.ILoadingState;
 
 /**
  * Time: 2019-12-01 22:45
- * Author: ChenYangQi
+ * @Author: ChenYangQi
  * Description:加载中状态管理类
  */
 public class LoadingStateManager implements ILoadingState {

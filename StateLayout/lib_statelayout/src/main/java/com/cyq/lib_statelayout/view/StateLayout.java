@@ -2,6 +2,7 @@ package com.cyq.lib_statelayout.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import com.cyq.lib_statelayout.interfaces.IErrorState;
@@ -9,11 +10,15 @@ import com.cyq.lib_statelayout.state.ErrorStateManager;
 import com.cyq.lib_statelayout.state.LoadingStateManager;
 
 /**
+ * @Author: ChenYangQi
  * Time: 2019-12-01 22:22
- * Author: ChenYangQi
  * Description:自定义多状态ViewGroup
  */
 public class StateLayout extends FrameLayout {
+    /**
+     * 展示自定义View的临时占位变量
+     */
+    private View tempCustomView;
     private ErrorStateManager mErrorStateManager;
     private LoadingStateManager mLoadingStateManager;
 
@@ -45,7 +50,7 @@ public class StateLayout extends FrameLayout {
         if (mErrorStateManager == null) {
             mErrorStateManager = new ErrorStateManager();
         }
-        removeView(mErrorStateManager.getView(getContext()));
+        removeStateView();
         addView(mErrorStateManager.getView(getContext()));
     }
 
@@ -56,7 +61,7 @@ public class StateLayout extends FrameLayout {
         if (mLoadingStateManager == null) {
             mLoadingStateManager = new LoadingStateManager();
         }
-        removeView(mLoadingStateManager.getView(getContext()));
+        removeStateView();
         addView(mLoadingStateManager.getView(getContext()));
     }
 
@@ -78,11 +83,33 @@ public class StateLayout extends FrameLayout {
      * 展示内容
      */
     public void showContent() {
+        removeStateView();
+    }
+
+    /**
+     * 展示自定义View
+     */
+    public void showCustomView(View view) {
+        removeStateView();
+        if (view == null) {
+            throw new NullPointerException("StateLayout custom view is empty");
+        }
+        tempCustomView = view;
+        addView(tempCustomView);
+    }
+
+    /**
+     * 状态页面变更的时候，移除之前的状态页，避免重复addView造成内存泄漏
+     */
+    private void removeStateView() {
         if (mErrorStateManager != null) {
             removeView(mErrorStateManager.getView(getContext()));
         }
         if (mLoadingStateManager != null) {
             removeView(mLoadingStateManager.getView(getContext()));
+        }
+        if (tempCustomView != null) {
+            removeView(tempCustomView);
         }
     }
 }

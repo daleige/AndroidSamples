@@ -8,7 +8,8 @@ import com.cyq.lib_statelayout.interfaces.IErrorState;
 
 /**
  * Time: 2019-12-01 22:24
- * Author: ChenYangQi
+ *
+ * @Author: ChenYangQi
  * Description:错误状态管理类
  */
 public class ErrorStateManager implements IErrorState {
