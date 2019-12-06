@@ -9,12 +9,5 @@ import android.view.View;
  * Description:错误状态
  */
 public interface IErrorState {
-
-    View getView(Context context);
-
-    void setRetryClickListener(OnRetryClickListener retryClickListener);
-
-    interface OnRetryClickListener {
-        void onRetryClicked();
-    }
+    void setRetryClickListener();
 }

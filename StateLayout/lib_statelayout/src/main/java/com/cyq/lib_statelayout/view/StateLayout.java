@@ -15,7 +15,7 @@ import com.cyq.lib_statelayout.state.LoadingStateManager;
  * Time: 2019-12-01 22:22
  * Description:自定义多状态ViewGroup
  */
-public class StateLayout extends FrameLayout {
+public class StateLayout extends FrameLayout implements ErrorStateManager.OnRetryListener {
     /**
      * 展示自定义View的临时占位变量
      */
@@ -24,6 +24,7 @@ public class StateLayout extends FrameLayout {
     private ErrorStateManager mErrorStateManager;
     private LoadingStateManager mLoadingStateManager;
     private EmptyStateManager mEmptyStateManager;
+    private OnRetryClickListener mRetryClickListener;
 
     public StateLayout(Context context) {
         this(context, null);
@@ -42,7 +43,7 @@ public class StateLayout extends FrameLayout {
      * 初始化几种状态布局管理类
      */
     private void init() {
-        mErrorStateManager = new ErrorStateManager();
+        mErrorStateManager = new ErrorStateManager(this);
         mLoadingStateManager = new LoadingStateManager();
         mEmptyStateManager = new EmptyStateManager();
     }
@@ -52,7 +53,7 @@ public class StateLayout extends FrameLayout {
      */
     public void showError() {
         if (mErrorStateManager == null) {
-            mErrorStateManager = new ErrorStateManager();
+            mErrorStateManager = new ErrorStateManager(this);
         }
         if (tempView == mErrorStateManager.getView(getContext())) {
             return;
@@ -75,18 +76,6 @@ public class StateLayout extends FrameLayout {
         tempView = mLoadingStateManager.getView(getContext());
         removeStateView();
         addView(tempView);
-    }
-
-    /**
-     * 设置重试按钮布局
-     *
-     * @param onRetryClickListener 重试点击事件
-     */
-    public void setOnRetryClickListener(IErrorState.OnRetryClickListener onRetryClickListener) {
-        if (mErrorStateManager == null) {
-            mErrorStateManager = new ErrorStateManager();
-        }
-        mErrorStateManager.setRetryClickListener(onRetryClickListener);
     }
 
     /**
@@ -155,5 +144,31 @@ public class StateLayout extends FrameLayout {
         if (tempCustomView != null && (tempView != tempCustomView)) {
             removeView(tempCustomView);
         }
+    }
+
+    /**
+     * 重试按钮点击的回调
+     */
+    @Override
+    public void onRetry() {
+        if (mRetryClickListener != null) {
+            mRetryClickListener.onClick();
+        }
+    }
+
+    /**
+     * 点击重试接口
+     */
+    public interface OnRetryClickListener {
+        void onClick();
+    }
+
+    /**
+     * 重试点击事件得set方法
+     *
+     * @param mRetryClickListener
+     */
+    public void setRetryClickListener(OnRetryClickListener mRetryClickListener) {
+        this.mRetryClickListener = mRetryClickListener;
     }
 }

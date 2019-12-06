@@ -8,7 +8,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.cyq.lib_statelayout.interfaces.IErrorState;
 import com.cyq.lib_statelayout.view.StateLayout;
 
 /**
@@ -43,13 +42,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBtnShowCustom.setOnClickListener(this);
         mBtnShowEmpty.setOnClickListener(this);
 
-        //设置点击重试
-        mStateLayout.setOnRetryClickListener(new IErrorState.OnRetryClickListener() {
+        mStateLayout.setRetryClickListener(new StateLayout.OnRetryClickListener() {
             @Override
-            public void onRetryClicked() {
-                Toast.makeText(MainActivity.this, "点击重试", Toast.LENGTH_SHORT).show();
+            public void onClick() {
+                Toast.makeText(MainActivity.this, "点击重试......", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
     @Override
