@@ -2,6 +2,7 @@ package com.cyq.lib_statelayout.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -61,6 +62,7 @@ public class StateLayout extends FrameLayout implements ErrorStateManager.OnRetr
         tempView = mErrorStateManager.getView(getContext());
         removeStateView();
         addView(tempView);
+        getTestChildCount();
     }
 
     /**
@@ -76,6 +78,7 @@ public class StateLayout extends FrameLayout implements ErrorStateManager.OnRetr
         tempView = mLoadingStateManager.getView(getContext());
         removeStateView();
         addView(tempView);
+        getTestChildCount();
     }
 
     /**
@@ -91,6 +94,7 @@ public class StateLayout extends FrameLayout implements ErrorStateManager.OnRetr
         tempView = mEmptyStateManager.getView(getContext());
         removeStateView();
         addView(tempView);
+        getTestChildCount();
     }
 
     /**
@@ -110,38 +114,40 @@ public class StateLayout extends FrameLayout implements ErrorStateManager.OnRetr
             removeView(tempCustomView);
         }
         removeStateView();
+        getTestChildCount();
     }
 
     /**
      * 展示自定义View
      */
     public void showCustomView(View view) {
-        removeStateView();
         if (view == null) {
             throw new NullPointerException("StateLayout:custom view is empty");
         }
         if (tempView == view) {
             return;
         }
+        removeStateView();
         tempView = view;
         tempCustomView = view;
         addView(tempView);
+        getTestChildCount();
     }
 
     /**
      * 状态页面变更的时候，移除之前的状态页，避免重复addView造成内存泄漏
      */
     private void removeStateView() {
-        if (mErrorStateManager != null && (tempView != mErrorStateManager.getView(getContext()))) {
+        if (mErrorStateManager != null) {
             removeView(mErrorStateManager.getView(getContext()));
         }
-        if (mLoadingStateManager != null && (tempView != mLoadingStateManager.getView(getContext()))) {
+        if (mLoadingStateManager != null) {
             removeView(mLoadingStateManager.getView(getContext()));
         }
-        if (mEmptyStateManager != null && (tempView != mEmptyStateManager.getView(getContext()))) {
+        if (mEmptyStateManager != null) {
             removeView(mEmptyStateManager.getView(getContext()));
         }
-        if (tempCustomView != null && (tempView != tempCustomView)) {
+        if (tempCustomView != null) {
             removeView(tempCustomView);
         }
     }
@@ -170,5 +176,9 @@ public class StateLayout extends FrameLayout implements ErrorStateManager.OnRetr
      */
     public void setRetryClickListener(OnRetryClickListener mRetryClickListener) {
         this.mRetryClickListener = mRetryClickListener;
+    }
+
+    public void getTestChildCount() {
+        Log.i("test","子元素个数：" + getChildCount());
     }
 }
