@@ -153,7 +153,7 @@ public class BreadScaleView extends ObservableScrollView implements ObservableSc
         switch (scrollState) {
             case SCROLL_STATE_IDLE:
                 //停止滑动
-                if (autoScrollTag == false) {
+                if (!autoScrollTag) {
                     return;
                 }
                 int topCount = scrollY / itemHeight;
