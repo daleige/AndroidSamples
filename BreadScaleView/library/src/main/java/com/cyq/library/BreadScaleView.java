@@ -3,13 +3,13 @@ package com.cyq.library;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -20,22 +20,21 @@ import java.util.List;
  * Author: ChenYangQi
  * Description:烤面包刻度选择器
  */
-public class BreadScaleView extends ScrollView {
+public class BreadScaleView extends ObservableScrollView implements ObservableScrollView.OnScrollListener {
     private List<ScaleBean> mData = new ArrayList<>();
     private LinearLayout container;
     private Context mContext;
-    private int itemHeight = 180;//item默认高度
+    private int itemHeight = 160;//item默认高度
+    private int displayCount = 9;//默认展示9个item
     private int tvSize = 24;//刻度文字默认大小，单位：sp
     private int ivWidth = 140;//面包图片宽高
     private int lineWidth = 200;//中间横线宽度
-    private int lineHeight = 16;//中间横线的高度
-    private int displayCount = 9;//默认展示9个item
+    private int lineHeight = 12;//中间横线的高度
     private int lineMarginLeft = 100;//刻度文字marginLeft
     private int lineMarginRight = 70;//面包图标marginRight
     private int lightColor = Color.parseColor("#616161");//未选中刻度颜色
     private int middleColor = Color.parseColor("#fafafa");//二级刻度颜色
     private int heightColor = Color.parseColor("#ff6d00");//三级刻度颜色
-
 
     public BreadScaleView(Context context) {
         this(context, null);
@@ -50,8 +49,11 @@ public class BreadScaleView extends ScrollView {
         init();
     }
 
+    /**
+     * 控件初始化
+     */
     private void init() {
-
+        this.setVerticalScrollBarEnabled(false);
         for (int i = 0; i < 20; i++) {
             ScaleBean bean = new ScaleBean();
             bean.setScale(String.valueOf(i + 1));
@@ -66,6 +68,7 @@ public class BreadScaleView extends ScrollView {
             container.addView(createItemView(bean.getScale(), bean.getType()));
         }
         this.addView(container);
+        setOnScrollListener(this);
     }
 
     /**
@@ -115,5 +118,71 @@ public class BreadScaleView extends ScrollView {
         itemView.addView(lineView);
         itemView.addView(tv);
         return itemView;
+    }
+
+    /**
+     * 修改ScrollView的滑动速度
+     *
+     * @param velocityY
+     */
+    @Override
+    public void fling(int velocityY) {
+        super.fling(velocityY / 2);
+    }
+
+    /**
+     * 设置控件高度为=item高度*item个数
+     *
+     * @param widthMeasureSpec
+     * @param heightMeasureSpec
+     */
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        setMeasuredDimension(widthMeasureSpec, itemHeight * displayCount);
+    }
+
+    /**
+     * 滑动状态监听
+     *
+     * @param view
+     * @param scrollState
+     */
+    @Override
+    public void onScrollStateChanged(ObservableScrollView view, int scrollState) {
+        switch (scrollState) {
+            case SCROLL_STATE_IDLE:
+                //停止滑动
+                if (autoScrollTag == false) {
+                    return;
+                }
+                int topCount = scrollY / itemHeight;
+                int criticalY = scrollY % itemHeight;
+                Log.i("test", "topCount:" + topCount + "-----criticalY:" + criticalY);
+                if (criticalY > itemHeight / 2) {
+                    //滑动到下一个位置
+                    BreadScaleView.this.smoothScrollTo(0, (topCount + 1) * itemHeight);
+                } else {
+                    //滑动到上一个位置
+                    BreadScaleView.this.smoothScrollTo(0, topCount * itemHeight);
+                }
+                autoScrollTag = false;
+                break;
+            case SCROLL_STATE_TOUCH_SCROLL://按下
+            case SCROLL_STATE_FLING://开始滑动
+                autoScrollTag = true;
+                break;
+            default:
+        }
+    }
+
+    int scrollY = 0;//标记Y方向已滑动距离
+    boolean autoScrollTag = false;//用来标记是否是自动滚动
+
+    @Override
+    public void onScroll(ObservableScrollView view, boolean isTouchScroll, int x, int y, int oldX
+            , int oldY) {
+//        Log.i("test", "fling-----");
+        scrollY = y;
     }
 }
