@@ -18,15 +18,24 @@ import java.util.List;
 /**
  * Time: 2019-12-07 21:44
  * Author: ChenYangQi
- * Description:面包刻度选择器
+ * Description:烤面包刻度选择器
  */
 public class BreadScaleView extends ScrollView {
     private List<ScaleBean> mData = new ArrayList<>();
     private LinearLayout container;
     private Context mContext;
-    private int itemHeight = 300;//item默认高度
-    private int textSize = 40;//刻度文字默认大小
+    private int itemHeight = 180;//item默认高度
+    private int tvSize = 24;//刻度文字默认大小，单位：sp
+    private int ivWidth = 140;//面包图片宽高
+    private int lineWidth = 200;//中间横线宽度
+    private int lineHeight = 16;//中间横线的高度
     private int displayCount = 9;//默认展示9个item
+    private int lineMarginLeft = 100;//刻度文字marginLeft
+    private int lineMarginRight = 70;//面包图标marginRight
+    private int lightColor = Color.parseColor("#616161");//未选中刻度颜色
+    private int middleColor = Color.parseColor("#fafafa");//二级刻度颜色
+    private int heightColor = Color.parseColor("#ff6d00");//三级刻度颜色
+
 
     public BreadScaleView(Context context) {
         this(context, null);
@@ -43,7 +52,7 @@ public class BreadScaleView extends ScrollView {
 
     private void init() {
 
-        for (int i = 0; i < 14; i++) {
+        for (int i = 0; i < 20; i++) {
             ScaleBean bean = new ScaleBean();
             bean.setScale(String.valueOf(i + 1));
             bean.setType(ScaleType.MIDDLE);
@@ -70,32 +79,40 @@ public class BreadScaleView extends ScrollView {
         LinearLayout itemView = new LinearLayout(mContext);
         itemView.setOrientation(LinearLayout.HORIZONTAL);
         itemView.setGravity(Gravity.CENTER_VERTICAL);
-        itemView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                itemHeight));
+        ViewGroup.LayoutParams itemLayoutParams =
+                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, itemHeight);
+        itemView.setLayoutParams(itemLayoutParams);
 
+        //创建刻度文字
         TextView tv = new TextView(mContext);
-        tv.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                itemHeight));
+        MarginLayoutParams tvLayoutParams =
+                new MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, itemHeight);
+        tv.setLayoutParams(tvLayoutParams);
         tv.setSingleLine(true);
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+        //TODO 需要根据不同的状态变更颜色
+        tv.setTextColor(lightColor);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, tvSize);
         tv.setText(scaleValue);
         tv.setGravity(Gravity.CENTER);
 
+        //创建面包图片
         ImageView iv = new ImageView(mContext);
-        iv.setLayoutParams(new LayoutParams(80, 80));
-        iv.setBackgroundColor(Color.parseColor("#f44336"));
+        MarginLayoutParams ivLayoutParams = new MarginLayoutParams(ivWidth, ivWidth);
+        iv.setLayoutParams(ivLayoutParams);
+        //TODO 替换成面包图标
+        iv.setBackgroundResource(R.drawable.bread_type_height);
 
+        //创建中间的横线刻度
         View lineView = new View(mContext);
-        lineView.setLayoutParams(new LayoutParams(200, 20));
-        lineView.setBackgroundColor(Color.parseColor("#f44336"));
-
-        ImageView ivTriangle = new ImageView(mContext);
-        ivTriangle.setLayoutParams(new LayoutParams(40, 40));
-        ivTriangle.setBackgroundColor(Color.parseColor("#f44336"));
+        MarginLayoutParams layoutParams = new MarginLayoutParams(lineWidth, lineHeight);
+        layoutParams.leftMargin = lineMarginLeft;
+        layoutParams.rightMargin = lineMarginRight;
+        lineView.setLayoutParams(layoutParams);
+        //TODO 需要根据不同的状态变更颜色
+        lineView.setBackgroundColor(lightColor);
 
         itemView.addView(iv);
         itemView.addView(lineView);
-        itemView.addView(ivTriangle);
         itemView.addView(tv);
         return itemView;
     }
