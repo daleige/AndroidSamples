@@ -6,7 +6,7 @@ package com.cyq.library;
  * Description:
  */
 public enum ScaleType {
-    LIGHT,//轻度烤熟
-    MIDDLE,//中度烤熟
-    HEIGHT//高度烤熟
+    LIGHT,//颜色最浅的刻度
+    MIDDLE,//颜色中等的刻度
+    HEIGHT//选中状态颜色最深的刻度
 }

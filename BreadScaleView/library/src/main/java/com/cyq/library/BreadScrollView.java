@@ -47,6 +47,16 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
      * 中间横线的高度
      */
     private int lineHeight = 12;
+
+    /**
+     * 中间横线选中状态宽度
+     */
+    private int lineHeightWidth = 240;
+    /**
+     * 中间横线的选中状态高度
+     */
+    private int lineHeightHeight = 24;
+
     /**
      * 刻度文字marginLeft
      */
@@ -112,6 +122,16 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
                 bean.setScale(String.valueOf(i));
                 bean.setType(ScaleType.LIGHT);
             }
+
+            if (i == 1) {
+                bean.setBreadType(BreadType.LIGHT);
+            } else if (i == 5) {
+                bean.setBreadType(BreadType.MIDDLE);
+            } else if (i == 9) {
+                bean.setBreadType(BreadType.HEIGHT);
+            } else {
+                bean.setBreadType(BreadType.EMPTY);
+            }
             mData.add(bean);
         }
 
@@ -119,7 +139,7 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
         container = new LinearLayout(mContext);
         container.setOrientation(LinearLayout.VERTICAL);
         for (ScaleBean bean : mData) {
-            container.addView(createItemView(bean.getScale(), bean.getType()));
+            container.addView(createItemView(bean));
         }
         this.addView(container);
         setOnScrollListener(this);
@@ -128,11 +148,10 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
     /**
      * 创建Item
      *
-     * @param scaleValue 刻度上要展示的文字
-     * @param type       展示左侧面包的图标类型
+     * @param bean 刻度信息
      * @return 返回item的View
      */
-    private View createItemView(String scaleValue, ScaleType type) {
+    private View createItemView(ScaleBean bean) {
         LinearLayout itemView = new LinearLayout(mContext);
         itemView.setOrientation(LinearLayout.HORIZONTAL);
         itemView.setGravity(Gravity.CENTER_VERTICAL);
@@ -147,37 +166,52 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
         tv.setLayoutParams(tvLayoutParams);
         tv.setSingleLine(true);
         //TODO 需要根据不同的状态变更颜色
-        if (type.equals(ScaleType.HEIGHT)) {
+        if (bean.getType().equals(ScaleType.HEIGHT)) {
             tv.setTextColor(heightColor);
-        } else if (type.equals(ScaleType.MIDDLE)) {
+        } else if (bean.getType().equals(ScaleType.MIDDLE)) {
             tv.setTextColor(middleTxtColor);
         } else {
             tv.setTextColor(lightColor);
         }
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, tvSize);
-        tv.setText(scaleValue);
+        tv.setText(bean.getScale());
         tv.setGravity(Gravity.CENTER);
 
         //创建面包图片
         ImageView iv = new ImageView(mContext);
         MarginLayoutParams ivLayoutParams = new MarginLayoutParams(ivWidth, ivWidth);
         iv.setLayoutParams(ivLayoutParams);
-        //TODO 替换成面包图标
-        iv.setBackgroundResource(R.drawable.bread_icon_3);
-
+        if (bean.getBreadType().equals(BreadType.HEIGHT)) {
+            iv.setBackgroundResource(R.drawable.bread_icon_3);
+        } else if (bean.getBreadType().equals(BreadType.MIDDLE)) {
+            iv.setBackgroundResource(R.drawable.bread_icon_2);
+        } else if (bean.getBreadType().equals(BreadType.LIGHT)) {
+            iv.setBackgroundResource(R.drawable.bread_icon_1);
+        } else {
+            //不需要设置面包图标
+        }
         //创建中间的横线刻度
         View lineView = new View(mContext);
         MarginLayoutParams layoutParams = new MarginLayoutParams(lineWidth, lineHeight);
-        layoutParams.leftMargin = lineMarginLeft;
-        layoutParams.rightMargin = lineMarginRight;
         lineView.setLayoutParams(layoutParams);
-        //TODO 需要根据不同的状态变更颜色
-        if (type.equals(ScaleType.HEIGHT)) {
+        if (bean.getType().equals(ScaleType.HEIGHT)) {
             lineView.setBackgroundColor(heightColor);
-        } else if (type.equals(ScaleType.MIDDLE)) {
+            //重新设置选中状态的刻度的宽高
+            layoutParams.width = lineHeightWidth;
+            layoutParams.height = lineHeightHeight;
+            //设置选中刻度的margin
+            layoutParams.leftMargin = lineMarginLeft;
+            layoutParams.rightMargin = lineMarginRight;
+        } else if (bean.getType().equals(ScaleType.MIDDLE)) {
             lineView.setBackgroundColor(middleColor);
+            //设置非选中刻度的margin
+            layoutParams.leftMargin = lineMarginLeft + (lineHeightWidth - lineWidth) / 2;
+            layoutParams.rightMargin = lineMarginRight + (lineHeightWidth - lineWidth) / 2;
         } else {
             lineView.setBackgroundColor(lightColor);
+            //设置非选中刻度的margin
+            layoutParams.leftMargin = lineMarginLeft + (lineHeightWidth - lineWidth) / 2;
+            layoutParams.rightMargin = lineMarginRight + (lineHeightWidth - lineWidth) / 2;
         }
         itemView.addView(iv);
         itemView.addView(lineView);

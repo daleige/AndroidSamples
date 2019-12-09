@@ -7,9 +7,20 @@ package com.cyq.library;
  */
 public class ScaleBean {
 
+    /**
+     * 刻度的文字
+     */
     private String scale;
 
+    /**
+     * 刻度的四种状态
+     */
     private ScaleType type;
+
+    /**
+     * 面包图片的4种状态
+     */
+    private BreadType breadType;
 
     public String getScale() {
         return scale;
@@ -25,5 +36,13 @@ public class ScaleBean {
 
     public void setType(ScaleType type) {
         this.type = type;
+    }
+
+    public BreadType getBreadType() {
+        return breadType;
+    }
+
+    public void setBreadType(BreadType breadType) {
+        this.breadType = breadType;
     }
 }

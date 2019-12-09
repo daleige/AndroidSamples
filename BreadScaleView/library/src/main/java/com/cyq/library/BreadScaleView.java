@@ -43,6 +43,15 @@ public class BreadScaleView extends FrameLayout {
      */
     private int lineWidth = 200;
     /**
+     * 中间横线选中状态宽度
+     */
+    private int lineHeightWidth = 240;
+    /**
+     * 中间横线的选中状态高度
+     */
+    private int lineHeightHeight = 24;
+
+    /**
      * 中间横线的高度
      */
     private int lineHeight = 12;
@@ -96,7 +105,7 @@ public class BreadScaleView extends FrameLayout {
 
         //游标布局属性
         ivCursor = new ImageView(mContext);
-        int marginLeft = ivWidth + lineMarginLeft + lineWidth;
+        int marginLeft = ivWidth + lineMarginLeft + lineHeightWidth;
         int marginTop = (displayCount / 2) * itemHeight + ((itemHeight - cursorWidth) / 2);
         MarginLayoutParams ivLayoutParams = new MarginLayoutParams(cursorWidth, cursorWidth);
         ivLayoutParams.leftMargin = marginLeft;
