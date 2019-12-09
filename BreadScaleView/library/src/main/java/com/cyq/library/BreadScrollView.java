@@ -3,6 +3,7 @@ package com.cyq.library;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -112,12 +113,9 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
         this.setVerticalScrollBarEnabled(false);
         for (int i = 1; i <= 20; i++) {
             ScaleBean bean = new ScaleBean();
-            if (i == 4 || i == 6) {
+            if (i >= 4) {
                 bean.setScale(String.valueOf(i));
                 bean.setType(ScaleType.MIDDLE);
-            } else if (i == 5) {
-                bean.setScale(String.valueOf(i));
-                bean.setType(ScaleType.HEIGHT);
             } else {
                 bean.setScale(String.valueOf(i));
                 bean.setType(ScaleType.LIGHT);
@@ -194,15 +192,16 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
         View lineView = new View(mContext);
         MarginLayoutParams layoutParams = new MarginLayoutParams(lineWidth, lineHeight);
         lineView.setLayoutParams(layoutParams);
-        if (bean.getType().equals(ScaleType.HEIGHT)) {
-            lineView.setBackgroundColor(heightColor);
-            //重新设置选中状态的刻度的宽高
-            layoutParams.width = lineHeightWidth;
-            layoutParams.height = lineHeightHeight;
-            //设置选中刻度的margin
-            layoutParams.leftMargin = lineMarginLeft;
-            layoutParams.rightMargin = lineMarginRight;
-        } else if (bean.getType().equals(ScaleType.MIDDLE)) {
+//        if (bean.getType().equals(ScaleType.HEIGHT)) {
+//            lineView.setBackgroundColor(heightColor);
+//            //重新设置选中状态的刻度的宽高
+//            layoutParams.width = lineHeightWidth;
+//            layoutParams.height = lineHeightHeight;
+//            //设置选中刻度的margin
+//            layoutParams.leftMargin = lineMarginLeft;
+//            layoutParams.rightMargin = lineMarginRight;
+//        } else
+        if (bean.getType().equals(ScaleType.MIDDLE)) {
             lineView.setBackgroundColor(middleColor);
             //设置非选中刻度的margin
             layoutParams.leftMargin = lineMarginLeft + (lineHeightWidth - lineWidth) / 2;
@@ -257,14 +256,21 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
                 }
                 int topCount = scrollY / itemHeight;
                 int criticalY = scrollY % itemHeight;
+
+                //记录当前滑动到的位置
+                int currentPosition;
                 if (criticalY > itemHeight / 2) {
                     //滑动到下一个位置
-                    BreadScrollView.this.smoothScrollTo(0, (topCount + 1) * itemHeight);
+                    currentPosition = topCount + 1;
+                    BreadScrollView.this.smoothScrollTo(0, currentPosition * itemHeight);
                 } else {
                     //滑动到上一个位置
-                    BreadScrollView.this.smoothScrollTo(0, topCount * itemHeight);
+                    currentPosition = topCount;
+                    BreadScrollView.this.smoothScrollTo(0, currentPosition * itemHeight);
                 }
                 autoScrollTag = false;
+                //刷新UI，更新到选中的位置为currentItemPosition
+                //refreshView(currentPosition+displayCount/2);
                 break;
             //按下
             case SCROLL_STATE_TOUCH_SCROLL:
@@ -279,8 +285,32 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
     }
 
     @Override
-    public void onScroll(ObservableScrollView view, boolean isTouchScroll, int x, int y, int oldX
-            , int oldY) {
+    public void onScroll(ObservableScrollView view, boolean isTouchScroll, int x, int y, int oldx
+            , int oldy) {
         scrollY = y;
+    }
+
+    /**
+     * 更新UI到当前选中的位置
+     *
+     * @param currentPosition
+     */
+    private void refreshView(int currentPosition) {
+        Log.i("test", "当前滑动到的位置：" + currentPosition);
+        for (int i = 0; i < mData.size(); i++) {
+            if (i == currentPosition) {
+                mData.get(i).setType(ScaleType.HEIGHT);
+            } else if (i == currentPosition - 1) {
+                mData.get(i).setType(ScaleType.MIDDLE);
+            } else if (i == currentPosition + 1) {
+                mData.get(i).setType(ScaleType.MIDDLE);
+            } else {
+                mData.get(i).setType(ScaleType.LIGHT);
+            }
+        }
+        container.removeAllViews();
+        for (ScaleBean bean : mData) {
+            container.addView(createItemView(bean));
+        }
     }
 }

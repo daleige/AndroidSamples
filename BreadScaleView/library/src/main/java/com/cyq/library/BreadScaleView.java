@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -21,6 +22,7 @@ import androidx.annotation.Nullable;
 public class BreadScaleView extends FrameLayout {
     private BreadScrollView mBreadScrollView;
     private ImageView ivCursor;
+    private View lineView;
     private Context mContext;
     /**
      * item默认高度
@@ -103,7 +105,7 @@ public class BreadScaleView extends FrameLayout {
         mBreadScrollView = new BreadScrollView(getContext());
         mBreadScrollView.setLayoutParams(new ScrollView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        //游标布局属性
+        //三角形游标布局属性
         ivCursor = new ImageView(mContext);
         int marginLeft = ivWidth + lineMarginLeft + lineHeightWidth;
         int marginTop = (displayCount / 2) * itemHeight + ((itemHeight - cursorWidth) / 2);
@@ -113,7 +115,15 @@ public class BreadScaleView extends FrameLayout {
         ivCursor.setLayoutParams(ivLayoutParams);
         ivCursor.setBackgroundResource(R.drawable.bread_icon_pointer);
 
+        //中间黄色横线
+        lineView = new View(mContext);
+        MarginLayoutParams layoutParams = new MarginLayoutParams(lineHeightWidth, lineHeightHeight);
+        lineView.setLayoutParams(layoutParams);
+        layoutParams.leftMargin = ivWidth + lineMarginLeft;
+        layoutParams.topMargin = (displayCount / 2) * itemHeight + ((itemHeight - lineHeightHeight) / 2);
+        lineView.setBackgroundColor(heightColor);
         addView(mBreadScrollView);
         addView(ivCursor);
+        addView(lineView);
     }
 }

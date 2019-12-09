@@ -143,15 +143,12 @@ public class WheelView extends ScrollView {
 
                     }
 
-
                 } else {
                     initialY = getScrollY();
                     WheelView.this.postDelayed(scrollerTask, newCheck);
                 }
             }
         };
-
-
     }
 
     int initialY;
