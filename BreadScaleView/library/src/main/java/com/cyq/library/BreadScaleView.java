@@ -23,7 +23,10 @@ public class BreadScaleView extends FrameLayout {
     private BreadScrollView mBreadScrollView;
     private ImageView ivCursor;
     private View lineView;
+    private View fristLineView;
+    private View lastLineView;
     private Context mContext;
+
     /**
      * item默认高度
      */
@@ -118,12 +121,31 @@ public class BreadScaleView extends FrameLayout {
         //中间黄色横线
         lineView = new View(mContext);
         MarginLayoutParams layoutParams = new MarginLayoutParams(lineHeightWidth, lineHeightHeight);
-        lineView.setLayoutParams(layoutParams);
         layoutParams.leftMargin = ivWidth + lineMarginLeft;
         layoutParams.topMargin = (displayCount / 2) * itemHeight + ((itemHeight - lineHeightHeight) / 2);
+        lineView.setLayoutParams(layoutParams);
         lineView.setBackgroundColor(heightColor);
+
+        //第一根白线刻度
+        fristLineView = new View(mContext);
+        MarginLayoutParams fristLp = new MarginLayoutParams(lineWidth, lineHeight);
+        fristLp.leftMargin = ivWidth + lineMarginLeft + (lineHeightWidth - lineWidth) / 2;
+        fristLp.topMargin = (displayCount / 2 - 1) * itemHeight + ((itemHeight - lineHeight) / 2);
+        fristLineView.setLayoutParams(fristLp);
+        fristLineView.setBackgroundColor(middleColor);
+
+        lastLineView = new View(mContext);
+        MarginLayoutParams lastLp = new MarginLayoutParams(lineWidth, lineHeight);
+        lastLp.leftMargin = ivWidth + lineMarginLeft + (lineHeightWidth - lineWidth) / 2;
+        lastLp.topMargin = (displayCount / 2 + 1) * itemHeight + ((itemHeight - lineHeight) / 2);
+        lastLineView.setLayoutParams(lastLp);
+        lastLineView.setBackgroundColor(middleColor);
+
+
         addView(mBreadScrollView);
         addView(ivCursor);
         addView(lineView);
+        addView(fristLineView);
+        addView(lastLineView);
     }
 }

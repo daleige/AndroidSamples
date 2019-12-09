@@ -198,17 +198,20 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
         View lineView = new View(mContext);
         MarginLayoutParams layoutParams = new MarginLayoutParams(lineWidth, lineHeight);
         lineView.setLayoutParams(layoutParams);
-        if (bean.getType().equals(ScaleType.MIDDLE)) {
-            lineView.setBackgroundColor(middleColor);
-            //设置非选中刻度的margin
-            layoutParams.leftMargin = lineMarginLeft + (lineHeightWidth - lineWidth) / 2;
-            layoutParams.rightMargin = lineMarginRight + (lineHeightWidth - lineWidth) / 2;
-        } else {
-            lineView.setBackgroundColor(lightColor);
-            //设置非选中刻度的margin
-            layoutParams.leftMargin = lineMarginLeft + (lineHeightWidth - lineWidth) / 2;
-            layoutParams.rightMargin = lineMarginRight + (lineHeightWidth - lineWidth) / 2;
-        }
+//        if (bean.getType().equals(ScaleType.MIDDLE)) {
+//            lineView.setBackgroundColor(middleColor);
+//            //设置非选中刻度的margin
+//            layoutParams.leftMargin = lineMarginLeft + (lineHeightWidth - lineWidth) / 2;
+//            layoutParams.rightMargin = lineMarginRight + (lineHeightWidth - lineWidth) / 2;
+//        } else {
+//            lineView.setBackgroundColor(lightColor);
+//            //设置非选中刻度的margin
+//            layoutParams.leftMargin = lineMarginLeft + (lineHeightWidth - lineWidth) / 2;
+//            layoutParams.rightMargin = lineMarginRight + (lineHeightWidth - lineWidth) / 2;
+//        }
+        layoutParams.leftMargin = lineMarginLeft + (lineHeightWidth - lineWidth) / 2;
+        layoutParams.rightMargin = lineMarginRight + (lineHeightWidth - lineWidth) / 2;
+        lineView.setBackgroundColor(lightColor);
         itemView.addView(iv);
         itemView.addView(lineView);
         itemView.addView(tv);
@@ -284,8 +287,8 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
     public void onScroll(ObservableScrollView view, boolean isTouchScroll, int x, int y, int oldx
             , int oldY) {
         scrollY = y;
-        int count = y / (itemHeight-3);
-        int position = count + displayCount / 2 ;
+        int count = y / (itemHeight - 3);
+        int position = count + displayCount / 2;
         int childSize = mData.size();
         for (int i = 0; i < childSize; i++) {
             if (position == i) {
