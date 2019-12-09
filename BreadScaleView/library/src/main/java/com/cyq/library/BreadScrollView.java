@@ -222,7 +222,7 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
      */
     @Override
     public void fling(int velocityY) {
-        super.fling(velocityY);
+        super.fling(velocityY / 4);
     }
 
     /**
@@ -253,7 +253,6 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
                 }
                 int topCount = scrollY / itemHeight;
                 int criticalY = scrollY % itemHeight;
-
                 if (criticalY > itemHeight / 2) {
                     //滑动到下一个位置
                     currentPosition = topCount + 1;
@@ -276,7 +275,6 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
         }
     }
 
-    int p = 0;
     /**
      * 记录当前滑动到的位置
      */
@@ -286,19 +284,12 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
     public void onScroll(ObservableScrollView view, boolean isTouchScroll, int x, int y, int oldx
             , int oldY) {
         scrollY = y;
-        int position = y / itemHeight;
-        int remainder = y % itemHeight;
-        int divided = y / itemHeight;
-        if (remainder == 0) {
-            position = divided + displayCount / 2;
-        } else {
-            if (remainder > itemHeight / 2) {
-                position = divided + 1 + displayCount / 2;
-            }
-        }
+        int count = y / (itemHeight-3);
+        int position = count + displayCount / 2 ;
         int childSize = mData.size();
         for (int i = 0; i < childSize; i++) {
             if (position == i) {
+                Log.i("test", "位置：" + position);
                 ((TextView) container.findViewById(position)).setTextColor(heightColor);
             } else {
                 ((TextView) container.findViewById(i)).setTextColor(middleColor);
