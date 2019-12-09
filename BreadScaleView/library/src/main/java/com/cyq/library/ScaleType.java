@@ -6,7 +6,6 @@ package com.cyq.library;
  * Description:
  */
 public enum ScaleType {
-    EMPTY, //无面包图标
     LIGHT,//轻度烤熟
     MIDDLE,//中度烤熟
     HEIGHT//高度烤熟

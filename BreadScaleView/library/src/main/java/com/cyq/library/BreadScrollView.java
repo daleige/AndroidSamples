@@ -58,15 +58,19 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
     /**
      * 未选中刻度颜色
      */
-    private int lightColor = Color.parseColor("#616161");
+    private int lightColor = Color.parseColor("#222222");
     /**
      * 二级刻度颜色
      */
-    private int middleColor = Color.parseColor("#fafafa");
+    private int middleColor = Color.parseColor("#D8D8D8");
+    /**
+     * 二级文字颜色
+     */
+    private int middleTxtColor = Color.parseColor("#BDBDBD");
     /**
      * 三级刻度颜色
      */
-    private int heightColor = Color.parseColor("#ff6d00");
+    private int heightColor = Color.parseColor("#DD5F00");
 
     /**
      * 标记Y方向已滑动距离
@@ -96,10 +100,18 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
      */
     private void init() {
         this.setVerticalScrollBarEnabled(false);
-        for (int i = 0; i < 20; i++) {
+        for (int i = 1; i <= 20; i++) {
             ScaleBean bean = new ScaleBean();
-            bean.setScale(String.valueOf(i + 1));
-            bean.setType(ScaleType.MIDDLE);
+            if (i == 4 || i == 6) {
+                bean.setScale(String.valueOf(i));
+                bean.setType(ScaleType.MIDDLE);
+            } else if (i == 5) {
+                bean.setScale(String.valueOf(i));
+                bean.setType(ScaleType.HEIGHT);
+            } else {
+                bean.setScale(String.valueOf(i));
+                bean.setType(ScaleType.LIGHT);
+            }
             mData.add(bean);
         }
 
@@ -117,10 +129,10 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
      * 创建Item
      *
      * @param scaleValue 刻度上要展示的文字
-     * @param empty      展示左侧面包的图标类型
+     * @param type       展示左侧面包的图标类型
      * @return 返回item的View
      */
-    private View createItemView(String scaleValue, ScaleType empty) {
+    private View createItemView(String scaleValue, ScaleType type) {
         LinearLayout itemView = new LinearLayout(mContext);
         itemView.setOrientation(LinearLayout.HORIZONTAL);
         itemView.setGravity(Gravity.CENTER_VERTICAL);
@@ -135,7 +147,13 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
         tv.setLayoutParams(tvLayoutParams);
         tv.setSingleLine(true);
         //TODO 需要根据不同的状态变更颜色
-        tv.setTextColor(lightColor);
+        if (type.equals(ScaleType.HEIGHT)) {
+            tv.setTextColor(heightColor);
+        } else if (type.equals(ScaleType.MIDDLE)) {
+            tv.setTextColor(middleTxtColor);
+        } else {
+            tv.setTextColor(lightColor);
+        }
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, tvSize);
         tv.setText(scaleValue);
         tv.setGravity(Gravity.CENTER);
@@ -154,8 +172,13 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
         layoutParams.rightMargin = lineMarginRight;
         lineView.setLayoutParams(layoutParams);
         //TODO 需要根据不同的状态变更颜色
-        lineView.setBackgroundColor(lightColor);
-
+        if (type.equals(ScaleType.HEIGHT)) {
+            lineView.setBackgroundColor(heightColor);
+        } else if (type.equals(ScaleType.MIDDLE)) {
+            lineView.setBackgroundColor(middleColor);
+        } else {
+            lineView.setBackgroundColor(lightColor);
+        }
         itemView.addView(iv);
         itemView.addView(lineView);
         itemView.addView(tv);
