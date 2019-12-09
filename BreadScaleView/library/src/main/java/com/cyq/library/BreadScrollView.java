@@ -198,17 +198,6 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
         View lineView = new View(mContext);
         MarginLayoutParams layoutParams = new MarginLayoutParams(lineWidth, lineHeight);
         lineView.setLayoutParams(layoutParams);
-//        if (bean.getType().equals(ScaleType.MIDDLE)) {
-//            lineView.setBackgroundColor(middleColor);
-//            //设置非选中刻度的margin
-//            layoutParams.leftMargin = lineMarginLeft + (lineHeightWidth - lineWidth) / 2;
-//            layoutParams.rightMargin = lineMarginRight + (lineHeightWidth - lineWidth) / 2;
-//        } else {
-//            lineView.setBackgroundColor(lightColor);
-//            //设置非选中刻度的margin
-//            layoutParams.leftMargin = lineMarginLeft + (lineHeightWidth - lineWidth) / 2;
-//            layoutParams.rightMargin = lineMarginRight + (lineHeightWidth - lineWidth) / 2;
-//        }
         layoutParams.leftMargin = lineMarginLeft + (lineHeightWidth - lineWidth) / 2;
         layoutParams.rightMargin = lineMarginRight + (lineHeightWidth - lineWidth) / 2;
         lineView.setBackgroundColor(lightColor);
