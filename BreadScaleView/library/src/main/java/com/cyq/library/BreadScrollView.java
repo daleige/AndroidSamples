@@ -222,7 +222,7 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
      */
     @Override
     public void fling(int velocityY) {
-        super.fling(velocityY / 3);
+        super.fling(velocityY);
     }
 
     /**
@@ -264,9 +264,6 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
                     BreadScrollView.this.smoothScrollTo(0, currentPosition * itemHeight);
                 }
                 autoScrollTag = false;
-                if (mHandler != null) {
-                    mHandler.sendEmptyMessage(0);
-                }
                 break;
             //按下
             case SCROLL_STATE_TOUCH_SCROLL:
@@ -274,7 +271,6 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
                 break;
             //开始滑动
             case SCROLL_STATE_FLING:
-                autoScrollTag = true;
                 break;
             default:
         }
@@ -290,27 +286,23 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
     public void onScroll(ObservableScrollView view, boolean isTouchScroll, int x, int y, int oldx
             , int oldY) {
         scrollY = y;
-//        int a = y / itemHeight;
-//        if (a > 0 && a != p && Math.abs(a - p) >= 1) {
-//            p = a;
-//            Log.i("test", "滑到了新的刻度 p:" + p + "   a:" + a);
-//            if (mHandler != null) {
-//                mHandler.sendEmptyMessage(0);
-//            }
-//        }
-    }
-
-    private Handler mHandler = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(@NonNull Message msg) {
-            for (int i = 0; i < mData.size(); i++) {
-                if (i == currentPosition + displayCount / 2) {
-                    ((TextView) container.findViewById((currentPosition + displayCount / 2))).setTextColor(heightColor);
-                } else {
-                    ((TextView) container.findViewById(i)).setTextColor(middleColor);
-                }
+        int position = y / itemHeight;
+        int remainder = y % itemHeight;
+        int divided = y / itemHeight;
+        if (remainder == 0) {
+            position = divided + displayCount / 2;
+        } else {
+            if (remainder > itemHeight / 2) {
+                position = divided + 1 + displayCount / 2;
             }
-            return false;
         }
-    });
+        int childSize = mData.size();
+        for (int i = 0; i < childSize; i++) {
+            if (position == i) {
+                ((TextView) container.findViewById(position)).setTextColor(heightColor);
+            } else {
+                ((TextView) container.findViewById(i)).setTextColor(middleColor);
+            }
+        }
+    }
 }
