@@ -12,7 +12,7 @@
         <attr name="bread_lineMarginLeft" format="dimension" />
         <attr name="bread_lineMarginRight" format="dimension" />
 
-        <attr name="bread_lineHeightColor" format="color" />
+        <attr name="bread_lightColor" format="color" />
         <attr name="bread_middleColor" format="color" />
         <attr name="bread_middleTxtColor" format="color" />
         <attr name="bread_heightColor" format="color" />

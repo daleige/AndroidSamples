@@ -1,6 +1,7 @@
 package com.cyq.library;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -106,6 +107,21 @@ public class BreadScaleView extends FrameLayout {
 
     public BreadScaleView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.BreadScaleView);
+        itemHeight = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_itemHeight, dip2px(itemHeight));
+        displayCount = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_displayCount, dip2px(displayCount));
+        tvSize = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_tvSize, dip2px(tvSize));
+        ivWidth = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_ivWidth, dip2px(ivWidth));
+        lineWidth = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_lineWidth, dip2px(lineWidth));
+        lineHeight = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_lineHeight, dip2px(lineHeight));
+        lineHeightWidth = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_lineHeightWidth, dip2px(lineHeightWidth));
+        lineMarginLeft = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_lineMarginLeft, dip2px(lineMarginLeft));
+        lineMarginRight = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_lineMarginRight, dip2px(lineMarginRight));
+        lightColor = array.getColor(R.styleable.BreadScaleView_bread_lightColor, lightColor);
+        middleColor = array.getColor(R.styleable.BreadScaleView_bread_middleColor, middleColor);
+        middleTxtColor = array.getColor(R.styleable.BreadScaleView_bread_middleTxtColor, middleTxtColor);
+        heightColor = array.getColor(R.styleable.BreadScaleView_bread_heightColor, heightColor);
+        array.recycle();
         init();
     }
 
