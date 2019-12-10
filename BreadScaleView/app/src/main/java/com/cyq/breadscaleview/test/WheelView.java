@@ -1,4 +1,4 @@
-package com.cyq.breadscaleview.view;
+package com.cyq.breadscaleview.test;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

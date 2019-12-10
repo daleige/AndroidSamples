@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,25 +14,4 @@
         android:layout_gravity="center_horizontal"
         android:background="#000000"
         android:visibility="visible" />
-
-    <com.cyq.breadscaleview.WheelView
-        android:id="@+id/wh"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:visibility="visible" />
-
-    <com.cyq.breadscaleview.view.WheelView
-        android:id="@+id/wv_test"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        app:lineHeight="1.3dp"
-        app:maskHeight="32dp"
-        app:noEmpty="true"
-        app:normalTextColor="@android:color/holo_green_light"
-        app:normalTextSize="18sp"
-        app:selectedTextColor="@android:color/holo_orange_dark"
-        app:selectedTextSize="22sp"
-        app:unitHeight="42dp" />
-
 </LinearLayout>

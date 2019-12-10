@@ -104,9 +104,35 @@ public class BreadScaleView extends FrameLayout {
      */
     private void init() {
         mContext = getContext();
+
         //滑动布局属性
         mBreadScrollView = new BreadScrollView(getContext());
         mBreadScrollView.setLayoutParams(new ScrollView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        mBreadScrollView.setOnFristOrLastItem(new BreadScrollView.OnFirstOrLastItem() {
+            @Override
+            public void firstItem(boolean isVisible) {
+                if(lastLineView==null){
+                    return;
+                }
+                if (isVisible) {
+                    fristLineView.setVisibility(VISIBLE);
+                } else {
+                    fristLineView.setVisibility(GONE);
+                }
+            }
+
+            @Override
+            public void lastItem(boolean isVisible) {
+                if(lastLineView==null){
+                    return;
+                }
+                if (isVisible) {
+                    lastLineView.setVisibility(VISIBLE);
+                } else {
+                    lastLineView.setVisibility(GONE);
+                }
+            }
+        });
 
         //三角形游标布局属性
         ivCursor = new ImageView(mContext);
@@ -149,7 +175,4 @@ public class BreadScaleView extends FrameLayout {
         addView(lastLineView);
     }
 
-    public void moveTo(int position){
-        mBreadScrollView.moveToPosition(position);
-    }
 }

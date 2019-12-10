@@ -2,6 +2,7 @@ package com.cyq.library;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.opengl.Visibility;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -154,8 +155,7 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
         container.addView(bottomView);
         this.addView(container);
         setOnScrollListener(this);
-
-        moveToPosition();
+        moveToPosition(4);
     }
 
     MarginLayoutParams tvLayoutParams;
@@ -210,14 +210,11 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
         layoutParams.leftMargin = lineMarginLeft + (lineHeightWidth - lineWidth) / 2;
         layoutParams.rightMargin = lineMarginRight + (lineHeightWidth - lineWidth) / 2;
         lineView.setBackgroundColor(lightColor);
+
         itemView.addView(iv);
         itemView.addView(lineView);
         itemView.addView(tv);
         return itemView;
-    }
-
-    private void moveToPosition() {
-        moveToPosition(0);
     }
 
     /**
@@ -311,6 +308,30 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
     public void onScroll(ObservableScrollView view, boolean isTouchScroll, int x, int y, int oldx
             , int oldY) {
         scrollY = y;
+
+        //白色刻度的隐藏和显示
+//        if (y <= itemHeight) {
+//            if (onFristOrLastItem != null) {
+//                onFristOrLastItem.firstItem(false);
+//            }
+//        } else {
+//            if (onFristOrLastItem != null) {
+//                onFristOrLastItem.firstItem(true);
+//            }
+//        }
+//
+//        if (y >= ofSetHeight + (itemCount - 2 - displayCount / 2) * itemHeight) {
+//            if (onFristOrLastItem != null) {
+//                onFristOrLastItem.lastItem(false);
+//            }
+//        } else {
+//            //显示
+//            if (onFristOrLastItem != null) {
+//                onFristOrLastItem.lastItem(true);
+//            }
+//        }
+
+        //控制文字变色
         int modular = (y - ofSetHeight) % itemHeight;
         int position = (y - ofSetHeight) / itemHeight + displayCount / 2;
         if (modular >= itemHeight / 2) {
@@ -325,13 +346,38 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
             } else {
                 if (position - 1 >= 0 && i == position - 1) {
                     ((TextView) container.findViewById(i)).setTextColor(middleTxtColor);
+
                 } else if (position + 1 < itemCount && i == position + 1) {
                     ((TextView) container.findViewById(i)).setTextColor(middleTxtColor);
                 } else {
                     ((TextView) container.findViewById(i)).setTextColor(lightColor);
                 }
             }
+
+            if(position==itemCount-1){
+                onFristOrLastItem.lastItem(false);
+            }else {
+                onFristOrLastItem.lastItem(true);
+            }
+            if(position==0){
+                onFristOrLastItem.firstItem(false);
+            }else {
+                onFristOrLastItem.firstItem(true);
+            }
         }
         oldPosition = position;
+    }
+
+
+    public void setOnFristOrLastItem(OnFirstOrLastItem onFirstOrLastItem) {
+        this.onFristOrLastItem = onFirstOrLastItem;
+    }
+
+    private OnFirstOrLastItem onFristOrLastItem;
+
+    public interface OnFirstOrLastItem {
+        void firstItem(boolean isVisible);
+
+        void lastItem(boolean isVisible);
     }
 }
