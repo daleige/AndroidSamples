@@ -2,9 +2,6 @@ package com.cyq.library;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Handler;
-import android.os.Message;
-import android.telecom.Call;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -14,8 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,6 +93,7 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
      */
     boolean autoScrollTag = false;
 
+    int itemCount;
 
     public BreadScrollView(Context context) {
         this(context, null);
@@ -140,9 +136,10 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
         }
 
         mContext = getContext();
+        itemCount = mData.size();
         container = new LinearLayout(mContext);
         container.setOrientation(LinearLayout.VERTICAL);
-        for (int i = 0; i < mData.size(); i++) {
+        for (int i = 0; i < itemCount; i++) {
             container.addView(createItemView(mData.get(i), i));
         }
         this.addView(container);
@@ -214,7 +211,7 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
      */
     @Override
     public void fling(int velocityY) {
-        super.fling(velocityY / 4);
+        super.fling(velocityY / 3);
     }
 
     /**
@@ -272,20 +269,37 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
      */
     int currentPosition;
 
+    /**
+     * 标记上一次的position，减少position相同时重复setTextColor
+     */
+    int oldPosition = -100;
+
     @Override
     public void onScroll(ObservableScrollView view, boolean isTouchScroll, int x, int y, int oldx
             , int oldY) {
         scrollY = y;
-        int count = y / (itemHeight - 3);
-        int position = count + displayCount / 2;
-        int childSize = mData.size();
-        for (int i = 0; i < childSize; i++) {
+        int modular = y % itemHeight;
+        int position = y / itemHeight + displayCount / 2;
+        if (modular >= itemHeight / 2) {
+            position++;
+        }
+        if (oldPosition == position) {
+            return;
+        }
+        for (int i = 0; i < itemCount; i++) {
             if (position == i) {
                 Log.i("test", "位置：" + position);
                 ((TextView) container.findViewById(position)).setTextColor(heightColor);
             } else {
-                ((TextView) container.findViewById(i)).setTextColor(middleColor);
+                if (position - 1 >= 0 && i == position - 1) {
+                    ((TextView) container.findViewById(i)).setTextColor(middleTxtColor);
+                } else if (position + 1 < itemCount && i == position + 1) {
+                    ((TextView) container.findViewById(i)).setTextColor(middleTxtColor);
+                } else {
+                    ((TextView) container.findViewById(i)).setTextColor(lightColor);
+                }
             }
         }
+        oldPosition = position;
     }
 }
