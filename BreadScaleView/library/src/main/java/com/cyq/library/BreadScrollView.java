@@ -3,6 +3,7 @@ package com.cyq.library;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -109,7 +111,6 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
         this.middleColor = middleColor;
         this.middleTxtColor = middleTxtColor;
         this.heightColor = heightColor;
-        init();
     }
 
     /**
@@ -117,26 +118,26 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
      */
     private void init() {
         this.setVerticalScrollBarEnabled(false);
-        for (int i = 1; i <= 9; i++) {
-            ScaleBean bean = new ScaleBean();
-            if (i >= 4) {
-                bean.setScale(String.valueOf(i));
-                bean.setType(ScaleType.MIDDLE);
-            } else {
-                bean.setScale(String.valueOf(i));
-                bean.setType(ScaleType.LIGHT);
-            }
 
-            if (i == 1) {
-                bean.setBreadType(BreadType.LIGHT);
-            } else if (i == 5) {
-                bean.setBreadType(BreadType.MIDDLE);
-            } else if (i == 9) {
-                bean.setBreadType(BreadType.HEIGHT);
-            } else {
-                bean.setBreadType(BreadType.EMPTY);
+        //如果没有数据就展示默认的9个
+        if (mData.size() <= 0) {
+            for (int i = 0; i < 9; i++) {
+                ScaleBean bean = new ScaleBean();
+                bean.setScale(String.valueOf(i + 1));
+                if (i == 0) {
+                    //下标位置0时，设置面包片图片1
+                    bean.setBreadType(BreadType.LIGHT);
+                } else if (i == 4) {
+                    //下标位置4时，设置面包片图片2
+                    bean.setBreadType(BreadType.MIDDLE);
+                } else if (i == 8) {
+                    //下标位置8时，设熟面包片图片3
+                    bean.setBreadType(BreadType.HEIGHT);
+                } else {
+                    bean.setBreadType(BreadType.EMPTY);
+                }
+                mData.add(bean);
             }
-            mData.add(bean);
         }
 
         mContext = getContext();
@@ -182,14 +183,8 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
                 new MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, itemHeight);
         tv.setLayoutParams(tvLayoutParams);
         tv.setSingleLine(true);
-        if (bean.getType().equals(ScaleType.HEIGHT)) {
-            tv.setTextColor(heightColor);
-        } else if (bean.getType().equals(ScaleType.MIDDLE)) {
-            tv.setTextColor(middleTxtColor);
-        } else {
-            tv.setTextColor(lightColor);
-        }
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, tvSize);
+        tv.setTextColor(lightColor);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, tvSize);
         tv.setText(bean.getScale());
         tv.setId(index);
         tv.setGravity(Gravity.CENTER);
@@ -217,6 +212,17 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
         itemView.addView(lineView);
         itemView.addView(tv);
         return itemView;
+    }
+
+
+    /**
+     * 设置数据
+     *
+     * @param datas
+     */
+    public void setData(List<ScaleBean> datas) {
+        mData = datas;
+        init();
     }
 
     /**

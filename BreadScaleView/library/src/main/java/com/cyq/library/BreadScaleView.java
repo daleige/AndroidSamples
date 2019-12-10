@@ -4,17 +4,17 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author : ChenYangQi
@@ -110,12 +110,13 @@ public class BreadScaleView extends FrameLayout {
         super(context, attrs, defStyleAttr);
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.BreadScaleView);
         itemHeight = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_itemHeight, dip2px(itemHeight));
-        displayCount = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_displayCount, displayCount);
-        tvSize = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_tvSize, tvSize);
+        displayCount = array.getInteger(R.styleable.BreadScaleView_bread_displayCount, displayCount);
+        tvSize = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_tvSize, dip2px(tvSize));
         ivWidth = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_ivWidth, dip2px(ivWidth));
         lineWidth = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_lineWidth, dip2px(lineWidth));
         lineHeight = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_lineHeight, dip2px(lineHeight));
         lineHeightWidth = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_lineHeightWidth, dip2px(lineHeightWidth));
+        lineHeightHeight = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_lineHeightHeight, dip2px(lineHeightHeight));
         lineMarginLeft = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_lineMarginLeft, dip2px(lineMarginLeft));
         lineMarginRight = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_lineMarginRight, dip2px(lineMarginRight));
         lightColor = array.getColor(R.styleable.BreadScaleView_bread_lightColor, lightColor);
@@ -220,9 +221,30 @@ public class BreadScaleView extends FrameLayout {
         }
     }
 
+    /**
+     * 设置数据源
+     *
+     * @param datas
+     */
+    public void setData(List<ScaleBean> datas) {
+        if (mBreadScrollView != null && datas.size() > 0) {
+            mBreadScrollView.setData(datas);
+        }
+    }
+
+    /**
+     * 滑动到下标具体位置
+     *
+     * @param index
+     */
+    public void scrollTo(int index) {
+        if (mBreadScrollView != null && index >= 0) {
+            mBreadScrollView.moveToPosition(index);
+        }
+    }
+
     private int dip2px(float dpValue) {
         final float scale = getContext().getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
-
 }

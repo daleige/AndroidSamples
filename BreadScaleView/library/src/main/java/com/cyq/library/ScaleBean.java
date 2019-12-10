@@ -12,11 +12,6 @@ public class ScaleBean {
     private String scale;
 
     /**
-     * 刻度的四种状态
-     */
-    private ScaleType type;
-
-    /**
      * 面包图片的4种状态
      */
     private BreadType breadType;
@@ -27,14 +22,6 @@ public class ScaleBean {
 
     public void setScale(String scale) {
         this.scale = scale;
-    }
-
-    public ScaleType getType() {
-        return type;
-    }
-
-    public void setType(ScaleType type) {
-        this.type = type;
     }
 
     public BreadType getBreadType() {

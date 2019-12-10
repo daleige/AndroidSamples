@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,5 +14,18 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:background="#000000"
-        android:visibility="visible" />
+        app:bread_displayCount="9"
+        app:bread_heightColor="#DD5F00"
+        app:bread_itemHeight="50dp"
+        app:bread_ivWidth="50dp"
+        app:bread_lightColor="#222222"
+        app:bread_lineHeight="2dp"
+        app:bread_lineHeightHeight="4dp"
+        app:bread_lineHeightWidth="50dp"
+        app:bread_lineMarginLeft="33dp"
+        app:bread_lineMarginRight="28dp"
+        app:bread_lineWidth="45dp"
+        app:bread_middleColor="#D8D8D8"
+        app:bread_middleTxtColor="#BDBDBD"
+        app:bread_tvSize="25sp" />
 </LinearLayout>
