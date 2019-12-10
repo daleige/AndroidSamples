@@ -271,8 +271,8 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
                     return;
                 }
                 int topCount = scrollY / itemHeight;
-                int criticalY = scrollY % itemHeight;
-                if (criticalY >= itemHeight / 2) {
+                int currentY = scrollY % itemHeight;
+                if (currentY >= itemHeight / 2) {
                     //滑动到下一个位置
                     currentPosition = topCount + 1;
                     BreadScrollView.this.smoothScrollTo(0, currentPosition * itemHeight);
@@ -282,6 +282,9 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
                     BreadScrollView.this.smoothScrollTo(0, currentPosition * itemHeight);
                 }
                 autoScrollTag = false;
+                if (onItemChangeListener != null) {
+                    onItemChangeListener.onItemChanged(currentPosition);
+                }
                 break;
             //按下
             case SCROLL_STATE_TOUCH_SCROLL:
@@ -308,29 +311,6 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
     public void onScroll(ObservableScrollView view, boolean isTouchScroll, int x, int y, int oldx
             , int oldY) {
         scrollY = y;
-
-        //白色刻度的隐藏和显示
-//        if (y <= itemHeight) {
-//            if (onFristOrLastItem != null) {
-//                onFristOrLastItem.firstItem(false);
-//            }
-//        } else {
-//            if (onFristOrLastItem != null) {
-//                onFristOrLastItem.firstItem(true);
-//            }
-//        }
-//
-//        if (y >= ofSetHeight + (itemCount - 2 - displayCount / 2) * itemHeight) {
-//            if (onFristOrLastItem != null) {
-//                onFristOrLastItem.lastItem(false);
-//            }
-//        } else {
-//            //显示
-//            if (onFristOrLastItem != null) {
-//                onFristOrLastItem.lastItem(true);
-//            }
-//        }
-
         //控制文字变色
         int modular = (y - ofSetHeight) % itemHeight;
         int position = (y - ofSetHeight) / itemHeight + displayCount / 2;
@@ -340,6 +320,11 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
         if (oldPosition == position) {
             return;
         }
+
+        if (oldPosition >= 0 && onItemChangeListener != null) {
+            onItemChangeListener.onItemChange(position, oldPosition);
+        }
+
         for (int i = 0; i < itemCount; i++) {
             if (position == i) {
                 ((TextView) container.findViewById(position)).setTextColor(heightColor);
@@ -354,14 +339,14 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
                 }
             }
 
-            if(position==itemCount-1){
+            if (position == itemCount - 1) {
                 onFristOrLastItem.lastItem(false);
-            }else {
+            } else {
                 onFristOrLastItem.lastItem(true);
             }
-            if(position==0){
+            if (position == 0) {
                 onFristOrLastItem.firstItem(false);
-            }else {
+            } else {
                 onFristOrLastItem.firstItem(true);
             }
         }
@@ -379,5 +364,18 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
         void firstItem(boolean isVisible);
 
         void lastItem(boolean isVisible);
+    }
+
+
+    public void setOnItemChangeListener(OnItemChangeListener onItemChangeListener) {
+        this.onItemChangeListener = onItemChangeListener;
+    }
+
+    private OnItemChangeListener onItemChangeListener;
+
+    public interface OnItemChangeListener {
+        void onItemChanged(int position);
+
+        void onItemChange(int position, int oldPosition);
     }
 }

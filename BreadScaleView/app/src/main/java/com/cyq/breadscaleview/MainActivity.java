@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cyq.library.BreadScaleView;
+import com.cyq.library.BreadScrollView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,5 +15,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         BreadScaleView scaleView = findViewById(R.id.bv_test);
 
+
+        scaleView.setOnItemChangeLietener(new BreadScrollView.OnItemChangeListener() {
+            @Override
+            public void onItemChanged(int position) {
+
+            }
+
+            @Override
+            public void onItemChange(int position, int oldPosition) {
+
+            }
+        });
     }
 }

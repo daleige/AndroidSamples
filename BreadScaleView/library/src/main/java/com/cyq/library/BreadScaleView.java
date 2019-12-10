@@ -111,7 +111,7 @@ public class BreadScaleView extends FrameLayout {
         mBreadScrollView.setOnFristOrLastItem(new BreadScrollView.OnFirstOrLastItem() {
             @Override
             public void firstItem(boolean isVisible) {
-                if(lastLineView==null){
+                if (lastLineView == null) {
                     return;
                 }
                 if (isVisible) {
@@ -123,7 +123,7 @@ public class BreadScaleView extends FrameLayout {
 
             @Override
             public void lastItem(boolean isVisible) {
-                if(lastLineView==null){
+                if (lastLineView == null) {
                     return;
                 }
                 if (isVisible) {
@@ -175,4 +175,9 @@ public class BreadScaleView extends FrameLayout {
         addView(lastLineView);
     }
 
+    public void setOnItemChangeLietener(BreadScrollView.OnItemChangeListener listener) {
+        if (mBreadScrollView != null && listener != null) {
+            mBreadScrollView.setOnItemChangeListener(listener);
+        }
+    }
 }
