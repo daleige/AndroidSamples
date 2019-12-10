@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,8 +110,8 @@ public class BreadScaleView extends FrameLayout {
         super(context, attrs, defStyleAttr);
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.BreadScaleView);
         itemHeight = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_itemHeight, dip2px(itemHeight));
-        displayCount = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_displayCount, dip2px(displayCount));
-        tvSize = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_tvSize, dip2px(tvSize));
+        displayCount = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_displayCount, displayCount);
+        tvSize = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_tvSize, tvSize);
         ivWidth = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_ivWidth, dip2px(ivWidth));
         lineWidth = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_lineWidth, dip2px(lineWidth));
         lineHeight = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_lineHeight, dip2px(lineHeight));
@@ -123,6 +124,13 @@ public class BreadScaleView extends FrameLayout {
         heightColor = array.getColor(R.styleable.BreadScaleView_bread_heightColor, heightColor);
         array.recycle();
         init();
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int width = ivWidth + lineMarginLeft + lineHeightWidth + lineMarginRight + dip2px(30);
+        int height = itemHeight * displayCount;
+        super.onMeasure(width, height);
     }
 
     /**
@@ -199,12 +207,6 @@ public class BreadScaleView extends FrameLayout {
         addView(lineView);
         addView(fristLineView);
         addView(lastLineView);
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int width = ivWidth + lineMarginLeft + lineHeightWidth + lineMarginRight + dip2px(30);
-        super.onMeasure(width, itemHeight * displayCount);
     }
 
     /**
