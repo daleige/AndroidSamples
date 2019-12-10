@@ -30,7 +30,7 @@ public class BreadScaleView extends FrameLayout {
     /**
      * item默认高度
      */
-    private int itemHeight = 160;
+    private int itemHeight = 50;
     /**
      * 默认展示9个item
      */
@@ -38,47 +38,50 @@ public class BreadScaleView extends FrameLayout {
     /**
      * 刻度文字默认大小，单位：sp
      */
-    private int tvSize = 24;
+    private int tvSize = 25;
     /**
      * 面包图片宽高
      */
-    private int ivWidth = 140;
+    private int ivWidth = 50;
     /**
      * 中间横线宽度
      */
-    private int lineWidth = 200;
+    private int lineWidth = 45;
     /**
      * 中间横线选中状态宽度
      */
-    private int lineHeightWidth = 240;
+    private int lineHeightWidth = 50;
     /**
      * 中间横线的选中状态高度
      */
-    private int lineHeightHeight = 24;
+    private int lineHeightHeight = 4;
 
     /**
      * 中间横线的高度
      */
-    private int lineHeight = 12;
+    private int lineHeight = 2;
     /**
-     * 刻度文字marginLeft
+     * 中间横线marginLeft
      */
-    private int lineMarginLeft = 100;
+    private int lineMarginLeft = 33;
     /**
-     * 面包图标marginRight
+     * 中间横线marginRight
      */
-    private int lineMarginRight = 100;
+    private int lineMarginRight = 28;
 
     /**
      * 未选中刻度颜色
      */
-    private int triangleLeftMargin = 4;
+    private int triangleLeftMargin = 2;
 
-    private int lightColor = Color.parseColor("#616161");
+    /**
+     * 1级刻度颜色
+     */
+    private int lightColor = Color.parseColor("#222222");
     /**
      * 二级刻度颜色
      */
-    private int middleColor = Color.parseColor("#fafafa");
+    private int middleColor = Color.parseColor("#D8D8D8");
     /**
      * 二级文字颜色
      */
@@ -86,7 +89,7 @@ public class BreadScaleView extends FrameLayout {
     /**
      * 三级刻度颜色
      */
-    private int heightColor = Color.parseColor("#ff6d00");
+    private int heightColor = Color.parseColor("#DD5F00");
 
     /**
      * 三角形游标的宽高
