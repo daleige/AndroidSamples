@@ -148,4 +148,8 @@ public class BreadScaleView extends FrameLayout {
         addView(fristLineView);
         addView(lastLineView);
     }
+
+    public void moveTo(int position){
+        mBreadScrollView.moveToPosition(position);
+    }
 }

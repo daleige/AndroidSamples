@@ -5,6 +5,8 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.cyq.library.BreadScaleView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,5 +51,11 @@ public class MainActivity extends AppCompatActivity {
                 //Log.i("id", "************id:" + id + "********text:" + text);
             }
         });
+
+
+
+        /**********************************************************test*****************************/
+        BreadScaleView scaleView=findViewById(R.id.bv_test);
+        scaleView.moveTo(19);
     }
 }

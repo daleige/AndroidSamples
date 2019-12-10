@@ -154,6 +154,8 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
         container.addView(bottomView);
         this.addView(container);
         setOnScrollListener(this);
+
+        moveToPosition();
     }
 
     MarginLayoutParams tvLayoutParams;
@@ -214,6 +216,27 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
         return itemView;
     }
 
+    private void moveToPosition() {
+        moveToPosition(0);
+    }
+
+    /**
+     * 移动指定位置
+     *
+     * @param index
+     */
+    public void moveToPosition(final int index) {
+        if (index < 0 || index > (itemCount - 1)) {
+            return;
+        }
+        BreadScrollView.this.post(new Runnable() {
+            @Override
+            public void run() {
+                BreadScrollView.this.scrollTo(0, ofSetHeight + (index - displayCount / 2) * itemHeight);
+            }
+        });
+    }
+
     /**
      * 修改ScrollView的滑动速度
      *
@@ -252,7 +275,7 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
                 }
                 int topCount = scrollY / itemHeight;
                 int criticalY = scrollY % itemHeight;
-                if (criticalY > itemHeight / 2) {
+                if (criticalY >= itemHeight / 2) {
                     //滑动到下一个位置
                     currentPosition = topCount + 1;
                     BreadScrollView.this.smoothScrollTo(0, currentPosition * itemHeight);
