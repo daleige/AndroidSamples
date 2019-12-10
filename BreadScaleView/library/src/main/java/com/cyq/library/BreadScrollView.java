@@ -94,6 +94,7 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
     boolean autoScrollTag = false;
 
     int itemCount;
+    int ofSetHeight;
 
     public BreadScrollView(Context context) {
         this(context, null);
@@ -137,11 +138,20 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
 
         mContext = getContext();
         itemCount = mData.size();
+        ofSetHeight = displayCount / 2 * itemHeight;
         container = new LinearLayout(mContext);
         container.setOrientation(LinearLayout.VERTICAL);
+
+        //添加顶部占位空控件
+        View topView = new View(mContext);
+        topView.setLayoutParams(new ViewGroup.LayoutParams(1, ofSetHeight));
+        View bottomView = new View(mContext);
+        bottomView.setLayoutParams(new ViewGroup.LayoutParams(1, ofSetHeight));
+        container.addView(topView);
         for (int i = 0; i < itemCount; i++) {
             container.addView(createItemView(mData.get(i), i));
         }
+        container.addView(bottomView);
         this.addView(container);
         setOnScrollListener(this);
     }
@@ -278,8 +288,8 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
     public void onScroll(ObservableScrollView view, boolean isTouchScroll, int x, int y, int oldx
             , int oldY) {
         scrollY = y;
-        int modular = y % itemHeight;
-        int position = y / itemHeight + displayCount / 2;
+        int modular = (y - ofSetHeight) % itemHeight;
+        int position = (y - ofSetHeight) / itemHeight + displayCount / 2;
         if (modular >= itemHeight / 2) {
             position++;
         }
@@ -288,7 +298,6 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
         }
         for (int i = 0; i < itemCount; i++) {
             if (position == i) {
-                Log.i("test", "位置：" + position);
                 ((TextView) container.findViewById(position)).setTextColor(heightColor);
             } else {
                 if (position - 1 >= 0 && i == position - 1) {
