@@ -71,6 +71,9 @@ public class BreadScaleView extends FrameLayout {
     /**
      * 未选中刻度颜色
      */
+
+    private int triangleLeftMargin = 4;
+
     private int lightColor = Color.parseColor("#616161");
     /**
      * 二级刻度颜色
@@ -175,9 +178,26 @@ public class BreadScaleView extends FrameLayout {
         addView(lastLineView);
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int width = ivWidth + lineMarginLeft + lineHeightWidth + lineMarginRight + dip2px(30);
+        super.onMeasure(width, itemHeight * displayCount);
+    }
+
+    /**
+     * 设置选择结果的回调
+     *
+     * @param listener
+     */
     public void setOnItemChangeLietener(BreadScrollView.OnItemChangeListener listener) {
         if (mBreadScrollView != null && listener != null) {
             mBreadScrollView.setOnItemChangeListener(listener);
         }
     }
+
+    private int dip2px(float dpValue) {
+        final float scale = getContext().getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
+
 }

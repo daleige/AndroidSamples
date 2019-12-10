@@ -2,9 +2,7 @@ package com.cyq.library;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.opengl.Visibility;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -115,7 +113,7 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
      */
     private void init() {
         this.setVerticalScrollBarEnabled(false);
-        for (int i = 1; i <= 20; i++) {
+        for (int i = 1; i <= 9; i++) {
             ScaleBean bean = new ScaleBean();
             if (i >= 4) {
                 bean.setScale(String.valueOf(i));
@@ -177,7 +175,7 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
         //创建刻度文字
         TextView tv = new TextView(mContext);
         tvLayoutParams =
-                new MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, itemHeight);
+                new MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, itemHeight);
         tv.setLayoutParams(tvLayoutParams);
         tv.setSingleLine(true);
         if (bean.getType().equals(ScaleType.HEIGHT)) {

@@ -14,8 +14,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BreadScaleView scaleView = findViewById(R.id.bv_test);
-
-
         scaleView.setOnItemChangeLietener(new BreadScrollView.OnItemChangeListener() {
             @Override
             public void onItemChanged(int position) {
