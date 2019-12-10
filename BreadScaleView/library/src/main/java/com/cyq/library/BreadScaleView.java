@@ -68,10 +68,10 @@ public class BreadScaleView extends FrameLayout {
      * 面包图标marginRight
      */
     private int lineMarginRight = 100;
+
     /**
      * 未选中刻度颜色
      */
-
     private int triangleLeftMargin = 4;
 
     private int lightColor = Color.parseColor("#616161");
@@ -79,6 +79,10 @@ public class BreadScaleView extends FrameLayout {
      * 二级刻度颜色
      */
     private int middleColor = Color.parseColor("#fafafa");
+    /**
+     * 二级文字颜色
+     */
+    private int middleTxtColor = Color.parseColor("#BDBDBD");
     /**
      * 三级刻度颜色
      */
@@ -107,9 +111,10 @@ public class BreadScaleView extends FrameLayout {
      */
     private void init() {
         mContext = getContext();
-
         //滑动布局属性
-        mBreadScrollView = new BreadScrollView(getContext());
+        mBreadScrollView = new BreadScrollView(getContext(), itemHeight, displayCount, tvSize, ivWidth,
+                lineWidth, lineHeight, lineHeightWidth, lineMarginLeft, lineMarginRight,
+                lightColor, middleColor, middleTxtColor, heightColor);
         mBreadScrollView.setLayoutParams(new ScrollView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         mBreadScrollView.setOnFristOrLastItem(new BreadScrollView.OnFirstOrLastItem() {
             @Override
@@ -139,7 +144,7 @@ public class BreadScaleView extends FrameLayout {
 
         //三角形游标布局属性
         ivCursor = new ImageView(mContext);
-        int marginLeft = ivWidth + lineMarginLeft + lineHeightWidth;
+        int marginLeft = ivWidth + lineMarginLeft + lineHeightWidth + triangleLeftMargin;
         int marginTop = (displayCount / 2) * itemHeight + ((itemHeight - cursorWidth) / 2);
         MarginLayoutParams ivLayoutParams = new MarginLayoutParams(cursorWidth, cursorWidth);
         ivLayoutParams.leftMargin = marginLeft;
@@ -169,7 +174,6 @@ public class BreadScaleView extends FrameLayout {
         lastLp.topMargin = (displayCount / 2 + 1) * itemHeight + ((itemHeight - lineHeight) / 2);
         lastLineView.setLayoutParams(lastLp);
         lastLineView.setBackgroundColor(middleColor);
-
 
         addView(mBreadScrollView);
         addView(ivCursor);

@@ -27,61 +27,58 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
     /**
      * item默认高度
      */
-    private int itemHeight = 160;
+    private int itemHeight;
     /**
      * 默认展示9个item
      */
-    private int displayCount = 9;
+    private int displayCount;
     /**
      * 刻度文字默认大小，单位：sp
      */
-    private int tvSize = 24;
+    private int tvSize;
     /**
      * 面包图片宽高
      */
-    private int ivWidth = 140;
+    private int ivWidth;
     /**
      * 中间横线宽度
      */
-    private int lineWidth = 200;
+    private int lineWidth;
     /**
      * 中间横线的高度
      */
-    private int lineHeight = 12;
+    private int lineHeight;
 
     /**
      * 中间横线选中状态宽度
      */
-    private int lineHeightWidth = 240;
-    /**
-     * 中间横线的选中状态高度
-     */
-    private int lineHeightHeight = 24;
+    private int lineHeightWidth;
 
     /**
      * 刻度文字marginLeft
      */
-    private int lineMarginLeft = 100;
+    private int lineMarginLeft;
     /**
      * 面包图标marginRight
      */
-    private int lineMarginRight = 100;
+    private int lineMarginRight;
     /**
      * 未选中刻度颜色
      */
-    private int lightColor = Color.parseColor("#222222");
+    private int lightColor;
     /**
      * 二级刻度颜色
      */
-    private int middleColor = Color.parseColor("#D8D8D8");
+    private int middleColor;
     /**
      * 二级文字颜色
      */
-    private int middleTxtColor = Color.parseColor("#BDBDBD");
+    private int middleTxtColor;
     /**
      * 三级刻度颜色
      */
-    private int heightColor = Color.parseColor("#DD5F00");
+    private int heightColor;
+
 
     /**
      * 标记Y方向已滑动距离
@@ -95,16 +92,23 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
     int itemCount;
     int ofSetHeight;
 
-    public BreadScrollView(Context context) {
-        this(context, null);
-    }
-
-    public BreadScrollView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
-
-    public BreadScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    public BreadScrollView(Context context, int itemHeight, int displayCount, int tvSize, int ivWidth,
+                           int lineWidth, int lineHeight, int lineHeightWidth, int lineMarginLeft, int lineMarginRight,
+                           int lightColor, int middleColor, int middleTxtColor, int heightColor) {
+        super(context);
+        this.itemHeight = itemHeight;
+        this.displayCount = displayCount;
+        this.tvSize = tvSize;
+        this.ivWidth = ivWidth;
+        this.lineWidth = lineWidth;
+        this.lineHeight = lineHeight;
+        this.lineHeightWidth = lineHeightWidth;
+        this.lineMarginLeft = lineMarginLeft;
+        this.lineMarginRight = lineMarginRight;
+        this.lightColor = lightColor;
+        this.middleColor = middleColor;
+        this.middleTxtColor = middleTxtColor;
+        this.heightColor = heightColor;
         init();
     }
 

@@ -6,7 +6,6 @@ package com.cyq.library;
  * Description:
  */
 public class ScaleBean {
-
     /**
      * 刻度的文字
      */
