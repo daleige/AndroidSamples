@@ -9,6 +9,7 @@
     tools:context=".MainActivity">
 
     <com.cyq.library.BreadScaleView
+        android:visibility="gone"
         android:id="@+id/bv_test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,4 +29,9 @@
         app:bread_middleColor="#D8D8D8"
         app:bread_middleTxtColor="#BDBDBD"
         app:bread_tvSize="25sp" />
+
+    <com.cyq.breadscaleview.BezierView
+        android:id="@+id/bzv_test"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </FrameLayout>

@@ -1,5 +1,6 @@
 package com.cyq.breadscaleview;
 
+import android.graphics.Point;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -54,5 +55,17 @@ public class MainActivity extends AppCompatActivity {
 
         //移动到下标为3的位置，也就是刻度中的4
         //scaleView.scrollTo(3);
+
+
+        BezierView bezierView=findViewById(R.id.bzv_test);
+        List<Point> pointList = new ArrayList<>();
+        pointList.add(new Point(10,899));
+        pointList.add(new Point(110,647));
+        pointList.add(new Point(130,300));
+        pointList.add(new Point(310,487));
+        pointList.add(new Point(390,700));
+        pointList.add(new Point(510,190));
+        pointList.add(new Point(910,400));
+        bezierView.setPointList(pointList);
     }
 }
