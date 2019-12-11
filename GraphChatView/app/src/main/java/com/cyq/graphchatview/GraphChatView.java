@@ -22,12 +22,12 @@ import java.util.List;
  * desc   :
  */
 public class GraphChatView extends View {
-    private int tvColor = Color.parseColor("#000000");
+    private int tvColor = Color.parseColor("#626262");
     private int tvSize = 17;
-    private int lineWidth = 1;
-    private int lineColor = Color.parseColor("#000000");
-    private int lineMarginLeft = 7;
-    private int lineMarginBottom = 10;
+    private float lineWidth = 0.5f;
+    private int lineColor = Color.parseColor("#626262");
+    private float lineMarginLeft = 7;
+    private float lineMarginBottom = 10;
 
     private Paint tvPaint;
     private Paint linePaint;
@@ -50,9 +50,9 @@ public class GraphChatView extends View {
 
     private void init() {
         tvSize = sp2px(tvSize);
-        lineWidth = dip2px(lineWidth);
-        lineMarginLeft = dip2px(lineMarginLeft);
-        lineMarginBottom = dip2px(lineMarginBottom);
+        lineWidth = dip2px(getContext(), lineWidth);
+        lineMarginLeft = dip2px(getContext(), lineMarginLeft);
+        lineMarginBottom = dip2px(getContext(), lineMarginBottom);
 
         tvPaint = new Paint();
         tvPaint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -71,23 +71,28 @@ public class GraphChatView extends View {
         yRoller.add("100");
         yRoller.add("150");
         yRoller.add("250");
-        yRoller.add("300");
 
-        xRoller.add("10");
-        xRoller.add("20");
+        xRoller.add("0");
+        xRoller.add("15");
         xRoller.add("30");
-        xRoller.add("40");
-        xRoller.add("50");
+        xRoller.add("分");
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        String baseLengthStr = "a";
+        for (String str : yRoller) {
+            if (str.length() > baseLengthStr.length()) {
+                baseLengthStr = str;
+            }
+        }
+
         Rect yTvBounds = new Rect();
-        tvPaint.getTextBounds("888", 0, "888".length(), yTvBounds);
+        tvPaint.getTextBounds(baseLengthStr, 0, baseLengthStr.length(), yTvBounds);
         int yTvWidth = yTvBounds.width();
         int yTvHeight = yTvBounds.height();
-        int yItemHeight = (getHeight() - yTvHeight) / yRoller.size();
+        int yItemHeight = (int) ((getHeight() - yTvHeight - lineMarginBottom) / yRoller.size());
 
         for (int i = 0; i < yRoller.size(); i++) {
             //画Y轴文字
@@ -102,13 +107,14 @@ public class GraphChatView extends View {
         }
 
         for (int i = 0; i < xRoller.size(); i++) {
-            int xItemWidth = (getWidth() - yTvWidth - lineMarginLeft) / xRoller.size();
-            int xIndexMid = yTvWidth + lineMarginLeft + xItemWidth * i + xItemWidth / 2;
-            //画Y轴文字
+            int xItemWidth = (int) ((getWidth() - yTvWidth - lineMarginLeft) / xRoller.size());
+            int xIndexMid = (int) (yTvWidth + lineMarginLeft + xItemWidth * i + xItemWidth / 2);
+            //画X轴文字
             String text = xRoller.get(i);
             Rect textBounds = new Rect();
             tvPaint.getTextBounds(text, 0, text.length(), textBounds);
-            int baseLine = measureBaseLine(tvPaint, text, getHeight() - yTvHeight);
+            //TODO 这个地方的topY有2像素左右误差。待处理
+            int baseLine = measureBaseLine(tvPaint, text, getHeight() - textBounds.height() - 2);
             canvas.drawText(text, xIndexMid - textBounds.width() / 2, baseLine, tvPaint);
         }
     }
@@ -133,8 +139,8 @@ public class GraphChatView extends View {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, getResources().getDisplayMetrics());
     }
 
-    private int dip2px(float dpValue) {
-        final float scale = getContext().getResources().getDisplayMetrics().density;
+    public static int dip2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
 }

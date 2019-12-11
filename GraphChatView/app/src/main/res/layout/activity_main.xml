@@ -8,7 +8,6 @@
     <com.cyq.graphchatview.GraphChatView
         android:layout_width="320dp"
         android:layout_height="220dp"
-        android:layout_gravity="center"
-        android:background="@android:color/darker_gray" />
+        android:layout_gravity="center" />
 
 </FrameLayout>
