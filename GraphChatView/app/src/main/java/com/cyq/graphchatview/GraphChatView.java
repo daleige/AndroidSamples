@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
@@ -24,6 +25,9 @@ public class GraphChatView extends View {
     private int tvSize = 17;
     private int lineWidth = 1;
     private int lineColor = Color.parseColor("#000000");
+    private int lineMarginLeft = 7;
+    private int lineMarginBottom = 10;
+
     private Paint tvPaint;
     private Paint linePaint;
 
@@ -44,15 +48,20 @@ public class GraphChatView extends View {
     }
 
     private void init() {
+        tvSize = sp2px(tvSize);
+        lineWidth = dip2px(lineWidth);
+        lineMarginLeft = dip2px(lineMarginLeft);
+        lineMarginBottom = dip2px(lineMarginBottom);
+
         tvPaint = new Paint();
         tvPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         tvPaint.setAntiAlias(true);
         tvPaint.setColor(tvColor);
-        tvPaint.setTextSize(sp2px(tvSize));
+        tvPaint.setTextSize(tvSize);
 
         linePaint = new Paint();
         linePaint.setColor(tvColor);
-        linePaint.setStrokeWidth(dip2px(lineWidth));
+        linePaint.setStrokeWidth(lineWidth);
         linePaint.setColor(lineColor);
         linePaint.setAntiAlias(true);
 
@@ -79,13 +88,30 @@ public class GraphChatView extends View {
         int yTvHeight = yTvBounds.height();
         int yItemHeight = (getHeight() - yTvHeight) / yRoller.size();
 
-        //画Y轴文字
         for (int i = 0; i < yRoller.size(); i++) {
+            //画Y轴文字
             String text = yRoller.get(yRoller.size() - i - 1);
             Rect textBounds = new Rect();
             tvPaint.getTextBounds(text, 0, text.length(), textBounds);
             int baseLine = measureBaseLine(tvPaint, text, yItemHeight * i);
             canvas.drawText(text, (yTvWidth - textBounds.width()) / 2, baseLine, tvPaint);
+
+            //画横线
+            canvas.drawLine(yTvWidth + lineMarginLeft, yItemHeight * i + yTvHeight / 2, getWidth(), yItemHeight * i + yTvHeight / 2, linePaint);
+        }
+
+        for (int i = 0; i < xRoller.size(); i++) {
+            int xItemWidth = (getWidth() - yTvWidth - lineMarginLeft) / xRoller.size();
+            int xIndexMid = yTvWidth + lineMarginLeft + xItemWidth * i + xItemWidth / 2;
+            Log.i("test", "-------------" + xIndexMid + "-----" + getWidth());
+
+            //画Y轴文字
+            String text = xRoller.get(i);
+            Rect textBounds = new Rect();
+
+            tvPaint.getTextBounds(text, 0, text.length(), textBounds);
+            int baseLine = measureBaseLine(tvPaint, text, getHeight() - yTvHeight);
+            canvas.drawText(text, xIndexMid - textBounds.width() / 2, baseLine, tvPaint);
         }
     }
 
