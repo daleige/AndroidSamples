@@ -1,6 +1,5 @@
 package com.cyq.graphchatview;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -28,12 +27,16 @@ public class GraphChatView extends View {
     private int lineColor = Color.parseColor("#626262");
     private float lineMarginLeft = 7;
     private float lineMarginBottom = 10;
+    private int graphColor = Color.parseColor("#FF5500");
+    private float graphWidth = 3.88f;
 
     private Paint tvPaint;
     private Paint linePaint;
+    private Paint graphPaint;
 
     private List<String> xRoller = new ArrayList<>();
     private List<String> yRoller = new ArrayList<>();
+    private List<TempBean> tempList = new ArrayList<>();
 
     public GraphChatView(Context context) {
         this(context, null);
@@ -53,6 +56,7 @@ public class GraphChatView extends View {
         lineWidth = dip2px(getContext(), lineWidth);
         lineMarginLeft = dip2px(getContext(), lineMarginLeft);
         lineMarginBottom = dip2px(getContext(), lineMarginBottom);
+        graphWidth = dip2px(getContext(), graphWidth);
 
         tvPaint = new Paint();
         tvPaint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -61,10 +65,14 @@ public class GraphChatView extends View {
         tvPaint.setTextSize(tvSize);
 
         linePaint = new Paint();
-        linePaint.setColor(tvColor);
         linePaint.setStrokeWidth(lineWidth);
         linePaint.setColor(lineColor);
         linePaint.setAntiAlias(true);
+
+        graphPaint = new Paint();
+        graphPaint.setColor(graphColor);
+        graphPaint.setStrokeWidth(graphWidth);
+        graphPaint.setStyle(Paint.Style.FILL_AND_STROKE);
 
         yRoller.add("0");
         yRoller.add("50");
@@ -76,6 +84,32 @@ public class GraphChatView extends View {
         xRoller.add("15");
         xRoller.add("30");
         xRoller.add("分");
+
+        TempBean tempBean1 = new TempBean();
+        tempBean1.setTimestamp(1575993600);
+        tempBean1.setTemp(12);
+        TempBean tempBean2 = new TempBean();
+        tempBean2.setTimestamp(1575994360); //12
+        tempBean2.setTemp(60);
+        TempBean tempBean3 = new TempBean();
+        tempBean3.setTimestamp(1575994594); //16
+        tempBean3.setTemp(80);
+        TempBean tempBean4 = new TempBean();
+        tempBean4.setTimestamp(1575994834); //20
+        tempBean4.setTemp(190);
+        TempBean tempBean5 = new TempBean();
+        tempBean5.setTimestamp(1575995194);//26
+        tempBean5.setTemp(220);
+        TempBean tempBean6 = new TempBean();
+        tempBean6.setTimestamp(1575995400);//30
+        tempBean6.setTemp(260);
+
+        tempList.add(tempBean1);
+        tempList.add(tempBean2);
+        tempList.add(tempBean3);
+        tempList.add(tempBean4);
+        tempList.add(tempBean5);
+        tempList.add(tempBean6);
     }
 
     @Override
@@ -117,6 +151,16 @@ public class GraphChatView extends View {
             int baseLine = measureBaseLine(tvPaint, text, getHeight() - textBounds.height() - 2);
             canvas.drawText(text, xIndexMid - textBounds.width() / 2, baseLine, tvPaint);
         }
+
+        //画曲线
+        int originX = (int) (yTvWidth + lineMarginLeft);
+        int originY = (int) (getHeight() - ((3 * yTvHeight) >> 1) - lineMarginBottom - lineWidth);
+        canvas.translate(originX, originY);
+        canvas.save();
+
+        canvas.drawCircle(0, 0, 4, graphPaint);
+
+        canvas.restore();
     }
 
     /**
