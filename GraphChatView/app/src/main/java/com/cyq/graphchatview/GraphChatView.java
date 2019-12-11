@@ -1,5 +1,6 @@
 package com.cyq.graphchatview;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -93,22 +94,19 @@ public class GraphChatView extends View {
             String text = yRoller.get(yRoller.size() - i - 1);
             Rect textBounds = new Rect();
             tvPaint.getTextBounds(text, 0, text.length(), textBounds);
-            int baseLine = measureBaseLine(tvPaint, text, yItemHeight * i);
+            int topY = yItemHeight * i + yItemHeight - yTvHeight;
+            int baseLine = measureBaseLine(tvPaint, text, topY);
             canvas.drawText(text, (yTvWidth - textBounds.width()) / 2, baseLine, tvPaint);
-
             //画横线
-            canvas.drawLine(yTvWidth + lineMarginLeft, yItemHeight * i + yTvHeight / 2, getWidth(), yItemHeight * i + yTvHeight / 2, linePaint);
+            canvas.drawLine(yTvWidth + lineMarginLeft, topY + yTvHeight / 2, getWidth(), topY + yTvHeight / 2, linePaint);
         }
 
         for (int i = 0; i < xRoller.size(); i++) {
             int xItemWidth = (getWidth() - yTvWidth - lineMarginLeft) / xRoller.size();
             int xIndexMid = yTvWidth + lineMarginLeft + xItemWidth * i + xItemWidth / 2;
-            Log.i("test", "-------------" + xIndexMid + "-----" + getWidth());
-
             //画Y轴文字
             String text = xRoller.get(i);
             Rect textBounds = new Rect();
-
             tvPaint.getTextBounds(text, 0, text.length(), textBounds);
             int baseLine = measureBaseLine(tvPaint, text, getHeight() - yTvHeight);
             canvas.drawText(text, xIndexMid - textBounds.width() / 2, baseLine, tvPaint);
