@@ -14,9 +14,11 @@ import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.graphics.Point;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by zouxiang on 2016/9/22.
@@ -133,7 +135,8 @@ public class BezierView extends View {
                 final float secondControlPointX = currentPointX - (lineSmoothness * secondDiffX);
                 final float secondControlPointY = currentPointY - (lineSmoothness * secondDiffY);
                 //画出曲线
-                mPath.cubicTo(firstControlPointX, firstControlPointY, secondControlPointX, secondControlPointY,
+                mPath.cubicTo(firstControlPointX, firstControlPointY, secondControlPointX,
+                        secondControlPointY,
                         currentPointX, currentPointY);
                 //将控制点保存到辅助路径上
                 mAssistPath.lineTo(firstControlPointX, firstControlPointY);
@@ -152,4 +155,17 @@ public class BezierView extends View {
         mPathMeasure = new PathMeasure(mPath, false);
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            mPointList.clear();
+            Random random = new Random();
+            for (int i = 0; i < 12; i++) {
+                mPointList.add(new Point(100 * i, random.nextInt(800)+400));
+            }
+            measurePath();
+            invalidate();
+        }
+        return false;
+    }
 }

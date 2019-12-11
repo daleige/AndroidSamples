@@ -12,6 +12,7 @@ import com.cyq.library.ScaleBean;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -57,15 +58,12 @@ public class MainActivity extends AppCompatActivity {
         //scaleView.scrollTo(3);
 
 
-        BezierView bezierView=findViewById(R.id.bzv_test);
+        BezierView bezierView = findViewById(R.id.bzv_test);
+        Random random = new Random();
         List<Point> pointList = new ArrayList<>();
-        pointList.add(new Point(10,899));
-        pointList.add(new Point(110,647));
-        pointList.add(new Point(130,300));
-        pointList.add(new Point(310,487));
-        pointList.add(new Point(390,700));
-        pointList.add(new Point(510,190));
-        pointList.add(new Point(910,400));
+        for (int i = 0; i < 12; i++) {
+            pointList.add(new Point(100 * i, random.nextInt(800)+400));
+        }
         bezierView.setPointList(pointList);
     }
 }
