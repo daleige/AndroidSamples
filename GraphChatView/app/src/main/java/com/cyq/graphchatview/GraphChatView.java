@@ -112,6 +112,7 @@ public class GraphChatView extends View {
         super.onDraw(canvas);
         TimeUtils.XRollerInfo infoList = TimeUtils.getXRollerInfo(tempList);
         if (infoList != null) {
+            xRoller.clear();
             xRoller.add(infoList.firstStr);
             xRoller.add(infoList.secondStr);
             xRoller.add(infoList.threeStr);
@@ -161,6 +162,11 @@ public class GraphChatView extends View {
         canvas.translate(originX, originY);
         canvas.save();
         canvas.drawCircle(0, 0, 4, graphPaint);
+        //换算成对应的xy轴坐标
+        for (int i = 0; i < tempList.size(); i++) {
+            float currentX;
+            int currentY;
+        }
         canvas.restore();
     }
 
