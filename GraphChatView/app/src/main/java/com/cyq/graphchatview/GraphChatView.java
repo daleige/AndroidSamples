@@ -80,11 +80,6 @@ public class GraphChatView extends View {
         yRoller.add("150");
         yRoller.add("250");
 
-        xRoller.add("0");
-        xRoller.add("15");
-        xRoller.add("30");
-        xRoller.add("分");
-
         TempBean tempBean1 = new TempBean();
         tempBean1.setTimestamp(1575993600);
         tempBean1.setTemp(12);
@@ -115,6 +110,14 @@ public class GraphChatView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        TimeUtils.XRollerInfo infoList = TimeUtils.getXRollerInfo(tempList);
+        if (infoList != null) {
+            xRoller.add(infoList.firstStr);
+            xRoller.add(infoList.secondStr);
+            xRoller.add(infoList.threeStr);
+            xRoller.add(infoList.typeStr);
+        }
+
         String baseLengthStr = "a";
         for (String str : yRoller) {
             if (str.length() > baseLengthStr.length()) {
@@ -157,9 +160,7 @@ public class GraphChatView extends View {
         int originY = (int) (getHeight() - ((3 * yTvHeight) >> 1) - lineMarginBottom - lineWidth);
         canvas.translate(originX, originY);
         canvas.save();
-
         canvas.drawCircle(0, 0, 4, graphPaint);
-
         canvas.restore();
     }
 

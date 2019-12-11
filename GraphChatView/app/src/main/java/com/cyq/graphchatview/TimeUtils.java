@@ -1,6 +1,5 @@
 package com.cyq.graphchatview;
 
-import android.os.SystemClock;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -19,8 +18,8 @@ public class TimeUtils {
         }
         long timeDifference = list.get(list.size() - 1).getTimestamp() - list.get(0).getTimestamp();
         //得到时间差也就是时长
-        int millis = (int) (timeDifference / 1000 / 60);
-        Log.i("test", "---------------millis:" + millis);
+        int millis = (int) (timeDifference / 60);
+
         if (millis < 1) {
             return new XRollerInfo(1, "0", "0.5", "1", "分");
         } else if (millis < 2) {
@@ -109,6 +108,12 @@ public class TimeUtils {
 
         public String getTypeStr() {
             return typeStr;
+        }
+
+        @NonNull
+        @Override
+        public String toString() {
+            return firstStr + "--" + secondStr + "--" + threeStr + typeStr + typeStr + maxMillis;
         }
     }
 }
