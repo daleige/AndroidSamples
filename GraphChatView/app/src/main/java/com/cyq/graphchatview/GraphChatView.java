@@ -129,22 +129,14 @@ public class GraphChatView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        TimeUtils.XRollerInfo infoList = TimeUtils.getXRollerInfo(tempList);
-        if (infoList != null) {
-            xRoller.clear();
-            xRoller.add(infoList.firstStr);
-            xRoller.add(infoList.secondStr);
-            xRoller.add(infoList.threeStr);
-            xRoller.add(infoList.typeStr);
-        }
 
+        //先画Y轴和横线
         String baseLengthStr = "a";
         for (String str : yRoller) {
             if (str.length() > baseLengthStr.length()) {
                 baseLengthStr = str;
             }
         }
-
         Rect yTvBounds = new Rect();
         tvPaint.getTextBounds(baseLengthStr, 0, baseLengthStr.length(), yTvBounds);
         int yTvWidth = yTvBounds.width();
@@ -161,6 +153,18 @@ public class GraphChatView extends View {
             canvas.drawText(text, (yTvWidth - textBounds.width()) / 2, baseLine, tvPaint);
             //画横线
             canvas.drawLine(yTvWidth + lineMarginLeft, topY + yTvHeight / 2, getWidth(), topY + yTvHeight / 2, linePaint);
+        }
+
+        if (tempList.size() <= 0) {
+            return;
+        }
+        TimeUtils.XRollerInfo infoList = TimeUtils.getXRollerInfo(tempList);
+        if (infoList != null) {
+            xRoller.clear();
+            xRoller.add(infoList.firstStr);
+            xRoller.add(infoList.secondStr);
+            xRoller.add(infoList.threeStr);
+            xRoller.add(infoList.typeStr);
         }
 
         for (int i = 0; i < xRoller.size(); i++) {
@@ -180,7 +184,6 @@ public class GraphChatView extends View {
         canvas.translate(originX, originY);
         canvas.save();
         //换算成对应的xy轴坐标
-
         //最开始的一个点的时间
         float timestampStart = tempList.get(0).getTimestamp();
         //最后一个点的时间
@@ -218,6 +221,7 @@ public class GraphChatView extends View {
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.graph_chat_point);
         Bitmap newBitmap = scaleBitmap(bitmap, (int) topPointWidth);
         canvas.drawBitmap(newBitmap, bitmapX - topPointWidth / 2, bitmapY - topPointWidth / 2, bitmapPaint);
+        canvas.restore();
     }
 
     private void measurePath() {
