@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         mGraphChatView = findViewById(R.id.graph_view);
-        mGraphChatView.setYAxis(60, "0", "60", "120", "180", "240", "300");
+//        mGraphChatView.setYAxis(60, "0", "60", "120", "180", "240", "300");
         mGraphChatView.setTempList(tempList);
     }
 }

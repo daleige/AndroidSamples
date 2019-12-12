@@ -19,7 +19,7 @@
         <attr name="graph_graphWidth" format="dimension" />
         <!--终点图片宽高-->
         <attr name="graph_topPointWidth" format="dimension" />
-        <!--贝塞尔曲线控制点系数-->
+        <!--贝塞尔曲线控制点系数 控制曲线平滑度 建议0.2f-->
         <attr name="graph_lineSmoothness" format="float" />
     </declare-styleable>
 </resources>

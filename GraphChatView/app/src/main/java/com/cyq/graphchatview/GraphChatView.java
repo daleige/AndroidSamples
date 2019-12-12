@@ -89,7 +89,6 @@ public class GraphChatView extends View {
         linePaint = new Paint();
         linePaint.setStrokeWidth(lineWidth);
         linePaint.setColor(lineColor);
-        linePaint.setAntiAlias(true);
 
         graphPaint = new Paint();
         graphPaint.setColor(graphColor);
@@ -110,14 +109,13 @@ public class GraphChatView extends View {
     /**
      * 设置Y轴刻度
      *
-     * @param scale 单位刻度
-     * @param strs  刻度上展示的文字，若不设置则展示0,50,100,150,200,250
+     * @param scale  单位刻度
+     * @param strArr 刻度上展示的文字，若不设置则展示0,50,100,150,200,250
      */
-    public void setYAxis(int scale, String... strs) {
-        if (strs.length > 0) {
+    public void setYAxis(int scale, @NonNull String... strArr) {
+        if (strArr.length > 0) {
             yScale = scale;
-            yRoller.clear();
-            yRoller = Arrays.asList(strs);
+            yRoller = Arrays.asList(strArr);
             invalidate();
         }
     }
