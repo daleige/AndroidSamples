@@ -117,6 +117,7 @@ public class GraphChatView extends View {
             yScale = scale;
             yRoller.clear();
             yRoller = Arrays.asList(strs);
+            invalidate();
         }
     }
 
