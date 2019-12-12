@@ -82,22 +82,22 @@ public class GraphChatView extends View {
 
         TempBean tempBean1 = new TempBean();
         tempBean1.setTimestamp(1575993600);
-        tempBean1.setTemp(12);
+        tempBean1.setTemp(0);
         TempBean tempBean2 = new TempBean();
-        tempBean2.setTimestamp(1575994360); //12
-        tempBean2.setTemp(60);
+        tempBean2.setTimestamp(1575994500); //15
+        tempBean2.setTemp(50);
         TempBean tempBean3 = new TempBean();
-        tempBean3.setTimestamp(1575994594); //16
-        tempBean3.setTemp(80);
+        tempBean3.setTimestamp(1575994800); //20
+        tempBean3.setTemp(100);
         TempBean tempBean4 = new TempBean();
-        tempBean4.setTimestamp(1575994834); //20
-        tempBean4.setTemp(190);
+        tempBean4.setTimestamp(1575994920); //22
+        tempBean4.setTemp(150);
         TempBean tempBean5 = new TempBean();
-        tempBean5.setTimestamp(1575995194);//26
-        tempBean5.setTemp(220);
+        tempBean5.setTimestamp(1575995400);//30
+        tempBean5.setTemp(200);
         TempBean tempBean6 = new TempBean();
-        tempBean6.setTimestamp(1575995400);//30
-        tempBean6.setTemp(260);
+        tempBean6.setTimestamp(1575995700);//35
+        tempBean6.setTemp(250);
 
         tempList.add(tempBean1);
         tempList.add(tempBean2);
@@ -145,15 +145,15 @@ public class GraphChatView extends View {
         }
 
         for (int i = 0; i < xRoller.size(); i++) {
-            int xItemWidth = (int) ((getWidth() - yTvWidth - lineMarginLeft) / xRoller.size());
-            int xIndexMid = (int) (yTvWidth + lineMarginLeft + xItemWidth * i + xItemWidth / 2);
+            int xItemWidth = (int) ((getWidth() - yTvWidth - lineMarginLeft) / (xRoller.size() - 1));
+            int xIndex = (int) (yTvWidth + lineMarginLeft + xItemWidth * i);
             //画X轴文字
             String text = xRoller.get(i);
             Rect textBounds = new Rect();
             tvPaint.getTextBounds(text, 0, text.length(), textBounds);
             //TODO 这个地方的topY有2像素左右误差。待处理
             int baseLine = measureBaseLine(tvPaint, text, getHeight() - textBounds.height() - 2);
-            canvas.drawText(text, xIndexMid - textBounds.width() / 2, baseLine, tvPaint);
+            canvas.drawText(text, xIndex - textBounds.width(), baseLine, tvPaint);
         }
 
         //画曲线
@@ -161,11 +161,26 @@ public class GraphChatView extends View {
         int originY = (int) (getHeight() - ((3 * yTvHeight) >> 1) - lineMarginBottom - lineWidth);
         canvas.translate(originX, originY);
         canvas.save();
-        canvas.drawCircle(0, 0, 4, graphPaint);
         //换算成对应的xy轴坐标
+
+        //最开始的一个点的时间
+        float timestampStart = tempList.get(0).getTimestamp();
+        //最后一个点的时间
+        float timeStampEnd = tempList.get(tempList.size() - 1).getTimestamp();
+
+        //点的时间差，单位=秒
+        float timeDifference = timeStampEnd - timestampStart;
+        //x轴代表的总时长，单位=秒
+        float xTotleTime = infoList.getMaxMillis() * 60;
+        float scale = timeDifference / xTotleTime;
+
         for (int i = 0; i < tempList.size(); i++) {
-            float currentX;
-            int currentY;
+            int temp = tempList.get(i).getTemp();
+            float timestamp = tempList.get(i).getTimestamp();
+            int y = temp * originY / 300;
+            int x = (int) ((timestamp - timestampStart) * (getWidth() - originX) * scale / (timeStampEnd - timestampStart));
+            Log.i("test", "x:" + x + "-----------y:" + y);
+            canvas.drawPoint(x, -y, graphPaint);
         }
         canvas.restore();
     }
