@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,6 +10,14 @@
         android:id="@+id/graph_view"
         android:layout_width="320dp"
         android:layout_height="220dp"
-        android:layout_gravity="center" />
-
+        android:layout_gravity="center"
+        app:graph_graphColor="#FF5500"
+        app:graph_graphWidth="1.92dp"
+        app:graph_lineColor="#626262"
+        app:graph_lineMarginBottom="2dp"
+        app:graph_lineMarginLeft="5dp"
+        app:graph_lineSmoothness="0.2"
+        app:graph_lineWidth="0dp"
+        app:graph_tvColor="#626262"
+        app:graph_tvSize="12sp" />
 </FrameLayout>

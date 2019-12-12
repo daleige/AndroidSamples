@@ -19,6 +19,7 @@ import android.view.View;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -111,11 +112,11 @@ public class GraphChatView extends View {
      * @param scale 单位刻度
      * @param strs  刻度上展示的文字，若不设置则展示0,50,100,150,200,250
      */
-    public void setYAxis(int scale, List<String> strs) {
-        if (strs.size() > 0) {
+    public void setYAxis(int scale, String... strs) {
+        if (strs.length > 0) {
             yScale = scale;
             yRoller.clear();
-            yRoller = strs;
+            yRoller = Arrays.asList(strs);
         }
     }
 
@@ -199,7 +200,7 @@ public class GraphChatView extends View {
         for (int i = 0; i < tempList.size(); i++) {
             int temp = tempList.get(i).getTemp();
             float timestamp = tempList.get(i).getTimestamp();
-            int y = temp * (originY + yTvHeight / 2) / 300;
+            int y = temp * (originY + yTvHeight / 2) / (yScale * yRoller.size());
             int x = (int) ((timestamp - timestampStart) * (getWidth() - originX) * scale / (timeStampEnd - timestampStart));
             Point point = new Point(x, -y);
             mPointList.add(point);
@@ -224,6 +225,9 @@ public class GraphChatView extends View {
         canvas.restore();
     }
 
+    /**
+     * 计算贝塞尔曲线的Path和PathMeasure
+     */
     private void measurePath() {
         mPath = new Path();
         mAssistPath = new Path();

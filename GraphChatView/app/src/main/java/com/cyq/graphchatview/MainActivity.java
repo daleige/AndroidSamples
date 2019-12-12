@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         tempList.add(tempBean8);
 
         mGraphChatView = findViewById(R.id.graph_view);
+        mGraphChatView.setYAxis(60, "0", "60", "120", "180", "240", "300");
         mGraphChatView.setTempList(tempList);
     }
 }
