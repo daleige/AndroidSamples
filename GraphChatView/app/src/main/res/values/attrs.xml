@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="GraphChatView">
+        <!--坐标文字颜色-->
+        <attr name="graph_tvColor" format="color" />
+        <!--坐标文字大小-->
+        <attr name="graph_tvSize" format="integer" />
+        <!-- 横线粗细-->
+        <attr name="graph_lineWidth" format="float" />
+        <!-- 横线颜色 -->
+        <attr name="graph_lineColor" format="color" />
+        <!-- 横线距离Y轴文字距离-->
+        <attr name="graph_lineMarginLeft" format="float" />
+        <!-- X轴距离Y轴底部距离-->
+        <attr name="graph_lineMarginBottom" format="float" />
+        <!--曲线颜色 -->
+        <attr name="graph_graphColor" format="color" />
+        <!--曲线宽度-->
+        <attr name="graph_graphWidth" format="float" />
+        <!--终点图片宽高-->
+        <attr name="graph_topPointWidth" format="float" />
+        <!--贝塞尔曲线控制点系数-->
+        <attr name="graph_lineSmoothness" format="float" />
+    </declare-styleable>
+</resources>

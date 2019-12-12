@@ -12,7 +12,6 @@ import android.graphics.PathMeasure;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
@@ -36,22 +35,21 @@ public class GraphChatView extends View {
     private int graphColor = Color.parseColor("#FF5500");
     private float graphWidth = 3.88f;
     private float topPointWidth = 30f;
+    private float lineSmoothness = 0.2f;
 
     private Paint tvPaint;
     private Paint linePaint;
     private Paint graphPaint;
     private Paint bitmapPaint;
-
-    private float lineSmoothness = 0.2f;
     private List<Point> mPointList = new ArrayList<>();
     private Path mPath;
     private Path mAssistPath;
     private float drawScale = 1f;
     private PathMeasure mPathMeasure;
 
+    private List<TempBean> tempList = new ArrayList<>();
     private List<String> xRoller = new ArrayList<>();
     private List<String> yRoller = new ArrayList<>();
-    private List<TempBean> tempList = new ArrayList<>();
 
     public GraphChatView(Context context) {
         this(context, null);
@@ -105,10 +103,10 @@ public class GraphChatView extends View {
         tempBean1.setTemp(20);
         TempBean tempBean2 = new TempBean();
         tempBean2.setTimestamp(1575994500); //15
-        tempBean2.setTemp(200);
+        tempBean2.setTemp(90);
         TempBean tempBean3 = new TempBean();
         tempBean3.setTimestamp(1575994800); //20
-        tempBean3.setTemp(210);
+        tempBean3.setTemp(170);
         TempBean tempBean4 = new TempBean();
         tempBean4.setTimestamp(1575994920); //22
         tempBean4.setTemp(218);
@@ -328,7 +326,7 @@ public class GraphChatView extends View {
      * @param topY      文字Y轴顶部坐标
      * @return
      */
-    public static int measureBaseLine(Paint textPaint, String text, int topY) {
+    private int measureBaseLine(Paint textPaint, String text, int topY) {
         Rect textBounds = new Rect();
         textPaint.getTextBounds(text, 0, text.length(), textBounds);
         Paint.FontMetricsInt fontMetricsInt = textPaint.getFontMetricsInt();
