@@ -383,9 +383,9 @@ public class GraphChatView extends View {
         if (millis < 1) {
             return new XRollerInfo(1.5f, "0", "0.5", "1", "分");
         } else if (millis < 2) {
-            return new XRollerInfo(1.5f, "0", "0.5", "1", "分");
-        } else if (millis < 4) {
             return new XRollerInfo(3, "0", "1", "2", "分");
+        } else if (millis < 4) {
+            return new XRollerInfo(6, "0", "4", "4", "分");
         } else if (millis < 6) {
             return new XRollerInfo(6, "0", "2", "4", "分");
         } else if (millis < 8) {
@@ -395,7 +395,7 @@ public class GraphChatView extends View {
         } else if (millis < 12) {
             return new XRollerInfo(15, "0", "5", "10", "分");
         } else if (millis < 20) {
-            return new XRollerInfo(18, "0", "6", "12", "分");
+            return new XRollerInfo(21, "0", "7", "14", "分");
         } else if (millis < 30) {
             return new XRollerInfo(30, "0", "10", "20", "分");
         } else if (millis < 40) {
@@ -413,9 +413,9 @@ public class GraphChatView extends View {
         } else if (millis < 120) {
             return new XRollerInfo(150, "0", "50", "100", "分");
         } else if (millis < 240) {
-            return new XRollerInfo(180, "0", "1", "2", "小时");
-        } else if (millis < 480) {
             return new XRollerInfo(360, "0", "2", "4", "小时");
+        } else if (millis < 480) {
+            return new XRollerInfo(540, "0", "3", "6", "小时");
         } else if (millis < 720) {
             return new XRollerInfo(720, "0", "4", "8", "小时");
         } else if (millis < 960) {
