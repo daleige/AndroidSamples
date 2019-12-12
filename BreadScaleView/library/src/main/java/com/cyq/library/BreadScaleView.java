@@ -110,6 +110,7 @@ public class BreadScaleView extends FrameLayout {
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.BreadScaleView);
         itemHeight = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_itemHeight, dip2px(itemHeight));
         displayCount = array.getInteger(R.styleable.BreadScaleView_bread_displayCount, displayCount);
+        heightColor = array.getColor(R.styleable.BreadScaleView_bread_heightColor, heightColor);
         tvSize = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_tvSize, dip2px(tvSize));
         ivWidth = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_ivWidth, dip2px(ivWidth));
         lineWidth = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_lineWidth, dip2px(lineWidth));
@@ -121,7 +122,6 @@ public class BreadScaleView extends FrameLayout {
         lightColor = array.getColor(R.styleable.BreadScaleView_bread_lightColor, lightColor);
         middleColor = array.getColor(R.styleable.BreadScaleView_bread_middleColor, middleColor);
         middleTxtColor = array.getColor(R.styleable.BreadScaleView_bread_middleTxtColor, middleTxtColor);
-        heightColor = array.getColor(R.styleable.BreadScaleView_bread_heightColor, heightColor);
         array.recycle();
         init();
     }

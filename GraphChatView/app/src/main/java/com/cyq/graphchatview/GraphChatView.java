@@ -1,6 +1,7 @@
 package com.cyq.graphchatview;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -46,7 +47,6 @@ public class GraphChatView extends View {
     private Path mAssistPath;
     private float drawScale = 1f;
     private PathMeasure mPathMeasure;
-
     private List<TempBean> tempList = new ArrayList<>();
     private List<String> xRoller = new ArrayList<>();
     private List<String> yRoller = new ArrayList<>();
@@ -61,17 +61,22 @@ public class GraphChatView extends View {
 
     public GraphChatView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.GraphChatView);
+        tvColor = array.getColor(R.styleable.GraphChatView_graph_tvColor, tvColor);
+        tvSize = array.getDimensionPixelSize(R.styleable.GraphChatView_graph_tvSize, dip2px(getContext(), tvSize));
+        lineWidth = array.getDimensionPixelSize(R.styleable.GraphChatView_graph_lineWidth, dip2px(getContext(), lineWidth));
+        lineColor = array.getColor(R.styleable.GraphChatView_graph_lineColor, lineColor);
+        lineMarginLeft = array.getDimensionPixelSize(R.styleable.GraphChatView_graph_lineMarginLeft, dip2px(getContext(), lineMarginLeft));
+        lineMarginBottom = array.getDimensionPixelSize(R.styleable.GraphChatView_graph_lineMarginBottom, dip2px(getContext(), lineMarginBottom));
+        graphColor = array.getColor(R.styleable.GraphChatView_graph_graphColor, graphColor);
+        graphWidth = array.getDimensionPixelSize(R.styleable.GraphChatView_graph_graphWidth, dip2px(getContext(), graphWidth));
+        topPointWidth = array.getDimensionPixelSize(R.styleable.GraphChatView_graph_topPointWidth, dip2px(getContext(), topPointWidth));
+        lineSmoothness = array.getFloat(R.styleable.GraphChatView_graph_lineSmoothness, lineSmoothness);
+        array.recycle();
         init();
     }
 
     private void init() {
-        tvSize = sp2px(tvSize);
-        lineWidth = dip2px(getContext(), lineWidth);
-        lineMarginLeft = dip2px(getContext(), lineMarginLeft);
-        lineMarginBottom = dip2px(getContext(), lineMarginBottom);
-        graphWidth = dip2px(getContext(), graphWidth);
-        topPointWidth = dip2px(getContext(), topPointWidth);
-
         tvPaint = new Paint();
         tvPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         tvPaint.setAntiAlias(true);
@@ -135,6 +140,9 @@ public class GraphChatView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+
+
         TimeUtils.XRollerInfo infoList = TimeUtils.getXRollerInfo(tempList);
         if (infoList != null) {
             xRoller.clear();
@@ -176,7 +184,6 @@ public class GraphChatView extends View {
             String text = xRoller.get(i);
             Rect textBounds = new Rect();
             tvPaint.getTextBounds(text, 0, text.length(), textBounds);
-            //TODO 这个地方的topY有2像素左右误差。待处理
             int baseLine = measureBaseLine(tvPaint, text, getHeight() - textBounds.height() - 2);
             canvas.drawText(text, xIndex - textBounds.width(), baseLine, tvPaint);
         }
@@ -353,19 +360,13 @@ public class GraphChatView extends View {
     private Bitmap scaleBitmap(Bitmap bm, int toWidth) {
         int width = bm.getWidth();
         int height = bm.getHeight();
-        // 设置想要的大小
-        int newWidth = toWidth;
-        int newHeight = toWidth;
         // 计算缩放比例
-        float scaleWidth = ((float) newWidth) / width;
-        float scaleHeight = ((float) newHeight) / height;
+        float scaleWidth = ((float) toWidth) / width;
+        float scaleHeight = ((float) toWidth) / height;
         // 取得想要缩放的matrix参数
         Matrix matrix = new Matrix();
         matrix.postScale(scaleWidth, scaleHeight);
         // 得到新的图片
-        Bitmap newBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, true);
-        return newBitmap;
+        return Bitmap.createBitmap(bm, 0, 0, width, height, matrix, true);
     }
-
-
 }
