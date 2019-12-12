@@ -1,8 +1,11 @@
 package com.cyq.graphchatview;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
@@ -32,10 +35,19 @@ public class GraphChatView extends View {
     private float lineMarginBottom = 10;
     private int graphColor = Color.parseColor("#FF5500");
     private float graphWidth = 3.88f;
+    private float topPointWidth = 30f;
 
     private Paint tvPaint;
     private Paint linePaint;
     private Paint graphPaint;
+    private Paint bitmapPaint;
+
+    private float lineSmoothness = 0.2f;
+    private List<Point> mPointList = new ArrayList<>();
+    private Path mPath;
+    private Path mAssistPath;
+    private float drawScale = 1f;
+    private PathMeasure mPathMeasure;
 
     private List<String> xRoller = new ArrayList<>();
     private List<String> yRoller = new ArrayList<>();
@@ -60,6 +72,7 @@ public class GraphChatView extends View {
         lineMarginLeft = dip2px(getContext(), lineMarginLeft);
         lineMarginBottom = dip2px(getContext(), lineMarginBottom);
         graphWidth = dip2px(getContext(), graphWidth);
+        topPointWidth = dip2px(getContext(), topPointWidth);
 
         tvPaint = new Paint();
         tvPaint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -77,6 +90,8 @@ public class GraphChatView extends View {
         graphPaint.setAntiAlias(true);
         graphPaint.setStrokeWidth(graphWidth);
         graphPaint.setStyle(Paint.Style.STROKE);
+
+        bitmapPaint = new Paint();
 
         yRoller.add("0");
         yRoller.add("50");
@@ -106,13 +121,17 @@ public class GraphChatView extends View {
         TempBean tempBean7 = new TempBean();
         tempBean7.setTimestamp(1575995880);//38
         tempBean7.setTemp(260);
-
+        TempBean tempBean8 = new TempBean();
+        tempBean8.setTimestamp(1575996180);//43
+        tempBean8.setTemp(260);
         tempList.add(tempBean1);
         tempList.add(tempBean2);
         tempList.add(tempBean3);
         tempList.add(tempBean4);
         tempList.add(tempBean5);
         tempList.add(tempBean6);
+        tempList.add(tempBean7);
+        tempList.add(tempBean8);
     }
 
     @Override
@@ -180,8 +199,9 @@ public class GraphChatView extends View {
         //x轴代表的总时长，单位=秒
         float xTotleTime = infoList.getMaxMillis() * 60;
         float scale = timeDifference / xTotleTime;
-
         mPointList.clear();
+        int bitmapX = 0;
+        int bitmapY = 0;
         for (int i = 0; i < tempList.size(); i++) {
             int temp = tempList.get(i).getTemp();
             float timestamp = tempList.get(i).getTimestamp();
@@ -189,23 +209,25 @@ public class GraphChatView extends View {
             int x = (int) ((timestamp - timestampStart) * (getWidth() - originX) * scale / (timeStampEnd - timestampStart));
             Point point = new Point(x, -y);
             mPointList.add(point);
+            if (i == tempList.size() - 1) {
+                bitmapX = x;
+                bitmapY = -y;
+            }
         }
         measurePath();
         Path dst = new Path();
         dst.rLineTo(0, 0);
         float distance = mPathMeasure.getLength() * drawScale;
         if (mPathMeasure.getSegment(0, distance, dst, true)) {
-            //绘制线
+            //绘制曲线
             canvas.drawPath(dst, graphPaint);
         }
-    }
 
-    private float lineSmoothness = 0.2f;
-    private List<Point> mPointList = new ArrayList<>();
-    private Path mPath;
-    private Path mAssistPath;
-    private float drawScale = 1f;
-    private PathMeasure mPathMeasure;
+        //画终点
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.graph_chat_point);
+        Bitmap newBitmap = scaleBitmap(bitmap, (int) topPointWidth);
+        canvas.drawBitmap(newBitmap, bitmapX - topPointWidth / 2, bitmapY - topPointWidth / 2, bitmapPaint);
+    }
 
     private void measurePath() {
         mPath = new Path();
@@ -318,8 +340,34 @@ public class GraphChatView extends View {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, getResources().getDisplayMetrics());
     }
 
-    public static int dip2px(Context context, float dpValue) {
+    private int dip2px(Context context, float dpValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
+
+    /**
+     * bitmap 尺寸修改
+     *
+     * @param bm
+     * @param toWidth
+     * @return
+     */
+    private Bitmap scaleBitmap(Bitmap bm, int toWidth) {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        // 设置想要的大小
+        int newWidth = toWidth;
+        int newHeight = toWidth;
+        // 计算缩放比例
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        // 取得想要缩放的matrix参数
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleHeight);
+        // 得到新的图片
+        Bitmap newBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, true);
+        return newBitmap;
+    }
+
+
 }
