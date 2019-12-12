@@ -6,6 +6,7 @@
     tools:context=".MainActivity">
 
     <com.cyq.graphchatview.GraphChatView
+        android:id="@+id/graph_view"
         android:layout_width="320dp"
         android:layout_height="220dp"
         android:layout_gravity="center" />
