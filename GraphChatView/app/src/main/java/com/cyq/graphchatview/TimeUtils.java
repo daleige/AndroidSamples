@@ -1,7 +1,5 @@
 package com.cyq.graphchatview;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import java.util.List;
@@ -21,53 +19,53 @@ public class TimeUtils {
         int millis = (int) (timeDifference / 60);
 
         if (millis < 1) {
-            return new XRollerInfo(1, "0", "0.5", "1", "分");
+            return new XRollerInfo(1.5f, "0", "0.5", "1", "分");
         } else if (millis < 2) {
-            return new XRollerInfo(2, "0", "0.5", "1", "分");
+            return new XRollerInfo(1.5f, "0", "0.5", "1", "分");
         } else if (millis < 4) {
-            return new XRollerInfo(4, "0", "1", "2", "分");
+            return new XRollerInfo(3, "0", "1", "2", "分");
         } else if (millis < 6) {
             return new XRollerInfo(6, "0", "2", "4", "分");
         } else if (millis < 8) {
-            return new XRollerInfo(8, "0", "3", "6", "分");
+            return new XRollerInfo(9, "0", "3", "6", "分");
         } else if (millis < 10) {
-            return new XRollerInfo(10, "0", "4", "8", "分");
+            return new XRollerInfo(12, "0", "4", "8", "分");
         } else if (millis < 12) {
-            return new XRollerInfo(12, "0", "5", "10", "分");
+            return new XRollerInfo(15, "0", "5", "10", "分");
         } else if (millis < 20) {
-            return new XRollerInfo(20, "0", "6", "12", "分");
+            return new XRollerInfo(18, "0", "6", "12", "分");
         } else if (millis < 30) {
             return new XRollerInfo(30, "0", "10", "20", "分");
         } else if (millis < 40) {
-            return new XRollerInfo(40, "0", "15", "30", "分");
+            return new XRollerInfo(45, "0", "15", "30", "分");
         } else if (millis < 50) {
-            return new XRollerInfo(50, "0", "20", "40", "分");
+            return new XRollerInfo(60, "0", "20", "40", "分");
         } else if (millis < 60) {
-            return new XRollerInfo(60, "0", "25", "50", "分");
+            return new XRollerInfo(75, "0", "25", "50", "分");
         } else if (millis < 70) {
-            return new XRollerInfo(70, "0", "30", "60", "分");
+            return new XRollerInfo(90, "0", "30", "60", "分");
         } else if (millis < 80) {
-            return new XRollerInfo(80, "0", "35", "70", "分");
+            return new XRollerInfo(105, "0", "35", "70", "分");
         } else if (millis < 100) {
-            return new XRollerInfo(100, "0", "40", "80", "分");
+            return new XRollerInfo(120, "0", "40", "80", "分");
         } else if (millis < 120) {
-            return new XRollerInfo(120, "0", "50", "100", "分");
+            return new XRollerInfo(150, "0", "50", "100", "分");
         } else if (millis < 240) {
-            return new XRollerInfo(240, "0", "1", "2", "小时");
+            return new XRollerInfo(180, "0", "1", "2", "小时");
         } else if (millis < 480) {
-            return new XRollerInfo(480, "0", "2", "4", "小时");
+            return new XRollerInfo(360, "0", "2", "4", "小时");
         } else if (millis < 720) {
             return new XRollerInfo(720, "0", "4", "8", "小时");
         } else if (millis < 960) {
-            return new XRollerInfo(960, "0", "6", "12", "小时");
+            return new XRollerInfo(1080, "0", "6", "12", "小时");
         } else if (millis < 1200) {
-            return new XRollerInfo(1200, "0", "8", "16", "小时");
+            return new XRollerInfo(1440, "0", "8", "16", "小时");
         } else if (millis < 1440) {
-            return new XRollerInfo(1440, "0", "10", "20", "小时");
+            return new XRollerInfo(1800, "0", "10", "20", "小时");
         } else if (millis < 2160) {
             return new XRollerInfo(2160, "0", "12", "24", "小时");
         } else if (millis < 2880) {
-            return new XRollerInfo(2880, "0", "18", "36", "小时");
+            return new XRollerInfo(3240, "0", "18", "36", "小时");
         }
         return null;
     }
@@ -76,7 +74,7 @@ public class TimeUtils {
      * X轴信息
      */
     public static class XRollerInfo {
-        public XRollerInfo(int maxMillis, String firstStr, String secondStr, String threeStr, String typeStr) {
+        public XRollerInfo(float maxMillis, String firstStr, String secondStr, String threeStr, String typeStr) {
             this.firstStr = firstStr;
             this.secondStr = secondStr;
             this.threeStr = threeStr;
@@ -84,13 +82,13 @@ public class TimeUtils {
             this.maxMillis = maxMillis;
         }
 
-        int maxMillis;
+        float maxMillis;
         String firstStr;
         String secondStr;
         String threeStr;
         String typeStr;
 
-        public int getMaxMillis() {
+        public float getMaxMillis() {
             return maxMillis;
         }
 

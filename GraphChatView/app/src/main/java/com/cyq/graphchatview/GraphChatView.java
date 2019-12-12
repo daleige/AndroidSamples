@@ -78,6 +78,7 @@ public class GraphChatView extends View {
         yRoller.add("50");
         yRoller.add("100");
         yRoller.add("150");
+        yRoller.add("200");
         yRoller.add("250");
 
         TempBean tempBean1 = new TempBean();
@@ -145,8 +146,8 @@ public class GraphChatView extends View {
         }
 
         for (int i = 0; i < xRoller.size(); i++) {
-            int xItemWidth = (int) ((getWidth() - yTvWidth - lineMarginLeft) / (xRoller.size() - 1));
-            int xIndex = (int) (yTvWidth + lineMarginLeft + xItemWidth * i);
+            float xItemWidth = (getWidth() - yTvWidth - lineMarginLeft) / (xRoller.size() - 1);
+            float xIndex = (yTvWidth + lineMarginLeft + xItemWidth * i);
             //画X轴文字
             String text = xRoller.get(i);
             Rect textBounds = new Rect();
@@ -167,7 +168,6 @@ public class GraphChatView extends View {
         float timestampStart = tempList.get(0).getTimestamp();
         //最后一个点的时间
         float timeStampEnd = tempList.get(tempList.size() - 1).getTimestamp();
-
         //点的时间差，单位=秒
         float timeDifference = timeStampEnd - timestampStart;
         //x轴代表的总时长，单位=秒
@@ -177,9 +177,8 @@ public class GraphChatView extends View {
         for (int i = 0; i < tempList.size(); i++) {
             int temp = tempList.get(i).getTemp();
             float timestamp = tempList.get(i).getTimestamp();
-            int y = temp * originY / 300;
+            int y = temp * (originY + yTvHeight / 2) / 300;
             int x = (int) ((timestamp - timestampStart) * (getWidth() - originX) * scale / (timeStampEnd - timestampStart));
-            Log.i("test", "x:" + x + "-----------y:" + y);
             canvas.drawPoint(x, -y, graphPaint);
         }
         canvas.restore();
