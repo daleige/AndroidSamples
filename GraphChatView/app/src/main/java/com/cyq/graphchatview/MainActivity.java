@@ -19,10 +19,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         random = new Random();
         for (int i = 0; i < 9; i++) {
             TempBean tempBean = new TempBean();
+
             tempBean.setTimestamp(System.currentTimeMillis() / 1000 + 300 * i);
             tempBean.setTemp(random.nextInt(260));
             tempList.add(tempBean);
@@ -39,9 +39,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void refreshData(View view) {
         tempList.clear();
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 20; i++) {
             TempBean tempBean = new TempBean();
-            tempBean.setTimestamp(System.currentTimeMillis() / 1000 + 300 * i);
+            //测试5秒递进一下
+            tempBean.setTimestamp(System.currentTimeMillis() / 1000 + 2 * i);
             tempBean.setTemp(random.nextInt(260));
             tempList.add(tempBean);
         }

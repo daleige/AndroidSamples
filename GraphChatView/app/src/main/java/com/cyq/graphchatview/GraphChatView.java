@@ -13,6 +13,7 @@ import android.graphics.PathMeasure;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
@@ -159,7 +160,7 @@ public class GraphChatView extends View {
         if (tempList.size() <= 0) {
             return;
         }
-        XRollerInfo infoList = getXRollerInfo(tempList);
+        XRollerInfo infoList = getXRollerInfo();
         if (infoList != null) {
             xRoller.clear();
             xRoller.add(infoList.firstStr);
@@ -186,11 +187,11 @@ public class GraphChatView extends View {
         canvas.save();
         //换算成对应的xy轴坐标
         //最开始的一个点的时间
-        float timestampStart = tempList.get(0).getTimestamp();
+        long timestampStart = tempList.get(0).getTimestamp();
         //最后一个点的时间
-        float timeStampEnd = tempList.get(tempList.size() - 1).getTimestamp();
+        long timeStampEnd = tempList.get(tempList.size() - 1).getTimestamp();
         //点的时间差，单位=秒
-        float timeDifference = timeStampEnd - timestampStart;
+        long timeDifference = timeStampEnd - timestampStart;
         //x轴代表的总时长，单位=秒
         float xTotleTime = infoList.getMaxMillis() * 60;
         float scale = timeDifference / xTotleTime;
@@ -199,7 +200,7 @@ public class GraphChatView extends View {
         int bitmapY = 0;
         for (int i = 0; i < tempList.size(); i++) {
             int temp = tempList.get(i).getTemp();
-            float timestamp = tempList.get(i).getTimestamp();
+            long timestamp = tempList.get(i).getTimestamp();
             int y = temp * (originY + yTvHeight / 2) / (yScale * yRoller.size());
             int x = (int) ((timestamp - timestampStart) * (getWidth() - originX) * scale / (timeStampEnd - timestampStart));
             Point point = new Point(x, -y);
@@ -367,23 +368,25 @@ public class GraphChatView extends View {
     /**
      * 根据传入的时间信息获取X轴信息
      *
-     * @param list
      * @return
      */
-    private XRollerInfo getXRollerInfo(List<TempBean> list) {
-        if (list.size() <= 0) {
+    private XRollerInfo getXRollerInfo() {
+        if (tempList.size() <= 0) {
             return null;
         }
-        long timeDifference = list.get(list.size() - 1).getTimestamp() - list.get(0).getTimestamp();
+        //最开始的一个点的时间
+        long timestampStart = tempList.get(0).getTimestamp();
+        //最后一个点的时间
+        long timeStampEnd = tempList.get(tempList.size() - 1).getTimestamp();
+        long timeDifference = timeStampEnd - timestampStart;
         //得到时间差也就是时长
         int millis = (int) (timeDifference / 60);
-
         if (millis < 1) {
             return new XRollerInfo(1.5f, "0", "0.5", "1", "分");
         } else if (millis < 2) {
             return new XRollerInfo(3, "0", "1", "2", "分");
         } else if (millis < 4) {
-            return new XRollerInfo(6, "0", "4", "4", "分");
+            return new XRollerInfo(6, "0", "2", "4", "分");
         } else if (millis < 6) {
             return new XRollerInfo(6, "0", "2", "4", "分");
         } else if (millis < 8) {
@@ -426,8 +429,9 @@ public class GraphChatView extends View {
             return new XRollerInfo(2160, "0", "12", "24", "小时");
         } else if (millis < 2880) {
             return new XRollerInfo(3240, "0", "18", "36", "小时");
+        }else {
+            return new XRollerInfo(3240, "0", "18", "36", "小时");
         }
-        return null;
     }
 
     /**
