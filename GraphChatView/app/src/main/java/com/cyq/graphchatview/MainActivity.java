@@ -39,11 +39,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void refreshData(View view) {
         tempList.clear();
-        for (int i = 0; i < 20; i++) {
+        int temp = 10;
+        for (int i = 0; i < 40; i++) {
             TempBean tempBean = new TempBean();
             //测试5秒递进一下
-            tempBean.setTimestamp(System.currentTimeMillis() / 1000 + 2 * i);
-            tempBean.setTemp(random.nextInt(260));
+            tempBean.setTimestamp(System.currentTimeMillis() / 1000 + 6 * i);
+            temp = temp + random.nextInt(10);
+            tempBean.setTemp(temp);
             tempList.add(tempBean);
         }
         mGraphChatView.setTempList(tempList);
