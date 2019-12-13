@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < 40; i++) {
             TempBean tempBean = new TempBean();
             //测试5秒递进一下
-            tempBean.setTimestamp(System.currentTimeMillis() / 1000 +1 * i);
+            tempBean.setTimestamp(System.currentTimeMillis() / 1000 +5 * i);
             temp = temp + random.nextInt(10);
             tempBean.setTemp(temp);
             tempList.add(tempBean);
