@@ -19,6 +19,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -53,6 +54,8 @@ public class GraphChatView extends View {
     private List<Float> xRoller = new ArrayList<>();
     private List<String> yRoller = new ArrayList<>();
     private int yScale = 50;
+
+    DecimalFormat decimalFormat = new DecimalFormat("###################.###########");
 
     public GraphChatView(Context context) {
         this(context, null);
@@ -175,14 +178,26 @@ public class GraphChatView extends View {
         canvas.save();
 
         for (int i = 0; i < xRoller.size(); i++) {
-            float x = ((getWidth() - originX) * xRoller.get(i)) / infoList.getMaxMillis();
+            float x = 0;
+            if (infoList.getTypeStr().equals("分")) {
+                x = ((getWidth() - originX) * xRoller.get(i)) / infoList.getMaxMillis();
+            } else if (infoList.getTypeStr().equals("小时")) {
+                x = ((getWidth() - originX) * xRoller.get(i) * 60f) / infoList.getMaxMillis();
+            }
             //画X轴文字
-            String text = String.valueOf(xRoller.get(i));
+            String text = decimalFormat.format(xRoller.get(i));
             Rect textBounds = new Rect();
             tvPaint.getTextBounds(text, 0, text.length(), textBounds);
-            int baseLine = measureBaseLine(tvPaint, text, (int) (lineMarginBottom));
+            int baseLine = measureBaseLine(tvPaint, text, (int) lineMarginBottom);
             canvas.drawText(text, x, baseLine, tvPaint);
         }
+
+        //画分或者小时文字
+        String typeStr = infoList.getTypeStr();
+        Rect typeRect = new Rect();
+        tvPaint.getTextBounds(typeStr, 0, typeStr.length(), typeRect);
+        int baseLine = measureBaseLine(tvPaint, typeStr, (int) lineMarginBottom);
+        canvas.drawText(typeStr, getWidth() - originX - typeRect.width(), baseLine, tvPaint);
 
         //换算成对应的xy轴坐标
         //最开始的一个点的时间
