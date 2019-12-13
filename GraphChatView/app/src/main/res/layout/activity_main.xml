@@ -14,7 +14,7 @@
         app:graph_graphColor="#FF5500"
         app:graph_graphWidth="1.92dp"
         app:graph_lineColor="#626262"
-        app:graph_lineMarginBottom="2dp"
+        app:graph_lineMarginBottom="10dp"
         app:graph_lineMarginLeft="5dp"
         app:graph_lineSmoothness="0.3"
         app:graph_lineWidth="0dp"

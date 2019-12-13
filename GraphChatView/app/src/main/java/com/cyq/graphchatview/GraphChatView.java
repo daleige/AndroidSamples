@@ -50,7 +50,7 @@ public class GraphChatView extends View {
     private float drawScale = 1f;
     private PathMeasure mPathMeasure;
     private List<TempBean> tempList = new ArrayList<>();
-    private List<String> xRoller = new ArrayList<>();
+    private List<Float> xRoller = new ArrayList<>();
     private List<String> yRoller = new ArrayList<>();
     private int yScale = 50;
 
@@ -165,25 +165,25 @@ public class GraphChatView extends View {
             xRoller.add(infoList.firstStr);
             xRoller.add(infoList.secondStr);
             xRoller.add(infoList.threeStr);
-            xRoller.add(infoList.typeStr);
         }
 
-        for (int i = 0; i < xRoller.size(); i++) {
-            float xItemWidth = (getWidth() - yTvWidth - lineMarginLeft) / (xRoller.size() - 1);
-            float xIndex = (yTvWidth + lineMarginLeft + xItemWidth * i);
-            //画X轴文字
-            String text = xRoller.get(i);
-            Rect textBounds = new Rect();
-            tvPaint.getTextBounds(text, 0, text.length(), textBounds);
-            int baseLine = measureBaseLine(tvPaint, text, getHeight() - textBounds.height() - 2);
-            canvas.drawText(text, xIndex - textBounds.width(), baseLine, tvPaint);
-        }
 
         //画曲线
         int originX = (int) (yTvWidth + lineMarginLeft);
         int originY = (int) (getHeight() - ((3 * yTvHeight) >> 1) - lineMarginBottom - lineWidth);
         canvas.translate(originX, originY);
         canvas.save();
+
+        for (int i = 0; i < xRoller.size(); i++) {
+            float x = ((getWidth() - originX) * xRoller.get(i)) / infoList.getMaxMillis();
+            //画X轴文字
+            String text = String.valueOf(xRoller.get(i));
+            Rect textBounds = new Rect();
+            tvPaint.getTextBounds(text, 0, text.length(), textBounds);
+            int baseLine = measureBaseLine(tvPaint, text, (int) (lineMarginBottom));
+            canvas.drawText(text, x, baseLine, tvPaint);
+        }
+
         //换算成对应的xy轴坐标
         //最开始的一个点的时间
         long timestampStart = tempList.get(0).getTimestamp();
@@ -381,53 +381,53 @@ public class GraphChatView extends View {
         //得到时间差也就是时长
         int millis = (int) (timeDifference / 60);
         if (millis < 2) {
-            return new XRollerInfo(2, "0", "0.5", "1", "分");
+            return new XRollerInfo(2, 0, 0.5f, 1, "分");
         } else if (millis < 4) {
-            return new XRollerInfo(4, "0", "1", "2", "分");
+            return new XRollerInfo(4, 0, 1, 2, "分");
         } else if (millis < 6) {
-            return new XRollerInfo(6, "0", "2", "4", "分");
+            return new XRollerInfo(6, 0, 2, 4, "分");
         } else if (millis < 8) {
-            return new XRollerInfo(8, "0", "3", "6", "分");
+            return new XRollerInfo(8, 0, 3, 6, "分");
         } else if (millis < 10) {
-            return new XRollerInfo(10, "0", "4", "8", "分");
+            return new XRollerInfo(10, 0, 4, 8, "分");
         } else if (millis < 12) {
-            return new XRollerInfo(12, "0", "5", "10", "分");
+            return new XRollerInfo(12, 0, 5, 10, "分");
         } else if (millis < 20) {
-            return new XRollerInfo(20, "0", "6", "12", "分");
+            return new XRollerInfo(20, 0, 6, 12, "分");
         } else if (millis < 30) {
-            return new XRollerInfo(30, "0", "10", "20", "分");
+            return new XRollerInfo(30, 0, 10, 20, "分");
         } else if (millis < 40) {
-            return new XRollerInfo(40, "0", "15", "30", "分");
+            return new XRollerInfo(40, 0, 15, 30, "分");
         } else if (millis < 50) {
-            return new XRollerInfo(50, "0", "20", "40", "分");
+            return new XRollerInfo(50, 0, 20, 40, "分");
         } else if (millis < 60) {
-            return new XRollerInfo(60, "0", "25", "50", "分");
+            return new XRollerInfo(60, 0, 25, 50, "分");
         } else if (millis < 70) {
-            return new XRollerInfo(70, "0", "30", "60", "分");
+            return new XRollerInfo(70, 0, 30, 60, "分");
         } else if (millis < 80) {
-            return new XRollerInfo(85, "0", "35", "70", "分");
+            return new XRollerInfo(85, 0, 35, 70, "分");
         } else if (millis < 100) {
-            return new XRollerInfo(100, "0", "40", "80", "分");
+            return new XRollerInfo(100, 0, 40, 80, "分");
         } else if (millis < 120) {
-            return new XRollerInfo(120, "0", "50", "100", "分");
+            return new XRollerInfo(120, 0, 50, 100, "分");
         } else if (millis < 4 * 60) {
-            return new XRollerInfo(4 * 60, "0", "1", "2", "小时");
+            return new XRollerInfo(4 * 60, 0, 1, 2, "小时");
         } else if (millis < 8 * 60) {
-            return new XRollerInfo(8 * 60, "0", "2", "4", "小时");
+            return new XRollerInfo(8 * 60, 0, 2, 4, "小时");
         } else if (millis < 12 * 60) {
-            return new XRollerInfo(12 * 60, "0", "4", "8", "小时");
+            return new XRollerInfo(12 * 60, 0, 4, 8, "小时");
         } else if (millis < 16 * 60) {
-            return new XRollerInfo(16 * 60, "0", "6", "12", "小时");
+            return new XRollerInfo(16 * 60, 0, 6, 12, "小时");
         } else if (millis < 20 * 60) {
-            return new XRollerInfo(20 * 60, "0", "8", "16", "小时");
+            return new XRollerInfo(20 * 60, 0, 8, 16, "小时");
         } else if (millis < 24 * 60) {
-            return new XRollerInfo(24 * 60, "0", "10", "20", "小时");
+            return new XRollerInfo(24 * 60, 0, 10, 20, "小时");
         } else if (millis < 36 * 60) {
-            return new XRollerInfo(36 * 60, "0", "12", "24", "小时");
+            return new XRollerInfo(36 * 60, 0, 12, 24, "小时");
         } else if (millis < 48 * 60) {
-            return new XRollerInfo(48 * 60, "0", "18", "36", "小时");
+            return new XRollerInfo(48 * 60, 0, 18, 36, "小时");
         } else {
-            return new XRollerInfo(48 * 60, "0", "18", "36", "小时");
+            return new XRollerInfo(48 * 60, 0, 18, 36, "小时");
         }
     }
 
@@ -435,7 +435,7 @@ public class GraphChatView extends View {
      * X轴信息
      */
     public static class XRollerInfo {
-        public XRollerInfo(float maxMillis, String firstStr, String secondStr, String threeStr, String typeStr) {
+        public XRollerInfo(float maxMillis, float firstStr, float secondStr, float threeStr, String typeStr) {
             this.firstStr = firstStr;
             this.secondStr = secondStr;
             this.threeStr = threeStr;
@@ -444,35 +444,29 @@ public class GraphChatView extends View {
         }
 
         float maxMillis;
-        String firstStr;
-        String secondStr;
-        String threeStr;
+        float firstStr;
+        float secondStr;
+        float threeStr;
         String typeStr;
 
         public float getMaxMillis() {
             return maxMillis;
         }
 
-        public String getFirstStr() {
+        public float getFirstStr() {
             return firstStr;
         }
 
-        public String getSecondStr() {
+        public float getSecondStr() {
             return secondStr;
         }
 
-        public String getThreeStr() {
+        public float getThreeStr() {
             return threeStr;
         }
 
         public String getTypeStr() {
             return typeStr;
-        }
-
-        @NonNull
-        @Override
-        public String toString() {
-            return firstStr + "--" + secondStr + "--" + threeStr + typeStr + typeStr + maxMillis;
         }
     }
 }
