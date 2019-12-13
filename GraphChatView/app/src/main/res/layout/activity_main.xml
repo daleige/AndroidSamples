@@ -21,4 +21,11 @@
         app:graph_topPointWidth="23dp"
         app:graph_tvColor="#626262"
         app:graph_tvSize="12sp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="刷新数据"
+        android:layout_gravity="center_horizontal|bottom"
+        android:onClick="refreshData"/>
 </FrameLayout>
