@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -19,11 +20,10 @@ public class RadarView extends View {
 
     private Paint radarPaint;
     private Paint valuePaint;
-    private int mRadius;
-    private int mCenterX;
-    private int mCenterY;
+    private float mRadius;
+    private float mCenterX;
+    private float mCenterY;
     private int mLevel = 6;
-    private int mFaceCount = 6;
 
     public RadarView(Context context) {
         this(context, null);
@@ -50,15 +50,6 @@ public class RadarView extends View {
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        mRadius = Math.min(w, h);
-        mCenterX = w / 2;
-        mCenterY = h / 2;
-        postInvalidate();
-        super.onSizeChanged(w, h, oldw, oldh);
-    }
-
-    @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         //绘制蜘蛛网格
@@ -75,20 +66,24 @@ public class RadarView extends View {
      * @param canvas
      */
     private void drawPolygon(Canvas canvas) {
+        mRadius = Math.min(getWidth(), getHeight()) / 2;
+        mCenterX = getWidth() / 2;
+        mCenterY = getHeight() / 2;
+        canvas.translate(mCenterX, mCenterY);
         Path path = new Path();
-        float r = mRadius / (mLevel); //r 是蜘蛛丝之间的间距
-        for (int i = 1; i <= mLevel; i++) { //中心点不用绘制
-            float curR = r * i; //当前半径
+        float r = mRadius / mLevel;
+        for (int i = 1; i <= mLevel; i++) {
+            float curR = r * i;
             path.reset();
-            for (int j = 0; j < mLevel; j++) {
+            for (int j = 0; j < i; j++) {
                 if (j == 0) {
-                    path.moveTo(mCenterX + curR, mCenterY);
+                    path.moveTo(curR, 0);
                 } else {
-                    int angle = 360 / 60 * j;
                     //根据半径，计算出蜘蛛丝上每个点的坐标
-                    float x = (float) (mCenterX + curR * Math.cos(angle * j));
-                    float y = (float) (mCenterY + curR * Math.sin(angle * j));
+                    float x = (float) (curR * Math.cos(60 * j));
+                    float y = (float) (curR * Math.sin(60 * j));
                     path.lineTo(x, y);
+                    Log.i("test", "x:" + x + "----y:" + y);
                 }
             }
             path.close();//闭合路径
