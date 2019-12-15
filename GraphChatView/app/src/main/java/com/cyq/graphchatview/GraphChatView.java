@@ -130,6 +130,15 @@ public class GraphChatView extends View {
         }
     }
 
+    /**
+     * 设置贝塞尔曲线平滑度系数
+     * @param lineSmoothness
+     */
+    public void setSmoothness(float lineSmoothness) {
+        this.lineSmoothness = lineSmoothness;
+        invalidate();
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);

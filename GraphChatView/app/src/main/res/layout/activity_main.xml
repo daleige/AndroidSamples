@@ -1,23 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <SeekBar
-        android:id="@+id/sb_test"
+
+    <Button
+        android:id="@+id/btn_test_local"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="testLocalJson"
+        android:text="测试本地数据" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/btn_test_local"
+        android:onClick="testRandom"
+        android:text="测试随机数据" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_margin="20dp" />
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20dp"
+        android:orientation="vertical">
+
+        <SeekBar
+            android:id="@+id/sb_test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_smooth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp"
+            android:text="贝塞尔曲线平滑度:0" />
+    </LinearLayout>
 
     <com.cyq.graphchatview.GraphChatView
         android:id="@+id/graph_view"
         android:layout_width="320dp"
         android:layout_height="220dp"
-        android:layout_gravity="center"
+        android:layout_centerInParent="true"
         app:graph_graphColor="#FF5500"
         app:graph_graphWidth="1.92dp"
         app:graph_lineColor="#626262"
@@ -29,4 +58,4 @@
         app:graph_tvColor="#626262"
         app:graph_tvSize="12sp" />
 
-</FrameLayout>
+</RelativeLayout>

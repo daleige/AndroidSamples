@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,9 +24,11 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private GraphChatView mGraphChatView;
+    private TextView tvSmooth;
     private List<TempBean> tempList = new ArrayList<>();
     private Random random;
     private SeekBar mSeekbar;
+    private float smoothness = 0f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,26 +45,25 @@ public class MainActivity extends AppCompatActivity {
 
         mGraphChatView = findViewById(R.id.graph_view);
         mSeekbar = findViewById(R.id.sb_test);
+        tvSmooth = findViewById(R.id.tv_smooth);
         mGraphChatView.setTempList(tempList);
 
         mSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                Log.i("test","onProgressChanged:"+i);
+                smoothness = i / 100f;
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                Log.i("test","onStartTrackingTouch");
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                Log.i("test","onStopTrackingTouch");
+                tvSmooth.setText("贝塞尔曲线平滑度：" + smoothness);
+                mGraphChatView.setSmoothness(smoothness);
             }
         });
-
-        parseJson();
     }
 
     private List<TempBean> mTestData = new ArrayList<>();
@@ -73,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
+                    long startTime = System.currentTimeMillis();
                     InputStream inputstream = getResources().getAssets().open("temperature.json");
                     StringBuilder data = new StringBuilder();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(inputstream));
@@ -94,6 +98,8 @@ public class MainActivity extends AppCompatActivity {
                     if (mHandler != null) {
                         mHandler.sendEmptyMessage(0);
                     }
+                    long endTime = System.currentTimeMillis();
+                    Log.i("test", "解析数据耗时：" + (endTime - startTime) + "ms");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -108,4 +114,19 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     });
+
+    public void testLocalJson(View view) {
+        parseJson();
+    }
+
+    public void testRandom(View view) {
+        tempList.clear();
+        for (int i = 0; i < 9; i++) {
+            TempBean tempBean = new TempBean();
+            tempBean.setTimestamp(System.currentTimeMillis() / 1000 + 300 * i);
+            tempBean.setTemp(random.nextInt(260));
+            tempList.add(tempBean);
+        }
+        mGraphChatView.setTempList(tempList);
+    }
 }
