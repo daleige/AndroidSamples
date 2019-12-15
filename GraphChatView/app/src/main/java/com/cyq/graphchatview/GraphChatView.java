@@ -1,5 +1,6 @@
 package com.cyq.graphchatview;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -55,6 +56,10 @@ public class GraphChatView extends View {
     private List<String> yRoller = new ArrayList<>();
     private int yScale = 50;
 
+    private float currentAnimValue;
+    private Path dst;
+    private ValueAnimator valueAnimator;
+
     DecimalFormat decimalFormat = new DecimalFormat("###################.###########");
 
     public GraphChatView(Context context) {
@@ -69,15 +74,24 @@ public class GraphChatView extends View {
         super(context, attrs, defStyleAttr);
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.GraphChatView);
         tvColor = array.getColor(R.styleable.GraphChatView_graph_tvColor, tvColor);
-        tvSize = array.getDimensionPixelSize(R.styleable.GraphChatView_graph_tvSize, dip2px(getContext(), tvSize));
-        lineWidth = array.getDimensionPixelSize(R.styleable.GraphChatView_graph_lineWidth, dip2px(getContext(), lineWidth));
+        tvSize = array.getDimensionPixelSize(R.styleable.GraphChatView_graph_tvSize,
+                dip2px(getContext(), tvSize));
+        lineWidth = array.getDimensionPixelSize(R.styleable.GraphChatView_graph_lineWidth,
+                dip2px(getContext(), lineWidth));
         lineColor = array.getColor(R.styleable.GraphChatView_graph_lineColor, lineColor);
-        lineMarginLeft = array.getDimensionPixelSize(R.styleable.GraphChatView_graph_lineMarginLeft, dip2px(getContext(), lineMarginLeft));
-        lineMarginBottom = array.getDimensionPixelSize(R.styleable.GraphChatView_graph_lineMarginBottom, dip2px(getContext(), lineMarginBottom));
+        lineMarginLeft =
+                array.getDimensionPixelSize(R.styleable.GraphChatView_graph_lineMarginLeft,
+                        dip2px(getContext(), lineMarginLeft));
+        lineMarginBottom =
+                array.getDimensionPixelSize(R.styleable.GraphChatView_graph_lineMarginBottom,
+                        dip2px(getContext(), lineMarginBottom));
         graphColor = array.getColor(R.styleable.GraphChatView_graph_graphColor, graphColor);
-        graphWidth = array.getDimensionPixelSize(R.styleable.GraphChatView_graph_graphWidth, dip2px(getContext(), graphWidth));
-        topPointWidth = array.getDimensionPixelSize(R.styleable.GraphChatView_graph_topPointWidth, dip2px(getContext(), topPointWidth));
-        lineSmoothness = array.getFloat(R.styleable.GraphChatView_graph_lineSmoothness, lineSmoothness);
+        graphWidth = array.getDimensionPixelSize(R.styleable.GraphChatView_graph_graphWidth,
+                dip2px(getContext(), graphWidth));
+        topPointWidth = array.getDimensionPixelSize(R.styleable.GraphChatView_graph_topPointWidth
+                , dip2px(getContext(), topPointWidth));
+        lineSmoothness = array.getFloat(R.styleable.GraphChatView_graph_lineSmoothness,
+                lineSmoothness);
         array.recycle();
         init();
     }
@@ -107,6 +121,18 @@ public class GraphChatView extends View {
         yRoller.add("150");
         yRoller.add("200");
         yRoller.add("250");
+
+        dst = new Path();
+        valueAnimator = ValueAnimator.ofFloat(0, 1);
+//        valueAnimator.setRepeatCount(ValueAnimator.REVERSE);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            public void onAnimationUpdate(ValueAnimator animation) {
+                currentAnimValue = (float) animation.getAnimatedValue();
+                invalidate();
+            }
+        });
+        valueAnimator.setDuration(1000);
+        valueAnimator.start();
     }
 
     /**
@@ -126,17 +152,18 @@ public class GraphChatView extends View {
     public void setTempList(List<TempBean> tempList) {
         if (tempList.size() > 0) {
             this.tempList = tempList;
-            invalidate();
+            valueAnimator.start();
         }
     }
 
     /**
      * 设置贝塞尔曲线平滑度系数
+     *
      * @param lineSmoothness
      */
     public void setSmoothness(float lineSmoothness) {
         this.lineSmoothness = lineSmoothness;
-        invalidate();
+        valueAnimator.start();
     }
 
     @Override
@@ -165,7 +192,8 @@ public class GraphChatView extends View {
             int baseLine = measureBaseLine(tvPaint, text, topY);
             canvas.drawText(text, (yTvWidth - textBounds.width()) / 2, baseLine, tvPaint);
             //画横线
-            canvas.drawLine(yTvWidth + lineMarginLeft, topY + yTvHeight / 2, getWidth(), topY + yTvHeight / 2, linePaint);
+            canvas.drawLine(yTvWidth + lineMarginLeft, topY + yTvHeight / 2, getWidth(),
+                    topY + yTvHeight / 2, linePaint);
         }
 
         if (tempList.size() <= 0) {
@@ -234,10 +262,11 @@ public class GraphChatView extends View {
             }
         }
         measurePath();
-        Path dst = new Path();
-        dst.rLineTo(0, 0);
-        float distance = mPathMeasure.getLength() * drawScale;
-        if (mPathMeasure.getSegment(0, distance, dst, true)) {
+
+        float stop = mPathMeasure.getLength() * currentAnimValue;
+        float start = 0;
+        dst.reset();
+        if (mPathMeasure.getSegment(start, stop, dst, true)) {
             //绘制曲线
             canvas.drawPath(dst, graphPaint);
         }
@@ -245,7 +274,8 @@ public class GraphChatView extends View {
         //画终点
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.graph_chat_point);
         Bitmap newBitmap = scaleBitmap(bitmap, (int) topPointWidth);
-        canvas.drawBitmap(newBitmap, bitmapX - topPointWidth / 2, bitmapY - topPointWidth / 2, bitmapPaint);
+        canvas.drawBitmap(newBitmap, bitmapX - topPointWidth / 2, bitmapY - topPointWidth / 2,
+                bitmapPaint);
         canvas.restore();
     }
 
@@ -360,7 +390,8 @@ public class GraphChatView extends View {
     }
 
     private int sp2px(int sp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, getResources().getDisplayMetrics());
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp,
+                getResources().getDisplayMetrics());
     }
 
     private int dip2px(Context context, float dpValue) {
@@ -459,7 +490,8 @@ public class GraphChatView extends View {
      * X轴信息
      */
     public static class XRollerInfo {
-        public XRollerInfo(float maxMillis, float firstStr, float secondStr, float threeStr, String typeStr) {
+        public XRollerInfo(float maxMillis, float firstStr, float secondStr, float threeStr,
+                           String typeStr) {
             this.firstStr = firstStr;
             this.secondStr = secondStr;
             this.threeStr = threeStr;
