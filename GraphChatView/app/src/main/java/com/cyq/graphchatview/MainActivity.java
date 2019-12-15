@@ -1,18 +1,22 @@
 package com.cyq.graphchatview;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
-import android.view.View;
+import android.widget.SeekBar;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -20,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private GraphChatView mGraphChatView;
     private List<TempBean> tempList = new ArrayList<>();
     private Random random;
+    private SeekBar mSeekbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,14 +34,31 @@ public class MainActivity extends AppCompatActivity {
         random = new Random();
         for (int i = 0; i < 9; i++) {
             TempBean tempBean = new TempBean();
-
             tempBean.setTimestamp(System.currentTimeMillis() / 1000 + 300 * i);
             tempBean.setTemp(random.nextInt(260));
             tempList.add(tempBean);
         }
 
         mGraphChatView = findViewById(R.id.graph_view);
+        mSeekbar = findViewById(R.id.sb_test);
         mGraphChatView.setTempList(tempList);
+
+        mSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                Log.i("test","onProgressChanged:"+i);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                Log.i("test","onStartTrackingTouch");
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                Log.i("test","onStopTrackingTouch");
+            }
+        });
 
         parseJson();
     }
@@ -58,32 +80,32 @@ public class MainActivity extends AppCompatActivity {
                     while ((line = reader.readLine()) != null) {
                         data.append(line);
                     }
-                    String reponData = data.toString();
                     Gson gson = new Gson();
-                    TestTempBean appList = gson.fromJson(reponData, TestTempBean.class);
-                    Log.i("test", "解析结果：" + appList.getData().size());
-
-
-
+                    TestTempBean appList = gson.fromJson(data.toString(), TestTempBean.class);
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    mTestData.clear();
+                    for (TestTempBean.DataBean bean : appList.getData()) {
+                        Date date = format.parse(bean.getAddTime());
+                        TempBean mTempBean = new TempBean();
+                        mTempBean.setTimestamp(date.getTime() / 1000);
+                        mTempBean.setTemp(Integer.parseInt(bean.getActualTemperature()));
+                        mTestData.add(mTempBean);
+                    }
+                    if (mHandler != null) {
+                        mHandler.sendEmptyMessage(0);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }).start();
-
     }
 
-    public void refreshData(View view) {
-        tempList.clear();
-        int temp = 10;
-        for (int i = 0; i < 40; i++) {
-            TempBean tempBean = new TempBean();
-            //测试5秒递进一下
-            tempBean.setTimestamp(System.currentTimeMillis() / 1000 + 5 * i);
-            temp = temp + random.nextInt(10);
-            tempBean.setTemp(temp);
-            tempList.add(tempBean);
+    private Handler mHandler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(@NonNull Message message) {
+            mGraphChatView.setTempList(mTestData);
+            return false;
         }
-        mGraphChatView.setTempList(tempList);
-    }
+    });
 }
