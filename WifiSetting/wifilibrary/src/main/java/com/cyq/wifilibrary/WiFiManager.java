@@ -13,12 +13,21 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.cyq.wifilibrary.intefaces.OnWifiConnectListener;
-import com.cyq.wifilibrary.intefaces.OnWifiEnabledListener;
-import com.cyq.wifilibrary.intefaces.OnWifiScanResultsListener;
+import com.cyq.wifilibrary.listener.OnWifiConnectListener;
+import com.cyq.wifilibrary.listener.OnWifiEnabledListener;
+import com.cyq.wifilibrary.listener.OnWifiScanResultsListener;
 
 import java.util.List;
 
+
+/**
+ * Created by kqw on 2016/8/2.
+ * WifiManager : https://developer.android.com/reference/android/net/wifi/WifiManager.html
+ * WifiConfiguration : https://developer.android.com/reference/android/net/wifi/WifiConfiguration.html
+ * ScanResult : https://developer.android.com/reference/android/net/wifi/ScanResult.html
+ * WifiInfo : https://developer.android.com/reference/android/net/wifi/WifiInfo.html
+ * Wifi管理
+ */
 public class WiFiManager extends BaseWiFiManager {
 
     private static final String TAG = "WiFiManager";
@@ -99,7 +108,6 @@ public class WiFiManager extends BaseWiFiManager {
             boolean isSave = saveConfiguration();
             // 连接网络
             boolean isEnable = enableNetwork(networkId);
-
             return isSave && isEnable;
         }
         return false;
@@ -126,16 +134,18 @@ public class WiFiManager extends BaseWiFiManager {
         return false;
     }
 
+    /* *******************************************************************************************/
+
+
     /**
      * 广播接收者
      */
     public static class NetworkBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+
             WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-            if (intent.getAction() == null) {
-                return;
-            }
+
             switch (intent.getAction()) {
                 case WifiManager.WIFI_STATE_CHANGED_ACTION: // WIFI状态发生变化
                     switch (intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_UNKNOWN)) {
@@ -266,7 +276,9 @@ public class WiFiManager extends BaseWiFiManager {
         }
     }
 
+
     private static class CallBackHandler extends Handler {
+
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);

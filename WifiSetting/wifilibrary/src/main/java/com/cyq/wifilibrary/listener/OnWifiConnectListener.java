@@ -1,4 +1,4 @@
-package com.cyq.wifilibrary.intefaces;
+package com.cyq.wifilibrary.listener;
 
 /**
  * Created by kqw on 2016/8/4.

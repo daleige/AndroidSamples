@@ -1,4 +1,4 @@
-package com.cyq.wifilibrary.intefaces;
+package com.cyq.wifilibrary.listener;
 
 import android.net.wifi.ScanResult;
 

@@ -21,5 +21,7 @@ android {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
+    implementation 'pub.devrel:easypermissions:3.0.0'
+    implementation project(path: ':wifilibrary')
+    implementation 'com.github.kongqw:PermissionsManager:1.0.0'
 }

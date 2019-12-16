@@ -400,18 +400,18 @@ public class BaseWiFiManager {
      * @param scanResult WIFI信息
      * @return 加密方式
      */
-    public WifiMode getSecurityMode(@NonNull ScanResult scanResult) {
+    public SecurityModeEnum getSecurityMode(@NonNull ScanResult scanResult) {
         String capabilities = scanResult.capabilities;
 
         if (capabilities.contains("WPA")) {
-            return WifiMode.WPA;
+            return SecurityModeEnum.WPA;
         } else if (capabilities.contains("WEP")) {
-            return WifiMode.WEP;
+            return SecurityModeEnum.WEP;
             //        } else if (capabilities.contains("EAP")) {
             //            return SecurityMode.WEP;
         } else {
             // 没有加密
-            return WifiMode.OPEN;
+            return SecurityModeEnum.OPEN;
         }
     }
 
