@@ -6,13 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-
     <EditText
-        android:hint="设置过滤长度"
+        android:text="1"
         android:id="@+id/et_test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:hint="设置过滤长度"
         android:inputType="number" />
 
     <Button
@@ -24,11 +24,12 @@
         android:text="测试本地数据" />
 
     <Button
+        android:id="@+id/btn_unique"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/btn_test_local"
-        android:onClick="testRandom"
-        android:text="测试随机数据" />
+        android:onClick="removeComponet"
+        android:text="过滤临近点重复温度的数据" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,10 +38,12 @@
         android:layout_margin="20dp"
         android:orientation="vertical">
 
-        <SeekBar
-            android:id="@+id/sb_test"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:onClick="testRandom"
+            android:text="测试随机数据" />
 
         <TextView
             android:id="@+id/tv_smooth"
@@ -49,6 +52,12 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="20dp"
             android:text="贝塞尔曲线平滑度:0" />
+
+        <SeekBar
+            android:id="@+id/sb_test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
 
     <com.cyq.graphchatview.GraphChatView
@@ -66,5 +75,6 @@
         app:graph_topPointWidth="23dp"
         app:graph_tvColor="#626262"
         app:graph_tvSize="12sp" />
+
 
 </RelativeLayout>

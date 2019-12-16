@@ -9,11 +9,11 @@ public class TempBean {
     /**
      * 时间戳
      */
-    private long timestamp;
+    public long timestamp;
     /**
      * 温度
      */
-    private int temp;
+    public int temp;
 
 
     public long getTimestamp() {

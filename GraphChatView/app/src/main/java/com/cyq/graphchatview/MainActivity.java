@@ -1,5 +1,6 @@
 package com.cyq.graphchatview;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
@@ -21,9 +23,17 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
+
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toCollection;
 
 public class MainActivity extends AppCompatActivity {
     private GraphChatView mGraphChatView;
@@ -129,6 +139,30 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     });
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void removeComponet(View view) {
+        if (mTestData.size() == 0) {
+            return;
+        }
+        List<TempBean> unique = new ArrayList<>();
+        int count = mTestData.size();
+        Log.i("test", "之钱的数据长度：" + mTestData.size());
+        for (int i = 0; i < count; i++) {
+            if (i == 0) {
+                unique.add(mTestData.get(i));
+            } else {
+                if (mTestData.get(i).getTemp() != unique.get(unique.size() - 1).getTemp()) {
+                    unique.add(mTestData.get(i));
+                }
+            }
+        }
+        Log.i("test", "之后的数据长度：" + unique.size());
+        for (TempBean bean:unique){
+            Log.i("test","--------"+bean.getTemp()+"----"+bean.getTimestamp());
+        }
+        mGraphChatView.setTempList(unique);
+    }
 
     public void testLocalJson(View view) {
         parseJson();
