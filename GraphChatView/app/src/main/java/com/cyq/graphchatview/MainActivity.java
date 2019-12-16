@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 try {
                     long startTime = System.currentTimeMillis();
-                    InputStream inputstream = getResources().getAssets().open("temperature.json");
+                    InputStream inputstream = getResources().getAssets().open("temperature2.json");
                     StringBuilder data = new StringBuilder();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(inputstream));
                     String line;
