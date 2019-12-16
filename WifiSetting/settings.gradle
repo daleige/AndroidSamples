@@ -1,2 +1,2 @@
-include ':app'
+include ':app', ':wifilibrary'
 rootProject.name='WifiSetting'
