@@ -7,17 +7,26 @@
     tools:context=".MainActivity">
 
 
+    <EditText
+        android:hint="设置过滤长度"
+        android:id="@+id/et_test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:inputType="number" />
+
     <Button
         android:id="@+id/btn_test_local"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/et_test"
         android:onClick="testLocalJson"
         android:text="测试本地数据" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/btn_test_local"
+        android:layout_below="@+id/btn_test_local"
         android:onClick="testRandom"
         android:text="测试随机数据" />
 
