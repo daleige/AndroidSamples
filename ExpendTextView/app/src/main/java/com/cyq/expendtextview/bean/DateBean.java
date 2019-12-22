@@ -1,4 +1,4 @@
-package com.cyq.expendtextview;
+package com.cyq.expendtextview.bean;
 
 /**
  * Time: 2019-12-22 18:40

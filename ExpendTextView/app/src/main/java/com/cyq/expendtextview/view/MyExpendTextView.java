@@ -1,4 +1,4 @@
-package com.cyq.expendtextview;
+package com.cyq.expendtextview.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -12,6 +12,8 @@ import androidx.appcompat.widget.AppCompatTextView;
  * desc   : 文字展开收缩控件，支持展开隐藏的动画
  */
 public class MyExpendTextView extends AppCompatTextView {
+    private int minLines = 3;
+
     public MyExpendTextView(Context context) {
         this(context, null);
     }
@@ -22,6 +24,12 @@ public class MyExpendTextView extends AppCompatTextView {
 
     public MyExpendTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
+        init();
+    }
+
+    private void init() {
+//        Log.i("test","height:" + height);
     }
 
     /**
@@ -30,11 +38,21 @@ public class MyExpendTextView extends AppCompatTextView {
     public void setExpend(boolean isExpend) {
         if (isExpend) {
             //展开
-            setMaxLines(30);
+            setMaxLines(Integer.MAX_VALUE);
         } else {
             //收缩
             setMaxLines(3);
         }
     }
 
+
+    private int dp2px(Context context, float dpValue) {
+        int res = 0;
+        final float scale = context.getResources().getDisplayMetrics().density;
+        if (dpValue < 0)
+            res = -(int) (-dpValue * scale + 0.5f);
+        else
+            res = (int) (dpValue * scale + 0.5f);
+        return res;
+    }
 }

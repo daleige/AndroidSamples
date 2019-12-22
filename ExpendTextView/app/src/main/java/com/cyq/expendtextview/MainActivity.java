@@ -6,6 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cyq.expendtextview.adapter.MyAdapter;
+import com.cyq.expendtextview.bean.DateBean;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
             bean.setStr(str);
             mList.add(bean);
         }
-        mAdapter = new MyAdapter(this, mList);
+        mAdapter = new MyAdapter(this,this, mList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mAdapter);
     }
