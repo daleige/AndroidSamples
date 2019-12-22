@@ -48,28 +48,42 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                 mActivity.getWindowManager().getDefaultDisplay().getWidth() - dp2px(mContext, 20f);
         expandableTextView.initWidth(viewWidth);
         expandableTextView.setMaxLines(3);
-        expandableTextView.setHasAnimation(true);
-        expandableTextView.setCloseInNewLine(true);
+        expandableTextView.setHasAnimation(false);
+        expandableTextView.setCloseInNewLine(false);
         expandableTextView.setOpenSuffixColor(Color.parseColor("#D81B60"));
         expandableTextView.setCloseSuffixColor(Color.parseColor("#D81B60"));
         expandableTextView.setOriginalText(mList.get(position).getStr());
         expandableTextView.setOpenAndCloseCallback(new ExpandableTextView.OpenAndCloseCallback() {
             @Override
             public void onOpen() {
+                expandableTextView.setHasAnimation(false);
                 Log.i("test", "open");
             }
 
             @Override
             public void onClose() {
+                expandableTextView.setHasAnimation(false);
                 Log.i("test", "close");
             }
         });
-
+        if(mList.get(position).getExpend()){
+            expandableTextView.open();
+        }else {
+            expandableTextView.close();
+        }
         Button button = holder.button;
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                expandableTextView.switchOpenClose();
+                expandableTextView.setHasAnimation(true);
+                if(mList.get(position).getExpend()){
+                    expandableTextView.close();
+                    mList.get(position).setExpend(false);
+                }else {
+                    expandableTextView.open();
+
+                    mList.get(position).setExpend(true);
+                }
             }
         });
     }

@@ -9,7 +9,6 @@ import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
@@ -188,16 +187,20 @@ public class ExpandableTextView extends AppCompatTextView {
     /**
      * 展开
      */
-    private void open() {
-        if (hasAnimation) {
-            Layout layout = createStaticLayout(mOpenSpannableStr);
-            mOpenHeight = layout.getHeight() + getPaddingTop() + getPaddingBottom();
-            executeOpenAnim();
-        } else {
-            ExpandableTextView.super.setMaxLines(Integer.MAX_VALUE);
-            setText(mOpenSpannableStr);
-            if (mOpenCloseCallback != null) {
-                mOpenCloseCallback.onOpen();
+    public void open() {
+
+        if (mExpandable) {
+            isClosed = !isClosed;
+            if (hasAnimation) {
+                Layout layout = createStaticLayout(mOpenSpannableStr);
+                mOpenHeight = layout.getHeight() + getPaddingTop() + getPaddingBottom();
+                executeOpenAnim();
+            } else {
+                ExpandableTextView.super.setMaxLines(Integer.MAX_VALUE);
+                setText(mOpenSpannableStr);
+                if (mOpenCloseCallback != null) {
+                    mOpenCloseCallback.onOpen();
+                }
             }
         }
     }
@@ -205,14 +208,17 @@ public class ExpandableTextView extends AppCompatTextView {
     /**
      * 收起
      */
-    private void close() {
-        if (hasAnimation) {
-            executeCloseAnim();
-        } else {
-            ExpandableTextView.super.setMaxLines(mMaxLines);
-            setText(mCloseSpannableStr);
-            if (mOpenCloseCallback != null) {
-                mOpenCloseCallback.onClose();
+    public void close() {
+        if (mExpandable) {
+            isClosed = !isClosed;
+            if (hasAnimation) {
+                executeCloseAnim();
+            } else {
+                ExpandableTextView.super.setMaxLines(mMaxLines);
+                setText(mCloseSpannableStr);
+                if (mOpenCloseCallback != null) {
+                    mOpenCloseCallback.onClose();
+                }
             }
         }
     }
