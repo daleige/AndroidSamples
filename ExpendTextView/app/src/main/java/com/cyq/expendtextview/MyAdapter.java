@@ -1,6 +1,7 @@
 package com.cyq.expendtextview;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +9,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,9 +18,9 @@ import java.util.List;
  */
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     private Context mContext;
-    private List<String> mList = new ArrayList<>();
+    private List<DateBean> mList;
 
-    public MyAdapter(Context mContext, List<String> mList) {
+    public MyAdapter(Context mContext, List<DateBean> mList) {
         this.mContext = mContext;
         this.mList = mList;
     }
@@ -33,16 +33,27 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
         final MyExpendTextView mExpendTextView = holder.mExpendTextView;
-        mExpendTextView.setText(mList.get(position));
+        mExpendTextView.setEllipsize(TextUtils.TruncateAt.END);
+        mExpendTextView.setText(mList.get(position).getStr());
+        if (mList.get(position).getExpend()) {
+            mExpendTextView.setExpend(true);
+        } else {
+            mExpendTextView.setExpend(false);
+        }
         mExpendTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mExpendTextView.setCurrentLines();
+                if (mList.get(position).getExpend()) {
+                    mList.get(position).setExpend(false);
+                    mExpendTextView.setExpend(false);
+                } else {
+                    mList.get(position).setExpend(true);
+                    mExpendTextView.setExpend(true);
+                }
             }
         });
-
     }
 
     @Override

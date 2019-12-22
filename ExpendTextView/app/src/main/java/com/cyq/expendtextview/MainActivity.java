@@ -12,7 +12,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private MyAdapter mAdapter;
-    private List<String> mList = new ArrayList<>();
+    private List<DateBean> mList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +22,10 @@ public class MainActivity extends AppCompatActivity {
         //构造假数据
         String str = getResources().getString(R.string.text_content);
         for (int i = 0; i < 30; i++) {
-            mList.add(str);
+            DateBean bean = new DateBean();
+            bean.setExpend(false);
+            bean.setStr(str);
+            mList.add(bean);
         }
         mAdapter = new MyAdapter(this, mList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
