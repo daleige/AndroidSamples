@@ -9,7 +9,9 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.TextView;
 
@@ -69,6 +71,7 @@ public class MyExpendTextView extends AppCompatTextView {
             mOpenAnim = ValueAnimator.ofFloat(0, 1);
             mOpenAnim.setDuration(1000);
         }
+        final ViewGroup.LayoutParams layoutParams = getLayoutParams();
         mOpenAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -76,9 +79,8 @@ public class MyExpendTextView extends AppCompatTextView {
                 MyExpendTextView.this.post(new Runnable() {
                     @Override
                     public void run() {
-                        Log.i("test", "---------open------:" + (int) (minHeight + (maxHeight - minHeight) * f));
-                        MyExpendTextView.this.getLayoutParams().height = (int) (minHeight + (maxHeight - minHeight) * f);
-                        invalidate();
+                        layoutParams.height = (int) (minHeight + (maxHeight - minHeight) * f);
+                        setLayoutParams(layoutParams);
                     }
                 });
             }
@@ -94,6 +96,7 @@ public class MyExpendTextView extends AppCompatTextView {
             mCloseAnim = ValueAnimator.ofFloat(0, 1);
             mCloseAnim.setDuration(1000);
         }
+        final ViewGroup.LayoutParams layoutParams = getLayoutParams();
         mCloseAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -101,9 +104,8 @@ public class MyExpendTextView extends AppCompatTextView {
                 MyExpendTextView.this.post(new Runnable() {
                     @Override
                     public void run() {
-                        Log.i("test", "---------close------:" + (int) (maxHeight - (maxHeight - minHeight) * f));
-                        MyExpendTextView.this.getLayoutParams().height = (int) (maxHeight - (maxHeight - minHeight) * f);
-                        invalidate();
+                        layoutParams.height = (int) (maxHeight - (maxHeight - minHeight) * f);
+                        setLayoutParams(layoutParams);
                     }
                 });
             }
