@@ -13,6 +13,7 @@ import com.cyq.greendaodemo.bean.DaoMaster;
 import com.cyq.greendaodemo.bean.DaoSession;
 import com.cyq.greendaodemo.bean.Student;
 import com.cyq.greendaodemo.bean.StudentDao;
+import com.cyq.greendaodemo.bean.Test;
 
 import java.util.List;
 import java.util.Random;
@@ -65,10 +66,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Random random = new Random();
         for (int i = 0; i < 100; i++) {
             Student student = new Student();
-            student.setId(i + 100);
+            student.setId(-i * 3 + 100);
             student.setAge(random.nextInt(80));
+            student.setTime(1577152151646L);
             student.setName("赵淑芳" + i);
-//            daoSession.insert(student);
             daoSession.insertOrReplace(student);
         }
     }
@@ -81,8 +82,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (Student student : mList) {
             Log.i("test", student.toString());
         }
-        List<Student> maxPostIdRow = studentDao.queryBuilder()
-                .where(StudentDao.Properties.Id.isNotNull()).orderDesc(StudentDao.Properties.Id).limit(1).list();
+        List<Student> maxPostIdRow = studentDao.queryBuilder().where(StudentDao.Properties.Id.isNotNull()).orderDesc(StudentDao.Properties.Id).limit(1).list();
+
         Long maxPostId = maxPostIdRow.get(0).getId();
         Log.i("test", "ID最大值：" + maxPostId);
     }

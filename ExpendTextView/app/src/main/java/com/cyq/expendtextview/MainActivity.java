@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cyq.expendtextview.adapter.MyAdapter;
+import com.cyq.expendtextview.adapter.TestAdapter;
 import com.cyq.expendtextview.bean.DateBean;
 
 import java.util.ArrayList;
@@ -14,8 +15,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
-    private MyAdapter mAdapter;
-    private List<DateBean> mList = new ArrayList<>();
+    private TestAdapter mAdapter;
+    private List<String> mList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,14 +24,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mRecyclerView = findViewById(R.id.recyclerView);
         //构造假数据
-        String str = getResources().getString(R.string.text_content);
         for (int i = 0; i < 30; i++) {
-            DateBean bean = new DateBean();
-            bean.setExpend(false);
-            bean.setStr(str);
-            mList.add(bean);
+            mList.add(getResources().getString(R.string.text_content));
         }
-        mAdapter = new MyAdapter(this,this, mList);
+        mAdapter = new TestAdapter(R.layout.item_layout_list, mList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mAdapter);
     }
