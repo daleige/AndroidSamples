@@ -1,10 +1,17 @@
 package com.cyq.expendtextview.view;
 
 import android.content.Context;
+import android.os.Build;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatTextView;
 
 /**
@@ -34,11 +41,17 @@ public class MyExpendTextView extends AppCompatTextView {
             @Override
             public void onClick(View v) {
                 if (isOpen) {
-                    close();
-                    isOpen = false;
+                    if (mOpneAndCloseTaggerListener != null) {
+                        close();
+                        isOpen = false;
+                        mOpneAndCloseTaggerListener.close();
+                    }
                 } else {
-                    open();
-                    isOpen = true;
+                    if (mOpneAndCloseTaggerListener != null) {
+                        open();
+                        isOpen = true;
+                        mOpneAndCloseTaggerListener.open();
+                    }
                 }
             }
         });
@@ -52,14 +65,15 @@ public class MyExpendTextView extends AppCompatTextView {
         setMaxLines(minLines);
     }
 
-    private int dp2px(Context context, float dpValue) {
-        int res = 0;
-        final float scale = context.getResources().getDisplayMetrics().density;
-        if (dpValue < 0) {
-            res = -(int) (-dpValue * scale + 0.5f);
-        } else {
-            res = (int) (dpValue * scale + 0.5f);
-        }
-        return res;
+    public void setOpneAndCloseTaggerListener(OnOpenAndCloseTaggerListener mOpneAndCloseTaggerListener) {
+        this.mOpneAndCloseTaggerListener = mOpneAndCloseTaggerListener;
+    }
+
+    private OnOpenAndCloseTaggerListener mOpneAndCloseTaggerListener;
+
+    public interface OnOpenAndCloseTaggerListener {
+        void open();
+
+        void close();
     }
 }

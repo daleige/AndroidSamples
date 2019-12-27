@@ -7,27 +7,31 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cyq.expendtextview.adapter.MyAdapter;
-import com.cyq.expendtextview.adapter.TestAdapter;
-import com.cyq.expendtextview.bean.DateBean;
+import com.cyq.expendtextview.bean.TestBean;
+import com.cyq.expendtextview.view.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
-    private TestAdapter mAdapter;
-    private List<String> mList = new ArrayList<>();
+    private MyAdapter mAdapter;
+    private List<TestBean> mList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mRecyclerView = findViewById(R.id.recyclerView);
+        int width = getWindowManager().getDefaultDisplay().getWidth() - Utils.dp2px(this, 20);
         //构造假数据
         for (int i = 0; i < 30; i++) {
-            mList.add(getResources().getString(R.string.text_content));
+            TestBean bean = new TestBean();
+            bean.setStr(getResources().getString(R.string.text_content));
+            bean.isChecked = false;
+            mList.add(bean);
         }
-        mAdapter = new TestAdapter(R.layout.item_layout_list, mList);
+        mAdapter = new MyAdapter(this, mList, width);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mAdapter);
     }

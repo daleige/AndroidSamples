@@ -1,91 +1,81 @@
 package com.cyq.expendtextview.adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
+import android.os.Build;
+import android.text.StaticLayout;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cyq.expendtextview.R;
-import com.cyq.expendtextview.bean.DateBean;
-import com.cyq.expendtextview.test.ExpandableTextView;
+import com.cyq.expendtextview.bean.TestBean;
+import com.cyq.expendtextview.view.MyExpendTextView;
 
 import java.util.List;
 
 /**
  * @author : ChenYangQi
- * date   : 2019/12/21 9:22
- * desc   : 列表Adapter
+ * date   : 2019/12/27 14:59
+ * desc   :
  */
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     private Context mContext;
-    private List<DateBean> mList;
-    private Activity mActivity;
+    private List<TestBean> mList;
+    private int widht;
 
-    public MyAdapter(Context mContext, Activity activity, List<DateBean> mList) {
+    public MyAdapter(Context mContext, List<TestBean> mList, int width) {
         this.mContext = mContext;
-        this.mActivity = activity;
         this.mList = mList;
+        this.widht = width;
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.list_tv_item, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_layout_list, parent, false);
         return new MyViewHolder(view);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
-        final ExpandableTextView expandableTextView = holder.mExpendTextView;
-        int viewWidth =
-                mActivity.getWindowManager().getDefaultDisplay().getWidth() - dp2px(mContext, 20f);
-        expandableTextView.initWidth(viewWidth);
-        expandableTextView.setMaxLines(3);
-        expandableTextView.setHasAnimation(false);
-        expandableTextView.setCloseInNewLine(false);
-        expandableTextView.setOpenSuffixColor(Color.parseColor("#D81B60"));
-        expandableTextView.setCloseSuffixColor(Color.parseColor("#D81B60"));
-        expandableTextView.setOriginalText(mList.get(position).getStr());
-        expandableTextView.setOpenAndCloseCallback(new ExpandableTextView.OpenAndCloseCallback() {
-            @Override
-            public void onOpen() {
-                expandableTextView.setHasAnimation(false);
-                Log.i("test", "open");
-            }
-
-            @Override
-            public void onClose() {
-                expandableTextView.setHasAnimation(false);
-                Log.i("test", "close");
-            }
-        });
-        if(mList.get(position).getExpend()){
-            expandableTextView.open();
-        }else {
-            expandableTextView.close();
+        MyExpendTextView mExpendTextView = holder.mTextView;
+        String str = mList.get(position).getStr();
+        StaticLayout staticLayout = StaticLayout.Builder
+                .obtain(str, 0, str.length(), mExpendTextView.getPaint(), widht)
+                .build();
+        Log.i("test", "staticLayout line count:" + staticLayout.getLineCount());
+        int currentLine = staticLayout.getLineCount();
+        if (currentLine >= 3) {
+            mExpendTextView.setEllipsize(TextUtils.TruncateAt.END);
+            mExpendTextView.setMaxLines(3);
         }
-        Button button = holder.button;
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                expandableTextView.setHasAnimation(true);
-                if(mList.get(position).getExpend()){
-                    expandableTextView.close();
-                    mList.get(position).setExpend(false);
-                }else {
-                    expandableTextView.open();
 
-                    mList.get(position).setExpend(true);
-                }
+        if (mList.get(position).isChecked) {
+            mExpendTextView.open();
+        } else {
+            mExpendTextView.close();
+        }
+
+        mExpendTextView.setOpneAndCloseTaggerListener(new MyExpendTextView.OnOpenAndCloseTaggerListener() {
+            @Override
+            public void open() {
+                mList.get(position).isChecked = true;
+            }
+
+            @Override
+            public void close() {
+                mList.get(position).isChecked = false;
             }
         });
+
+        mExpendTextView.setText(mList.get(position).getStr());
     }
 
     @Override
@@ -94,23 +84,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        ExpandableTextView mExpendTextView;
-        Button button;
+        private MyExpendTextView mTextView;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            mExpendTextView = itemView.findViewById(R.id.expanded_text);
-            button = itemView.findViewById(R.id.btn_tagger);
+            mTextView = itemView.findViewById(R.id.tv_my);
         }
-    }
-
-    private int dp2px(Context context, float dpValue) {
-        int res;
-        final float scale = context.getResources().getDisplayMetrics().density;
-        if (dpValue < 0)
-            res = -(int) (-dpValue * scale + 0.5f);
-        else
-            res = (int) (dpValue * scale + 0.5f);
-        return res;
     }
 }
