@@ -52,15 +52,19 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                 .build();
         Log.i("test", "staticLayout line count:" + staticLayout.getLineCount());
         int currentLine = staticLayout.getLineCount();
+        int maxHeight = staticLayout.getHeight();
+        int lineHeight = maxHeight / currentLine;
+        int minHeight = lineHeight * 3;
+        mExpendTextView.init(minHeight,maxHeight);
         if (currentLine >= 3) {
             mExpendTextView.setEllipsize(TextUtils.TruncateAt.END);
             mExpendTextView.setMaxLines(3);
         }
 
         if (mList.get(position).isChecked) {
-            mExpendTextView.open();
+
         } else {
-            mExpendTextView.close();
+
         }
 
         mExpendTextView.setOpneAndCloseTaggerListener(new MyExpendTextView.OnOpenAndCloseTaggerListener() {
