@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Build;
 import android.text.StaticLayout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,12 +26,12 @@ import java.util.List;
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     private Context mContext;
     private List<TestBean> mList;
-    private int widht;
+    private int width;
 
     public MyAdapter(Context mContext, List<TestBean> mList, int width) {
         this.mContext = mContext;
         this.mList = mList;
-        this.widht = width;
+        this.width = width;
     }
 
     @NonNull
@@ -48,22 +47,25 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         MyExpendTextView mExpendTextView = holder.mTextView;
         String str = mList.get(position).getStr();
         StaticLayout staticLayout = StaticLayout.Builder
-                .obtain(str, 0, str.length(), mExpendTextView.getPaint(), widht)
+                .obtain(str, 0, str.length(), mExpendTextView.getPaint(), width)
                 .build();
-        Log.i("test", "staticLayout line count:" + staticLayout.getLineCount());
         int currentLine = staticLayout.getLineCount();
         int maxHeight = staticLayout.getHeight();
         int lineHeight = maxHeight / currentLine;
-        int minHeight = lineHeight * 3;
-        mExpendTextView.init(minHeight, maxHeight);
-        if (currentLine >= 3) {
+
+        if (currentLine > 3) {
+            int minHeight = lineHeight * 3;
+            mExpendTextView.init(minHeight, maxHeight);
+            mExpendTextView.setEllipsize(TextUtils.TruncateAt.END);
             mExpendTextView.getLayoutParams().height = minHeight;
+        } else {
+            mExpendTextView.init(maxHeight, maxHeight);
         }
 
         if (mList.get(position).isChecked) {
-
+            mExpendTextView.open();
         } else {
-
+            mExpendTextView.close();
         }
 
         mExpendTextView.setOpneAndCloseTaggerListener(new MyExpendTextView.OnOpenAndCloseTaggerListener() {

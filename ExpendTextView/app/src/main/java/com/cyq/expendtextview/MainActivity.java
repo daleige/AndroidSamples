@@ -27,7 +27,18 @@ public class MainActivity extends AppCompatActivity {
         //构造假数据
         for (int i = 0; i < 30; i++) {
             TestBean bean = new TestBean();
-            bean.setStr(getResources().getString(R.string.text_content));
+            if (i % 3 == 0) {
+                bean.setStr("测试一行文字的");
+            } else if (i % 4 == 0) {
+                bean.setStr("测试二行文字的，测试二行文字的，测试二试二行文字的，测试二行文字的");
+            } else if (i % 5 == 0) {
+                bean.setStr("测试三行文字的，测试三行文字的，测试三行文字的，测试三行文字的，测试三行文字的，测试三行文字的" +
+                        "测试三行文字的测试三行文字的" +
+                        "测试三行文字的测试三行文字的测试三行文字的测试三行文字的测试三行文字的测试三行文字的测试三行文字的");
+            } else {
+                bean.setStr(getResources().getString(R.string.text_content));
+
+            }
             bean.isChecked = false;
             mList.add(bean);
         }

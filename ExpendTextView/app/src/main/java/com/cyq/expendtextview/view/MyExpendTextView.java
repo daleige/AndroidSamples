@@ -15,9 +15,13 @@ import androidx.appcompat.widget.AppCompatTextView;
  * desc   : 文字展开收缩控件，支持展开隐藏的动画
  */
 public class MyExpendTextView extends AppCompatTextView {
-    private int minLines = 3;
     private boolean isOpen = false;
-    private ValueAnimator mOpenAnim, mCloseAnim;
+    private ValueAnimator mOpenAnim;
+    private ValueAnimator mCloseAnim;
+    private int minHeight;
+    private int maxHeight;
+    //动画时长
+    private int duration = 400;
 
     public MyExpendTextView(Context context) {
         this(context, null);
@@ -59,7 +63,7 @@ public class MyExpendTextView extends AppCompatTextView {
     private void startOpenAnim() {
         if (mOpenAnim == null) {
             mOpenAnim = ValueAnimator.ofFloat(0, 1);
-            mOpenAnim.setDuration(1000);
+            mOpenAnim.setDuration(duration);
         }
         final ViewGroup.LayoutParams layoutParams = getLayoutParams();
         mOpenAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -69,7 +73,7 @@ public class MyExpendTextView extends AppCompatTextView {
                 MyExpendTextView.this.post(new Runnable() {
                     @Override
                     public void run() {
-                        layoutParams.height = (int) (minHeight + (maxHeight - minHeight) * f);
+                        layoutParams.height = (int) (minHeight + ((maxHeight - minHeight) * f));
                         setLayoutParams(layoutParams);
                     }
                 });
@@ -84,7 +88,7 @@ public class MyExpendTextView extends AppCompatTextView {
     private void startCloseAnim() {
         if (mCloseAnim == null) {
             mCloseAnim = ValueAnimator.ofFloat(0, 1);
-            mCloseAnim.setDuration(1000);
+            mCloseAnim.setDuration(duration);
         }
         final ViewGroup.LayoutParams layoutParams = getLayoutParams();
         mCloseAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -94,15 +98,36 @@ public class MyExpendTextView extends AppCompatTextView {
                 MyExpendTextView.this.post(new Runnable() {
                     @Override
                     public void run() {
-                        layoutParams.height = (int) (maxHeight - (maxHeight - minHeight) * f);
+                        layoutParams.height = (int) (maxHeight - ((maxHeight - minHeight) * f));
                         setLayoutParams(layoutParams);
                     }
                 });
             }
         });
+        mCloseAnim.start();
     }
 
-    private int minHeight, maxHeight;
+    public void open() {
+        MyExpendTextView.this.post(new Runnable() {
+            @Override
+            public void run() {
+                ViewGroup.LayoutParams layoutParams = getLayoutParams();
+                layoutParams.height = maxHeight;
+                setLayoutParams(layoutParams);
+            }
+        });
+    }
+
+    public void close() {
+        MyExpendTextView.this.post(new Runnable() {
+            @Override
+            public void run() {
+                ViewGroup.LayoutParams layoutParams = getLayoutParams();
+                layoutParams.height = minHeight;
+                setLayoutParams(layoutParams);
+            }
+        });
+    }
 
     /**
      * 初始化传入高度
