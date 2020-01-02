@@ -1,5 +1,6 @@
 package com.cyq.expendtextview.view;
 
+import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
@@ -20,8 +21,9 @@ public class MyExpendTextView extends AppCompatTextView {
     private ValueAnimator mCloseAnim;
     private int minHeight;
     private int maxHeight;
+    private boolean isExpendable;
     //动画时长
-    private int duration = 400;
+    private int duration = 200;
 
     public MyExpendTextView(Context context) {
         this(context, null);
@@ -43,15 +45,11 @@ public class MyExpendTextView extends AppCompatTextView {
                 if (isOpen) {
                     if (mOpneAndCloseTaggerListener != null) {
                         isOpen = false;
-                        mOpneAndCloseTaggerListener.close();
                         startCloseAnim();
                     }
                 } else {
-                    if (mOpneAndCloseTaggerListener != null) {
-                        isOpen = true;
-                        mOpneAndCloseTaggerListener.open();
-                        startOpenAnim();
-                    }
+                    isOpen = true;
+                    startOpenAnim();
                 }
             }
         });
@@ -61,10 +59,36 @@ public class MyExpendTextView extends AppCompatTextView {
      * 展开动画
      */
     private void startOpenAnim() {
+        if (mOpneAndCloseTaggerListener != null) {
+            mOpneAndCloseTaggerListener.open();
+        }
         if (mOpenAnim == null) {
             mOpenAnim = ValueAnimator.ofFloat(0, 1);
             mOpenAnim.setDuration(duration);
         }
+
+        mOpenAnim.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+
         final ViewGroup.LayoutParams layoutParams = getLayoutParams();
         mOpenAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -86,10 +110,35 @@ public class MyExpendTextView extends AppCompatTextView {
      * 关闭动画
      */
     private void startCloseAnim() {
+        if (mOpneAndCloseTaggerListener != null) {
+            mOpneAndCloseTaggerListener.close();
+        }
         if (mCloseAnim == null) {
             mCloseAnim = ValueAnimator.ofFloat(0, 1);
             mCloseAnim.setDuration(duration);
         }
+
+        mCloseAnim.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+
         final ViewGroup.LayoutParams layoutParams = getLayoutParams();
         mCloseAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -108,6 +157,7 @@ public class MyExpendTextView extends AppCompatTextView {
     }
 
     public void open() {
+        isOpen=true;
         MyExpendTextView.this.post(new Runnable() {
             @Override
             public void run() {
@@ -119,6 +169,7 @@ public class MyExpendTextView extends AppCompatTextView {
     }
 
     public void close() {
+        isOpen=false;
         MyExpendTextView.this.post(new Runnable() {
             @Override
             public void run() {
@@ -135,9 +186,10 @@ public class MyExpendTextView extends AppCompatTextView {
      * @param minHeight 收缩时的高度
      * @param maxHeight 展开时的高度
      */
-    public void init(int minHeight, int maxHeight) {
+    public void init(int minHeight, int maxHeight, boolean isExpendable) {
         this.minHeight = minHeight;
         this.maxHeight = maxHeight;
+        this.isExpendable = isExpendable;
     }
 
     public void setOpneAndCloseTaggerListener(OnOpenAndCloseTaggerListener mOpneAndCloseTaggerListener) {

@@ -44,7 +44,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
-        MyExpendTextView mExpendTextView = holder.mTextView;
+        final MyExpendTextView mExpendTextView = holder.mTextView;
         String str = mList.get(position).getStr();
         StaticLayout staticLayout = StaticLayout.Builder
                 .obtain(str, 0, str.length(), mExpendTextView.getPaint(), width)
@@ -55,11 +55,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
         if (currentLine > 3) {
             int minHeight = lineHeight * 3;
-            mExpendTextView.init(minHeight, maxHeight);
+            mExpendTextView.init(minHeight, maxHeight,true);
             mExpendTextView.setEllipsize(TextUtils.TruncateAt.END);
             mExpendTextView.getLayoutParams().height = minHeight;
         } else {
-            mExpendTextView.init(maxHeight, maxHeight);
+            mExpendTextView.init(maxHeight, maxHeight,false);
         }
 
         if (mList.get(position).isChecked) {
