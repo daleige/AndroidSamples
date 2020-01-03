@@ -2,6 +2,7 @@ package com.cyq.expendtextview.adapter;
 
 import android.content.Context;
 import android.os.Build;
+import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -46,9 +47,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
         final MyExpendTextView mExpendTextView = holder.mTextView;
         String str = mList.get(position).getStr();
-        StaticLayout staticLayout = StaticLayout.Builder
-                .obtain(str, 0, str.length(), mExpendTextView.getPaint(), width)
-                .build();
+//        StaticLayout staticLayout = StaticLayout.Builder
+//                .obtain(str, 0, str.length(), mExpendTextView.getPaint(), width)
+//                .build();
+        StaticLayout staticLayout = new StaticLayout(str, mExpendTextView.getPaint(), width, Layout.Alignment.ALIGN_NORMAL,
+                1, 0, false);
         int currentLine = staticLayout.getLineCount();
         int maxHeight = staticLayout.getHeight();
         int lineHeight = maxHeight / currentLine;
