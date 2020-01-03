@@ -55,11 +55,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
         if (currentLine > 3) {
             int minHeight = lineHeight * 3;
-            mExpendTextView.init(minHeight, maxHeight,true);
+            mExpendTextView.init(minHeight, maxHeight, true);
             mExpendTextView.setEllipsize(TextUtils.TruncateAt.END);
             mExpendTextView.getLayoutParams().height = minHeight;
+            if (mList.get(position).isChecked) {
+                mExpendTextView.setMaxLines(Integer.MAX_VALUE);
+            } else {
+                mExpendTextView.setMaxLines(3);
+            }
         } else {
-            mExpendTextView.init(maxHeight, maxHeight,false);
+            mExpendTextView.init(maxHeight, maxHeight, false);
         }
 
         if (mList.get(position).isChecked) {

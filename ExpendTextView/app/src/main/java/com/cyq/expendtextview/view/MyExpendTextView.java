@@ -3,6 +3,8 @@ package com.cyq.expendtextview.view;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.Intent;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +41,7 @@ public class MyExpendTextView extends AppCompatTextView {
     }
 
     private void init() {
+        setEllipsize(TextUtils.TruncateAt.END);
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,7 +73,7 @@ public class MyExpendTextView extends AppCompatTextView {
         mOpenAnim.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animator) {
-
+                setMaxLines(Integer.MAX_VALUE);
             }
 
             @Override
@@ -80,7 +83,7 @@ public class MyExpendTextView extends AppCompatTextView {
 
             @Override
             public void onAnimationCancel(Animator animator) {
-
+                setMaxLines(Integer.MAX_VALUE);
             }
 
             @Override
@@ -126,11 +129,12 @@ public class MyExpendTextView extends AppCompatTextView {
 
             @Override
             public void onAnimationEnd(Animator animator) {
-
+                setMaxLines(3);
             }
 
             @Override
             public void onAnimationCancel(Animator animator) {
+                setMaxLines(3);
             }
 
             @Override
@@ -157,7 +161,7 @@ public class MyExpendTextView extends AppCompatTextView {
     }
 
     public void open() {
-        isOpen=true;
+        isOpen = true;
         MyExpendTextView.this.post(new Runnable() {
             @Override
             public void run() {
@@ -169,7 +173,7 @@ public class MyExpendTextView extends AppCompatTextView {
     }
 
     public void close() {
-        isOpen=false;
+        isOpen = false;
         MyExpendTextView.this.post(new Runnable() {
             @Override
             public void run() {
