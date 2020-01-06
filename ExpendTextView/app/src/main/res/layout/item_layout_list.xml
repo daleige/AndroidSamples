@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.cyq.expendtextview.view.MyExpendTextView
+    <com.cyq.expendtextview.view.MyExpendTextView2
         android:id="@+id/tv_my"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

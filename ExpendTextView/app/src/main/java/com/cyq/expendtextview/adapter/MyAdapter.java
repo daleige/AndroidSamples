@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cyq.expendtextview.R;
 import com.cyq.expendtextview.bean.TestBean;
-import com.cyq.expendtextview.view.MyExpendTextView;
+import com.cyq.expendtextview.view.MyExpendTextView2;
 
 import java.util.List;
 
@@ -45,7 +45,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
-        final MyExpendTextView mExpendTextView = holder.mTextView;
+        final MyExpendTextView2 mExpendTextView = holder.mTextView;
         String str = mList.get(position).getStr();
 //        StaticLayout staticLayout = StaticLayout.Builder
 //                .obtain(str, 0, str.length(), mExpendTextView.getPaint(), width)
@@ -76,7 +76,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             mExpendTextView.close();
         }
 
-        mExpendTextView.setOpneAndCloseTaggerListener(new MyExpendTextView.OnOpenAndCloseTaggerListener() {
+        mExpendTextView.setOpneAndCloseTaggerListener(new MyExpendTextView2.OnOpenAndCloseTaggerListener() {
             @Override
             public void open() {
                 mList.get(position).isChecked = true;
@@ -97,7 +97,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        private MyExpendTextView mTextView;
+        private MyExpendTextView2 mTextView;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);

@@ -3,7 +3,6 @@ package com.cyq.expendtextview.view;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.content.Intent;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -17,7 +16,7 @@ import androidx.appcompat.widget.AppCompatTextView;
  * date   : 2019/12/21 8:39
  * desc   : 文字展开收缩控件，支持展开隐藏的动画
  */
-public class MyExpendTextView extends AppCompatTextView {
+public class MyExpendTextView2 extends AppCompatTextView {
     private boolean isOpen = false;
     private ValueAnimator mOpenAnim;
     private ValueAnimator mCloseAnim;
@@ -27,15 +26,15 @@ public class MyExpendTextView extends AppCompatTextView {
     //动画时长
     private int duration = 200;
 
-    public MyExpendTextView(Context context) {
+    public MyExpendTextView2(Context context) {
         this(context, null);
     }
 
-    public MyExpendTextView(Context context, @Nullable AttributeSet attrs) {
+    public MyExpendTextView2(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public MyExpendTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public MyExpendTextView2(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
@@ -97,7 +96,7 @@ public class MyExpendTextView extends AppCompatTextView {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 final float f = (float) animation.getAnimatedValue();
-                MyExpendTextView.this.post(new Runnable() {
+                MyExpendTextView2.this.post(new Runnable() {
                     @Override
                     public void run() {
                         layoutParams.height = (int) (minHeight + ((maxHeight - minHeight) * f));
@@ -148,7 +147,7 @@ public class MyExpendTextView extends AppCompatTextView {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 final float f = (float) animation.getAnimatedValue();
-                MyExpendTextView.this.post(new Runnable() {
+                MyExpendTextView2.this.post(new Runnable() {
                     @Override
                     public void run() {
                         layoutParams.height = (int) (maxHeight - ((maxHeight - minHeight) * f));
@@ -162,7 +161,7 @@ public class MyExpendTextView extends AppCompatTextView {
 
     public void open() {
         isOpen = true;
-        MyExpendTextView.this.post(new Runnable() {
+        MyExpendTextView2.this.post(new Runnable() {
             @Override
             public void run() {
                 ViewGroup.LayoutParams layoutParams = getLayoutParams();
@@ -174,7 +173,7 @@ public class MyExpendTextView extends AppCompatTextView {
 
     public void close() {
         isOpen = false;
-        MyExpendTextView.this.post(new Runnable() {
+        MyExpendTextView2.this.post(new Runnable() {
             @Override
             public void run() {
                 ViewGroup.LayoutParams layoutParams = getLayoutParams();
