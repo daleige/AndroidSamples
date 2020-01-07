@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.cyq.customview.view.NeBigView
+    <com.cyq.customview.BigImageView
         android:id="@+id/iv_big"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
