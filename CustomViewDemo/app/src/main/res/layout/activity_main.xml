@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.cyq.customview.view.WheelView
+    <com.cyq.customview.view.NeBigView
+        android:id="@+id/iv_big"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 </FrameLayout>
