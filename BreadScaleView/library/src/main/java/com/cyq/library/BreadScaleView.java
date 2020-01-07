@@ -2,7 +2,13 @@ package com.cyq.library;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LightingColorFilter;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,23 +111,39 @@ public class BreadScaleView extends FrameLayout {
         this(context, attrs, 0);
     }
 
-    public BreadScaleView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public BreadScaleView(@NonNull Context context, @Nullable AttributeSet attrs,
+                          int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.BreadScaleView);
-        itemHeight = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_itemHeight, dip2px(itemHeight));
-        displayCount = array.getInteger(R.styleable.BreadScaleView_bread_displayCount, displayCount);
+        itemHeight = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_itemHeight,
+                dip2px(itemHeight));
+        displayCount = array.getInteger(R.styleable.BreadScaleView_bread_displayCount,
+                displayCount);
         heightColor = array.getColor(R.styleable.BreadScaleView_bread_heightColor, heightColor);
-        tvSize = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_tvSize, dip2px(tvSize));
-        ivWidth = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_ivWidth, dip2px(ivWidth));
-        lineWidth = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_lineWidth, dip2px(lineWidth));
-        lineHeight = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_lineHeight, dip2px(lineHeight));
-        lineHeightWidth = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_lineHeightWidth, dip2px(lineHeightWidth));
-        lineHeightHeight = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_lineHeightHeight, dip2px(lineHeightHeight));
-        lineMarginLeft = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_lineMarginLeft, dip2px(lineMarginLeft));
-        lineMarginRight = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_lineMarginRight, dip2px(lineMarginRight));
+        tvSize = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_tvSize,
+                dip2px(tvSize));
+        ivWidth = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_ivWidth,
+                dip2px(ivWidth));
+        lineWidth = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_lineWidth,
+                dip2px(lineWidth));
+        lineHeight = array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_lineHeight,
+                dip2px(lineHeight));
+        lineHeightWidth =
+                array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_lineHeightWidth,
+                        dip2px(lineHeightWidth));
+        lineHeightHeight =
+                array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_lineHeightHeight,
+                        dip2px(lineHeightHeight));
+        lineMarginLeft =
+                array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_lineMarginLeft,
+                        dip2px(lineMarginLeft));
+        lineMarginRight =
+                array.getDimensionPixelSize(R.styleable.BreadScaleView_bread_lineMarginRight,
+                        dip2px(lineMarginRight));
         lightColor = array.getColor(R.styleable.BreadScaleView_bread_lightColor, lightColor);
         middleColor = array.getColor(R.styleable.BreadScaleView_bread_middleColor, middleColor);
-        middleTxtColor = array.getColor(R.styleable.BreadScaleView_bread_middleTxtColor, middleTxtColor);
+        middleTxtColor = array.getColor(R.styleable.BreadScaleView_bread_middleTxtColor,
+                middleTxtColor);
         array.recycle();
         init();
     }
@@ -139,7 +161,8 @@ public class BreadScaleView extends FrameLayout {
     private void init() {
         mContext = getContext();
         //滑动布局属性
-        mBreadScrollView = new BreadScrollView(getContext(), itemHeight, displayCount, tvSize, ivWidth,
+        mBreadScrollView = new BreadScrollView(getContext(), itemHeight, displayCount, tvSize,
+                ivWidth,
                 lineWidth, lineHeight, lineHeightWidth, lineMarginLeft, lineMarginRight,
                 lightColor, middleColor, middleTxtColor, heightColor);
         mBreadScrollView.setLayoutParams(new ScrollView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -183,7 +206,8 @@ public class BreadScaleView extends FrameLayout {
         lineView = new View(mContext);
         MarginLayoutParams layoutParams = new MarginLayoutParams(lineHeightWidth, lineHeightHeight);
         layoutParams.leftMargin = ivWidth + lineMarginLeft;
-        layoutParams.topMargin = (displayCount / 2) * itemHeight + ((itemHeight - lineHeightHeight) / 2);
+        layoutParams.topMargin =
+                (displayCount / 2) * itemHeight + ((itemHeight - lineHeightHeight) / 2);
         lineView.setLayoutParams(layoutParams);
         lineView.setBackgroundColor(heightColor);
 
@@ -245,5 +269,23 @@ public class BreadScaleView extends FrameLayout {
     private int dip2px(float dpValue) {
         final float scale = getContext().getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
+    }
+
+    LightingColorFilter filter = new LightingColorFilter(0xffff00, 0x000000);
+    Paint paint = new Paint();
+    int redColor = Color.parseColor("#DD5F00");
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        paint.setColor(Color.RED);
+        Rect rect = new Rect(0, 400, 1080, 700);
+//        setLayerType(LAYER_TYPE_SOFTWARE, null);
+        int layer = canvas.saveLayer(0, 0, getWidth(), getHeight(), null, Canvas.ALL_SAVE_FLAG);
+        canvas.save();
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.MULTIPLY));
+        canvas.drawRect(rect, paint);
+        paint.setXfermode(null);
+        canvas.restoreToCount(layer);
     }
 }

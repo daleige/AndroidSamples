@@ -1,6 +1,10 @@
 package com.cyq.library;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.LightingColorFilter;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -90,8 +94,10 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
     int itemCount;
     int ofSetHeight;
 
-    public BreadScrollView(Context context, int itemHeight, int displayCount, int tvSize, int ivWidth,
-                           int lineWidth, int lineHeight, int lineHeightWidth, int lineMarginLeft, int lineMarginRight,
+    public BreadScrollView(Context context, int itemHeight, int displayCount, int tvSize,
+                           int ivWidth,
+                           int lineWidth, int lineHeight, int lineHeightWidth, int lineMarginLeft
+            , int lineMarginRight,
                            int lightColor, int middleColor, int middleTxtColor, int heightColor) {
         super(context);
         this.itemHeight = itemHeight;
@@ -233,7 +239,8 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
         BreadScrollView.this.post(new Runnable() {
             @Override
             public void run() {
-                BreadScrollView.this.scrollTo(0, ofSetHeight + (index - displayCount / 2) * itemHeight);
+                BreadScrollView.this.scrollTo(0,
+                        ofSetHeight + (index - displayCount / 2) * itemHeight);
             }
         });
     }
@@ -382,4 +389,7 @@ public class BreadScrollView extends ObservableScrollView implements ObservableS
 
         void onItemChange(int position, int oldPosition);
     }
+
+
+
 }
