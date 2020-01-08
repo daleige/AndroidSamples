@@ -53,20 +53,7 @@ public class RoundImageView extends AppCompatImageView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         mRect = new RectF(0, 0, mViewWidth, mViewHeight);
-        mPath.addCircle(radius, radius, radius, Path.Direction.CW);
-//        mPath.moveTo(radius, 0);
-//        mPath.lineTo(mViewWidth - radius, 0);
-        mPath.addCircle(mViewWidth - radius, radius, radius, Path.Direction.CW);
-//        mPath.moveTo(mViewWidth, radius);
-//        mPath.lineTo(mViewWidth, mViewHeight - radius);
-        mPath.addCircle(mViewWidth - radius, mViewHeight - radius, radius, Path.Direction.CW);
-//        mPath.moveTo(mViewWidth - radius, mViewHeight);
-//        mPath.lineTo(radius, mViewHeight);
-        mPath.addCircle(radius, mViewHeight - radius, radius, Path.Direction.CW);
-//        mPath.moveTo(0, mViewHeight - radius);
-//        mPath.lineTo(0, radius);
-        mPath.addRect(mRect, Path.Direction.CW);
-        mPath.close();
+
 
         canvas.drawPath(mPath, mPaint);
     }

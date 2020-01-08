@@ -139,11 +139,8 @@ public class NeBigView extends View implements GestureDetector.OnGestureListener
     public boolean onTouch(View v, MotionEvent event) {
         // 直接将时间传递给手势事件处理
         mGestureDetector.onTouchEvent(event);
-
         mScaleGestureDetector.onTouchEvent(event);
-
         return true;
-
     }
 
     // 6： 手按下去，处理事件

@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -16,9 +17,6 @@ import android.widget.Scroller;
 
 import androidx.annotation.Nullable;
 
-import com.cyq.customview.view.NeBigView;
-
-import java.io.IOError;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -39,7 +37,7 @@ public class BigImageView extends View implements GestureDetector.OnGestureListe
     private int mViewHeight;
     private Bitmap mBitmap;
     private BitmapRegionDecoder mDecoder;
-    private Matrix matrix;
+    private Matrix matrix = new Matrix();
 
     public BigImageView(Context context) {
         this(context, null);
@@ -104,7 +102,6 @@ public class BigImageView extends View implements GestureDetector.OnGestureListe
         //内存復用，復用的Bitmap尺寸必须和解码区域尺寸一致
         mOptions.inBitmap = mBitmap;
         mBitmap = mDecoder.decodeRegion(mRect, mOptions);
-        matrix = new Matrix();
         matrix.setScale(mViewWidth / (float) mRect.width(), mViewWidth / (float) mRect.width());
         canvas.drawBitmap(mBitmap, matrix, null);
     }
@@ -126,6 +123,7 @@ public class BigImageView extends View implements GestureDetector.OnGestureListe
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        Log.i("test", "distanceY:" + distanceY + "    distanceX:" + distanceX);
         return false;
     }
 
@@ -141,6 +139,7 @@ public class BigImageView extends View implements GestureDetector.OnGestureListe
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        return false;
+        mGestureDetector.onTouchEvent(event);
+        return true;
     }
 }

@@ -5,9 +5,13 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.cyq.customview.view.RoundImageView
-        android:id="@+id/iv"
-        android:layout_gravity="center"
-        android:layout_width="200dp"
-        android:layout_height="200dp" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="阴影效果ShadeLayout" />
+    </ScrollView>
 </FrameLayout>
