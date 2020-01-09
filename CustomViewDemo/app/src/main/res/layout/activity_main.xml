@@ -32,7 +32,7 @@
                 android:shadowDx="20"
                 android:shadowDy="20"
                 android:shadowRadius="5"
-                android:text="阴影效果ShadeLayout"
+                android:text="drawText获取基线方法封装"
                 android:textAllCaps="false" />
         </LinearLayout>
     </ScrollView>
