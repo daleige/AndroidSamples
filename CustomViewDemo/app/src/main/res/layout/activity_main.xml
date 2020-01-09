@@ -8,10 +8,15 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <Button
+            android:id="@+id/btn_shadow_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="阴影效果ShadeLayout" />
+            android:shadowColor="@android:color/black"
+            android:shadowDx="20"
+            android:shadowDy="20"
+            android:shadowRadius="5"
+            android:text="阴影效果ShadeLayout"
+            android:textAllCaps="false" />
     </ScrollView>
 </FrameLayout>
