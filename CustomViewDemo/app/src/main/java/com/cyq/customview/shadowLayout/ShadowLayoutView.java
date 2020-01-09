@@ -36,7 +36,7 @@ public class ShadowLayoutView extends View {
         mPaint.setAntiAlias(true);
         mPaint.setColor(Color.BLACK);
         mPaint.setTextSize(50);
-        mPaint.setShadowLayer(10, 20, 20, Color.BLACK);
+        mPaint.setShadowLayer(10, 20, 20, Color.RED);
         mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.shadow_test);
     }
 
