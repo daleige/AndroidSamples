@@ -34,6 +34,14 @@
                 android:shadowRadius="5"
                 android:text="drawText获取基线方法封装"
                 android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btn_paint_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:shadowRadius="5"
+                android:text="白板控件PaintView"
+                android:textAllCaps="false" />
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

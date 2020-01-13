@@ -8,11 +8,14 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cyq.customview.drawText.DrawTextActivity;
+import com.cyq.customview.paintView.PaintView;
+import com.cyq.customview.paintView.PaintViewActivity;
 import com.cyq.customview.shadowLayout.ShadowLayoutActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private Button mBtnShadowLayout;
     private Button mBtnDrawText;
+    private Button mBtnPaintView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +29,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBtnShadowLayout.setOnClickListener(this);
         mBtnDrawText = findViewById(R.id.btn_draw_text);
         mBtnDrawText.setOnClickListener(this);
+        mBtnPaintView = (Button) findViewById(R.id.btn_paint_view);
+        mBtnPaintView.setOnClickListener(this);
     }
 
     @Override
@@ -38,6 +43,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_draw_text:
                 intent.setClass(this, DrawTextActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.btn_paint_view:
+                intent.setClass(this, PaintViewActivity.class);
                 startActivity(intent);
                 break;
             default:
