@@ -27,7 +27,7 @@ public class NineImageLayout extends ViewGroup {
     /**
      * 一张图片允许的最大宽高范围
      */
-    private int singleImageWidht = 600;
+    private int singleImageWidth = 600;
 
     public NineImageLayout(Context context) {
         this(context, null);
@@ -51,7 +51,7 @@ public class NineImageLayout extends ViewGroup {
         int count = getChildCount();
         if (count == 1) {
             //TODO 单独处理
-            setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
+            setMeasuredDimension(singleViewWidth, singleViewHeight);
             return;
         } else if (count <= 3) {
             viewHeight = itemWidth;
@@ -71,7 +71,6 @@ public class NineImageLayout extends ViewGroup {
             viewHeight = width;
             viewWidth = width;
         }
-        Log.i("test", "最终测量结果viewWidth：" + viewWidth + "  viewHeight:" + viewHeight);
         setMeasuredDimension(viewWidth, viewHeight);
     }
 
@@ -91,8 +90,8 @@ public class NineImageLayout extends ViewGroup {
                         //TODO 单独处理
                         left = 0;
                         top = 0;
-                        right = left +singleImageWidht ;
-                        bottom = top + singleImageWidht;
+                        right = left + singleViewWidth;
+                        bottom = top + singleViewHeight;
                     } else {
                         left = 0;
                         top = 0;
@@ -153,5 +152,47 @@ public class NineImageLayout extends ViewGroup {
             }
             childView.layout(left, top, right, bottom);
         }
+    }
+
+    int singleViewWidth = 0;
+    int singleViewHeight = 0;
+
+    /**
+     * 传入单张图片的宽高
+     *
+     * @param width
+     * @param height
+     */
+    public void setSingleImage(int width, int height) {
+        if (width >= height) {
+            singleViewWidth = singleImageWidth;
+            singleViewHeight = (int) (singleImageWidth * ((double) height / (double) width));
+        } else {
+            singleViewHeight = singleImageWidth;
+            singleViewWidth = (int) (singleImageWidth * ((double) width / (double) height));
+        }
+        Log.i("test","---"+singleViewWidth+"---"+singleViewHeight);
+        setMeasuredDimension(singleViewWidth, singleViewHeight);
+        getChildAt(0).layout(0, 0, singleViewWidth, singleViewHeight);
+    }
+
+    /**
+     * 获取MarginLayoutParams必须要重写这几个方法
+     *
+     * @return
+     */
+    @Override
+    protected LayoutParams generateDefaultLayoutParams() {
+        return new MarginLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+    }
+
+    @Override
+    protected LayoutParams generateLayoutParams(LayoutParams p) {
+        return new MarginLayoutParams(p);
+    }
+
+    @Override
+    public LayoutParams generateLayoutParams(AttributeSet attrs) {
+        return new MarginLayoutParams(getContext(), attrs);
     }
 }
