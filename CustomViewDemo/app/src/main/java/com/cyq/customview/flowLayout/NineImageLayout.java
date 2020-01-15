@@ -24,6 +24,10 @@ public class NineImageLayout extends ViewGroup {
      * 单个图片的宽度和高度
      */
     private int itemWidth;
+    /**
+     * 一张图片允许的最大宽高范围
+     */
+    private int singleImageWidht = 600;
 
     public NineImageLayout(Context context) {
         this(context, null);
@@ -47,7 +51,8 @@ public class NineImageLayout extends ViewGroup {
         int count = getChildCount();
         if (count == 1) {
             //TODO 单独处理
-
+            setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
+            return;
         } else if (count <= 3) {
             viewHeight = itemWidth;
             if (count == 2) {
@@ -80,60 +85,73 @@ public class NineImageLayout extends ViewGroup {
 
         for (int i = 0; i < count; i++) {
             View childView = getChildAt(i);
-            if (i == 0) {
-                if (count == 1) {
-                    //TODO 单独处理
-
-                } else {
-                    left = 0;
+            switch (i) {
+                case 0:
+                    if (count == 1) {
+                        //TODO 单独处理
+                        left = 0;
+                        top = 0;
+                        right = left +singleImageWidht ;
+                        bottom = top + singleImageWidht;
+                    } else {
+                        left = 0;
+                        top = 0;
+                        right = left + itemWidth;
+                        bottom = top + itemWidth;
+                    }
+                    break;
+                case 1:
+                    left = itemWidth + itemMargin;
                     top = 0;
                     right = left + itemWidth;
                     bottom = top + itemWidth;
-                }
-            } else if (i == 1) {
-                left = itemWidth + itemMargin;
-                top = 0;
-                right = left + itemWidth;
-                bottom = top + itemWidth;
-            } else if (i == 2) {
-                left = itemWidth * 2 + itemMargin * 2;
-                top = 0;
-                right = width;
-                bottom = top + itemWidth;
-            } else if (i == 3) {
-                left = 0;
-                top = itemWidth + itemMargin;
-                right = left + itemWidth;
-                bottom = top + itemWidth;
-            } else if (i == 4) {
-                left = itemWidth + itemMargin;
-                top = itemWidth + itemMargin;
-                right = left + itemWidth;
-                bottom = top + itemWidth;
-            } else if (i == 5) {
-                left = (itemWidth + itemMargin) * 2;
-                top = itemWidth + itemMargin;
-                right = width;
-                bottom = top + itemWidth;
-            } else if (i == 6) {
-                left = 0;
-                top = (itemWidth + itemMargin) * 2;
-                right = left + itemWidth;
-                bottom = width;
-            } else if (i == 7) {
-                left = itemWidth + itemMargin;
-                top = (itemWidth + itemMargin) * 2;
-                right = left + itemWidth;
-                bottom = width;
-            } else if (i == 8) {
-                left = (itemWidth + itemMargin) * 2;
-                top = (itemWidth + itemMargin) * 2;
-                right = width;
-                bottom = width;
+                    break;
+                case 2:
+                    left = itemWidth * 2 + itemMargin * 2;
+                    top = 0;
+                    right = width;
+                    bottom = top + itemWidth;
+                    break;
+                case 3:
+                    left = 0;
+                    top = itemWidth + itemMargin;
+                    right = left + itemWidth;
+                    bottom = top + itemWidth;
+                    break;
+                case 4:
+                    left = itemWidth + itemMargin;
+                    top = itemWidth + itemMargin;
+                    right = left + itemWidth;
+                    bottom = top + itemWidth;
+                    break;
+                case 5:
+                    left = (itemWidth + itemMargin) * 2;
+                    top = itemWidth + itemMargin;
+                    right = width;
+                    bottom = top + itemWidth;
+                    break;
+                case 6:
+                    left = 0;
+                    top = (itemWidth + itemMargin) * 2;
+                    right = left + itemWidth;
+                    bottom = width;
+                    break;
+                case 7:
+                    left = itemWidth + itemMargin;
+                    top = (itemWidth + itemMargin) * 2;
+                    right = left + itemWidth;
+                    bottom = width;
+                    break;
+                case 8:
+                    left = (itemWidth + itemMargin) * 2;
+                    top = (itemWidth + itemMargin) * 2;
+                    right = width;
+                    bottom = width;
+                    break;
+                default:
+                    break;
             }
             childView.layout(left, top, right, bottom);
         }
     }
-
-
 }
