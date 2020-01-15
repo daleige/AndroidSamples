@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".paintView.PaintViewActivity"></activity>
+        <activity android:name=".flowLayout.FlowLayoutActivity"></activity>
+        <activity android:name=".paintView.PaintViewActivity" />
         <activity android:name=".drawText.DrawTextActivity" />
         <activity android:name=".shadowLayout.ShadowLayoutActivity" />
         <activity android:name=".MainActivity">
