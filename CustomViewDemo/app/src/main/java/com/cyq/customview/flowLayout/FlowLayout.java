@@ -59,7 +59,7 @@ public class FlowLayout extends ViewGroup {
             } else {
                 //不需要换行
                 lineWidth += childWidth;
-                lineHeight = Math.min(lineHeight, childHeight);
+                lineHeight = Math.max(lineHeight, childHeight);
             }
 
             //最后添加最后一行的宽高
@@ -86,7 +86,6 @@ public class FlowLayout extends ViewGroup {
         int lineHeight = 0;
         int top = 0;
         int left = 0;
-
         int count = getChildCount();
         for (int i = 0; i < count; i++) {
             View chileView = getChildAt(i);
@@ -104,10 +103,10 @@ public class FlowLayout extends ViewGroup {
             } else {
                 //不需要换行
                 lineWidth += childWidth;
-                lineHeight = Math.min(lineHeight, childHeight);
+                lineHeight = Math.max(lineHeight, childHeight);
             }
 
-            //计算childView的 left  top  right  bottom
+            //计算childView的left  top  right  bottom
             int leftChild = left + lp.leftMargin;
             int topChild = top + lp.topMargin;
             int rightChild = leftChild + chileView.getMeasuredWidth();

@@ -12,6 +12,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             android:orientation="vertical">
 
             <Button
@@ -29,10 +31,6 @@
                 android:id="@+id/btn_draw_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:shadowColor="@android:color/black"
-                android:shadowDx="20"
-                android:shadowDy="20"
-                android:shadowRadius="5"
                 android:text="drawText获取基线方法封装"
                 android:textAllCaps="false" />
 
