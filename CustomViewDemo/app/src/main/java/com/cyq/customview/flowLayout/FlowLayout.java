@@ -49,10 +49,10 @@ public class FlowLayout extends ViewGroup {
 
             int childWidth = chileView.getMeasuredWidth() + lp.leftMargin + lp.rightMargin;
             int childHeight = chileView.getMeasuredHeight() + lp.topMargin + lp.bottomMargin;
-            if (lineWidth + childWidth > measureWidth) {
+            if (lineWidth + childWidth > measureWidth - (getPaddingLeft() + getPaddingRight())) {
                 //需要换行
                 width = Math.max(lineWidth, width);
-                height += + lineHeight;
+                height += +lineHeight;
                 //因为当前行放不下，需要放到下一行，所以下一行的行高行宽为此时的ChildView的宽高
                 lineWidth = childWidth;
                 lineHeight = childHeight;
@@ -68,24 +68,22 @@ public class FlowLayout extends ViewGroup {
                 height += lineHeight;
             }
         }
-
-        if (measureWidthMode == MeasureSpec.EXACTLY) {
-            width = measureWidth;
-        }
-
         if (measureHeightMode == MeasureSpec.EXACTLY) {
-            height = measureHeight;
+            height = getMeasuredHeight();
+        } else if (measureHeightMode == MeasureSpec.AT_MOST) {
+            height = height + getPaddingTop() + getPaddingBottom();
+        } else if (measureHeightMode == MeasureSpec.UNSPECIFIED) {
+            height = height + getPaddingTop() + getPaddingBottom();
         }
-
-        setMeasuredDimension(width, height);
+        setMeasuredDimension(getMeasuredWidth(), height);
     }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int lineWidth = 0;
         int lineHeight = 0;
-        int top = 0;
-        int left = 0;
+        int top = getPaddingTop();
+        int left = getPaddingLeft();
         int count = getChildCount();
         for (int i = 0; i < count; i++) {
             View chileView = getChildAt(i);
@@ -93,10 +91,10 @@ public class FlowLayout extends ViewGroup {
 
             int childWidth = chileView.getMeasuredWidth() + lp.leftMargin + lp.rightMargin;
             int childHeight = chileView.getMeasuredHeight() + lp.topMargin + lp.bottomMargin;
-            if (lineWidth + childWidth > getMeasuredWidth()) {
+            if (lineWidth + childWidth > getMeasuredWidth() - (getPaddingLeft() + getPaddingRight())) {
                 //需要换行
                 top += lineHeight;
-                left = 0;
+                left = getPaddingLeft();
                 //因为当前行放不下，需要放到下一行，所以下一行的行高行宽为此时的ChildView的宽高
                 lineWidth = childWidth;
                 lineHeight = childHeight;

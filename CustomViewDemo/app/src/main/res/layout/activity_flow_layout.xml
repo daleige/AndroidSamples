@@ -9,7 +9,10 @@
     <com.cyq.customview.flowLayout.FlowLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/darker_gray">
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="10dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -30,6 +33,7 @@
             android:layout_marginBottom="4dp"
             android:background="@drawable/tag_item_bg"
             android:text="BBBBBBBBB" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,6 +43,7 @@
             android:layout_marginBottom="4dp"
             android:background="@drawable/tag_item_bg"
             android:text="CCCCCCCCC" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -58,6 +63,7 @@
             android:layout_marginBottom="4dp"
             android:background="@drawable/tag_item_bg"
             android:text="EEEEEEEEEE" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -67,6 +73,7 @@
             android:layout_marginBottom="4dp"
             android:background="@drawable/tag_item_bg"
             android:text="FF" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -76,6 +83,7 @@
             android:layout_marginBottom="4dp"
             android:background="@drawable/tag_item_bg"
             android:text="GGGG" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -105,6 +113,7 @@
             android:layout_marginBottom="4dp"
             android:background="@drawable/tag_item_bg"
             android:text="EEEEEEEEEEEEEEEE" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -114,6 +123,7 @@
             android:layout_marginBottom="4dp"
             android:background="@drawable/tag_item_bg"
             android:text="JJJJ" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -123,6 +133,7 @@
             android:layout_marginBottom="4dp"
             android:background="@drawable/tag_item_bg"
             android:text="KKK" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -132,6 +143,7 @@
             android:layout_marginBottom="4dp"
             android:background="@drawable/tag_item_bg"
             android:text="LL" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -141,6 +153,7 @@
             android:layout_marginBottom="4dp"
             android:background="@drawable/tag_item_bg"
             android:text="MMMMM" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -150,6 +163,7 @@
             android:layout_marginBottom="4dp"
             android:background="@drawable/tag_item_bg"
             android:text="NNNNN" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -159,6 +173,7 @@
             android:layout_marginBottom="4dp"
             android:background="@drawable/tag_item_bg"
             android:text="OO" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -169,4 +184,5 @@
             android:background="@drawable/tag_item_bg"
             android:text="PPPPP" />
     </com.cyq.customview.flowLayout.FlowLayout>
+
 </LinearLayout>
