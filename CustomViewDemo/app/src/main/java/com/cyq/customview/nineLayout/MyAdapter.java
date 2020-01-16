@@ -46,6 +46,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
         final List<String> mData = mList.get(position);
         holder.tvTitle.setText("这是" + mData.size() + "张图片的标题");
+        final NineImageLayout nineImageLayout = holder.nineImageLayout;
         holder.nineImageLayout.setAdapter(new NineImageAdapter() {
             @Override
             protected int getItemCount() {
@@ -58,8 +59,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             }
 
             @Override
-            protected void bindView(View view, int i) {
-                ImageView imageView = view.findViewById(R.id.iv_img);
+            protected void bindView(View view, final int i) {
+                final ImageView imageView = view.findViewById(R.id.iv_img);
+                Glide.with(mContext).load(mData.get(i)).into(imageView);
                 if (mData.size() == 1) {
                     Glide.with(mContext)
                             .asBitmap()
@@ -69,17 +71,19 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                                 public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
                                     final int width = bitmap.getWidth();
                                     final int height = bitmap.getHeight();
-                                    holder.nineImageLayout.setSingleImage(width, height);
+                                    nineImageLayout.setSingleImage(width, height);
+                                    Glide.with(mContext).load(mData.get(0)).into(imageView);
                                 }
                             });
+                } else {
+                    Glide.with(mContext).load(mData.get(i)).into(imageView);
                 }
-                Glide.with(mContext).load(mData.get(i)).into(imageView);
             }
 
             @Override
             public void OnItemClick(int i, View view) {
                 super.OnItemClick(position, view);
-                Toast.makeText(mContext,"position:"+mData.get(i),Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "position:" + mData.get(i), Toast.LENGTH_SHORT).show();
             }
         });
     }
