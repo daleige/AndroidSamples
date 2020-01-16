@@ -6,186 +6,12 @@
     android:orientation="vertical"
     tools:context=".flowLayout.FlowLayoutActivity">
 
-    <com.cyq.customview.flowLayout.FlowLayout
+    <com.cyq.customview.flowLayout.TabFlowLayout
+        android:id="@+id/tab_fl"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="20dp"
-        android:paddingTop="10dp"
-        android:paddingRight="20dp"
-        android:paddingBottom="10dp">
+        android:layout_height="wrap_content" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="4dp"
-            android:background="@drawable/tag_item_bg"
-            android:text="AAAAAA" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="4dp"
-            android:background="@drawable/tag_item_bg"
-            android:text="BBBBBBBBB" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="4dp"
-            android:background="@drawable/tag_item_bg"
-            android:text="CCCCCCCCC" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="4dp"
-            android:background="@drawable/tag_item_bg"
-            android:text="DDD" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="4dp"
-            android:background="@drawable/tag_item_bg"
-            android:text="EEEEEEEEEE" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="4dp"
-            android:background="@drawable/tag_item_bg"
-            android:text="FF" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="4dp"
-            android:background="@drawable/tag_item_bg"
-            android:text="GGGG" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="4dp"
-            android:background="@drawable/tag_item_bg"
-            android:text="HHHHH" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="4dp"
-            android:background="@drawable/tag_item_bg"
-            android:text="IIIII" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="4dp"
-            android:background="@drawable/tag_item_bg"
-            android:text="EEEEEEEEEEEEEEEE" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="4dp"
-            android:background="@drawable/tag_item_bg"
-            android:text="JJJJ" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="4dp"
-            android:background="@drawable/tag_item_bg"
-            android:text="KKK" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="4dp"
-            android:background="@drawable/tag_item_bg"
-            android:text="LL" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="4dp"
-            android:background="@drawable/tag_item_bg"
-            android:text="MMMMM" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="4dp"
-            android:background="@drawable/tag_item_bg"
-            android:text="NNNNN" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="4dp"
-            android:background="@drawable/tag_item_bg"
-            android:text="OO" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="4dp"
-            android:background="@drawable/tag_item_bg"
-            android:text="PPPPP" />
-    </com.cyq.customview.flowLayout.FlowLayout>
-
-    <com.cyq.customview.flowLayout.NineImageLayout
+    <com.cyq.customview.nineLayout.NineImageLayout
         android:id="@+id/nine_img_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -243,7 +69,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop" />
-    </com.cyq.customview.flowLayout.NineImageLayout>
+    </com.cyq.customview.nineLayout.NineImageLayout>
 
     <View
         android:layout_width="match_parent"
