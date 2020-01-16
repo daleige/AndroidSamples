@@ -16,7 +16,7 @@ public abstract class NineImageAdapter {
 
     protected   abstract void bindView(View view, int position);
 
-//    public void OnItemClick(int position, View view) {
-//
-//    }
+    public void OnItemClick(int position, View view) {
+
+    }
 }

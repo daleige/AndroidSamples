@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -87,13 +88,19 @@ public class FlowLayoutActivity extends AppCompatActivity {
                             .into(new SimpleTarget<Bitmap>() {
                                 @Override
                                 public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
-                                    final int w = bitmap.getWidth();
-                                    final int h = bitmap.getHeight();
-                                    nineImageLayout.setSingleImage(w, h);
+                                    final int width = bitmap.getWidth();
+                                    final int height = bitmap.getHeight();
+                                    nineImageLayout.setSingleImage(width, height);
                                 }
                             });
                 }
                 Glide.with(FlowLayoutActivity.this).load(imgList.get(position)).into(imageView);
+            }
+
+            @Override
+            public void OnItemClick(int position, View view) {
+                super.OnItemClick(position, view);
+                Toast.makeText(FlowLayoutActivity.this, "position:" + position, Toast.LENGTH_SHORT).show();
             }
         });
     }

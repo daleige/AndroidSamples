@@ -2,7 +2,6 @@ package com.cyq.customview.nineLayout;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -176,7 +175,6 @@ public class NineImageLayout extends ViewGroup {
             singleViewHeight = singleImageWidth;
             singleViewWidth = (int) (singleImageWidth * ((double) width / (double) height));
         }
-        Log.i("test", "---" + singleViewWidth + "---" + singleViewHeight);
         getChildAt(0).layout(0, 0, singleViewWidth, singleViewHeight);
         setMeasuredDimension(singleViewWidth, singleViewHeight);
     }
@@ -190,10 +188,29 @@ public class NineImageLayout extends ViewGroup {
         mAdapter = adapter;
         removeAllViews();
         for (int i = 0; i < mAdapter.getItemCount(); i++) {
-            View view = mAdapter.createView(LayoutInflater.from(getContext()), this, i);
+            final View view = mAdapter.createView(LayoutInflater.from(getContext()), this, i);
             mAdapter.bindView(view, i);
             addView(view);
+            bindClickEvent(i, view);
         }
+    }
+
+    /**
+     * 绑定点击事件
+     *
+     * @param position
+     * @param view
+     */
+    private void bindClickEvent(final int position, final View view) {
+        if (mAdapter == null) {
+            return;
+        }
+        view.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAdapter.OnItemClick(position, view);
+            }
+        });
     }
 
     /**
