@@ -11,11 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.cyq.customview.nineLayout.NineImageLayout
+    <com.cyq.customview.nineLayout.view.NineImageLayout
         android:id="@+id/nine_img_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-    </com.cyq.customview.nineLayout.NineImageLayout>
+    </com.cyq.customview.nineLayout.view.NineImageLayout>
 
     <View
         android:layout_width="match_parent"

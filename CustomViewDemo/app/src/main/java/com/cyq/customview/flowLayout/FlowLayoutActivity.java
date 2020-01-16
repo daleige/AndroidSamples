@@ -2,7 +2,6 @@ package com.cyq.customview.flowLayout;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +15,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.cyq.customview.R;
-import com.cyq.customview.nineLayout.NineImageAdapter;
-import com.cyq.customview.nineLayout.NineImageLayout;
+import com.cyq.customview.nineLayout.view.NineImageAdapter;
+import com.cyq.customview.nineLayout.view.NineImageLayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;

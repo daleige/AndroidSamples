@@ -7,12 +7,13 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:usesCleartextTraffic="true"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".flowLayout.FlowLayoutActivity"></activity>
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".nineLayout.NineImageLayoutActivity"></activity>
+        <activity android:name=".flowLayout.FlowLayoutActivity" />
         <activity android:name=".paintView.PaintViewActivity" />
         <activity android:name=".drawText.DrawTextActivity" />
         <activity android:name=".shadowLayout.ShadowLayoutActivity" />

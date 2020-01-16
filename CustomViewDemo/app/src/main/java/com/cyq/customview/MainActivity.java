@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.cyq.customview.drawText.DrawTextActivity;
 import com.cyq.customview.flowLayout.FlowLayoutActivity;
+import com.cyq.customview.nineLayout.NineImageLayoutActivity;
 import com.cyq.customview.paintView.PaintViewActivity;
 import com.cyq.customview.shadowLayout.ShadowLayoutActivity;
 
@@ -17,6 +18,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mBtnDrawText;
     private Button mBtnPaintView;
     private Button mBtnFlowLayout;
+    private Button mBtnNineLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBtnPaintView.setOnClickListener(this);
         mBtnFlowLayout = (Button) findViewById(R.id.btn_flow_layout);
         mBtnFlowLayout.setOnClickListener(this);
+        mBtnNineLayout = (Button) findViewById(R.id.btn_nine_layout);
+        mBtnNineLayout.setOnClickListener(this);
     }
 
     @Override
@@ -54,6 +58,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_flow_layout:
                 intent.setClass(this, FlowLayoutActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.btn_nine_layout:
+                intent.setClass(this, NineImageLayoutActivity.class);
                 startActivity(intent);
                 break;
             default:

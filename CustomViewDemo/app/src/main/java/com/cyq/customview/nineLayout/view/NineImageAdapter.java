@@ -1,4 +1,4 @@
-package com.cyq.customview.nineLayout;
+package com.cyq.customview.nineLayout.view;
 
 import android.view.LayoutInflater;
 import android.view.View;
