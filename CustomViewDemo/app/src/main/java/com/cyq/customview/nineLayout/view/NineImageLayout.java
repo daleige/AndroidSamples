@@ -107,16 +107,30 @@ public class NineImageLayout extends ViewGroup {
                     bottom = top + itemWidth;
                     break;
                 case 2:
-                    left = itemWidth * 2 + itemMargin * 2;
-                    top = 0;
-                    right = width;
-                    bottom = top + itemWidth;
+                    if (count == 4) {
+                        left = 0;
+                        top = itemWidth + itemMargin;
+                        right = left+itemWidth;
+                        bottom = top + itemWidth;
+                    } else {
+                        left = itemWidth * 2 + itemMargin * 2;
+                        top = 0;
+                        right = width;
+                        bottom = top + itemWidth;
+                    }
                     break;
                 case 3:
-                    left = 0;
-                    top = itemWidth + itemMargin;
-                    right = left + itemWidth;
-                    bottom = top + itemWidth;
+                    if (count == 4) {
+                        left = itemWidth + itemMargin;
+                        top = itemWidth + itemMargin;
+                        right = left + itemWidth;
+                        bottom = top + itemWidth;
+                    } else {
+                        left = 0;
+                        top = itemWidth + itemMargin;
+                        right = left + itemWidth;
+                        bottom = top + itemWidth;
+                    }
                     break;
                 case 4:
                     left = itemWidth + itemMargin;
