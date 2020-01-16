@@ -19,7 +19,7 @@ public class NineImageLayout extends ViewGroup {
     /**
      * 图片之间间隔的大小
      */
-    private int itemMargin = 15;
+    private int itemMargin = 10;
     /**
      * 单个图片的宽度和高度
      */
@@ -164,6 +164,9 @@ public class NineImageLayout extends ViewGroup {
      * @param height
      */
     public void setSingleImage(int width, int height) {
+        if (getChildCount() != 1) {
+            return;
+        }
         if (width >= height) {
             singleViewWidth = singleImageWidth;
             singleViewHeight = (int) (singleImageWidth * ((double) height / (double) width));
@@ -171,7 +174,7 @@ public class NineImageLayout extends ViewGroup {
             singleViewHeight = singleImageWidth;
             singleViewWidth = (int) (singleImageWidth * ((double) width / (double) height));
         }
-        Log.i("test","---"+singleViewWidth+"---"+singleViewHeight);
+        Log.i("test", "---" + singleViewWidth + "---" + singleViewHeight);
         setMeasuredDimension(singleViewWidth, singleViewHeight);
         getChildAt(0).layout(0, 0, singleViewWidth, singleViewHeight);
     }

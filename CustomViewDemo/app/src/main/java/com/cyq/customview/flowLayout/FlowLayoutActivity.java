@@ -40,14 +40,14 @@ public class FlowLayoutActivity extends AppCompatActivity {
         nineImageLayout = findViewById(R.id.nine_img_view);
 
         mIv1 = (ImageView) findViewById(R.id.iv_1);
-//        mIv2 = (ImageView) findViewById(R.id.iv_2);
-//        mIv3 = (ImageView) findViewById(R.id.iv_3);
-//        mIv4 = (ImageView) findViewById(R.id.iv_4);
-//        mIv5 = (ImageView) findViewById(R.id.iv_5);
-//        mIv6 = (ImageView) findViewById(R.id.iv_6);
-//        mIv7 = (ImageView) findViewById(R.id.iv_7);
-//        mIv8 = (ImageView) findViewById(R.id.iv_8);
-//        mIv9 = (ImageView) findViewById(R.id.iv_9);
+        mIv2 = (ImageView) findViewById(R.id.iv_2);
+        mIv3 = (ImageView) findViewById(R.id.iv_3);
+        mIv4 = (ImageView) findViewById(R.id.iv_4);
+        mIv5 = (ImageView) findViewById(R.id.iv_5);
+        mIv6 = (ImageView) findViewById(R.id.iv_6);
+        mIv7 = (ImageView) findViewById(R.id.iv_7);
+        mIv8 = (ImageView) findViewById(R.id.iv_8);
+        mIv9 = (ImageView) findViewById(R.id.iv_9);
 
         Glide.with(this).load(URL_IMG).into(mIv1);
 
@@ -64,14 +64,14 @@ public class FlowLayoutActivity extends AppCompatActivity {
                         nineImageLayout.setSingleImage(w, h);
                     }
                 });
-//        Glide.with(this).load(URL_IMG).into(mIv2);
-//        Glide.with(this).load(URL_IMG).into(mIv3);
-//        Glide.with(this).load(URL_IMG).into(mIv4);
-//        Glide.with(this).load(URL_IMG).into(mIv5);
-//        Glide.with(this).load(URL_IMG).into(mIv6);
-//        Glide.with(this).load(URL_IMG).into(mIv7);
-//        Glide.with(this).load(URL_IMG).into(mIv8);
-//        Glide.with(this).load(URL_IMG).into(mIv9);
+        Glide.with(this).load(URL_IMG).into(mIv2);
+        Glide.with(this).load(URL_IMG).into(mIv3);
+        Glide.with(this).load(URL_IMG).into(mIv4);
+        Glide.with(this).load(URL_IMG).into(mIv5);
+        Glide.with(this).load(URL_IMG).into(mIv6);
+        Glide.with(this).load(URL_IMG).into(mIv7);
+        Glide.with(this).load(URL_IMG).into(mIv8);
+        Glide.with(this).load(URL_IMG).into(mIv9);
     }
 
 
