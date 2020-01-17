@@ -17,7 +17,7 @@ public class NineImageLayoutActivity extends AppCompatActivity {
     private MyAdapter mAdapter;
     private Random random;
     private final String URL_IMG = "http://q3x62hkt1.bkt.clouddn.com/banner/58f57dfa5bb73.jpg";
-//    private final String URL_IMG = "http://q3x62hkt1.bkt.clouddn.com/timg.jpeg";
+    private final String URL_IMG_2 = "http://q3x62hkt1.bkt.clouddn.com/timg.jpeg";
     private List<List<String>> mList = new ArrayList<>();
 
     @Override
@@ -25,11 +25,16 @@ public class NineImageLayoutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nine_image_layout);
         random = new Random();
+        List<String> testList = new ArrayList<>();
+        testList.add(URL_IMG_2);
         for (int i = 0; i < 100; i++) {
             int count = i % 9 + 1;
             List<String> list = new ArrayList<>();
             for (int j = 0; j < count; j++) {
                 list.add(URL_IMG);
+            }
+            if (i % 8 == 0) {
+                mList.add(testList);
             }
             mList.add(list);
         }

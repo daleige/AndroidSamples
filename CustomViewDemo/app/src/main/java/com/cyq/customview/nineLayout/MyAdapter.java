@@ -74,9 +74,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                                     final int width = bitmap.getWidth();
                                     final int height = bitmap.getHeight();
                                     nineImageLayout.setSingleImage(width, height,imageView);
-                                    Glide.with(mContext).load(mData.get(0)).into(imageView);
                                 }
                             });
+                    Glide.with(mContext).load(mData.get(0)).into(imageView);
                 } else {
                     Glide.with(mContext).load(mData.get(i)).into(imageView);
                 }
