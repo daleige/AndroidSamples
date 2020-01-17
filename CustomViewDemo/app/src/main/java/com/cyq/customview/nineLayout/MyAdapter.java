@@ -2,6 +2,7 @@ package com.cyq.customview.nineLayout;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.cyq.customview.nineLayout.view.NineImageAdapter;
 import com.cyq.customview.nineLayout.view.NineImageLayout;
 
 import java.util.List;
+import java.util.logging.Handler;
 
 /**
  * @author : ChenYangQi
@@ -71,7 +73,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                                 public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
                                     final int width = bitmap.getWidth();
                                     final int height = bitmap.getHeight();
-                                    nineImageLayout.setSingleImage(width, height);
+                                    nineImageLayout.setSingleImage(width, height,imageView);
                                     Glide.with(mContext).load(mData.get(0)).into(imageView);
                                 }
                             });
@@ -91,6 +93,24 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     @Override
     public int getItemCount() {
         return mList.size();
+    }
+
+    class nineImaageAdapter extends NineImageAdapter {
+
+        @Override
+        protected int getItemCount() {
+            return 0;
+        }
+
+        @Override
+        protected View createView(LayoutInflater inflater, ViewGroup parent, int position) {
+            return null;
+        }
+
+        @Override
+        protected void bindView(View view, int position) {
+
+        }
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

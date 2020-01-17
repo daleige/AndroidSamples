@@ -16,7 +16,8 @@ public class NineImageLayoutActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private MyAdapter mAdapter;
     private Random random;
-    private final String URL_IMG = "http://q3x62hkt1.bkt.clouddn.com/timg.jpeg";
+    private final String URL_IMG = "http://q3x62hkt1.bkt.clouddn.com/banner/58f57dfa5bb73.jpg";
+//    private final String URL_IMG = "http://q3x62hkt1.bkt.clouddn.com/timg.jpeg";
     private List<List<String>> mList = new ArrayList<>();
 
     @Override

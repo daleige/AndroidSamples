@@ -79,7 +79,7 @@ public class FlowLayoutActivity extends AppCompatActivity {
 
             @Override
             protected void bindView(View view, int position) {
-                ImageView imageView = view.findViewById(R.id.iv_img);
+                final ImageView imageView = view.findViewById(R.id.iv_img);
                 if (imgList.size() == 1) {
                     Glide.with(FlowLayoutActivity.this)
                             .asBitmap()
@@ -89,7 +89,7 @@ public class FlowLayoutActivity extends AppCompatActivity {
                                 public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
                                     final int width = bitmap.getWidth();
                                     final int height = bitmap.getHeight();
-                                    nineImageLayout.setSingleImage(width, height);
+                                    nineImageLayout.setSingleImage(width, height,imageView);
                                 }
                             });
                 }

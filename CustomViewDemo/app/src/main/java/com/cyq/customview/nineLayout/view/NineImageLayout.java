@@ -2,6 +2,7 @@ package com.cyq.customview.nineLayout.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,7 @@ public class NineImageLayout extends ViewGroup {
      * 一张图片允许的最大宽高范围
      */
     private int singleImageWidth = 600;
-    private NineImageAdapter mAdapter;
+    private LayoutParams layoutParams;
 
     public NineImageLayout(Context context) {
         this(context, null);
@@ -110,7 +111,7 @@ public class NineImageLayout extends ViewGroup {
                     if (count == 4) {
                         left = 0;
                         top = itemWidth + itemMargin;
-                        right = left+itemWidth;
+                        right = left + itemWidth;
                         bottom = top + itemWidth;
                     } else {
                         left = itemWidth * 2 + itemMargin * 2;
@@ -178,10 +179,13 @@ public class NineImageLayout extends ViewGroup {
      * @param width
      * @param height
      */
-    public void setSingleImage(int width, int height) {
+    public void setSingleImage(int width, int height, View view) {
+        Log.i("test", "-------------------<<<<<<<<<childCount:" + getChildCount());
         if (getChildCount() != 1) {
-            return;
+            removeAllViews();
+            addView(view);
         }
+        Log.i("test", "------------------->>>>>>>>>>width：" + width + "    height:" + height);
         if (width >= height) {
             singleViewWidth = singleImageWidth;
             singleViewHeight = (int) (singleImageWidth * ((double) height / (double) width));
@@ -199,13 +203,14 @@ public class NineImageLayout extends ViewGroup {
      * @param adapter
      */
     public void setAdapter(NineImageAdapter adapter) {
-        mAdapter = adapter;
         removeAllViews();
-        for (int i = 0; i < mAdapter.getItemCount(); i++) {
-            final View view = mAdapter.createView(LayoutInflater.from(getContext()), this, i);
-            mAdapter.bindView(view, i);
+        for (int i = 0; i < adapter.getItemCount(); i++) {
+            final View view = adapter.createView(LayoutInflater.from(getContext()), this, i);
+            adapter.bindView(view, i);
+            layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+            removeView(view);
             addView(view);
-            bindClickEvent(i, view);
+            bindClickEvent(i, view, adapter);
         }
     }
 
@@ -215,14 +220,14 @@ public class NineImageLayout extends ViewGroup {
      * @param position
      * @param view
      */
-    private void bindClickEvent(final int position, final View view) {
-        if (mAdapter == null) {
+    private void bindClickEvent(final int position, final View view, final NineImageAdapter adapter) {
+        if (adapter == null) {
             return;
         }
         view.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAdapter.OnItemClick(position, view);
+                adapter.OnItemClick(position, view);
             }
         });
     }
