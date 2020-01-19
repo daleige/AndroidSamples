@@ -2,7 +2,6 @@ package com.cyq.customview.nineLayout;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,6 @@ import com.cyq.customview.nineLayout.view.NineImageAdapter;
 import com.cyq.customview.nineLayout.view.NineImageLayout;
 
 import java.util.List;
-import java.util.logging.Handler;
 
 /**
  * @author : ChenYangQi
