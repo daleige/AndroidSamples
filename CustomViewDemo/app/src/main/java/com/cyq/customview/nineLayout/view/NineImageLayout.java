@@ -1,11 +1,14 @@
 package com.cyq.customview.nineLayout.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.cyq.customview.R;
 
 /**
  * @author : ChenYangQi
@@ -16,11 +19,11 @@ public class NineImageLayout extends ViewGroup {
     /**
      * 控件宽度
      */
-    private int width = 800;
+    private int width = 300;
     /**
      * 图片之间间隔的大小
      */
-    private int itemMargin = 10;
+    private int itemMargin = 5;
     /**
      * 单个图片的宽度和高度
      */
@@ -28,8 +31,7 @@ public class NineImageLayout extends ViewGroup {
     /**
      * 一张图片允许的最大宽高范围
      */
-    private int singleImageWidth = 600;
-    private LayoutParams layoutParams;
+    private int singleImageWidth = 200;
 
     public NineImageLayout(Context context) {
         this(context, null);
@@ -41,13 +43,19 @@ public class NineImageLayout extends ViewGroup {
 
     public NineImageLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        //一张图片的宽高
+        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.NineImageLayout);
+        singleImageWidth = array.getDimensionPixelSize(R.styleable.NineImageLayout_nine_singleImageWidth, dip2px(getContext(), singleImageWidth));
+        itemMargin = array.getDimensionPixelSize(R.styleable.NineImageLayout_nine_imageGap, dip2px(getContext(), itemMargin));
+        width = array.getDimensionPixelSize(R.styleable.NineImageLayout_nine_layoutWidth, dip2px(getContext(), width));
+        array.recycle();
+        Log.i("test", "width：" + width);
         itemWidth = (width - 2 * itemMargin) / 3;
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        //一张图片的宽高
         int viewHeight = 0;
         int viewWidth = 0;
         int count = getChildCount();
@@ -207,7 +215,6 @@ public class NineImageLayout extends ViewGroup {
         for (int i = 0; i < adapter.getItemCount(); i++) {
             final View view = adapter.createView(LayoutInflater.from(getContext()), this, i);
             adapter.bindView(view, i);
-            layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
             removeView(view);
             addView(view);
             bindClickEvent(i, view, adapter);
@@ -250,5 +257,10 @@ public class NineImageLayout extends ViewGroup {
     @Override
     public LayoutParams generateLayoutParams(AttributeSet attrs) {
         return new MarginLayoutParams(getContext(), attrs);
+    }
+
+    private int dip2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
     }
 }
