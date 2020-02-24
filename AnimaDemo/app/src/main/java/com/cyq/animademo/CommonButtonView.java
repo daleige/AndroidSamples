@@ -80,7 +80,6 @@ public class CommonButtonView extends LinearLayout implements View.OnTouchListen
         lightDrawable.setCornerRadius(roundRadius);
         normalDrawable.setCornerRadius(roundRadius);
         normalDrawable.setColor(normalColor);
-        setPadding(dip2px(7), 0, dip2px(7), 0);
     }
 
     /**
@@ -88,7 +87,8 @@ public class CommonButtonView extends LinearLayout implements View.OnTouchListen
      *
      * @param buttonType {@link ButtonType}
      */
-    public void create(int buttonType, String[] items, boolean confirm, CommonButtonViewAction commonButtonViewAction) {
+    public void create(int buttonType, String[] items, boolean confirm,
+                       CommonButtonViewAction commonButtonViewAction) {
         this.mActionListener = commonButtonViewAction;
         if (buttonType == ButtonType.YELLOW) {
             lightColor = yellowColor;
@@ -162,7 +162,9 @@ public class CommonButtonView extends LinearLayout implements View.OnTouchListen
     private TextView createLightBtn(String text) {
         TextView lightBtn = new TextView(mContext);
         MarginLayoutParams lightLp = new MarginLayoutParams(lightBtnWidth, lightBtnHeight);
-        lightLp.topMargin = marginHeight;
+        lightLp.topMargin = dip2px(7);
+        lightLp.leftMargin = dip2px(7);
+        lightLp.rightMargin = dip2px(7);
         lightBtn.setLayoutParams(lightLp);
         lightBtn.setBackgroundDrawable(lightDrawable);
         lightBtn.setTextSize(lightTextSize);
@@ -201,6 +203,7 @@ public class CommonButtonView extends LinearLayout implements View.OnTouchListen
         FrameLayout confirmBtn = new FrameLayout(mContext);
         MarginLayoutParams confirmLp = new MarginLayoutParams(normalBtnWidth, normalBtnHeight);
         confirmLp.topMargin = marginHeight;
+        confirmLp.bottomMargin = dip2px(7);
         confirmBtn.setLayoutParams(confirmLp);
         ImageView iv = new ImageView(mContext);
         FrameLayout.LayoutParams ivLp = new FrameLayout.LayoutParams(dip2px(30), dip2px(30));
