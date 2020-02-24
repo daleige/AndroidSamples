@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         mCommonBtnView = findViewById(R.id.common_btn_view);
 
         String[] items = {"高亮按钮", "普通按钮1", "普通按钮2", "普通按钮3"};
-        mCommonBtnView.create(ButtonType.GREEN, items, true,
+        mCommonBtnView.create(ButtonType.BLUE, items, true,
                 new CommonButtonView.CommonButtonViewAction() {
                     @Override
                     public void onClick(int position) {

@@ -3,7 +3,6 @@ package com.cyq.animademo;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.GradientDrawable;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -39,7 +38,9 @@ public class CommonButtonView extends LinearLayout implements View.OnTouchListen
     private int lightColor;
 
     private int yellowColor = Color.parseColor("#FF5000");
+
     private int greenColor = Color.parseColor("#44A902");
+    private int greePOressColor = Color.parseColor("#80C14A");
     private int blueColor = Color.parseColor("#2C8AFF");
     private int lightTextSize = 22;
     private int normalTextsize = 20;
@@ -48,8 +49,8 @@ public class CommonButtonView extends LinearLayout implements View.OnTouchListen
     private List<View> views = new ArrayList<>();
     private CommonButtonViewAction mActionListener;
     private float roundRadius = dip2px(4);
-    private GradientDrawable lightDrawable;
-    private GradientDrawable normalDrawable;
+//    private GradientDrawable lightDrawable;
+//    private GradientDrawable normalDrawable;
 
     public CommonButtonView(Context context) {
         this(context, null);
@@ -75,11 +76,11 @@ public class CommonButtonView extends LinearLayout implements View.OnTouchListen
         //内容水平居中排列
         setGravity(Gravity.CENTER_HORIZONTAL);
         //动态创建shape
-        lightDrawable = new GradientDrawable();
-        normalDrawable = new GradientDrawable();
-        lightDrawable.setCornerRadius(roundRadius);
-        normalDrawable.setCornerRadius(roundRadius);
-        normalDrawable.setColor(normalColor);
+//        lightDrawable = new GradientDrawable();
+//        normalDrawable = new GradientDrawable();
+//        lightDrawable.setCornerRadius(roundRadius);
+//        normalDrawable.setCornerRadius(roundRadius);
+//        normalDrawable.setColor(normalColor);
     }
 
     /**
@@ -99,8 +100,6 @@ public class CommonButtonView extends LinearLayout implements View.OnTouchListen
         } else {
             lightColor = normalColor;
         }
-        //设置shape背景色
-        lightDrawable.setColor(lightColor);
 
         if (items.length <= 0) {
             return;
@@ -110,7 +109,7 @@ public class CommonButtonView extends LinearLayout implements View.OnTouchListen
             if (lightColor != normalColor) {
                 //组件有高亮颜色
                 if (i == 0) {
-                    TextView lightBtn = createLightBtn(mItems[i]);
+                    TextView lightBtn = createLightBtn(mItems[i], buttonType);
                     views.add(lightBtn);
                 } else {
                     TextView normalBtn = createNormalBtn(mItems[i]);
@@ -159,14 +158,20 @@ public class CommonButtonView extends LinearLayout implements View.OnTouchListen
      *
      * @return
      */
-    private TextView createLightBtn(String text) {
+    private TextView createLightBtn(String text, int colorType) {
         TextView lightBtn = new TextView(mContext);
         MarginLayoutParams lightLp = new MarginLayoutParams(lightBtnWidth, lightBtnHeight);
         lightLp.topMargin = dip2px(7);
         lightLp.leftMargin = dip2px(7);
         lightLp.rightMargin = dip2px(7);
         lightBtn.setLayoutParams(lightLp);
-        lightBtn.setBackgroundDrawable(lightDrawable);
+        if (colorType == ButtonType.YELLOW) {
+            lightBtn.setBackgroundResource(R.drawable.yellow_common_button_bg);
+        } else if (colorType == ButtonType.BLUE) {
+            lightBtn.setBackgroundResource(R.drawable.blue_common_button_bg);
+        } else if (colorType == ButtonType.GREEN) {
+            lightBtn.setBackgroundResource(R.drawable.green_common_button_bg);
+        }
         lightBtn.setTextSize(lightTextSize);
         lightBtn.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
         lightBtn.setTextColor(widthColor);
@@ -185,7 +190,7 @@ public class CommonButtonView extends LinearLayout implements View.OnTouchListen
         MarginLayoutParams normalLp = new MarginLayoutParams(normalBtnWidth, normalBtnHeight);
         normalLp.topMargin = marginHeight;
         normalBtn.setLayoutParams(normalLp);
-        normalBtn.setBackgroundDrawable(normalDrawable);
+        normalBtn.setBackgroundResource(R.drawable.normal_common_button_bg);
         normalBtn.setTextSize(normalTextsize);
         normalBtn.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
         normalBtn.setTextColor(widthColor);
@@ -214,7 +219,7 @@ public class CommonButtonView extends LinearLayout implements View.OnTouchListen
         } else {
             iv.setBackgroundResource(R.drawable.set_icon_delete);
         }
-        confirmBtn.setBackgroundDrawable(normalDrawable);
+        confirmBtn.setBackgroundResource(R.drawable.normal_common_button_bg);
         confirmBtn.addView(iv);
         return confirmBtn;
     }
