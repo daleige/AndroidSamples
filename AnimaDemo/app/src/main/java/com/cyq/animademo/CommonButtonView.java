@@ -78,6 +78,7 @@ public class CommonButtonView extends LinearLayout implements View.OnTouchListen
      */
     public void create(CommonButtonViewAction commonButtonViewAction) {
         this.mActionListener = commonButtonViewAction;
+
         if (lightButtonType == ButtonType.YELLOW) {
             lightColor = yellowColor;
         } else if (lightButtonType == ButtonType.BLUE) {
@@ -108,14 +109,16 @@ public class CommonButtonView extends LinearLayout implements View.OnTouchListen
             }
         }
 
-        if (mConfire) {
-            //有确认按钮
-            FrameLayout confirmBtn = createConfirmBtn(true);
-            views.add(confirmBtn);
-        } else {
-            //有徐晓按钮
-            FrameLayout confirmBtn = createConfirmBtn(false);
-            views.add(confirmBtn);
+        if(mConfirmType==ActionType.POSITIVE||mConfirmType==ActionType.NEGATIVE){
+            if (mConfirmType==ActionType.POSITIVE) {
+                //有确认按钮
+                FrameLayout confirmBtn = createConfirmBtn(true);
+                views.add(confirmBtn);
+            } else {
+                //有取消按钮
+                FrameLayout confirmBtn = createConfirmBtn(false);
+                views.add(confirmBtn);
+            }
         }
 
         //加载到View容器中
@@ -130,16 +133,15 @@ public class CommonButtonView extends LinearLayout implements View.OnTouchListen
                     }
                 }
             });
-
             views.get(i).setOnTouchListener(this);
         }
     }
 
     private int lightButtonType = 0;
-    private boolean mConfire;
+    private int mConfirmType=0;
 
-    public CommonButtonView actionButton(boolean confirm) {
-        mConfire = confirm;
+    public CommonButtonView actionButton(int confirmTypr) {
+        mConfirmType = confirmTypr;
         return this;
     }
 

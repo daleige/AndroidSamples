@@ -20,13 +20,14 @@ public class MainActivity extends AppCompatActivity {
 
         String[] items = {"高亮按钮", "普通按钮1", "普通按钮2", "普通按钮3"};
 
-        mCommonBtnView.lightButtonType(ButtonType.BLUE)
-                .actionButton(true)
+        mCommonBtnView
+                .lightButtonType(ButtonType.BLUE)
+                .actionButton(ActionType.NEGATIVE)
                 .addItems(items)
                 .create(new CommonButtonView.CommonButtonViewAction() {
                     @Override
                     public void onClick(int position) {
-                        Toast.makeText(MainActivity.this,"点击了"+position,Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "点击了" + position, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
