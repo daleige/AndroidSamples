@@ -40,7 +40,6 @@ public class CommonButtonView extends LinearLayout implements View.OnTouchListen
     private int yellowColor = Color.parseColor("#FF5000");
 
     private int greenColor = Color.parseColor("#44A902");
-    private int greePOressColor = Color.parseColor("#80C14A");
     private int blueColor = Color.parseColor("#2C8AFF");
     private int lightTextSize = 22;
     private int normalTextsize = 20;
@@ -48,9 +47,6 @@ public class CommonButtonView extends LinearLayout implements View.OnTouchListen
     private String[] mItems;
     private List<View> views = new ArrayList<>();
     private CommonButtonViewAction mActionListener;
-    private float roundRadius = dip2px(4);
-//    private GradientDrawable lightDrawable;
-//    private GradientDrawable normalDrawable;
 
     public CommonButtonView(Context context) {
         this(context, null);
@@ -75,41 +71,31 @@ public class CommonButtonView extends LinearLayout implements View.OnTouchListen
         normalBtnHeight = dip2px(46);
         //内容水平居中排列
         setGravity(Gravity.CENTER_HORIZONTAL);
-        //动态创建shape
-//        lightDrawable = new GradientDrawable();
-//        normalDrawable = new GradientDrawable();
-//        lightDrawable.setCornerRadius(roundRadius);
-//        normalDrawable.setCornerRadius(roundRadius);
-//        normalDrawable.setColor(normalColor);
     }
 
     /**
      * 设置按钮组件高亮颜色
-     *
-     * @param buttonType {@link ButtonType}
      */
-    public void create(int buttonType, String[] items, boolean confirm,
-                       CommonButtonViewAction commonButtonViewAction) {
+    public void create(CommonButtonViewAction commonButtonViewAction) {
         this.mActionListener = commonButtonViewAction;
-        if (buttonType == ButtonType.YELLOW) {
+        if (lightButtonType == ButtonType.YELLOW) {
             lightColor = yellowColor;
-        } else if (buttonType == ButtonType.BLUE) {
+        } else if (lightButtonType == ButtonType.BLUE) {
             lightColor = blueColor;
-        } else if (buttonType == ButtonType.GREEN) {
+        } else if (lightButtonType == ButtonType.GREEN) {
             lightColor = greenColor;
         } else {
             lightColor = normalColor;
         }
 
-        if (items.length <= 0) {
+        if (mItems.length <= 0) {
             return;
         }
-        mItems = items;
         for (int i = 0; i < mItems.length; i++) {
             if (lightColor != normalColor) {
                 //组件有高亮颜色
                 if (i == 0) {
-                    TextView lightBtn = createLightBtn(mItems[i], buttonType);
+                    TextView lightBtn = createLightBtn(mItems[i], lightButtonType);
                     views.add(lightBtn);
                 } else {
                     TextView normalBtn = createNormalBtn(mItems[i]);
@@ -122,7 +108,7 @@ public class CommonButtonView extends LinearLayout implements View.OnTouchListen
             }
         }
 
-        if (confirm) {
+        if (mConfire) {
             //有确认按钮
             FrameLayout confirmBtn = createConfirmBtn(true);
             views.add(confirmBtn);
@@ -149,8 +135,23 @@ public class CommonButtonView extends LinearLayout implements View.OnTouchListen
         }
     }
 
-    public void addAction(boolean confirm) {
+    private int lightButtonType = 0;
+    private boolean mConfire;
 
+    public CommonButtonView actionButton(boolean confirm) {
+        mConfire = confirm;
+        return this;
+    }
+
+
+    public CommonButtonView lightButtonType(int type) {
+        lightButtonType = type;
+        return this;
+    }
+
+    public CommonButtonView addItems(String... items) {
+        mItems = items;
+        return this;
     }
 
     /**
