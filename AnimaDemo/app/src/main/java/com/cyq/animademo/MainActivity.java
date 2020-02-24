@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
         mCommonBtnView
                 .lightButtonType(ButtonType.BLUE)
-                .actionButton(ActionType.NEGATIVE)
+                .actionButton(ActionType.POSITIVE)
                 .addItems(items)
                 .create(new CommonButtonView.CommonButtonViewAction() {
                     @Override
