@@ -1,4 +1,4 @@
-package com.cyq.animademo;
+package com.cyq.animademo.button;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -15,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+
+import com.cyq.animademo.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,7 +111,7 @@ public class CommonButtonView extends LinearLayout implements View.OnTouchListen
             }
         }
 
-        if(mConfirmType==ActionType.POSITIVE||mConfirmType==ActionType.NEGATIVE){
+        if(mConfirmType== ActionType.POSITIVE||mConfirmType==ActionType.NEGATIVE){
             if (mConfirmType==ActionType.POSITIVE) {
                 //有确认按钮
                 FrameLayout confirmBtn = createConfirmBtn(true);

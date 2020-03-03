@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/holo_blue_bright"
-    tools:context=".MainActivity">
+    android:background="@android:color/holo_red_dark"
+    tools:context=".ThreeActivity">
 
     <Button
+        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:onClick="next"
-        android:text="跳转二级页" />
+        android:text="返回二级页"
+        android:onClick="back"/>
 
 </FrameLayout>

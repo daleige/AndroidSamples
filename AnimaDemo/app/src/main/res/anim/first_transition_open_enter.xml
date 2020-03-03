@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 首页跳二级页 二级页入场动画-->
+    <alpha
+        android:duration="1500"
+        android:fromAlpha="0.4"
+        android:interpolator="@android:anim/decelerate_interpolator"
+        android:startOffset="1000"
+        android:toAlpha="1.0" />
+
+    <translate
+        android:duration="1500"
+        android:fromYDelta="100%"
+        android:interpolator="@android:anim/decelerate_interpolator"
+        android:startOffset="1000"
+        android:toYDelta="0%" />
+</set>
