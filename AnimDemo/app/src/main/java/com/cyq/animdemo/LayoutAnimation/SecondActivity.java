@@ -3,6 +3,7 @@ package com.cyq.animdemo.LayoutAnimation;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 
 import com.cyq.animdemo.R;
 
@@ -15,4 +16,7 @@ public class SecondActivity extends AppCompatActivity {
     }
 
 
+    public void back(View view) {
+        finish();
+    }
 }
