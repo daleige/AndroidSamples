@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/ll_container_2"
+    android:id="@+id/ll_container_3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/holo_green_dark"
+    android:background="#004466"
     android:orientation="vertical"
-    tools:context=".LayoutAnimation.SecondActivity">
+    tools:context=".LayoutAnimation.ThreeActivity">
 
     <TextView
         android:layout_width="match_parent"
@@ -15,16 +15,7 @@
         android:background="@color/colorPrimary"
         android:gravity="center"
         android:onClick="back"
-        android:text="返回" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_margin="10dp"
-        android:onClick="next"
-        android:background="@color/colorPrimary"
-        android:gravity="center"
-        android:text="下一页" />
+        android:text="第三页" />
 
     <TextView
         android:layout_width="match_parent"
@@ -32,7 +23,8 @@
         android:layout_margin="10dp"
         android:background="@color/colorPrimary"
         android:gravity="center"
-        android:text="文本" />
+        android:onClick="back"
+        android:text="第三页" />
 
     <TextView
         android:layout_width="match_parent"
@@ -40,16 +32,8 @@
         android:layout_margin="10dp"
         android:background="@color/colorPrimary"
         android:gravity="center"
-        android:text="文本" />
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_margin="10dp"
-        android:background="@color/colorPrimary"
-        android:gravity="center"
-        android:text="文本" />
+        android:onClick="back"
+        android:text="第三页" />
 
     <TextView
         android:layout_width="match_parent"
@@ -57,5 +41,42 @@
         android:layout_margin="10dp"
         android:background="@color/colorPrimary"
         android:gravity="center"
-        android:text="文本" />
+        android:onClick="back"
+        android:text="第三页" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:onClick="back"
+        android:text="第三页" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:onClick="back"
+        android:text="第三页" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:onClick="back"
+        android:text="第三页" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:onClick="back"
+        android:text="第三页" />
 </LinearLayout>
