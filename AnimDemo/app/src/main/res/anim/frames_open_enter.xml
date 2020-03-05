@@ -4,4 +4,4 @@
     android:fillAfter="false"
     android:fromXDelta="0%"
     android:interpolator="@android:anim/accelerate_decelerate_interpolator"
-    android:toXDelta="100%" />
+    android:toXDelta="-100%" />

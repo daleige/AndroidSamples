@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import com.cyq.animdemo.LayoutAnimation.SecondActivity;
 
 public class MainActivity extends AppCompatActivity {
-
     private LayoutAnimationController layoutController;
     private LinearLayout linearLayout;
 
@@ -21,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         linearLayout = findViewById(R.id.ll_container);
-        layoutController = AnimationUtils.loadLayoutAnimation(this, R.anim.left_to_right_layout_animation);
+        layoutController = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_open_enter);
     }
 
     public void next(View view) {

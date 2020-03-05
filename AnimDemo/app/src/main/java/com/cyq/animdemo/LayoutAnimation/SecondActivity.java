@@ -13,16 +13,20 @@ import com.cyq.animdemo.R;
 public class SecondActivity extends AppCompatActivity {
 
     private LinearLayout llContainer;
-    private LayoutAnimationController layoutController;
+    private LayoutAnimationController layoutControllerIn;
+
+    private LayoutAnimationController layoutContrillerBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
         llContainer = findViewById(R.id.ll_container_2);
-        layoutController = AnimationUtils.loadLayoutAnimation(this, R.anim.right_to_left_layout_animation);
-        llContainer.setLayoutAnimation(layoutController);
+        layoutControllerIn = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_open_exit);
+        llContainer.setLayoutAnimation(layoutControllerIn);
         llContainer.startLayoutAnimation();
+
+
     }
 
     public void back(View view) {
