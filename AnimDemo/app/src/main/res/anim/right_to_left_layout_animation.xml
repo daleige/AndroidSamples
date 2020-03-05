@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layoutAnimation xmlns:android="http://schemas.android.com/apk/res/android"
-    android:animation="@anim/right_translate_to_left"
+    android:animation="@anim/left_translate_to_right"
     android:animationOrder="normal"
     android:delay="8%" />

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layoutAnimation="@anim/left_to_right_layout_animation"
+    android:background="@color/colorAccent"
     android:orientation="vertical"
-    android:id="@+id/ll_container"
     tools:context=".MainActivity">
 
     <Button

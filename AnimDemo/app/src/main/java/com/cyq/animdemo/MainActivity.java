@@ -13,16 +13,21 @@ import com.cyq.animdemo.LayoutAnimation.SecondActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+    private LayoutAnimationController layoutController;
+    private LinearLayout linearLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        LinearLayout linearLayout = findViewById(R.id.ll_container);
-        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(this, R.anim.left_to_right_layout_animation);
-        linearLayout.setLayoutAnimation(controller);
+        linearLayout = findViewById(R.id.ll_container);
+        layoutController = AnimationUtils.loadLayoutAnimation(this, R.anim.left_to_right_layout_animation);
     }
 
     public void next(View view) {
         startActivity(new Intent(this, SecondActivity.class));
+        overridePendingTransition(R.anim.second_transition_open_enter, R.anim.second_transition_open_exit);
+        linearLayout.setLayoutAnimation(layoutController);
+        linearLayout.startLayoutAnimation();
     }
 }
