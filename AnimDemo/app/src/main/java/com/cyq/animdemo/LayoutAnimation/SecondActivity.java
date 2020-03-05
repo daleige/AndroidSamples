@@ -13,24 +13,33 @@ import com.cyq.animdemo.R;
 public class SecondActivity extends AppCompatActivity {
 
     private LinearLayout llContainer;
-    private LayoutAnimationController layoutControllerIn;
-
-    private LayoutAnimationController layoutContrillerBack;
+    private LayoutAnimationController inController;
+    private LayoutAnimationController backController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
         llContainer = findViewById(R.id.ll_container_2);
-        layoutControllerIn = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_open_exit);
-        llContainer.setLayoutAnimation(layoutControllerIn);
-        llContainer.startLayoutAnimation();
+        inController = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_open_exit);
+        backController = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_close_exit);
+    }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        llContainer.setLayoutAnimation(inController);
     }
 
     public void back(View view) {
         finish();
         overridePendingTransition(R.anim.second_transition_close_enter, R.anim.second_transition_close_exit);
+//        for (int i = 0; i < llContainer.getChildCount(); i++) {
+//            llContainer.getChildAt(i).clearAnimation();
+//        }
+        llContainer.clearAnimation();
+        llContainer.setLayoutAnimation(null);
+        llContainer.setLayoutAnimation(backController);
+        llContainer.startLayoutAnimation();
     }
 }

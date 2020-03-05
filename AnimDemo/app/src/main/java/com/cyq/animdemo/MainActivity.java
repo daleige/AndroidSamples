@@ -12,7 +12,8 @@ import android.widget.LinearLayout;
 import com.cyq.animdemo.LayoutAnimation.SecondActivity;
 
 public class MainActivity extends AppCompatActivity {
-    private LayoutAnimationController layoutController;
+    private LayoutAnimationController inController;
+    private LayoutAnimationController backController;
     private LinearLayout linearLayout;
 
     @Override
@@ -20,13 +21,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         linearLayout = findViewById(R.id.ll_container);
-        layoutController = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_open_enter);
+        inController = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_open_enter);
+        backController = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_close_enter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        linearLayout.setLayoutAnimation(backController);
     }
 
     public void next(View view) {
         startActivity(new Intent(this, SecondActivity.class));
         overridePendingTransition(R.anim.second_transition_open_enter, R.anim.second_transition_open_exit);
-        linearLayout.setLayoutAnimation(layoutController);
+        linearLayout.setLayoutAnimation(inController);
         linearLayout.startLayoutAnimation();
     }
+
+
 }
