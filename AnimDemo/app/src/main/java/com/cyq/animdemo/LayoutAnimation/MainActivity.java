@@ -1,4 +1,4 @@
-package com.cyq.animdemo;
+package com.cyq.animdemo.LayoutAnimation;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,6 +10,7 @@ import android.view.animation.LayoutAnimationController;
 import android.widget.LinearLayout;
 
 import com.cyq.animdemo.LayoutAnimation.SecondActivity;
+import com.cyq.animdemo.R;
 
 public class MainActivity extends AppCompatActivity {
     private LayoutAnimationController inController;
