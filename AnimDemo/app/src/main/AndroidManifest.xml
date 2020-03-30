@@ -9,18 +9,30 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".transition.TowActivity"></activity>
-        <activity android:name=".transition.OneActivity" />
-        <activity android:name=".IndexActivity">
+        <activity
+            android:name=".transition.TowActivity"
+            android:launchMode="singleTask"></activity>
+        <activity
+            android:name=".transition.OneActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".IndexActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LayoutAnimation.ThreeActivity" />
-        <activity android:name=".LayoutAnimation.SecondActivity" />
-        <activity android:name=".LayoutAnimation.MainActivity" />
+        <activity
+            android:name=".LayoutAnimation.ThreeActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".LayoutAnimation.SecondActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".LayoutAnimation.MainActivity"
+            android:launchMode="singleTask" />
     </application>
 
 </manifest>
