@@ -24,7 +24,7 @@
         <TextView
             android:id="@+id/sample_name"
             style="@style/Base.TextAppearance.AppCompat.Large"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:text="@{sample.name}"
@@ -51,7 +51,7 @@
         <TextView
             android:id="@+id/sample_name1"
             style="@style/Base.TextAppearance.AppCompat.Large"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:text="@{sample.name}"
@@ -77,7 +77,7 @@
         <TextView
             android:id="@+id/sample_name2"
             style="@style/Base.TextAppearance.AppCompat.Large"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:text="@{sample.name}"
@@ -103,7 +103,7 @@
         <TextView
             android:id="@+id/sample_name3"
             style="@style/Base.TextAppearance.AppCompat.Large"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:text="@{sample.name}"

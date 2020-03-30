@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityOptionsCompat;
 
 import com.cyq.animdemo.LayoutAnimation.MainActivity;
 import com.cyq.animdemo.transition.OneActivity;
@@ -34,7 +35,8 @@ public class IndexActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.btn_transition:
                 Intent intent2 = new Intent(this, OneActivity.class);
-                startActivity(intent2);
+                startActivity(intent2, ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+                        null).toBundle());
                 break;
             default:
 
