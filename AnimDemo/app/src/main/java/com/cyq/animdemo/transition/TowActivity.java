@@ -35,7 +35,7 @@ public class TowActivity extends AppCompatActivity implements View.OnClickListen
 
     private void setupWindowAnimations() {
         Slide enterTransition = new Slide();
-        enterTransition.setDuration(300);
+        enterTransition.setDuration(1000);
         enterTransition.setInterpolator(new DecelerateInterpolator());
         enterTransition.setSlideEdge(Gravity.RIGHT);
         getWindow().setEnterTransition(enterTransition);

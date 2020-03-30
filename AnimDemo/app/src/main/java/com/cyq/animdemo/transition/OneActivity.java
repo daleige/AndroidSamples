@@ -1,6 +1,5 @@
 package com.cyq.animdemo.transition;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.transition.Slide;
@@ -8,7 +7,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,22 +38,22 @@ public class OneActivity extends AppCompatActivity implements View.OnClickListen
 
     private void setupWindowAnimations() {
         Slide enter = new Slide();
-        enter.setDuration(300);
+        enter.setDuration(1000);
         enter.setSlideEdge(Gravity.RIGHT);
         enter.setInterpolator(new DecelerateInterpolator());
 
         Slide exit = new Slide();
-        exit.setDuration(300);
+        exit.setDuration(1000);
         exit.setSlideEdge(Gravity.LEFT);
         exit.setInterpolator(new DecelerateInterpolator());
 
         Slide reenter = new Slide();
         reenter.setSlideEdge(Gravity.LEFT);
-        reenter.setDuration(300);
+        reenter.setDuration(1000);
         reenter.setInterpolator(new DecelerateInterpolator());
 
         Slide returnT = new Slide();
-        returnT.setDuration(300);
+        returnT.setDuration(1000);
         returnT.setSlideEdge(Gravity.RIGHT);
         returnT.setInterpolator(new DecelerateInterpolator());
 
@@ -72,11 +70,10 @@ public class OneActivity extends AppCompatActivity implements View.OnClickListen
                 finishAfterTransition();
                 break;
             case R.id.btn_next:
-                Intent intent = new Intent(this, TowActivity.class);
-                final Pair<View, String>[] pairs =
-                        TransitionHelper.createSafeTransitionParticipants(this, false);
-                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this);
-                startActivity(intent, options.toBundle());
+                Intent i = new Intent(this, TowActivity.class);
+                final Pair<View, String>[] pairs = TransitionHelper.createSafeTransitionParticipants(OneActivity.this, false);
+                ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(OneActivity.this, pairs);
+                startActivity(i, transitionActivityOptions.toBundle());
                 break;
         }
     }

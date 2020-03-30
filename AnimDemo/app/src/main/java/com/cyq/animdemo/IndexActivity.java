@@ -8,9 +8,11 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
 
 import com.cyq.animdemo.LayoutAnimation.MainActivity;
 import com.cyq.animdemo.transition.OneActivity;
+import com.cyq.animdemo.transition.utils.TransitionHelper;
 
 public class IndexActivity extends AppCompatActivity implements View.OnClickListener {
     private Button mLayoutAnimation;
@@ -36,9 +38,10 @@ public class IndexActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(intent1);
                 break;
             case R.id.btn_transition:
-                Intent intent2 = new Intent(this, OneActivity.class);
-                startActivity(intent2, ActivityOptionsCompat.makeSceneTransitionAnimation(this,
-                        null).toBundle());
+                Intent inten2 = new Intent(IndexActivity.this, OneActivity.class);
+                final Pair<View, String>[] pairs = TransitionHelper.createSafeTransitionParticipants(IndexActivity.this, false);
+                ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(IndexActivity.this, pairs);
+                startActivity(inten2, transitionActivityOptions.toBundle());
                 break;
             default:
 
