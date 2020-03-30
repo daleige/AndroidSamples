@@ -8,9 +8,17 @@
     tools:context=".IndexActivity">
 
     <Button
+        android:id="@+id/btn_layout_animation"
         android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="layoutAnimation" />
+
+    <Button
+        android:id="@+id/btn_transition"
+        android:layout_margin="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Transition" />
 
 </LinearLayout>
