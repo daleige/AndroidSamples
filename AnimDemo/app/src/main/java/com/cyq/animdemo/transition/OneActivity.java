@@ -2,6 +2,7 @@ package com.cyq.animdemo.transition;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.transition.ChangeBounds;
 import android.transition.Slide;
 import android.view.Gravity;
 import android.view.View;
@@ -11,10 +12,10 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityOptionsCompat;
-import androidx.core.util.Pair;
 
 import com.cyq.animdemo.R;
-import com.cyq.animdemo.transition.utils.TransitionHelper;
+
+import static com.cyq.animdemo.transition.utils.Constant.DURATION;
 
 public class OneActivity extends AppCompatActivity implements View.OnClickListener {
     private Button mBack;
@@ -23,13 +24,9 @@ public class OneActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-        getWindow().setAllowEnterTransitionOverlap(true);
-        getWindow().setAllowReturnTransitionOverlap(true);
-        setupWindowAnimations();
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_one);
-
+        setupWindowAnimations();
         mBack = findViewById(R.id.btn_back);
         mNext = findViewById(R.id.btn_next);
         mBack.setOnClickListener(this);
@@ -38,29 +35,34 @@ public class OneActivity extends AppCompatActivity implements View.OnClickListen
 
     private void setupWindowAnimations() {
         Slide enter = new Slide();
-        enter.setDuration(1000);
+        enter.setDuration(DURATION);
         enter.setSlideEdge(Gravity.RIGHT);
         enter.setInterpolator(new DecelerateInterpolator());
 
         Slide exit = new Slide();
-        exit.setDuration(1000);
+        exit.setDuration(DURATION);
         exit.setSlideEdge(Gravity.LEFT);
         exit.setInterpolator(new DecelerateInterpolator());
 
         Slide reenter = new Slide();
         reenter.setSlideEdge(Gravity.LEFT);
-        reenter.setDuration(1000);
+        reenter.setDuration(DURATION);
         reenter.setInterpolator(new DecelerateInterpolator());
 
         Slide returnT = new Slide();
-        returnT.setDuration(1000);
+        returnT.setDuration(DURATION);
         returnT.setSlideEdge(Gravity.RIGHT);
         returnT.setInterpolator(new DecelerateInterpolator());
+
+        ChangeBounds changeBounds= new ChangeBounds();
+        changeBounds.setDuration(DURATION);
+        changeBounds.setResizeClip(true);
 
         getWindow().setReenterTransition(reenter);
         getWindow().setEnterTransition(enter);
         getWindow().setReturnTransition(returnT);
         getWindow().setExitTransition(exit);
+        getWindow().setAllowEnterTransitionOverlap(true);
     }
 
     @Override
@@ -71,10 +73,10 @@ public class OneActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case R.id.btn_next:
                 Intent i = new Intent(this, TowActivity.class);
-                final Pair<View, String>[] pairs = TransitionHelper.createSafeTransitionParticipants(OneActivity.this, false);
-                ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(OneActivity.this, pairs);
-                startActivity(i, transitionActivityOptions.toBundle());
+                startActivity(i, ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle());
                 break;
+            default:
+
         }
     }
 }

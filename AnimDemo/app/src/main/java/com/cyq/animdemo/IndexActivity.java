@@ -8,11 +8,9 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityOptionsCompat;
-import androidx.core.util.Pair;
 
 import com.cyq.animdemo.LayoutAnimation.MainActivity;
 import com.cyq.animdemo.transition.OneActivity;
-import com.cyq.animdemo.transition.utils.TransitionHelper;
 
 public class IndexActivity extends AppCompatActivity implements View.OnClickListener {
     private Button mLayoutAnimation;
@@ -21,6 +19,7 @@ public class IndexActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        getWindow().setAllowEnterTransitionOverlap(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_index);
 
@@ -39,9 +38,7 @@ public class IndexActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.btn_transition:
                 Intent inten2 = new Intent(IndexActivity.this, OneActivity.class);
-                final Pair<View, String>[] pairs = TransitionHelper.createSafeTransitionParticipants(IndexActivity.this, false);
-                ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(IndexActivity.this, pairs);
-                startActivity(inten2, transitionActivityOptions.toBundle());
+                startActivity(inten2, ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle());
                 break;
             default:
 
