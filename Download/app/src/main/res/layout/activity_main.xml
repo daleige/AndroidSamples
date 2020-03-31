@@ -23,6 +23,7 @@
             android:progress="20" />
 
         <TextView
+            android:id="@+id/tv_progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
@@ -31,13 +32,13 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/tv_download"
+        android:id="@+id/btn_download"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="下载" />
 
     <Button
-        android:id="@+id/tv_cancel"
+        android:id="@+id/btn_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
