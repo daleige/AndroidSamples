@@ -6,5 +6,5 @@ package com.cyq.animdemo.transition.utils;
  * desc   :
  */
 public class Constant {
-    public static final int DURATION = 1000;
+    public static final int DURATION = 2000;
 }

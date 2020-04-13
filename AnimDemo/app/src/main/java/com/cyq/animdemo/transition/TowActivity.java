@@ -3,8 +3,12 @@ package com.cyq.animdemo.transition;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
+import android.transition.ChangeBounds;
+import android.transition.Slide;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +18,8 @@ import com.cyq.animdemo.transition.utils.EnterSlide;
 import com.cyq.animdemo.transition.utils.ExitSlide;
 import com.cyq.animdemo.transition.utils.ReenterSlide;
 import com.cyq.animdemo.transition.utils.ReturnSlide;
+
+import static com.cyq.animdemo.transition.utils.Constant.DURATION;
 
 public class TowActivity extends AppCompatActivity implements View.OnClickListener {
     private Button mBack;
@@ -33,16 +39,35 @@ public class TowActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void setupWindowAnimations() {
-        EnterSlide enter = new EnterSlide();
-        ExitSlide exit = new ExitSlide();
-        ReenterSlide reenter = new ReenterSlide();
-        ReturnSlide returnT = new ReturnSlide();
+        Slide enter = new Slide();
+        enter.setDuration(DURATION);
+        enter.setSlideEdge(Gravity.RIGHT);
+        enter.setInterpolator(new DecelerateInterpolator());
 
+        Slide exit = new Slide();
+        exit.setDuration(DURATION);
+        exit.setSlideEdge(Gravity.LEFT);
+        exit.setInterpolator(new DecelerateInterpolator());
+
+        Slide reenter = new Slide();
+        reenter.setSlideEdge(Gravity.LEFT);
+        reenter.setDuration(DURATION);
+        reenter.setInterpolator(new DecelerateInterpolator());
+
+        Slide returnT = new Slide();
+        returnT.setDuration(DURATION);
+        returnT.setSlideEdge(Gravity.RIGHT);
+        returnT.setInterpolator(new DecelerateInterpolator());
+
+        ChangeBounds changeBounds= new ChangeBounds();
+        changeBounds.setDuration(DURATION);
+        changeBounds.setResizeClip(true);
+
+        getWindow().setReenterTransition(reenter);
+        getWindow().setEnterTransition(enter);
         getWindow().setReturnTransition(returnT);
         getWindow().setExitTransition(exit);
-        getWindow().setEnterTransition(enter);
-        getWindow().setReenterTransition(reenter);
-//        getWindow().setAllowEnterTransitionOverlap(true);
+        getWindow().setAllowEnterTransitionOverlap(true);
     }
 
     @Override
