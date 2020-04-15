@@ -22,7 +22,7 @@
             android:id="@+id/btn_banner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="弹窗Dialog"
+            android:text="Banner"
             android:textAllCaps="false" />
 
     </LinearLayout>
