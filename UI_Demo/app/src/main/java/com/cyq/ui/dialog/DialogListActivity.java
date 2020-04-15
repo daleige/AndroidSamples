@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.cyq.ui.R;
 import com.cyq.ui.dialog.builder.DialogBuilder;
 import com.cyq.ui.dialog.builder.MessageDialogBuilder;
+import com.cyq.ui.dialog.dialog.TestDialog;
 
 public class DialogListActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -35,10 +36,14 @@ public class DialogListActivity extends AppCompatActivity implements View.OnClic
         switch (v.getId()) {
             case R.id.btn_message_dialog:
                 new MessageDialogBuilder(this)
+                        .setTitle("测试标题...")
+                        .setMessage("测试内容内容......")
+                        .setCanceledOnTouchOutside(true)
                         .show();
                 break;
             case R.id.button2:
-
+                TestDialog dialog = new TestDialog(this);
+                dialog.show();
                 break;
         }
     }

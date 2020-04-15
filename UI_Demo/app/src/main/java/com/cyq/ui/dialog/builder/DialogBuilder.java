@@ -1,5 +1,7 @@
 package com.cyq.ui.dialog.builder;
 
+import com.cyq.ui.dialog.dialog.BaseDialog;
+
 /**
  * @author : ChenYangQi
  * date   : 2020/4/15 14:44
@@ -31,7 +33,7 @@ public abstract class DialogBuilder {
      *
      * @return
      */
-    public abstract DialogBuilder create();
+    public abstract BaseDialog create();
 
     /**
      * 根据style生成dialog，但不显示
@@ -39,7 +41,7 @@ public abstract class DialogBuilder {
      * @param styleId
      * @return
      */
-    public abstract DialogBuilder create(int styleId);
+    public abstract BaseDialog create(int styleId);
 
     /**
      * 生成一个Dialog，并显示

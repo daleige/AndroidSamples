@@ -2,6 +2,7 @@ package com.cyq.ui.dialog.builder;
 
 import android.content.Context;
 
+import com.cyq.ui.dialog.dialog.BaseDialog;
 import com.cyq.ui.dialog.dialog.MessageDialog;
 
 /**
@@ -21,30 +22,31 @@ public class MessageDialogBuilder extends DialogBuilder {
 
     @Override
     public MessageDialogBuilder setTitle(String title) {
-
+        mDialog.setTitle(title);
         return this;
     }
 
     @Override
     public MessageDialogBuilder setMessage(String message) {
-
+        mDialog.setMessage(message);
         return this;
     }
 
     @Override
     public MessageDialogBuilder setCanceledOnTouchOutside(boolean b) {
-
+        mDialog.setCanceledOnTouchOutside(b);
         return this;
     }
 
     @Override
-    public DialogBuilder create() {
-        return null;
+    public BaseDialog create() {
+        return mDialog;
     }
 
     @Override
-    public DialogBuilder create(int styleId) {
-        return null;
+    public BaseDialog create(int styleId) {
+
+        return mDialog;
     }
 
     @Override

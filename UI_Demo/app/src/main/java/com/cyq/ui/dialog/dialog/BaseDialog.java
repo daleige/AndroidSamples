@@ -2,11 +2,13 @@ package com.cyq.ui.dialog.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.cyq.ui.R;
+import com.cyq.ui.dialog.builder.DialogBuilder;
 
 /**
  * @author : ChenYangQi
@@ -14,15 +16,13 @@ import com.cyq.ui.R;
  * desc   : 基类Activity
  */
 public abstract class BaseDialog extends Dialog {
+    private final View view;
 
     public BaseDialog(Context context) {
         super(context, R.style.BaseDialog);
-        if (getContentView() == null) {
-            setContentView(getContentId());
-        } else {
-            setContentView(getContentView());
-        }
-        init(context);
+        view = LayoutInflater.from(context).inflate(getLayoutId(), null, false);
+        setContentView(view);
+        init(context,view);
     }
 
     /**
@@ -30,19 +30,19 @@ public abstract class BaseDialog extends Dialog {
      *
      * @return 返回布局id
      */
-    protected abstract int getContentId();
+    protected abstract int getLayoutId();
 
     /**
      * 初始化方法
      */
-    protected abstract void init(Context context);
+    protected abstract void init(Context context,View view);
 
     /**
      * 布局View 返回null 时 getContentId 起作用
      *
      * @return null
      */
-    private View getContentView() {
+    protected View getContentView() {
         return null;
     }
 
@@ -70,4 +70,24 @@ public abstract class BaseDialog extends Dialog {
             dialogWindow.setAttributes(lp);
         }
     }
+
+    /**
+     * 设置标题
+     */
+    public abstract void setTitle(String title);
+
+    /**
+     * 设置dialog内容
+     *
+     * @param message
+     */
+    public abstract void setMessage(String message);
+
+    /**
+     * 点击外部是否关闭dialog
+     *
+     * @param b
+     */
+    public abstract void setCanceledOnTouchOutside(boolean b);
+
 }
