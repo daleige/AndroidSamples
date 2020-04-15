@@ -10,21 +10,21 @@ public abstract class DialogBuilder {
     /**
      * 设置标题
      */
-    public abstract void setTitle(String title);
+    public abstract DialogBuilder setTitle(String title);
 
     /**
      * 设置dialog内容
      *
      * @param message
      */
-    public abstract void setMessage(String message);
+    public abstract DialogBuilder setMessage(String message);
 
     /**
      * 点击外部是否关闭dialog
      *
      * @param b
      */
-    public abstract void setCanceledOnTouchOutside(boolean b);
+    public abstract DialogBuilder setCanceledOnTouchOutside(boolean b);
 
     /**
      * 生成一个dialog，但不显示

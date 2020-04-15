@@ -28,7 +28,7 @@ public abstract class BaseDialog extends Dialog {
     /**
      * 布局资源
      *
-     * @return
+     * @return 返回布局id
      */
     protected abstract int getContentId();
 
@@ -40,9 +40,9 @@ public abstract class BaseDialog extends Dialog {
     /**
      * 布局View 返回null 时 getContentId 起作用
      *
-     * @return
+     * @return null
      */
-    protected View getContentView() {
+    private View getContentView() {
         return null;
     }
 
@@ -59,7 +59,7 @@ public abstract class BaseDialog extends Dialog {
     /**
      * 设置弹出的位置
      *
-     * @param gravity
+     * @param gravity 布局位置
      */
     protected void setDialogGravity(int gravity) {
         Window dialogWindow = getWindow();
@@ -69,10 +69,5 @@ public abstract class BaseDialog extends Dialog {
             dialogWindow.setGravity(gravity);
             dialogWindow.setAttributes(lp);
         }
-    }
-
-    @Override
-    public void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
     }
 }

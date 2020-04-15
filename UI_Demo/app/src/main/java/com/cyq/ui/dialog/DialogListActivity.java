@@ -7,6 +7,8 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cyq.ui.R;
+import com.cyq.ui.dialog.builder.DialogBuilder;
+import com.cyq.ui.dialog.builder.MessageDialogBuilder;
 
 public class DialogListActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -32,7 +34,8 @@ public class DialogListActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_message_dialog:
-
+                new MessageDialogBuilder(this)
+                        .show();
                 break;
             case R.id.button2:
 
