@@ -9,10 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.cyq.ui.R;
 import com.cyq.ui.dialog.action.ActionListener;
-import com.cyq.ui.dialog.builder.DialogBuilder;
-import com.cyq.ui.dialog.builder.MessageDialogBuilder;
 import com.cyq.ui.dialog.dialog.BaseDialog;
-import com.cyq.ui.dialog.dialog.TestDialog;
+import com.cyq.ui.dialog.dialog.MyDialog;
 
 public class DialogListActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -38,7 +36,7 @@ public class DialogListActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_message_dialog:
-                BaseDialog dialog = new MessageDialogBuilder(this)
+                BaseDialog dialog =new MyDialog.MessageDialogBuilder(this)
                         .setTitle("真的要放弃购买吗？")
                         .setMessage("您可能会失去会员曲库、无损音质、手机铃声，免费下载等特权！")
                         .setCanceledOnTouchOutside(true)
