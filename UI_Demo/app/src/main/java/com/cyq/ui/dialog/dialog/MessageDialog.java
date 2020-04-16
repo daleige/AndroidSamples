@@ -1,14 +1,11 @@
 package com.cyq.ui.dialog.dialog;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
 import com.cyq.ui.R;
-import com.cyq.ui.dialog.builder.DialogBuilder;
 
 /**
  * @author : ChenYangQi
@@ -52,15 +49,6 @@ public class MessageDialog extends BaseDialog {
     public void setMessage(String message) {
         if (!TextUtils.isEmpty(message)) {
             mTvMessageContent.setText(message);
-        }
-    }
-
-    @Override
-    public void setCanceledOnTouchOutside(boolean b) {
-        if (b) {
-            setCanceledOnTouchOutside(true);
-        } else {
-            setCanceledOnTouchOutside(false);
         }
     }
 }

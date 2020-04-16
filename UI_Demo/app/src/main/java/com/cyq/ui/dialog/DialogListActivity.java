@@ -38,7 +38,7 @@ public class DialogListActivity extends AppCompatActivity implements View.OnClic
                 new MessageDialogBuilder(this)
                         .setTitle("测试标题...")
                         .setMessage("测试内容内容......")
-                        .setCanceledOnTouchOutside(true)
+                        .setCanceledOnTouchOutside(false)
                         .show();
                 break;
             case R.id.button2:

@@ -82,12 +82,4 @@ public abstract class BaseDialog extends Dialog {
      * @param message
      */
     public abstract void setMessage(String message);
-
-    /**
-     * 点击外部是否关闭dialog
-     *
-     * @param b
-     */
-    public abstract void setCanceledOnTouchOutside(boolean b);
-
 }
