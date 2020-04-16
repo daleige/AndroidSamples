@@ -8,6 +8,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.cyq.ui.R;
+import com.cyq.ui.dialog.action.ActionListener;
 import com.cyq.ui.dialog.builder.DialogBuilder;
 
 /**
@@ -22,7 +23,7 @@ public abstract class BaseDialog extends Dialog {
         super(context, R.style.BaseDialog);
         view = LayoutInflater.from(context).inflate(getLayoutId(), null, false);
         setContentView(view);
-        init(context,view);
+        init(context, view);
     }
 
     /**
@@ -35,7 +36,7 @@ public abstract class BaseDialog extends Dialog {
     /**
      * 初始化方法
      */
-    protected abstract void init(Context context,View view);
+    protected abstract void init(Context context, View view);
 
     /**
      * 布局View 返回null 时 getContentId 起作用
@@ -82,4 +83,19 @@ public abstract class BaseDialog extends Dialog {
      * @param message
      */
     public abstract void setMessage(String message);
+
+    /**
+     * 设置取消按钮的文字
+     *
+     * @param txt
+     */
+    public abstract void setNegativeTxt(String txt, ActionListener actionListener);
+
+    /**
+     * 设置确认按钮的文字
+     *
+     * @param txt
+     */
+    public abstract void setPositiveTxt(String txt,ActionListener actionListener);
+
 }

@@ -3,12 +3,15 @@ package com.cyq.ui.dialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cyq.ui.R;
+import com.cyq.ui.dialog.action.ActionListener;
 import com.cyq.ui.dialog.builder.DialogBuilder;
 import com.cyq.ui.dialog.builder.MessageDialogBuilder;
+import com.cyq.ui.dialog.dialog.BaseDialog;
 import com.cyq.ui.dialog.dialog.TestDialog;
 
 public class DialogListActivity extends AppCompatActivity implements View.OnClickListener {
@@ -38,7 +41,20 @@ public class DialogListActivity extends AppCompatActivity implements View.OnClic
                 new MessageDialogBuilder(this)
                         .setTitle("测试标题...")
                         .setMessage("测试内容内容......")
-                        .setCanceledOnTouchOutside(false)
+                        .setCanceledOnTouchOutside(true)
+                        .setNegativeAction("Cancel", new ActionListener() {
+                            @Override
+                            public void onClick(BaseDialog dialog, int index) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .setPositiveAction("Sure", new ActionListener() {
+                            @Override
+                            public void onClick(BaseDialog dialog, int index) {
+                                //TODO 响应点击事件
+                                Toast.makeText(DialogListActivity.this, "点击确认！", Toast.LENGTH_SHORT).show();
+                            }
+                        })
                         .show();
                 break;
             case R.id.button2:

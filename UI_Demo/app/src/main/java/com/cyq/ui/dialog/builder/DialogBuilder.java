@@ -1,5 +1,6 @@
 package com.cyq.ui.dialog.builder;
 
+import com.cyq.ui.dialog.action.ActionListener;
 import com.cyq.ui.dialog.dialog.BaseDialog;
 
 /**
@@ -27,6 +28,16 @@ public abstract class DialogBuilder {
      * @param b
      */
     public abstract DialogBuilder setCanceledOnTouchOutside(boolean b);
+
+    /**
+     * 取消点击事件回调
+     *
+     * @param action
+     * @return
+     */
+    public abstract DialogBuilder setNegativeAction(String txt, ActionListener action);
+
+    public abstract DialogBuilder setPositiveAction(String txt, ActionListener actionListener);
 
     /**
      * 生成一个dialog，但不显示

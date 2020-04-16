@@ -2,6 +2,7 @@ package com.cyq.ui.dialog.builder;
 
 import android.content.Context;
 
+import com.cyq.ui.dialog.action.ActionListener;
 import com.cyq.ui.dialog.dialog.BaseDialog;
 import com.cyq.ui.dialog.dialog.MessageDialog;
 
@@ -37,6 +38,19 @@ public class MessageDialogBuilder extends DialogBuilder {
         mDialog.setCanceledOnTouchOutside(b);
         return this;
     }
+
+    @Override
+    public DialogBuilder setNegativeAction(String txt, ActionListener action) {
+        mDialog.setNegativeTxt(txt,action);
+        return this;
+    }
+
+    @Override
+    public DialogBuilder setPositiveAction(String txt, ActionListener action) {
+        mDialog.setPositiveTxt(txt,action);
+        return this;
+    }
+
 
     @Override
     public BaseDialog create() {
