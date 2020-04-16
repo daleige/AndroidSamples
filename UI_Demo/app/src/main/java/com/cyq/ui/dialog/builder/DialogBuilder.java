@@ -57,5 +57,5 @@ public abstract class DialogBuilder {
     /**
      * 生成一个Dialog，并显示
      */
-    public abstract void show();
+    public abstract BaseDialog show();
 }

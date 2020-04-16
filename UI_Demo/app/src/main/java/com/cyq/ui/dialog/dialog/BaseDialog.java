@@ -17,11 +17,10 @@ import com.cyq.ui.dialog.builder.DialogBuilder;
  * desc   : 基类Activity
  */
 public abstract class BaseDialog extends Dialog {
-    private final View view;
 
     public BaseDialog(Context context) {
         super(context, R.style.BaseDialog);
-        view = LayoutInflater.from(context).inflate(getLayoutId(), null, false);
+        View view = LayoutInflater.from(context).inflate(getLayoutId(), null, false);
         setContentView(view);
         init(context, view);
     }

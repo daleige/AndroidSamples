@@ -13,43 +13,50 @@
         android:layout_marginEnd="30dp"
         android:text="退出后台后是否删除用户信息？"
         android:textColor="@android:color/black"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tv_message_content"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_message_title"
         android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="30dp"
+        android:layout_marginBottom="20dp"
         android:text="确定要退出？"
         android:textSize="18sp" />
 
-
-    <TextView
-        android:id="@+id/tv_sure"
+    <LinearLayout
+        android:id="@+id/ll_message_action_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_message_content"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="20dp"
-        android:padding="10dp"
-        android:text="确定"
-        android:textColor="@color/colorPrimary" />
+        android:orientation="horizontal"
+        android:visibility="gone">
 
-    <TextView
-        android:id="@+id/tv_cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_message_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="20dp"
-        android:layout_toStartOf="@+id/tv_sure"
-        android:padding="10dp"
-        android:text="取消"
-        android:textColor="@color/colorPrimary" />
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="20dp"
+            android:padding="10dp"
+            android:text="取消"
+            android:visibility="gone"
+            android:textColor="@color/colorPrimary" />
+
+        <TextView
+            android:id="@+id/tv_sure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="20dp"
+            android:padding="10dp"
+            android:text="确定"
+            android:visibility="gone"
+            android:textColor="@color/colorPrimary" />
+    </LinearLayout>
 </RelativeLayout>

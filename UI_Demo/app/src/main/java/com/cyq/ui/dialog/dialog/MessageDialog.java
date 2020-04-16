@@ -3,6 +3,7 @@ package com.cyq.ui.dialog.dialog;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cyq.ui.R;
@@ -16,6 +17,7 @@ import org.w3c.dom.Text;
  * desc   : 普通消息类型的Dialog
  */
 public class MessageDialog extends BaseDialog {
+    private LinearLayout mllActionContainer;
     private TextView mTvMessageTitle;
     private TextView mTvMessageContent;
     private TextView mTvSure;
@@ -32,6 +34,7 @@ public class MessageDialog extends BaseDialog {
 
     @Override
     protected void init(Context context, View view) {
+        mllActionContainer = findViewById(R.id.ll_message_action_container);
         mTvMessageTitle = view.findViewById(R.id.tv_message_title);
         mTvMessageContent = view.findViewById(R.id.tv_message_content);
         mTvSure = findViewById(R.id.tv_sure);
@@ -41,6 +44,7 @@ public class MessageDialog extends BaseDialog {
     @Override
     public void setTitle(String title) {
         if (!TextUtils.isEmpty(title)) {
+            mTvMessageTitle.setVisibility(View.VISIBLE);
             mTvMessageTitle.setText(title);
         }
     }
@@ -57,6 +61,8 @@ public class MessageDialog extends BaseDialog {
         if (TextUtils.isEmpty(txt)) {
             return;
         }
+        mllActionContainer.setVisibility(View.VISIBLE);
+        mTvCancel.setVisibility(View.VISIBLE);
         mTvCancel.setText(txt);
         if (action == null) {
             return;
@@ -74,6 +80,8 @@ public class MessageDialog extends BaseDialog {
         if (TextUtils.isEmpty(txt)) {
             return;
         }
+        mllActionContainer.setVisibility(View.VISIBLE);
+        mTvSure.setVisibility(View.VISIBLE);
         mTvSure.setText(txt);
         if (action == null) {
             return;

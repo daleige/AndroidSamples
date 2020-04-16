@@ -41,13 +41,13 @@ public class MessageDialogBuilder extends DialogBuilder {
 
     @Override
     public DialogBuilder setNegativeAction(String txt, ActionListener action) {
-        mDialog.setNegativeTxt(txt,action);
+        mDialog.setNegativeTxt(txt, action);
         return this;
     }
 
     @Override
     public DialogBuilder setPositiveAction(String txt, ActionListener action) {
-        mDialog.setPositiveTxt(txt,action);
+        mDialog.setPositiveTxt(txt, action);
         return this;
     }
 
@@ -64,9 +64,10 @@ public class MessageDialogBuilder extends DialogBuilder {
     }
 
     @Override
-    public void show() {
+    public BaseDialog show() {
         if (mDialog != null && !mDialog.isShowing()) {
             mDialog.show();
         }
+        return mDialog;
     }
 }
