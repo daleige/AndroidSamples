@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.cyq.ui.dialog.action.ActionListener;
 import com.cyq.ui.dialog.dialog.BaseDialog;
-import com.cyq.ui.dialog.dialog.MessageDialog;
 
 /**
  * @author : ChenYangQi
