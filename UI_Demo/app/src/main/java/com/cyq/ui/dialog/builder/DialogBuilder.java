@@ -2,14 +2,12 @@ package com.cyq.ui.dialog.builder;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 
-import com.cyq.ui.R;
 import com.cyq.ui.dialog.action.ActionListener;
 import com.cyq.ui.dialog.dialog.MyDialog;
 import com.cyq.ui.dialog.util.DialogView;
@@ -20,15 +18,15 @@ import com.cyq.ui.dialog.util.DialogView;
  * desc   : 各种类型的 Builder都应该继承DialogBuilder，该类定义一些通用的方法和规范
  */
 public abstract class DialogBuilder<T extends DialogBuilder> {
-    protected Context mContext;
-    protected MyDialog mDialog;
-    protected String mTitleStr;
-    protected String mSureStr;
-    protected String mCancelStr;
+    private Context mContext;
+    private MyDialog mDialog;
+    private String mTitleStr;
+    private String mSureStr;
+    private String mCancelStr;
     protected String mContentStr;
-    protected ActionListener mSureActionListener;
-    protected ActionListener mCancelActionListener;
-    protected boolean mCancelOnTouchOutside = true;
+    private ActionListener mSureActionListener;
+    private ActionListener mCancelActionListener;
+    private boolean mCancelOnTouchOutside = true;
 
     public DialogBuilder(Context mContext) {
         this.mContext = mContext;
@@ -52,7 +50,6 @@ public abstract class DialogBuilder<T extends DialogBuilder> {
         this.mContentStr = message;
         return (T) this;
     }
-
 
 
     public T setCanceledOnTouchOutside(boolean b) {
