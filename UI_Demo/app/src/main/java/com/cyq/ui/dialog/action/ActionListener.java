@@ -1,6 +1,6 @@
 package com.cyq.ui.dialog.action;
 
-import com.cyq.ui.dialog.dialog.BaseDialog;
+import com.cyq.ui.dialog.dialog.MyDialog;
 
 /**
  * @author : ChenYangQi
@@ -15,5 +15,5 @@ public interface ActionListener {
      * @param dialog dialog
      * @param index 点击的位置下标，
      */
-    public void onClick(BaseDialog dialog, int index);
+    public void onClick(MyDialog dialog, int index);
 }
