@@ -1,17 +1,18 @@
 package com.cyq.animdemo.transition;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.transition.ChangeBounds;
 import android.transition.Slide;
 import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
+import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityOptionsCompat;
 
 import com.cyq.animdemo.R;
 
@@ -20,13 +21,17 @@ import static com.cyq.animdemo.transition.utils.Constant.DURATION;
 public class OneActivity extends AppCompatActivity implements View.OnClickListener {
     private Button mBack;
     private Button mNext;
+    private View rootView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        //getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_one);
-        setupWindowAnimations();
+        rootView = findViewById(R.id.root_view);
+
+
+        //setupWindowAnimations();
         mBack = findViewById(R.id.btn_back);
         mNext = findViewById(R.id.btn_next);
         mBack.setOnClickListener(this);
@@ -54,7 +59,7 @@ public class OneActivity extends AppCompatActivity implements View.OnClickListen
         returnT.setSlideEdge(Gravity.RIGHT);
         returnT.setInterpolator(new DecelerateInterpolator());
 
-        ChangeBounds changeBounds= new ChangeBounds();
+        ChangeBounds changeBounds = new ChangeBounds();
         changeBounds.setDuration(DURATION);
         changeBounds.setResizeClip(true);
 
@@ -73,10 +78,33 @@ public class OneActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case R.id.btn_next:
                 Intent i = new Intent(this, TowActivity.class);
-                startActivity(i, ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle());
+//                startActivity(i, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+                startActivity(i);
+                rootView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        rootView.getViewTreeObserver().removeOnPreDrawListener(this);
+                        startRootAnimation();
+                        return true;
+                    }
+                });
+
                 break;
             default:
 
         }
+    }
+
+    private void startRootAnimation() {
+//        rootView.setScaleY(0.1f);
+//        rootView.setPivotY(rootView.getY() + rootView.getHeight() / 2);
+        Animator animator = ObjectAnimator.ofFloat(rootView, "translationY", 0f, 720f);
+        animator.setDuration(1000);
+        animator.start();
+//        rootView.animate()
+//                .translationY()
+//                .setDuration(1000)
+//                .setInterpolator(new AccelerateInterpolator())
+//                .start();
     }
 }
