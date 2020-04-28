@@ -1,7 +1,5 @@
 package com.cyq.animdemo.transition;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +8,8 @@ import android.transition.Slide;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 
@@ -24,6 +23,8 @@ public class TowActivity extends AppCompatActivity implements View.OnClickListen
     private Button mBack;
     private Button mNext;
     private View rootView;
+
+    private Animation exitAnimation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class TowActivity extends AppCompatActivity implements View.OnClickListen
             });
         }
 
+        exitAnimation = AnimationUtils.loadAnimation(this, R.anim.air_fry_transition_close_exit);
 
         //setupWindowAnimations();
         mBack = findViewById(R.id.btn_back);
@@ -53,16 +55,9 @@ public class TowActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void startRootAnimation() {
-//        rootView.setScaleY(0.1f);
-//        rootView.setPivotY(rootView.getY() + rootView.getHeight() / 2);
-        Animator animator= ObjectAnimator.ofFloat(rootView,"translationY",720f,0f);
-        animator.setDuration(1000);
-        animator.start();
-//        rootView.animate()
-//                .translationY()
-//                .setDuration(1000)
-//                .setInterpolator(new AccelerateInterpolator())
-//                .start();
+        Animation animation = AnimationUtils.loadAnimation(this,
+                R.anim.air_fry_transition_open_enter);
+        rootView.startAnimation(animation);
     }
 
     private void setupWindowAnimations() {
@@ -101,8 +96,9 @@ public class TowActivity extends AppCompatActivity implements View.OnClickListen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_back:
-                //finishAfterTransition();
+                setResult(RESULT_OK);
                 finish();
+                rootView.startAnimation(exitAnimation);
                 break;
             case R.id.btn_next:
 

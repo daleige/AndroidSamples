@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--    二级页退回首页，二级页的消失动画-->
+    <alpha
+        android:fillAfter="true"
+        android:duration="2000"
+        android:fromAlpha="1.0"
+        android:interpolator="@android:anim/accelerate_interpolator"
+        android:toAlpha="0.0" />
+
+    <scale
+        android:fillAfter="true"
+        android:duration="2000"
+        android:fromXScale="1.0"
+        android:fromYScale="1.0"
+        android:pivotY="50%"
+        android:pivotX="50%"
+        android:interpolator="@android:anim/accelerate_interpolator"
+        android:toXScale="0.8"
+        android:toYScale="0.8" />
+</set>

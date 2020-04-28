@@ -1,17 +1,18 @@
 package com.cyq.animdemo.transition;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.transition.ChangeBounds;
 import android.transition.Slide;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cyq.animdemo.R;
@@ -22,6 +23,8 @@ public class OneActivity extends AppCompatActivity implements View.OnClickListen
     private Button mBack;
     private Button mNext;
     private View rootView;
+    private Animation exitAnimation;
+    private Animation animation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +33,12 @@ public class OneActivity extends AppCompatActivity implements View.OnClickListen
         setContentView(R.layout.activity_one);
         rootView = findViewById(R.id.root_view);
 
-
         //setupWindowAnimations();
         mBack = findViewById(R.id.btn_back);
         mNext = findViewById(R.id.btn_next);
         mBack.setOnClickListener(this);
         mNext.setOnClickListener(this);
+        exitAnimation = AnimationUtils.loadAnimation(this, R.anim.air_fry_transition_close_enter);
     }
 
     private void setupWindowAnimations() {
@@ -74,21 +77,11 @@ public class OneActivity extends AppCompatActivity implements View.OnClickListen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_back:
-                finishAfterTransition();
                 break;
             case R.id.btn_next:
                 Intent i = new Intent(this, TowActivity.class);
-//                startActivity(i, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-                startActivity(i);
-                rootView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                    @Override
-                    public boolean onPreDraw() {
-                        rootView.getViewTreeObserver().removeOnPreDrawListener(this);
-                        startRootAnimation();
-                        return true;
-                    }
-                });
-
+                startActivityForResult(i,101);
+                startRootAnimation();
                 break;
             default:
 
@@ -96,15 +89,14 @@ public class OneActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void startRootAnimation() {
-//        rootView.setScaleY(0.1f);
-//        rootView.setPivotY(rootView.getY() + rootView.getHeight() / 2);
-        Animator animator = ObjectAnimator.ofFloat(rootView, "translationY", 0f, 720f);
-        animator.setDuration(1000);
-        animator.start();
-//        rootView.animate()
-//                .translationY()
-//                .setDuration(1000)
-//                .setInterpolator(new AccelerateInterpolator())
-//                .start();
+        animation = AnimationUtils.loadAnimation(this, R.anim.air_fry_transition_open_exit);
+        rootView.startAnimation(animation);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.e("test","收回返回.....");
+        rootView.startAnimation(exitAnimation);
     }
 }

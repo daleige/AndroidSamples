@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 空气炸返回首页，首页入场动画-->
+    <scale
+        android:duration="2000"
+        android:fromXScale="0.8"
+        android:fromYScale="0.8"
+        android:interpolator="@android:anim/accelerate_interpolator"
+        android:pivotX="50%"
+        android:fillAfter="true"
+        android:pivotY="50%"
+        android:startOffset="200"
+        android:toXScale="1.0"
+        android:toYScale="1.0" />
+
+    <alpha
+        android:fillAfter="true"
+        android:duration="2000"
+        android:fromAlpha="0.0"
+        android:interpolator="@android:anim/accelerate_interpolator"
+        android:startOffset="200"
+        android:toAlpha="1.0" />
+</set>
