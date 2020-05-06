@@ -28,19 +28,22 @@ public class ThermometerView extends View {
     //粒子圆环的宽度
     private int mCircleWidth;
     //粒子总个数
-    private int pointCount = 30;
+    private int pointCount = 50;
     //粒子移动速度
     private double pointMoveSpeed = 0.5;
     //粒子列表
-    private List<Point> mPointList = new ArrayList<>(pointCount);
+    private List<AnimPoint> mAnimPointList = new ArrayList<>(pointCount);
     //粒子外层圆环原点坐标和半径长度
     private int centerX, centerY, radius;
     //粒子外层圆环的画笔
     private Paint mCirclePaint;
     //粒子画笔
     private Paint mPointPaint;
+    private Paint mLinePaint;
     //白色
     private int whiteColor = Color.parseColor("#FFFFFFFF");
+    private int redColor = Color.parseColor("#f44336");
+    private int yellowColor = Color.parseColor("#4caf50");
 
     public ThermometerView(Context context) {
         this(context, null);
@@ -71,34 +74,47 @@ public class ThermometerView extends View {
         mCirclePaint.setStrokeWidth(mCircleWidth);
 
         mPointPaint = new Paint();
-        mPointPaint.setColor(whiteColor);
+        mPointPaint.setColor(redColor);
         mPointPaint.setAntiAlias(true);
         mPointPaint.setStyle(Paint.Style.FILL);
 
+        mLinePaint = new Paint();
+        mLinePaint.setColor(yellowColor);
+        mLinePaint.setAntiAlias(true);
+        mLinePaint.setStrokeWidth(1);
+        mLinePaint.setStyle(Paint.Style.FILL);
+
         mRandom = new Random();
 
-        mPointList.clear();
-        Point point = new Point();
-        point.setAlpha(1);
+        mAnimPointList.clear();
+        AnimPoint animPoint = new AnimPoint();
+        animPoint.setAlpha(1);
         for (int i = 0; i < pointCount; i++) {
             //通过clone创建对象，避免重复创建
-            Point clonePoint = point.clone();
-            clonePoint.setRadius(10);
-            clonePoint.setCenterX(mRandom.nextInt(width));
-            clonePoint.setCenterY(height / 2);
-            mPointList.add(clonePoint);
+            AnimPoint cloneAnimPoint = animPoint.clone();
+            cloneAnimPoint.setRadius(10);
+            cloneAnimPoint.setAnger(Math.toRadians(mRandom.nextInt(360)));
+            cloneAnimPoint.setCenterX((int) ((radius * Math.sin(cloneAnimPoint.getAnger())) + radius));
+            cloneAnimPoint.setCenterY((int) ((radius * Math.cos(cloneAnimPoint.getAnger())) + radius));
+            mAnimPointList.add(cloneAnimPoint);
         }
 
         //画运动粒子
-        ValueAnimator animator = ValueAnimator.ofFloat(1F, 1000F);
-        animator.setDuration(10000);
+        ValueAnimator animator = ValueAnimator.ofFloat(0F, 1F);
+        animator.setDuration(3000);
+        animator.setRepeatCount(ValueAnimator.INFINITE);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
+                float value = (float) animation.getAnimatedValue();
                 for (int i = 0; i < pointCount; i++) {
-                    pointY = (int) (((float) animation.getAnimatedValue() / 1000F) * height);
-                    mPointList.get(i).setCenterY(pointY);
+                    pointX =
+                            (int) ((radius * (1F - value) * Math.sin(mAnimPointList.get(i).getAnger())) + radius);
+                    pointY =
+                            (int) ((radius * (1F - value) * Math.cos(mAnimPointList.get(i).getAnger())) + radius);
+                    mAnimPointList.get(i).setCenterX(pointX);
+                    mAnimPointList.get(i).setCenterY(pointY);
                 }
                 //更新坐标数据后，重绘粒子的坐标位置
                 invalidate();
@@ -116,12 +132,17 @@ public class ThermometerView extends View {
     @Override
     protected void onDraw(final Canvas canvas) {
         super.onDraw(canvas);
+        //画动画粒子
+        for (AnimPoint animPoint : mAnimPointList) {
+            canvas.drawCircle(animPoint.getCenterX(), animPoint.getCenterY(),
+                    animPoint.getRadius(), mPointPaint);
+        }
         //画外层圆环
         canvas.drawCircle(centerX, centerY, radius, mCirclePaint);
-        //话动画粒子
-        for (Point point : mPointList) {
-            canvas.drawCircle(point.getCenterX(), point.getCenterY(), point.getRadius(), mPointPaint);
-        }
+
+        //画测试坐标线
+        canvas.drawLine(radius, 0, radius, height, mLinePaint);
+        canvas.drawLine(0, radius, width, radius, mLinePaint);
     }
 
     private int pointX, pointY, pointRadius;
