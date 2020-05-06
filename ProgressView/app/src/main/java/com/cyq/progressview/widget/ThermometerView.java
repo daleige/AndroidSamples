@@ -28,7 +28,7 @@ public class ThermometerView extends View {
     //粒子圆环的宽度
     private int mCircleWidth;
     //粒子总个数
-    private int pointCount = 50;
+    private int pointCount = 30;
     //粒子移动速度
     private double pointMoveSpeed = 0.5;
     //粒子列表
@@ -92,7 +92,7 @@ public class ThermometerView extends View {
         for (int i = 0; i < pointCount; i++) {
             //通过clone创建对象，避免重复创建
             AnimPoint cloneAnimPoint = animPoint.clone();
-            cloneAnimPoint.setRadius(10);
+            cloneAnimPoint.setRadius(mRandom.nextInt(5) + 5);
             cloneAnimPoint.setAnger(Math.toRadians(mRandom.nextInt(360)));
             cloneAnimPoint.setCenterX((int) ((radius * Math.sin(cloneAnimPoint.getAnger())) + radius));
             cloneAnimPoint.setCenterY((int) ((radius * Math.cos(cloneAnimPoint.getAnger())) + radius));
