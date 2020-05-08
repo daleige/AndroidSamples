@@ -9,17 +9,24 @@
     tools:context=".IndexActivity">
 
     <Button
-        android:id="@+id/btn_layout_animation"
-        android:layout_margin="20dp"
+        android:id="@+id/mLayoutAnimation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="layoutAnimation" />
+        android:text="layoutAnimation"
+        android:textAllCaps="false" />
 
     <Button
-        android:id="@+id/btn_transition"
-        android:layout_margin="20dp"
+        android:id="@+id/mTransition"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Transition" />
+        android:text="Transition"
+        android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/mBtnPathMeasure"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PathMeasure"
+        android:textAllCaps="false" />
 
 </LinearLayout>

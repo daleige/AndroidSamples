@@ -28,6 +28,9 @@ public class AnimPoint implements Cloneable {
      */
     private double anger;
 
+
+
+
     public double getAnger() {
         return anger;
     }

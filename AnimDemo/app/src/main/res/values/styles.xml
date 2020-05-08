@@ -12,15 +12,15 @@
 <!--        <item name="android:windowAllowEnterTransitionOverlap">true</item>-->
 <!--        <item name="android:windowAllowReturnTransitionOverlap">true</item>-->
 
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowAnimationStyle">@null</item>
+<!--        <item name="android:windowBackground">@android:color/transparent</item>-->
+<!--        <item name="android:windowIsTranslucent">true</item>-->
+<!--        <item name="android:windowAnimationStyle">@null</item>-->
     </style>
 
     <style name="AppTheme.TransparentActivity" parent="AppTheme">
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowAnimationStyle">@null</item>
+<!--        <item name="android:windowBackground">@android:color/transparent</item>-->
+<!--        <item name="android:windowIsTranslucent">true</item>-->
+<!--        <item name="android:windowAnimationStyle">@null</item>-->
     </style>
 
 </resources>
