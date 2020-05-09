@@ -19,6 +19,10 @@ class PathMeasureView : View {
     private var mPathMeasure: PathMeasure? = null
     private var mLinePaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var mPointPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var mCurrentPosition = FloatArray(2)
+    private var mTanArr = FloatArray(2)
+    private lateinit var mAnimator: ValueAnimator
+    private var mValue: Float = 0.0f
 
     constructor(context: Context) : super(context)
 
@@ -47,9 +51,6 @@ class PathMeasureView : View {
         startAnim()
     }
 
-    var mCurrentPosition = FloatArray(2)
-    var mTanArr = FloatArray(2)
-
     private fun startAnim() {
         //绘制三阶布尔塞尔曲线
         mPath.reset()
@@ -57,14 +58,14 @@ class PathMeasureView : View {
         mPath.cubicTo(220F, 750F, 580F, 450F, 700F, 600F)
 
         mPathMeasure = PathMeasure(mPath, false)
-        val mAnimator = ValueAnimator.ofFloat(0F, mPathMeasure!!.length)
+        mAnimator = ValueAnimator.ofFloat(0F, mPathMeasure!!.length)
         mAnimator.duration = 2000
         mAnimator.repeatMode = ValueAnimator.REVERSE
         mAnimator.repeatCount = ValueAnimator.INFINITE
         mAnimator.interpolator = AccelerateDecelerateInterpolator()
         mAnimator.addUpdateListener { animation ->
-            val value: Float = animation?.animatedValue as Float
-            mPathMeasure!!.getPosTan(value, mCurrentPosition, mTanArr)
+            mValue = animation?.animatedValue as Float
+            mPathMeasure!!.getPosTan(mValue, mCurrentPosition, mTanArr)
             invalidate()
         }
         mAnimator.start()
