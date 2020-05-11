@@ -73,10 +73,7 @@ class PathMeasureView : View {
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-
         canvas?.drawPath(mPath, mLinePaint)
-
         canvas?.drawPoint(mCurrentPosition[0], mCurrentPosition[1], mPointPaint)
-
     }
 }

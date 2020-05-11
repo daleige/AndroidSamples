@@ -1,5 +1,7 @@
 package com.cyq.progressview.widget;
 
+import android.graphics.Path;
+
 /**
  * @author : ChenYangQi
  * date   : 2020/5/6 15:47
@@ -28,8 +30,22 @@ public class AnimPoint implements Cloneable {
      */
     private double anger;
 
+    private Path path;
+
+    /**
+     * 随机为每个动画粒子创建一个Path，保存它的运动路劲
+     *
+     * @param path
+     */
+    public void initPath(Path path) {
 
 
+        this.path = path;
+    }
+
+    public Path getPath() {
+        return path;
+    }
 
     public double getAnger() {
         return anger;
