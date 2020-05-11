@@ -3,6 +3,7 @@ package com.cyq.animdemo.LayoutAnimation;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Path;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         linearLayout = findViewById(R.id.ll_container);
         inController = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_open_enter);
         backController = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_close_enter);
+
     }
 
     @Override

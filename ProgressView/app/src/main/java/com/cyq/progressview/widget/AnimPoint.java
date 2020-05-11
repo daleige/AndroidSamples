@@ -1,6 +1,6 @@
 package com.cyq.progressview.widget;
 
-import android.graphics.Path;
+import java.util.Random;
 
 /**
  * @author : ChenYangQi
@@ -11,15 +11,15 @@ public class AnimPoint implements Cloneable {
     /**
      * 粒子原点x坐标
      */
-    private int centerX;
+    private float mX;
     /**
      * 粒子原点y坐标
      */
-    private int centerY;
+    private float mY;
     /**
      * 粒子半径
      */
-    private int radius;
+    private float radius;
     /**
      * 透明度 0.00-1.00 之间
      */
@@ -30,21 +30,23 @@ public class AnimPoint implements Cloneable {
      */
     private double anger;
 
-    private Path path;
+    private final int liveTime = 3;
+    private float velocity = 20;
+    private Random mRandom = new Random();
 
-    /**
-     * 随机为每个动画粒子创建一个Path，保存它的运动路劲
-     *
-     * @param path
-     */
-    public void initPath(Path path) {
-
-
-        this.path = path;
+    public void init() {
+        anger = Math.toRadians(mRandom.nextInt(360));
+        mX = (float) (radius * Math.cos(anger));
+        mY = (float) (radius * Math.sin(anger));
     }
 
-    public Path getPath() {
-        return path;
+    public void updatePoint() {
+        mX = (float) (mX - velocity * Math.cos(anger));
+        mY = (float) (mY - velocity * Math.sin(anger));
+        //如果到了最大值 则重新给运动粒子一个轨迹属性
+        if (radius * Math.sin(anger) >= mY) {
+            init();
+        }
     }
 
     public double getAnger() {
@@ -55,27 +57,11 @@ public class AnimPoint implements Cloneable {
         this.anger = anger;
     }
 
-    public int getCenterX() {
-        return centerX;
-    }
-
-    public void setCenterX(int centerX) {
-        this.centerX = centerX;
-    }
-
-    public int getCenterY() {
-        return centerY;
-    }
-
-    public void setCenterY(int centerY) {
-        this.centerY = centerY;
-    }
-
-    public int getRadius() {
+    public float getRadius() {
         return radius;
     }
 
-    public void setRadius(int radius) {
+    public void setRadius(float radius) {
         this.radius = radius;
     }
 
@@ -85,6 +71,22 @@ public class AnimPoint implements Cloneable {
 
     public void setAlpha(float alpha) {
         this.alpha = alpha;
+    }
+
+    public float getmX() {
+        return mX;
+    }
+
+    public void setmX(float mX) {
+        this.mX = mX;
+    }
+
+    public float getmY() {
+        return mY;
+    }
+
+    public void setmY(float mY) {
+        this.mY = mY;
     }
 
     @Override

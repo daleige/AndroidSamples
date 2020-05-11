@@ -89,13 +89,14 @@ public class ThermometerView extends View {
         mAnimPointList.clear();
         AnimPoint animPoint = new AnimPoint();
         animPoint.setAlpha(1);
+
         for (int i = 0; i < pointCount; i++) {
             //通过clone创建对象，避免重复创建
             AnimPoint cloneAnimPoint = animPoint.clone();
             cloneAnimPoint.setRadius(mRandom.nextInt(5) + 5);
             cloneAnimPoint.setAnger(Math.toRadians(mRandom.nextInt(360)));
-            cloneAnimPoint.setCenterX((int) ((radius * Math.sin(cloneAnimPoint.getAnger())) + radius));
-            cloneAnimPoint.setCenterY((int) ((radius * Math.cos(cloneAnimPoint.getAnger())) + radius));
+            cloneAnimPoint.setmX((int) ((radius * Math.sin(cloneAnimPoint.getAnger())) + radius));
+            cloneAnimPoint.setmY((int) ((radius * Math.cos(cloneAnimPoint.getAnger())) + radius));
             mAnimPointList.add(cloneAnimPoint);
         }
 
@@ -113,8 +114,8 @@ public class ThermometerView extends View {
                             (int) ((radius * (1F - value) * Math.sin(mAnimPointList.get(i).getAnger())) + radius);
                     pointY =
                             (int) ((radius * (1F - value) * Math.cos(mAnimPointList.get(i).getAnger())) + radius);
-                    mAnimPointList.get(i).setCenterX(pointX);
-                    mAnimPointList.get(i).setCenterY(pointY);
+                    mAnimPointList.get(i).setmX(pointX);
+                    mAnimPointList.get(i).setmY(pointY);
                 }
                 //更新坐标数据后，重绘粒子的坐标位置
                 invalidate();
@@ -134,7 +135,7 @@ public class ThermometerView extends View {
         super.onDraw(canvas);
         //画动画粒子
         for (AnimPoint animPoint : mAnimPointList) {
-            canvas.drawCircle(animPoint.getCenterX(), animPoint.getCenterY(),
+            canvas.drawCircle(animPoint.getmX(), animPoint.getmY(),
                     animPoint.getRadius(), mPointPaint);
         }
         //画外层圆环
