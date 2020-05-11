@@ -1,5 +1,7 @@
 package com.cyq.progressview.widget;
 
+import android.util.Log;
+
 import java.util.Random;
 
 /**
@@ -29,23 +31,26 @@ public class AnimPoint implements Cloneable {
      * 粒子初始位置的角度
      */
     private double anger;
-
     private final int liveTime = 3;
-    private float velocity = 20;
-    private Random mRandom = new Random();
+    private float distance = 2;
+    private float velocity;
+    private int num = 0;
 
-    public void init() {
-        anger = Math.toRadians(mRandom.nextInt(360));
+    public void init(Random random) {
+        anger = Math.toRadians(random.nextInt(360));
+        velocity = random.nextFloat();
         mX = (float) (radius * Math.cos(anger));
         mY = (float) (radius * Math.sin(anger));
     }
 
-    public void updatePoint() {
-        mX = (float) (mX - velocity * Math.cos(anger));
-        mY = (float) (mY - velocity * Math.sin(anger));
+    public void updatePoint(Random random) {
+        mX = (float) (mX - distance * Math.cos(anger) * velocity);
+        mY = (float) (mY - distance * Math.sin(anger) * velocity);
+        num++;
         //如果到了最大值 则重新给运动粒子一个轨迹属性
-        if (radius * Math.sin(anger) >= mY) {
-            init();
+        if (num>100) {
+            num = 0;
+            init(random);
         }
     }
 
