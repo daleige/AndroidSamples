@@ -17,21 +17,21 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/btn_shadow_layout"
+                android:id="@+id/mBtnShadowLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="阴影效果ShadeLayout"
                 android:textAllCaps="false" />
 
             <Button
-                android:id="@+id/btn_draw_text"
+                android:id="@+id/mBtnDrawText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="drawText获取基线方法封装"
                 android:textAllCaps="false" />
 
             <Button
-                android:id="@+id/btn_paint_view"
+                android:id="@+id/mBtnPaintView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:shadowRadius="5"
@@ -39,7 +39,7 @@
                 android:textAllCaps="false" />
 
             <Button
-                android:id="@+id/btn_flow_layout"
+                android:id="@+id/mBtnFlowLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:shadowRadius="5"
@@ -47,11 +47,19 @@
                 android:textAllCaps="false" />
 
             <Button
-                android:id="@+id/btn_nine_layout"
+                android:id="@+id/mBtnNineLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:shadowRadius="5"
                 android:text="自定义9图控件"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/mBtnBlue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:shadowRadius="5"
+                android:text="高斯模糊场景"
                 android:textAllCaps="false" />
         </LinearLayout>
     </ScrollView>
