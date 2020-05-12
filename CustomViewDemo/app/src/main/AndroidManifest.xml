@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".nineLayout.NineImageLayoutActivity"></activity>
+        <activity android:name=".blur.BlurActivity"></activity>
+        <activity android:name=".nineLayout.NineImageLayoutActivity" />
         <activity android:name=".flowLayout.FlowLayoutActivity" />
         <activity android:name=".paintView.PaintViewActivity" />
         <activity android:name=".drawText.DrawTextActivity" />
