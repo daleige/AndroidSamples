@@ -28,6 +28,8 @@ public class BlurView extends View {
     private float[] stops = {0.0F, 0.8F, 1.0f};
     private Paint mPaint2;
     private Paint mPaint3;
+    private Paint mPaint4;
+    private Paint mPaint5;
 
     public BlurView(Context context) {
         this(context, null);
@@ -58,6 +60,15 @@ public class BlurView extends View {
         mPaint3.setColor(Color.WHITE);
         mPaint3.setStyle(Paint.Style.FILL);
         mPaint3.setShadowLayer(20, 10, 10, Color.WHITE);
+
+        mPaint4 = new Paint();
+        mPaint4.setStrokeWidth(40);
+        mPaint4.setColor(Color.GREEN);
+        mPaint4.setStyle(Paint.Style.STROKE);
+
+        mPaint5 = new Paint();
+        mPaint5.setStyle(Paint.Style.STROKE);
+        mPaint5.setColor(Color.RED);
     }
 
     @Override
@@ -69,5 +80,9 @@ public class BlurView extends View {
         canvas.drawCircle(500, 700, 50, mPaint2);
         //setShadowLayout实现阴影
         canvas.drawCircle(500, 900, 50, mPaint3);
+
+        //测试边框
+        canvas.drawRect(400, 1200, 800, 1500, mPaint4);
+        canvas.drawRect(400, 1200, 800, 1500, mPaint5);
     }
 }
