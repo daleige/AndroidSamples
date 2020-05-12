@@ -47,7 +47,7 @@ public class AnimPoint implements Cloneable {
         mY = (float) (mY - distance * Math.sin(anger) * velocity);
         num++;
         //如果到了最大值 则重新给运动粒子一个轨迹属性
-        if (velocity * num > 170 || num > 800) {
+        if (velocity * num > 190 || num > 800) {
             num = 0;
             init(random, viewRadius);
         }

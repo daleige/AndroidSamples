@@ -64,14 +64,14 @@ public class ThermometerView extends View {
         mContext = getContext();
         width = Utils.dip2px(300, mContext);
         height = Utils.dip2px(300, mContext);
-        mCircleWidth = Utils.dip2px(10, mContext);
+        mCircleWidth = Utils.dip2px(5, mContext);
         centerX = width / 2;
         centerY = width / 2;
         radius = width / 2 - mCircleWidth / 2;
 
         mCirclePaint = new Paint();
         mCirclePaint.setColor(whiteColor);
-        mCirclePaint.setAntiAlias(true);
+//        mCirclePaint.setAntiAlias(true);
         mCirclePaint.setStyle(Paint.Style.STROKE);
         mCirclePaint.setStrokeWidth(mCircleWidth);
 
