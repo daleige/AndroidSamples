@@ -2,6 +2,7 @@ package com.cyq.progressview.widget;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -75,15 +76,9 @@ public class ThermometerView extends View {
         mCirclePaint.setStrokeWidth(mCircleWidth);
 
         mPointPaint = new Paint();
-        mPointPaint.setColor(redColor);
-        mPointPaint.setAntiAlias(true);
+        mPointPaint.setColor(whiteColor);
         mPointPaint.setStyle(Paint.Style.FILL);
-
-//        RadialGradient gradient = new RadialGradient(3, 3,1,
-//                new int[] {0xFFFFFFFF, 0xFFFFFFFF, 0x00FFFFFF},
-//                new float[] {0.0f, 0.8f, 1.0f},
-//                android.graphics.Shader.TileMode.CLAMP);
-        //mPointPaint.setShader(gradient);
+        mPointPaint.setMaskFilter(new BlurMaskFilter(5, BlurMaskFilter.Blur.NORMAL));
 
         mLinePaint = new Paint();
         mLinePaint.setColor(yellowColor);
@@ -98,8 +93,7 @@ public class ThermometerView extends View {
         for (int i = 0; i < pointCount; i++) {
             //通过clone创建对象，避免重复创建
             AnimPoint cloneAnimPoint = animPoint.clone();
-            cloneAnimPoint.setRadius(radius);
-            cloneAnimPoint.init(mRandom);
+            cloneAnimPoint.init(mRandom,radius);
             mPointList.add(cloneAnimPoint);
         }
 
@@ -113,7 +107,7 @@ public class ThermometerView extends View {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 for (AnimPoint point : mPointList) {
-                    point.updatePoint(mRandom);
+                    point.updatePoint(mRandom,radius);
                 }
                 invalidate();
             }
@@ -134,14 +128,14 @@ public class ThermometerView extends View {
         canvas.drawCircle(centerX, centerY, radius, mCirclePaint);
 
         //画测试坐标线
-        canvas.drawLine(radius, 0, radius, height, mLinePaint);
-        canvas.drawLine(0, radius, width, radius, mLinePaint);
+//        canvas.drawLine(radius, 0, radius, height, mLinePaint);
+//        canvas.drawLine(0, radius, width, radius, mLinePaint);
 
         //画动画粒子
         canvas.translate(centerX, centerY);
         for (AnimPoint animPoint : mPointList) {
             canvas.drawCircle(animPoint.getmX(), animPoint.getmY(),
-                    6, mPointPaint);
+                    animPoint.getRadius(), mPointPaint);
         }
 
     }
