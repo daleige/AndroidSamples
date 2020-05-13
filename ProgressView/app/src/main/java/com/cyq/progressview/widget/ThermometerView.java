@@ -29,7 +29,7 @@ public class ThermometerView extends View {
     //控件宽高
     private int width, height;
     //粒子圆环的宽度
-    private int mCircleWidth = 30;
+    private final int mCircleWidth = 30;
     //粒子总个数
     private int pointCount = 100;
     //粒子列表
@@ -77,7 +77,6 @@ public class ThermometerView extends View {
         mContext = getContext();
         width = Utils.dip2px(300, mContext);
         height = Utils.dip2px(300, mContext);
-        mCircleWidth = Utils.dip2px(5, mContext);
         centerX = width / 2;
         centerY = width / 2;
         radius = width / 2 - mCircleWidth / 2;
@@ -85,7 +84,7 @@ public class ThermometerView extends View {
         mCirclePaint = new Paint();
         mCirclePaint.setColor(endRadialGradientColor);
         mCirclePaint.setStyle(Paint.Style.STROKE);
-        mCirclePaint.setStrokeWidth(40);
+        mCirclePaint.setStrokeWidth(mCircleWidth);
         mCirclePaint.setMaskFilter(new BlurMaskFilter(10, BlurMaskFilter.Blur.SOLID));
 
         mPointPaint = new Paint();
@@ -164,7 +163,8 @@ public class ThermometerView extends View {
 
         //画渐变进度圆
         canvas.drawCircle(0, 0, radius, mSweptPaint);
+
         //渐变进度圆的外层圆环
-        canvas.drawCircle(0, 0, radius-14, mCirclePaint);
+        canvas.drawCircle(0, 0, radius, mCirclePaint);
     }
 }
