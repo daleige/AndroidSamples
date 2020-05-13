@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RadialGradient;
+import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -28,7 +29,7 @@ public class ThermometerView extends View {
     //控件宽高
     private int width, height;
     //粒子圆环的宽度
-    private int mCircleWidth;
+    private int mCircleWidth = 34;
     //粒子总个数
     private int pointCount = 100;
     //粒子列表
@@ -42,8 +43,20 @@ public class ThermometerView extends View {
     private Paint mLinePaint;
     //白色
     private int whiteColor = Color.parseColor("#FFFFFFFF");
+    private int blackColor = Color.parseColor("#FF000000");
     private int redColor = Color.parseColor("#f44336");
     private int yellowColor = Color.parseColor("#4caf50");
+
+
+    private int beginRadialGradientColor = Color.parseColor("#66001BFF");
+    private int endRadialGradientColor = Color.parseColor("#1978FF");
+    private int middleRadialGradientColor = Color.parseColor("#1A001BFF");
+    private int radialCircleColor = Color.parseColor("#FF0066FF");
+    private int[] radialArr = {blackColor, middleRadialGradientColor, beginRadialGradientColor};
+    private float[] radialPositionArr = {0F, 0.7F, 1F};
+
+    private Paint mSweptPaint;
+    private RadialGradient mRadialGradient;
 
     private Random mRandom = new Random();
 
@@ -70,10 +83,9 @@ public class ThermometerView extends View {
         radius = width / 2 - mCircleWidth / 2;
 
         mCirclePaint = new Paint();
-        mCirclePaint.setColor(whiteColor);
-//        mCirclePaint.setAntiAlias(true);
+        mCirclePaint.setColor(endRadialGradientColor);
         mCirclePaint.setStyle(Paint.Style.STROKE);
-        mCirclePaint.setStrokeWidth(mCircleWidth);
+        mCirclePaint.setStrokeWidth(40);
 
         mPointPaint = new Paint();
         mPointPaint.setColor(whiteColor);
@@ -86,6 +98,19 @@ public class ThermometerView extends View {
         mLinePaint.setStrokeWidth(1);
         mLinePaint.setStyle(Paint.Style.FILL);
 
+        mSweptPaint = new Paint();
+        mSweptPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        mSweptPaint.setColor(radialCircleColor);
+        mRadialGradient = new RadialGradient(
+                0,
+                0,
+                radius,
+                radialArr,
+                radialPositionArr,
+                Shader.TileMode.CLAMP);
+        mSweptPaint.setShader(mRadialGradient);
+
+
         mPointList.clear();
         AnimPoint animPoint = new AnimPoint();
         animPoint.setAlpha(1);
@@ -93,7 +118,7 @@ public class ThermometerView extends View {
         for (int i = 0; i < pointCount; i++) {
             //通过clone创建对象，避免重复创建
             AnimPoint cloneAnimPoint = animPoint.clone();
-            cloneAnimPoint.init(mRandom,radius);
+            cloneAnimPoint.init(mRandom, radius);
             mPointList.add(cloneAnimPoint);
         }
 
@@ -107,7 +132,7 @@ public class ThermometerView extends View {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 for (AnimPoint point : mPointList) {
-                    point.updatePoint(mRandom,radius);
+                    point.updatePoint(mRandom, radius);
                 }
                 invalidate();
             }
@@ -124,8 +149,6 @@ public class ThermometerView extends View {
     @Override
     protected void onDraw(final Canvas canvas) {
         super.onDraw(canvas);
-        //画外层圆环
-        canvas.drawCircle(centerX, centerY, radius, mCirclePaint);
 
         //画测试坐标线
 //        canvas.drawLine(radius, 0, radius, height, mLinePaint);
@@ -138,5 +161,9 @@ public class ThermometerView extends View {
                     animPoint.getRadius(), mPointPaint);
         }
 
+        //画渐变进度圆
+        canvas.drawCircle(0, 0, radius, mSweptPaint);
+        //渐变进度圆的外层圆环
+        canvas.drawCircle(0, 0, radius-12, mCirclePaint);
     }
 }
