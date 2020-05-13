@@ -54,7 +54,7 @@ public class BlurView extends View {
         mPaint2 = new Paint();
         mPaint2.setColor(Color.WHITE);
         mPaint2.setStyle(Paint.Style.FILL);
-        mPaint2.setMaskFilter(new BlurMaskFilter(10, BlurMaskFilter.Blur.NORMAL));
+        mPaint2.setMaskFilter(new BlurMaskFilter(25, BlurMaskFilter.Blur.NORMAL));
 
         mPaint3 = new Paint();
         mPaint3.setColor(Color.WHITE);
