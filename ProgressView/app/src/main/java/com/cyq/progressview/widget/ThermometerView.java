@@ -29,7 +29,7 @@ public class ThermometerView extends View {
     //控件宽高
     private int width, height;
     //粒子圆环的宽度
-    private int mCircleWidth = 34;
+    private int mCircleWidth = 30;
     //粒子总个数
     private int pointCount = 100;
     //粒子列表
@@ -53,7 +53,7 @@ public class ThermometerView extends View {
     private int middleRadialGradientColor = Color.parseColor("#1A001BFF");
     private int radialCircleColor = Color.parseColor("#FF0066FF");
     private int[] radialArr = {blackColor, middleRadialGradientColor, beginRadialGradientColor};
-    private float[] radialPositionArr = {0F, 0.7F, 1F};
+    private float[] radialPositionArr = {0F, 0.6F, 1F};
 
     private Paint mSweptPaint;
     private RadialGradient mRadialGradient;
@@ -86,6 +86,7 @@ public class ThermometerView extends View {
         mCirclePaint.setColor(endRadialGradientColor);
         mCirclePaint.setStyle(Paint.Style.STROKE);
         mCirclePaint.setStrokeWidth(40);
+        mCirclePaint.setMaskFilter(new BlurMaskFilter(10, BlurMaskFilter.Blur.SOLID));
 
         mPointPaint = new Paint();
         mPointPaint.setColor(whiteColor);
@@ -164,6 +165,6 @@ public class ThermometerView extends View {
         //画渐变进度圆
         canvas.drawCircle(0, 0, radius, mSweptPaint);
         //渐变进度圆的外层圆环
-        canvas.drawCircle(0, 0, radius-12, mCirclePaint);
+        canvas.drawCircle(0, 0, radius-14, mCirclePaint);
     }
 }
