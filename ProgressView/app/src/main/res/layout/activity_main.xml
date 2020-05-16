@@ -8,6 +8,7 @@
     tools:context=".MainActivity">
 
     <com.cyq.progressview.widget.ThermometerView
+        android:id="@+id/mThermometerView"
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_gravity="center" />

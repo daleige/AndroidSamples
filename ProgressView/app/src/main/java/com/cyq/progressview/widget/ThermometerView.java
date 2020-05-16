@@ -16,6 +16,7 @@ import android.graphics.RadialGradient;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.Xfermode;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -185,7 +186,7 @@ public class ThermometerView extends View {
             }
         });
 
-        ValueAnimator initAnimator = ValueAnimator.ofFloat(0, 1F);
+        final ValueAnimator initAnimator = ValueAnimator.ofFloat(0, 1F);
         initAnimator.setDuration(1000);
         initAnimator.setInterpolator(new AccelerateInterpolator());
         initAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -197,7 +198,7 @@ public class ThermometerView extends View {
                         0,
                         -centerX,
                         0,
-                        centerX,
+                        centerY,
                         backShaderColorArr,
                         backPositionArr,
                         Shader.TileMode.CLAMP);
@@ -219,7 +220,12 @@ public class ThermometerView extends View {
                 pointsAnimator.start();
             }
         });
-        initAnimator.start();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                initAnimator.start();
+            }
+        },1000);
     }
 
     @Override
