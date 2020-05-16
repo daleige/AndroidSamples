@@ -1,10 +1,13 @@
 package com.cyq.progressview.widget;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
@@ -15,6 +18,7 @@ import android.graphics.Shader;
 import android.graphics.Xfermode;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
 
 import androidx.annotation.Nullable;
 
@@ -31,60 +35,51 @@ import java.util.Random;
  */
 public class ThermometerView extends View {
     private Context mContext;
-    /**
-     * 控件宽高
-     */
+    /*控件宽高*/
     private int width, height;
-    /**
-     * 粒子圆环的宽度
-     */
-    private final int mCircleWidth = 30;
-    /**
-     * 粒子总个数
-     */
+    /*粒子圆环的宽度*/
+    private final int mCircleWidth = 40;
+    /*粒子总个数*/
     private int pointCount = 100;
-    /**
-     * 粒子列表
-     */
+    /*粒子列表*/
     private List<AnimPoint> mPointList = new ArrayList<>(pointCount);
-    /**
-     * 粒子外层圆环原点坐标和半径长度
-     */
+    /*粒子外层圆环原点坐标和半径长度*/
     private int centerX, centerY, radius;
-    /**
-     * 粒子外层圆环的画笔
-     */
+    /*粒子外层圆环的画笔*/
     private Paint mCirclePaint;
-    /**
-     * 粒子画笔
-     */
+    /*粒子画笔*/
     private Paint mPointPaint;
-    /**
-     * 圆弧画笔
-     */
+    /*圆弧画笔*/
     private Paint mArcPaint;
-
     private Paint mArcPathPaint;
-
-    /**
-     * 白色
-     */
+    /*底色圆环画笔*/
+    private Paint mBackCirclePaiht;
+    /*开始时底色圆环渐变的画笔*/
+    private Paint mBackShadePaint;
+    /*白色*/
     private int whiteColor = Color.parseColor("#FFFFFFFF");
     private int blackColor = Color.parseColor("#FF000000");
     private int redColor = Color.parseColor("#f44336");
     private int yellowColor = Color.parseColor("#4caf50");
-
     private int beginRadialGradientColor = Color.parseColor("#66001BFF");
     private int endRadialGradientColor = Color.parseColor("#1978FF");
     private int middleRadialGradientColor = Color.parseColor("#1A001BFF");
     private int radialCircleColor = Color.parseColor("#FF0066FF");
+    /*底色圆环的颜色*/
+    private int backCircleColor = Color.parseColor("#290066FF");
+    /*透明颜色*/
+    private int transparentColor = Color.parseColor("#00000000");
+    /*底色圆环初始化动画渐变色*/
+    private int[] backShaderColorArr = {transparentColor, transparentColor, blackColor};
+    private float[] backPositionArr = {0, 0, 1};
+
     private int[] radialArr = {blackColor, middleRadialGradientColor, beginRadialGradientColor};
     private float[] radialPositionArr = {0F, 0.6F, 1F};
-
+    private LinearGradient mBackCircleLinearGradient;
     private Paint mSweptPaint;
     private RadialGradient mRadialGradient;
-
     private Random mRandom = new Random();
+    private RectF mRect;
 
     public ThermometerView(Context context) {
         this(context, null);
@@ -106,17 +101,18 @@ public class ThermometerView extends View {
         centerX = width / 2;
         centerY = width / 2;
         radius = width / 2 - mCircleWidth / 2;
+        mRect = new RectF(-centerX, -centerX, centerX, centerX);
 
         mCirclePaint = new Paint();
         mCirclePaint.setColor(endRadialGradientColor);
         mCirclePaint.setStyle(Paint.Style.STROKE);
         mCirclePaint.setStrokeWidth(mCircleWidth);
-        mCirclePaint.setMaskFilter(new BlurMaskFilter(10, BlurMaskFilter.Blur.SOLID));
+        mCirclePaint.setMaskFilter(new BlurMaskFilter(50, BlurMaskFilter.Blur.SOLID));
 
         mPointPaint = new Paint();
         mPointPaint.setColor(whiteColor);
         mPointPaint.setStyle(Paint.Style.FILL);
-        mPointPaint.setMaskFilter(new BlurMaskFilter(5, BlurMaskFilter.Blur.NORMAL));
+        mPointPaint.setMaskFilter(new BlurMaskFilter(2, BlurMaskFilter.Blur.NORMAL));
 
         mSweptPaint = new Paint();
         mSweptPaint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -136,33 +132,49 @@ public class ThermometerView extends View {
         mArcPaint.setStrokeWidth(20);
 
         mArcPathPaint = new Paint();
-        mArcPathPaint.setStrokeWidth(4);
         mArcPathPaint.setColor(Color.RED);
         mArcPathPaint.setStyle(Paint.Style.STROKE);
         mArcPathPaint.setAntiAlias(true);
-
         mXfermode = new PorterDuffXfermode(PorterDuff.Mode.DST_ATOP);
 
-        mRect = new RectF(-centerX, -centerY, centerX, centerY);
+        mBackCirclePaiht = new Paint();
+        mBackCirclePaiht.setColor(backCircleColor);
+        mBackCirclePaiht.setStrokeWidth(20);
+        mBackCirclePaiht.setAntiAlias(true);
+        mBackCirclePaiht.setStyle(Paint.Style.STROKE);
+
+        mBackShadePaint = new Paint();
+
+        //绘制扇形path
         mArcPath = new Path();
-        mArcPath = getSectorClip(centerX, centerY, radius, 0, 150);
+        final ValueAnimator arcAnimator = ValueAnimator.ofInt(0, 3600);
+        arcAnimator.setDuration(10000);
+        arcAnimator.setRepeatMode(ValueAnimator.RESTART);
+        arcAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        arcAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int value = (int) animation.getAnimatedValue();
+                //获取此时的扇形区域path，用于裁剪动画粒子的canvas
+                getSectorClip(width / 2F, -90, value / 10F);
+            }
+        });
+
         mPointList.clear();
         AnimPoint animPoint = new AnimPoint();
         animPoint.setAlpha(1);
-
         for (int i = 0; i < pointCount; i++) {
             //通过clone创建对象，避免重复创建
             AnimPoint cloneAnimPoint = animPoint.clone();
             cloneAnimPoint.init(mRandom, radius);
             mPointList.add(cloneAnimPoint);
         }
-
         //画运动粒子
-        ValueAnimator animator = ValueAnimator.ofFloat(0F, 1F);
-        animator.setDuration(Integer.MAX_VALUE);
-        animator.setRepeatMode(ValueAnimator.RESTART);
-        animator.setRepeatCount(ValueAnimator.INFINITE);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        final ValueAnimator pointsAnimator = ValueAnimator.ofFloat(0F, 1F);
+        pointsAnimator.setDuration(Integer.MAX_VALUE);
+        pointsAnimator.setRepeatMode(ValueAnimator.RESTART);
+        pointsAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        pointsAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -172,7 +184,42 @@ public class ThermometerView extends View {
                 invalidate();
             }
         });
-        animator.start();
+
+        ValueAnimator initAnimator = ValueAnimator.ofFloat(0, 1F);
+        initAnimator.setDuration(1000);
+        initAnimator.setInterpolator(new AccelerateInterpolator());
+        initAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float value = (float) animation.getAnimatedValue();
+                backPositionArr[1] = value;
+                mBackCircleLinearGradient = new LinearGradient(
+                        0,
+                        -centerX,
+                        0,
+                        centerX,
+                        backShaderColorArr,
+                        backPositionArr,
+                        Shader.TileMode.CLAMP);
+                mBackShadePaint.setShader(mBackCircleLinearGradient);
+                invalidate();
+            }
+        });
+        initAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                arcAnimator.start();
+                pointsAnimator.start();
+            }
+        });
+        initAnimator.start();
     }
 
     @Override
@@ -183,52 +230,41 @@ public class ThermometerView extends View {
 
     private Xfermode mXfermode;
     private Path mArcPath;
-    private RectF mRect;
 
     @Override
     protected void onDraw(final Canvas canvas) {
         super.onDraw(canvas);
+        //step:画底色圆
+        canvas.save();
         canvas.translate(centerX, centerY);
+        canvas.drawCircle(0, 0, radius, mBackCirclePaiht);
+        canvas.drawRect(mRect, mBackShadePaint);
+        canvas.restore();
 
-        //画动画粒子
+        //step2:画扇形区域的运动粒子
+        canvas.save();
+        canvas.translate(centerX, centerY);
+        canvas.clipPath(mArcPath);
         for (AnimPoint animPoint : mPointList) {
             canvas.drawCircle(animPoint.getmX(), animPoint.getmY(),
                     animPoint.getRadius(), mPointPaint);
         }
-        //画渐变进度圆
         canvas.drawCircle(0, 0, radius, mSweptPaint);
-        //渐变进度圆的外层圆环
         canvas.drawCircle(0, 0, radius, mCirclePaint);
-
-        //设置图层混合模式
-        //  mArcPaint.setXfermode(mXfermode);
-//        //画圆弧的角度
-//        int layoutId = canvas.saveLayer(0, 0, width, height, mArcPaint, Canvas.ALL_SAVE_FLAG);
-//        canvas.drawArc(0, 0, radius * 2, radius * 2, 0, 120, true, mArcPaint);
-//        canvas.restoreToCount(layoutId);
-//        canvas.restore();
-
-        canvas.drawPath(mArcPath, mArcPathPaint);
+        canvas.restore();
     }
 
-    private Path getSectorClip(float center_X, float center_Y, float r, float startAngle, float sweepAngle) {
-        Path path = new Path();
-        //下面是获得一个三角形的剪裁区
-        //圆心
-        //起始点角度在圆上对应的横坐标
-        path.moveTo(center_X, center_Y);
-        //起始点角度在圆上对应的纵坐标
-        path.lineTo((float) (center_X + r * Math.cos(startAngle * Math.PI / 180)),
-                (float) (center_Y + r * Math.sin(startAngle * Math.PI / 180)));
-        //终点角度在圆上对应的横坐标
-        path.lineTo((float) (center_X + r * Math.cos(sweepAngle * Math.PI / 180)),
-                (float) (center_Y + r * Math.sin(sweepAngle * Math.PI / 180)));
-        //终点点角度在圆上对应的纵坐标
-        path.close();
-        //设置一个正方形，内切圆
-        RectF rectF = new RectF(center_X - r, center_Y - r, center_X + r, center_Y + r);
-        //下面是获得弧形剪裁区的方法
-        path.addArc(rectF, startAngle, sweepAngle - startAngle);
-        return path;
+    /**
+     * 绘制扇形path
+     *
+     * @param r
+     * @param startAngle
+     * @param sweepAngle
+     */
+    private void getSectorClip(float r, float startAngle, float sweepAngle) {
+        mArcPath.reset();
+        mArcPath.addArc(-r, -r, r, r, startAngle, sweepAngle);
+        mArcPath.lineTo(0, 0);
+        mArcPath.close();
     }
 }
