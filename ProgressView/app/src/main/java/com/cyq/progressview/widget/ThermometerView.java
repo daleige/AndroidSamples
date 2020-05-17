@@ -2,6 +2,7 @@ package com.cyq.progressview.widget;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.BlurMaskFilter;
@@ -10,12 +11,9 @@ import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.graphics.RadialGradient;
 import android.graphics.RectF;
 import android.graphics.Shader;
-import android.graphics.Xfermode;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
@@ -73,8 +71,11 @@ public class ThermometerView extends View {
     /*底色圆环初始化动画渐变色*/
     private int[] backShaderColorArr = {transparentColor, transparentColor, blackColor};
     private float[] backPositionArr = {0, 0, 1};
-
     private int[] radialArr = {blackColor, middleRadialGradientColor, beginRadialGradientColor};
+    private int progressColor1 = Color.parseColor("#A60066FF");
+    private int progressColor2 = Color.parseColor("#FFFFDB00");
+    private int progressColor3 = Color.parseColor("#FFFFA300");
+    private int progressColor4 = Color.parseColor("#FFFF8000");
     private float[] radialPositionArr = {0F, 0.6F, 1F};
     private LinearGradient mBackCircleLinearGradient;
     private Paint mSweptPaint;
@@ -136,7 +137,6 @@ public class ThermometerView extends View {
         mArcPathPaint.setColor(Color.RED);
         mArcPathPaint.setStyle(Paint.Style.STROKE);
         mArcPathPaint.setAntiAlias(true);
-        mXfermode = new PorterDuffXfermode(PorterDuff.Mode.DST_ATOP);
 
         mBackCirclePaiht = new Paint();
         mBackCirclePaiht.setColor(backCircleColor);
@@ -160,6 +160,24 @@ public class ThermometerView extends View {
                 getSectorClip(width / 2F, -90, value / 10F);
             }
         });
+        //颜色变化动画
+        final ValueAnimator clickColorAnim = ValueAnimator.ofObject(
+                new ArgbEvaluator(),
+                progressColor1,
+                progressColor2,
+                progressColor3,
+                progressColor4);
+        clickColorAnim.setDuration(10000);
+        clickColorAnim.setRepeatCount(ValueAnimator.INFINITE);
+        //clickColorAnim.setRepeatMode(ValueAnimator.REVERSE);
+        clickColorAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int color = (int) animation.getAnimatedValue();
+                mPointPaint.setColor(color);
+                mCirclePaint.setColor(color);
+            }
+        });
 
         mPointList.clear();
         AnimPoint animPoint = new AnimPoint();
@@ -171,7 +189,7 @@ public class ThermometerView extends View {
             mPointList.add(cloneAnimPoint);
         }
         //画运动粒子
-        final ValueAnimator pointsAnimator = ValueAnimator.ofFloat(0F, 1F);
+        final ValueAnimator pointsAnimator = ValueAnimator.ofFloat(0.1F, 1F);
         pointsAnimator.setDuration(Integer.MAX_VALUE);
         pointsAnimator.setRepeatMode(ValueAnimator.RESTART);
         pointsAnimator.setRepeatCount(ValueAnimator.INFINITE);
@@ -217,6 +235,7 @@ public class ThermometerView extends View {
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 arcAnimator.start();
+                clickColorAnim.start();
                 pointsAnimator.start();
             }
         });
@@ -225,7 +244,7 @@ public class ThermometerView extends View {
             public void run() {
                 initAnimator.start();
             }
-        },1000);
+        }, 1000);
     }
 
     @Override
@@ -234,7 +253,6 @@ public class ThermometerView extends View {
         setMeasuredDimension(width, height);
     }
 
-    private Xfermode mXfermode;
     private Path mArcPath;
 
     @Override
