@@ -21,6 +21,15 @@ public class MyColors {
      */
     private int endColor;
 
+    public MyColors() {
+    }
+
+    public MyColors(int outColor, int beginColor, int endColor) {
+        this.outColor = outColor;
+        this.beginColor = beginColor;
+        this.endColor = endColor;
+    }
+
     public int getOutColor() {
         return outColor;
     }

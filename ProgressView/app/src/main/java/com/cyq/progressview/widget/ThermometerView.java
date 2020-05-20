@@ -2,7 +2,6 @@ package com.cyq.progressview.widget;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.BlurMaskFilter;
@@ -22,6 +21,8 @@ import android.view.animation.AccelerateInterpolator;
 import androidx.annotation.Nullable;
 
 import com.cyq.progressview.Utils;
+import com.cyq.progressview.evaluator.MyColors;
+import com.cyq.progressview.evaluator.MyColorsEvaluator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,12 +72,18 @@ public class ThermometerView extends View {
     /*底色圆环初始化动画渐变色*/
     private int[] backShaderColorArr = {transparentColor, transparentColor, blackColor};
     private float[] backPositionArr = {0, 0, 1};
-    private int[] radialArr = {blackColor, middleRadialGradientColor, beginRadialGradientColor};
-    private int progressColor1 = Color.parseColor("#A60066FF");
-    private int progressColor2 = Color.parseColor("#FFFFDB00");
+    private int[] radialArr = {blackColor, middleRadialGradientColor};
     private int progressColor3 = Color.parseColor("#FFFFA300");
     private int progressColor4 = Color.parseColor("#FFFF8000");
-    private float[] radialPositionArr = {0F, 0.6F, 1F};
+
+    private int progressColor1 = Color.parseColor("#FF0066FF");
+    private int progressColor2 = Color.parseColor("#FFFF8000");
+    private int startColor1 = Color.parseColor("#A30066FF");//0.64透明度
+    private int startColor2 = Color.parseColor("#A3FF8000");//0.16透明度
+    private int endColor1 = Color.parseColor("#230066FF");
+    private int endColor2 = Color.parseColor("#23FF8000");
+
+    private float[] radialPositionArr = {0.6F, 1F};
     private LinearGradient mBackCircleLinearGradient;
     private Paint mSweptPaint;
     private RadialGradient mRadialGradient;
@@ -160,22 +167,36 @@ public class ThermometerView extends View {
                 getSectorClip(width / 2F, -90, value / 10F);
             }
         });
+
+
         //颜色变化动画
+        MyColors startColors = new MyColors(progressColor1, startColor1, endColor1);
+        MyColors endColors = new MyColors(progressColor2, startColor2, endColor2);
+
         final ValueAnimator clickColorAnim = ValueAnimator.ofObject(
-                new ArgbEvaluator(),
-                progressColor1,
-                progressColor2,
-                progressColor3,
-                progressColor4);
+                new MyColorsEvaluator(),
+                startColors,
+                endColors);
         clickColorAnim.setDuration(10000);
         clickColorAnim.setRepeatCount(ValueAnimator.INFINITE);
         //clickColorAnim.setRepeatMode(ValueAnimator.REVERSE);
         clickColorAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                int color = (int) animation.getAnimatedValue();
-                mPointPaint.setColor(color);
-                mCirclePaint.setColor(color);
+                MyColors colors = (MyColors) animation.getAnimatedValue();
+                mPointPaint.setColor(colors.getOutColor());
+                mCirclePaint.setColor(colors.getOutColor());
+                //设置内圈变色圆的shader
+                radialArr[0] = colors.getEndColor();
+                radialArr[1] = colors.getBeginColor();
+                mRadialGradient = new RadialGradient(
+                        0,
+                        0,
+                        radius,
+                        radialArr,
+                        radialPositionArr,
+                        Shader.TileMode.CLAMP);
+                mSweptPaint.setShader(mRadialGradient);
             }
         });
 
