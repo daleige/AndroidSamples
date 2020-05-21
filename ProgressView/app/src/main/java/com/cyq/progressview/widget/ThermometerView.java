@@ -72,7 +72,7 @@ public class ThermometerView extends View {
     /*底色圆环初始化动画渐变色*/
     private int[] backShaderColorArr = {transparentColor, transparentColor, blackColor};
     private float[] backPositionArr = {0, 0, 1};
-    private int[] radialArr = {blackColor, middleRadialGradientColor};
+    private int[] radialArr = {blackColor, blackColor, middleRadialGradientColor};
 
     private int progressColor1 = Color.parseColor("#FF0066FF");
     private int startColor1 = Color.parseColor("#A30066FF");//0.64透明度
@@ -90,7 +90,7 @@ public class ThermometerView extends View {
     private int startColor4 = Color.parseColor("#A3FF8000");//0.16透明度
     private int endColor4 = Color.parseColor("#23FF8000");
 
-    private float[] radialPositionArr = {0.6F, 1F};
+    private float[] radialPositionArr = {0F, 0.6F, 1F};
     private LinearGradient mBackCircleLinearGradient;
     private Paint mSweptPaint;
     private RadialGradient mRadialGradient;
@@ -175,21 +175,15 @@ public class ThermometerView extends View {
             }
         });
 
-
         //颜色变化动画
         MyColors colors1 = new MyColors(progressColor1, startColor1, endColor1);
         MyColors colors2 = new MyColors(progressColor2, startColor2, endColor2);
         MyColors colors3 = new MyColors(progressColor3, startColor3, endColor3);
         MyColors colors4 = new MyColors(progressColor4, startColor4, endColor4);
-        final ValueAnimator clickColorAnim = ValueAnimator.ofObject(
-                new MyColorsEvaluator(),
-                colors1,
-                colors2,
-                colors3,
-                colors4);
+        final ValueAnimator clickColorAnim = ValueAnimator.ofObject(new MyColorsEvaluator(),
+                colors1, colors2, colors3, colors4);
         clickColorAnim.setDuration(10000);
         clickColorAnim.setRepeatCount(ValueAnimator.INFINITE);
-        //clickColorAnim.setRepeatMode(ValueAnimator.REVERSE);
         clickColorAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -197,8 +191,8 @@ public class ThermometerView extends View {
                 mPointPaint.setColor(colors.getOutColor());
                 mCirclePaint.setColor(colors.getOutColor());
                 //设置内圈变色圆的shader
-                radialArr[0] = colors.getEndColor();
-                radialArr[1] = colors.getBeginColor();
+                radialArr[1] = colors.getEndColor();
+                radialArr[2] = colors.getBeginColor();
                 mRadialGradient = new RadialGradient(
                         0,
                         0,
