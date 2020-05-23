@@ -35,59 +35,87 @@ import java.util.Random;
  */
 public class ThermometerView extends View {
     private Context mContext;
-    /*控件宽高*/
+    /**
+     * 控件宽高
+     */
     private int width, height;
-    /*粒子圆环的宽度*/
+    /**
+     * 粒子圆环的宽度
+     */
     private final int mCircleWidth = 40;
-    /*粒子总个数*/
+    /**
+     * 粒子总个数
+     */
     private int pointCount = 100;
-    /*粒子列表*/
+    /**
+     * 粒子列表
+     */
     private List<AnimPoint> mPointList = new ArrayList<>(pointCount);
-    /*粒子外层圆环原点坐标和半径长度*/
+    /**
+     * 粒子外层圆环原点坐标和半径长度
+     */
     private int centerX, centerY, radius;
-    /*粒子外层圆环的画笔*/
+    /**
+     * 粒子外层圆环的画笔
+     */
     private Paint mCirclePaint;
-    /*粒子画笔*/
+    /**
+     * 粒子画笔
+     */
     private Paint mPointPaint;
-    /*圆弧画笔*/
+    /**
+     * 圆弧画笔
+     */
     private Paint mArcPaint;
     private Paint mArcPathPaint;
-    /*底色圆环画笔*/
+    /**
+     * 底色圆环画笔
+     */
     private Paint mBackCirclePaiht;
-    /*开始时底色圆环渐变的画笔*/
+    /**
+     * 开始时底色圆环渐变的画笔
+     */
     private Paint mBackShadePaint;
-    /*白色*/
+    /**
+     * 白色
+     */
     private int whiteColor = Color.parseColor("#FFFFFFFF");
     private int blackColor = Color.parseColor("#FF000000");
-    private int redColor = Color.parseColor("#f44336");
-    private int yellowColor = Color.parseColor("#4caf50");
-    private int beginRadialGradientColor = Color.parseColor("#66001BFF");
     private int endRadialGradientColor = Color.parseColor("#1978FF");
     private int middleRadialGradientColor = Color.parseColor("#1A001BFF");
     private int radialCircleColor = Color.parseColor("#FF0066FF");
-    /*底色圆环的颜色*/
+    /**
+     * 底色圆环的颜色
+     */
     private int backCircleColor = Color.parseColor("#290066FF");
-    /*透明颜色*/
+    /**
+     * 透明颜色
+     */
     private int transparentColor = Color.parseColor("#00000000");
-    /*底色圆环初始化动画渐变色*/
+    /**
+     * 底色圆环初始化动画渐变色
+     */
     private int[] backShaderColorArr = {transparentColor, transparentColor, blackColor};
     private float[] backPositionArr = {0, 0, 1};
     private int[] radialArr = {blackColor, blackColor, middleRadialGradientColor};
 
+    /**
+     * 0.64透明度 //0.16透明度
+     */
     private int progressColor1 = Color.parseColor("#FF0066FF");
-    private int startColor1 = Color.parseColor("#A30066FF");//0.64透明度
+    private int startColor1 = Color.parseColor("#A30066FF");
     private int endColor1 = Color.parseColor("#230066FF");
 
     private int progressColor2 = Color.parseColor("#FFFFDB00");
-    private int startColor2 = Color.parseColor("#A3FFDB00");//0.16透明度
+    private int startColor2 = Color.parseColor("#A3FFDB00");
     private int endColor2 = Color.parseColor("#23FFDB00");
 
     private int progressColor3 = Color.parseColor("#FFFFA300");
-    private int startColor3 = Color.parseColor("#A3FFA300");//0.64透明度
+    private int startColor3 = Color.parseColor("#A3FFA300");
     private int endColor3 = Color.parseColor("#23FFA300");
 
     private int progressColor4 = Color.parseColor("#FFFF8000");
-    private int startColor4 = Color.parseColor("#A3FF8000");//0.16透明度
+    private int startColor4 = Color.parseColor("#A3FF8000");
     private int endColor4 = Color.parseColor("#23FF8000");
 
     private float[] radialPositionArr = {0F, 0.6F, 1F};

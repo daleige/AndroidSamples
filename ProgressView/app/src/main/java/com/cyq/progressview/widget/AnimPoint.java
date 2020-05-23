@@ -21,7 +21,7 @@ public class AnimPoint implements Cloneable {
      */
     private float radius;
     /**
-     * 透明度 0.00-1.00 之间
+     * 透明度 0.00-1.00 之间，暂时不用，没有透明度变化的需求
      */
     private float alpha;
 
@@ -29,11 +29,15 @@ public class AnimPoint implements Cloneable {
      * 粒子初始位置的角度
      */
     private double anger;
-    private final int liveTime = 3;
     private float distance = 1;
     private float velocity;
     private int num = 0;
 
+    /**
+     * 重新初始化粒子
+     * @param random
+     * @param viewRadius
+     */
     public void init(Random random, float viewRadius) {
         anger = Math.toRadians(random.nextInt(360));
         velocity = random.nextFloat();
@@ -42,6 +46,11 @@ public class AnimPoint implements Cloneable {
         mY = (float) (viewRadius * Math.sin(anger));
     }
 
+    /**
+     * 计算下一步粒子
+     * @param random
+     * @param viewRadius
+     */
     public void updatePoint(Random random, float viewRadius) {
         mX = (float) (mX - distance * Math.cos(anger) * velocity);
         mY = (float) (mY - distance * Math.sin(anger) * velocity);
