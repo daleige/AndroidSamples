@@ -46,7 +46,7 @@ public class ThermometerView extends View {
     /**
      * 粒子总个数
      */
-    private int pointCount = 100;
+    private int pointCount = 10000;
     /**
      * 粒子列表
      */

@@ -61,6 +61,14 @@
                 android:shadowRadius="5"
                 android:text="高斯模糊场景"
                 android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/mBtnIntercept"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:shadowRadius="5"
+                android:text="事件分发处理"
+                android:textAllCaps="false" />
         </LinearLayout>
     </ScrollView>
 </FrameLayout>
