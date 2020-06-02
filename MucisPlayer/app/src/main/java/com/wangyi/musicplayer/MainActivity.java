@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private VisualizerView mVisualizerView;
     private MediaPlayer mMediaPlayer;
     private Visualizer mVisualizer;
     private SeekBar mSeekBar;
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         mSeekBar = findViewById(R.id.seek_bar);
         mCurrentTime = findViewById(R.id.current_time);
         mTotalTime = findViewById(R.id.tv_duration);
-
+        mVisualizerView = findViewById(R.id.mVisualizerView);
 
         try {
             initMusic();
@@ -62,10 +63,7 @@ public class MainActivity extends AppCompatActivity {
         mSeekBar.setMax(mMediaPlayer.getDuration());
         mMediaPlayer.start();
         mHandler.post(runnable);
-
     }
-
-    String result = "begin";
 
     /**
      * 初始化可视化
@@ -84,21 +82,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFftDataCapture(Visualizer visualizer, byte[] fft,
                                          int samplingRate) {
-                data1.clear();
-                data2.clear();
-                for (int i = 0; i < fft.length; i += 2) {
-                    float magnitude = (float) Math.hypot(fft[i], fft[i + 1]);
-                    float phase = (float) Math.atan2(fft[i + 1], fft[i]);
-                    data1.add(magnitude);
-                    data2.add(phase);
+                byte[] model = new byte[fft.length / 2 + 1];
+                model[0] = (byte) Math.abs(fft[1]);
+                int j = 1;
+                int size = Math.min(fft.length, 200);
+                for (int i = 2; i < size; ) {
+                    model[j] = (byte) Math.hypot(fft[i], fft[i + 1]);
+                    i += 2;
+                    j++;
                 }
 
-                for (float f : data1) {
-                    result = result + "---" + f;
-                }
-                Log.e("test", result);
+                //设置音频数据到控件
+                mVisualizerView.setVisualizer(model);
             }
-        }, Visualizer.getMaxCaptureRate() / 2, true, true);
+        }, Visualizer.getMaxCaptureRate() / 2, false, true);
         mVisualizer.setEnabled(true);
     }
 

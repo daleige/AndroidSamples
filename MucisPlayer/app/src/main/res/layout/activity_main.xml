@@ -2,6 +2,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.wangyi.musicplayer.VisualizerView
+        android:id="@+id/mVisualizerView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_gravity="center" />
 
     <LinearLayout
         android:layout_width="match_parent"
