@@ -7,8 +7,14 @@
     android:background="@android:color/black"
     tools:context=".MainActivity">
 
-    <com.cyq.progressview.widget.ThermometerView
-        android:id="@+id/mThermometerView"
+    <!--    <com.cyq.progressview.widget.ThermometerView-->
+    <!--        android:id="@+id/mThermometerView"-->
+    <!--        android:layout_width="300dp"-->
+    <!--        android:layout_height="300dp"-->
+    <!--        android:layout_gravity="center" />-->
+
+    <com.cyq.progressview.widget.ProgressView
+        android:id="@+id/progress_view"
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_gravity="center" />

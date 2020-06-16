@@ -21,7 +21,6 @@ public class MyColorsEvaluator implements TypeEvaluator<MyColors> {
         return myColors;
     }
 
-
     /**
      * 计算当前的argb颜色值，实现方式参考{@link android.animation.ArgbEvaluator}
      *

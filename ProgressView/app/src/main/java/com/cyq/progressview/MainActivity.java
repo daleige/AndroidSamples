@@ -9,13 +9,11 @@ import android.view.View;
 import com.cyq.progressview.widget.ThermometerView;
 
 public class MainActivity extends AppCompatActivity {
-    private ThermometerView mThermometerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mThermometerView=findViewById(R.id.mThermometerView);
     }
 }

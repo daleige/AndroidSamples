@@ -321,11 +321,14 @@ public class ThermometerView extends View {
         //step2:画扇形区域的运动粒子
         canvas.save();
         canvas.translate(centerX, centerY);
+        //把画布裁剪成扇形
         canvas.clipPath(mArcPath);
+        //画运动粒子
         for (AnimPoint animPoint : mPointList) {
             canvas.drawCircle(animPoint.getmX(), animPoint.getmY(),
                     animPoint.getRadius(), mPointPaint);
         }
+
         canvas.drawCircle(0, 0, radius, mSweptPaint);
         canvas.drawCircle(0, 0, radius, mCirclePaint);
         canvas.restore();
