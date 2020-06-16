@@ -15,7 +15,6 @@
         android:textStyle="bold" />
 
     <TextView
-        margin
         android:id="@+id/tv_second_number"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

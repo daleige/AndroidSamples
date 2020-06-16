@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -15,11 +17,13 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 
 import androidx.annotation.Nullable;
 
+import com.cyq.progressview.R;
 import com.cyq.progressview.Utils;
 import com.cyq.progressview.evaluator.MyColors;
 import com.cyq.progressview.evaluator.MyColorsEvaluator;
@@ -46,7 +50,7 @@ public class ThermometerView extends View {
     /**
      * 粒子总个数
      */
-    private int pointCount = 10000;
+    private int pointCount = 200;
     /**
      * 粒子列表
      */
@@ -125,6 +129,14 @@ public class ThermometerView extends View {
     private Random mRandom = new Random();
     private RectF mRect;
 
+
+    private Bitmap mBitmap;
+    private Canvas mBmpCanvas;
+    private Paint mBmpPaint;
+    private float scaleHeight;
+    private float scaleWidth;
+    private int mCurrentAngle;
+
     public ThermometerView(Context context) {
         this(context, null);
     }
@@ -198,6 +210,7 @@ public class ThermometerView extends View {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 int value = (int) animation.getAnimatedValue();
+                mCurrentAngle = value;
                 //获取此时的扇形区域path，用于裁剪动画粒子的canvas
                 getSectorClip(width / 2F, -90, value / 10F);
             }
@@ -298,7 +311,13 @@ public class ThermometerView extends View {
                 initAnimator.start();
             }
         }, 1000);
+
+        //初始化指针Bitmap画布
+
+        initBitmap();
+
     }
+
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -328,9 +347,16 @@ public class ThermometerView extends View {
             canvas.drawCircle(animPoint.getmX(), animPoint.getmY(),
                     animPoint.getRadius(), mPointPaint);
         }
-
         canvas.drawCircle(0, 0, radius, mSweptPaint);
         canvas.drawCircle(0, 0, radius, mCirclePaint);
+        canvas.restore();
+        //画指针
+        canvas.save();
+        canvas.translate(centerX, centerY);
+        canvas.rotate(mCurrentAngle/10F);
+        canvas.translate(-scaleWidth + 20, -scaleHeight - 10);
+        canvas.drawBitmap(mBitmap, 0, 0, mBmpPaint);
+        Log.e("test", "当前的角度:" + mCurrentAngle);
         canvas.restore();
     }
 
@@ -346,5 +372,19 @@ public class ThermometerView extends View {
         mArcPath.addArc(-r, -r, r, r, startAngle, sweepAngle);
         mArcPath.lineTo(0, 0);
         mArcPath.close();
+    }
+
+    /**
+     * 初始化指针图片的Bitmap
+     */
+    private void initBitmap() {
+        mBmpPaint = new Paint();
+        mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.indicator);
+        float bitmapWidth = mBitmap.getWidth();
+        float bitmapHeight = mBitmap.getHeight();
+        scaleHeight = centerX;
+        scaleWidth = bitmapWidth * (centerX / bitmapHeight);
+        mBitmap = Bitmap.createScaledBitmap(mBitmap, (int) scaleWidth, (int) scaleHeight, false);
+        Log.e("test", "拉伸后的宽高：" + scaleWidth + "-----" + scaleHeight + "----半徑：" + centerX);
     }
 }
