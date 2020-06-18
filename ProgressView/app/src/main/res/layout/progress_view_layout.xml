@@ -3,9 +3,9 @@
     android:layout_width="300dp"
     android:layout_height="300dp">
 
-<!--    <com.cyq.progressview.widget.ThermometerView-->
-<!--        android:id="@+id/ThermometerView"-->
-<!--        android:layout_width="300dp"-->
-<!--        android:layout_height="300dp" />-->
+    <com.cyq.progressview.widget.NumberChangeView
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content" />
 
 </FrameLayout>
