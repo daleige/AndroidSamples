@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
     tools:context=".MainActivity">
-
-    <!--    <com.cyq.progressview.widget.ThermometerView-->
-    <!--        android:id="@+id/mThermometerView"-->
-    <!--        android:layout_width="300dp"-->
-    <!--        android:layout_height="300dp"-->
-    <!--        android:layout_gravity="center" />-->
 
     <com.cyq.progressview.widget.ProgressView
         android:id="@+id/progress_view"
@@ -19,4 +14,10 @@
         android:layout_height="300dp"
         android:layout_gravity="center" />
 
-</FrameLayout>
+    <com.cyq.progressview.widget.ThermometerView
+        android:id="@+id/mThermometerView"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp" />
+</LinearLayout>

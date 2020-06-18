@@ -50,7 +50,7 @@ public class ThermometerView extends View {
     /**
      * 粒子总个数
      */
-    private int pointCount = 200;
+    private int pointCount = 100;
     /**
      * 粒子列表
      */
@@ -313,11 +313,8 @@ public class ThermometerView extends View {
         }, 1000);
 
         //初始化指针Bitmap画布
-
         initBitmap();
-
     }
-
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -356,7 +353,6 @@ public class ThermometerView extends View {
         canvas.rotate(mCurrentAngle/10F);
         canvas.translate(-scaleWidth + 20, -scaleHeight - 10);
         canvas.drawBitmap(mBitmap, 0, 0, mBmpPaint);
-        Log.e("test", "当前的角度:" + mCurrentAngle);
         canvas.restore();
     }
 
@@ -385,6 +381,5 @@ public class ThermometerView extends View {
         scaleHeight = centerX;
         scaleWidth = bitmapWidth * (centerX / bitmapHeight);
         mBitmap = Bitmap.createScaledBitmap(mBitmap, (int) scaleWidth, (int) scaleHeight, false);
-        Log.e("test", "拉伸后的宽高：" + scaleWidth + "-----" + scaleHeight + "----半徑：" + centerX);
     }
 }

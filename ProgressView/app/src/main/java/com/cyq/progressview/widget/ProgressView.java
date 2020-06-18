@@ -35,6 +35,5 @@ public class ProgressView extends FrameLayout {
 
     private void init() {
         LayoutInflater.from(getContext()).inflate(R.layout.progress_view_layout, this, true);
-
     }
 }
