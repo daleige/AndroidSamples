@@ -90,6 +90,9 @@ public class NumberView extends FrameLayout {
     }
 
     public void setCurrentValue(int value) {
+        if (value == mCurrentValue) {
+            return;
+        }
         mTvFirst.setText(String.valueOf(mCurrentValue));
         mTvSecond.setText(String.valueOf(value));
         mDownAnim.start();

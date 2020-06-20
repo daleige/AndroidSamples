@@ -5,11 +5,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
-
 import androidx.annotation.Nullable;
-
 import com.cyq.progressview.R;
-
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -55,13 +52,19 @@ public class TempNumberView extends LinearLayout {
         mHundred = temperature / 100 % 10;
         Log.e("test", "个 十 百：" + mSingle + "---" + mTen + "---" + mHundred);
         mSingleView.setCurrentValue(mSingle);
+        if (temperature > 9) {
+            mTenView.setCurrentValue(mTen);
+        }
+        if (temperature > 99) {
+            mHundredView.setCurrentValue(mHundred);
+        }
     }
 
     //   全局变量
     Disposable disposable;
 
     void testCount() {
-        disposable = Observable.interval(0, 1, TimeUnit.SECONDS)
+        disposable = Observable.interval(0, 1000, TimeUnit.MILLISECONDS)
                 .map(new Function<Long, Long>() {
                     @Override
                     public Long apply(Long aLong) throws Exception {
