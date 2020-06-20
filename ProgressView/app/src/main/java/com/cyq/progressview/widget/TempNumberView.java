@@ -5,8 +5,11 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
+
 import androidx.annotation.Nullable;
+
 import com.cyq.progressview.R;
+
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
