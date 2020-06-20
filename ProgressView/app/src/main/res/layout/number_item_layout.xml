@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="80dp"
+    android:layout_width="wrap_content"
     android:layout_height="80dp">
 
     <TextView
         android:id="@+id/tv_number_one"
-        android:layout_width="80dp"
+        android:layout_width="wrap_content"
         android:layout_height="80dp"
+        android:layout_gravity="center"
         android:gravity="center"
         android:padding="0dp"
         android:text="0"
@@ -15,8 +16,9 @@
 
     <TextView
         android:id="@+id/tv_number_tow"
-        android:layout_width="80dp"
+        android:layout_width="wrap_content"
         android:layout_height="80dp"
+        android:layout_gravity="center"
         android:layout_marginTop="80dp"
         android:gravity="center"
         android:text="1"

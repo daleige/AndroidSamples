@@ -54,7 +54,6 @@ public class NumberChangeView1 extends FrameLayout {
             int mSecondNextValue = (mSecondCurrentValue + 2) % 10;
             mTvFirst.setText(String.valueOf(mFirstNextValue));
             mTvSecond.setText(String.valueOf(mSecondNextValue));
-            mUpAnim.start();
             mDownAnim.start();
         }
     }
@@ -63,41 +62,6 @@ public class NumberChangeView1 extends FrameLayout {
 
     private void init() {
         mHeight = Utils.dip2px(80, getContext());
-        Log.e("test", "文字控件的高度：" + mHeight);
-        mUpAnim = ValueAnimator.ofFloat(0F, 1F);
-        mUpAnim.setDuration(600);
-        mUpAnim.setRepeatCount(0);
-        mUpAnim.setInterpolator(new BounceInterpolator());
-        mUpAnim.setRepeatMode(ValueAnimator.RESTART);
-        mUpAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float value = (float) animation.getAnimatedValue();
-                mTvFirst.setTranslationY(-mHeight * value);
-            }
-        });
-        mUpAnim.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-
         mDownAnim = ValueAnimator.ofFloat(0F, 1F);
         mDownAnim.setDuration(600);
         mDownAnim.setInterpolator(new BounceInterpolator());
@@ -107,6 +71,7 @@ public class NumberChangeView1 extends FrameLayout {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float value = (float) animation.getAnimatedValue();
+                mTvFirst.setTranslationY(-mHeight * value);
                 mTvSecond.setTranslationY(-mHeight * value);
             }
         });
@@ -131,7 +96,6 @@ public class NumberChangeView1 extends FrameLayout {
 
             }
         });
-        mUpAnim.start();
         mDownAnim.start();
     }
 
