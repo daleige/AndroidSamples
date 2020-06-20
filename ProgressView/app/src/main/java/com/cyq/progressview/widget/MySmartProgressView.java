@@ -17,7 +17,6 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 
@@ -37,7 +36,7 @@ import java.util.Random;
  * date   : 2020/5/6 14:24
  * desc   : 温度进度控件
  */
-public class ThermometerView extends View {
+public class MySmartProgressView extends View {
     private Context mContext;
     /**
      * 控件宽高
@@ -137,15 +136,15 @@ public class ThermometerView extends View {
     private float scaleWidth;
     private int mCurrentAngle;
 
-    public ThermometerView(Context context) {
+    public MySmartProgressView(Context context) {
         this(context, null);
     }
 
-    public ThermometerView(Context context, @Nullable AttributeSet attrs) {
+    public MySmartProgressView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public ThermometerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public MySmartProgressView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
@@ -203,7 +202,7 @@ public class ThermometerView extends View {
         //绘制扇形path
         mArcPath = new Path();
         final ValueAnimator arcAnimator = ValueAnimator.ofInt(0, 3600);
-        arcAnimator.setDuration(10000);
+        arcAnimator.setDuration(100000);
         arcAnimator.setRepeatMode(ValueAnimator.RESTART);
         arcAnimator.setRepeatCount(ValueAnimator.INFINITE);
         arcAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {

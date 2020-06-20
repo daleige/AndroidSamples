@@ -1,11 +1,10 @@
-package com.cyq.progressview.widget;
+package com.cyq.progressview.widget.recyclerview;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.widget.Adapter;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -15,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cyq.progressview.R;
 
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;

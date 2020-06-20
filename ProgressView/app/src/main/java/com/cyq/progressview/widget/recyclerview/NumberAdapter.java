@@ -1,4 +1,4 @@
-package com.cyq.progressview.widget;
+package com.cyq.progressview.widget.recyclerview;
 
 import android.content.Context;
 import android.view.LayoutInflater;

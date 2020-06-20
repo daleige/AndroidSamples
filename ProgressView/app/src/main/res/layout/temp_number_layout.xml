@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="horizontal">
+
+    <com.cyq.progressview.widget.NumberView
+        android:id="@+id/mHundredNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <com.cyq.progressview.widget.NumberView
+        android:id="@+id/mTenNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <com.cyq.progressview.widget.NumberView
+        android:id="@+id/mSingleNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_number_one"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="0dp"
+        android:text="°"
+        android:textColor="@android:color/white"
+        android:textSize="60sp" />
+
+</LinearLayout>

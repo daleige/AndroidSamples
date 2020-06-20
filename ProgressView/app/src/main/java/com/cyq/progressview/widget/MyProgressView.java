@@ -17,7 +17,7 @@ import com.cyq.progressview.R;
  * desc   : 自定义组合布局 底部的扇形粒子动画+数字切换
  */
 public class MyProgressView extends FrameLayout {
-    private ThermometerView mThermometerView;
+    private MySmartProgressView mMySmartProgressView;
     private FrameLayout mNumberContainer;
 
     public MyProgressView(@NonNull Context context) {
