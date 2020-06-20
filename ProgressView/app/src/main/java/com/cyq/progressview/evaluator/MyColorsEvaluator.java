@@ -8,10 +8,11 @@ import android.animation.TypeEvaluator;
  * desc   : 自定义属性动画的TypeEvaluator
  */
 public class MyColorsEvaluator implements TypeEvaluator<MyColors> {
+    private MyColors myColors;
 
     @Override
     public MyColors evaluate(float fraction, MyColors startValue, MyColors endValue) {
-        MyColors myColors = new MyColors();
+        myColors = new MyColors();
         myColors.setOutColor((Integer) getCurrentColor(fraction, startValue.getOutColor(),
                 endValue.getOutColor()));
         myColors.setBeginColor((Integer) getCurrentColor(fraction, startValue.getBeginColor(),
