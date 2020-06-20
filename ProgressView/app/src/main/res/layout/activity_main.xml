@@ -8,11 +8,22 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <com.cyq.progressview.widget.ProgressView
-        android:id="@+id/progress_view"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_gravity="center" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.cyq.progressview.widget.NumberChangeView1
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <com.cyq.progressview.widget.NumberChangeView2
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp" />
+    </LinearLayout>
 
     <com.cyq.progressview.widget.ThermometerView
         android:id="@+id/mThermometerView"
