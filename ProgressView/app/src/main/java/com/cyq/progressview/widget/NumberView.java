@@ -27,9 +27,10 @@ public class NumberView extends FrameLayout {
     private ValueAnimator mDownAnim;
     private int mHeight;
     private int mCurrentValue = 0;
-    private boolean firstInRanger = true;
-    private int mFirstNextValue = 0;
-    private int mSecondNextValue = 0;
+    /**
+     * 是升序还是降序
+     */
+    private boolean mAscending;
 
     public NumberView(@NonNull Context context) {
         this(context, null);
@@ -58,8 +59,13 @@ public class NumberView extends FrameLayout {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float value = (float) animation.getAnimatedValue();
-                mTvFirst.setTranslationY(-mHeight * value);
-                mTvSecond.setTranslationY(-mHeight * value);
+                if (mAscending) {
+                    mTvFirst.setTranslationY(-mHeight * value);
+                    mTvSecond.setTranslationY(-mHeight * value);
+                } else {
+                    mTvFirst.setTranslationY(mHeight * value);
+                    mTvSecond.setTranslationY(-2 * mHeight + mHeight * value);
+                }
             }
         });
         mDownAnim.addListener(new Animator.AnimatorListener() {
@@ -93,6 +99,8 @@ public class NumberView extends FrameLayout {
         if (value == mCurrentValue) {
             return;
         }
+        //判断数字是增加还是减少，进而确定不同的动画效果
+        mAscending = value > mCurrentValue;
         mTvFirst.setText(String.valueOf(mCurrentValue));
         mTvSecond.setText(String.valueOf(value));
         mDownAnim.start();

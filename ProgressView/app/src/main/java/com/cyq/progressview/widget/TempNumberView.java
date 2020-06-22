@@ -63,7 +63,9 @@ public class TempNumberView extends LinearLayout {
         }
     }
 
-    //   全局变量
+    /**
+     * 全局变量
+     */
     Disposable disposable;
 
     void testCount() {
@@ -79,7 +81,7 @@ public class TempNumberView extends LinearLayout {
                     @Override
                     public void accept(Long count) throws Exception {
                         Log.e("test", "count: " + count);
-                        setTemperature(Integer.parseInt(String.valueOf(count)));
+                        setTemperature(500 - Integer.parseInt(String.valueOf(count)));
                     }
                 });
     }
