@@ -54,12 +54,12 @@ public class TempNumberView extends LinearLayout {
         mTen = temperature / 10 % 10;
         mHundred = temperature / 100 % 10;
         Log.e("test", "个 十 百：" + mSingle + "---" + mTen + "---" + mHundred);
-        mSingleView.setCurrentValue(mSingle);
+        mSingleView.setCurrentValue(mSingle, temperature);
         if (temperature > 9) {
-            mTenView.setCurrentValue(mTen);
+            mTenView.setCurrentValue(mTen, temperature);
         }
         if (temperature > 99) {
-            mHundredView.setCurrentValue(mHundred);
+            mHundredView.setCurrentValue(mHundred, temperature);
         }
     }
 
@@ -81,7 +81,7 @@ public class TempNumberView extends LinearLayout {
                     @Override
                     public void accept(Long count) throws Exception {
                         Log.e("test", "count: " + count);
-                        setTemperature(500 - Integer.parseInt(String.valueOf(count)));
+                        setTemperature( Integer.parseInt(String.valueOf(count)));
                     }
                 });
     }

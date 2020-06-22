@@ -26,7 +26,9 @@ public class NumberView extends FrameLayout {
     private ValueAnimator mUpAnim;
     private ValueAnimator mDownAnim;
     private int mHeight;
-    private int mCurrentValue = 0;
+    private int mCurrentValue;
+    private int mTemperature;
+
     /**
      * 是升序还是降序
      */
@@ -68,42 +70,28 @@ public class NumberView extends FrameLayout {
                 }
             }
         });
-        mDownAnim.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
     }
 
     public int getCurrentValue() {
         return mCurrentValue;
     }
 
-    public void setCurrentValue(int value) {
-        if (value == mCurrentValue) {
+    /**
+     * 设置下一位数字的值
+     *
+     * @param value       个，十，百位的值
+     * @param temperature 真实的值
+     */
+    public void setCurrentValue(int value, int temperature) {
+        if (temperature == this.mTemperature || value == mCurrentValue) {
             return;
         }
         //判断数字是增加还是减少，进而确定不同的动画效果
-        mAscending = value > mCurrentValue;
+        mAscending = temperature > mCurrentValue;
+        mCurrentValue = value;
         mTvFirst.setText(String.valueOf(mCurrentValue));
         mTvSecond.setText(String.valueOf(value));
         mDownAnim.start();
-        this.mCurrentValue = value;
+        mTemperature = temperature;
     }
 }
