@@ -22,8 +22,24 @@ public class MainActivity extends AppCompatActivity {
         mContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
+                if (tagger) {
+                    mProgress.animate()
+                            .translationY(-200F)
+                            .scaleX(0.85f)
+                            .scaleY(0.85f)
+                            .setDuration(200)
+                            .withLayer()
+                            .start();
+                } else {
+                    mProgress.animate()
+                            .translationY(0F)
+                            .scaleX(1f)
+                            .scaleY(1f)
+                            .setDuration(200)
+                            .withLayer()
+                            .start();
+                }
+                tagger = !tagger;
             }
         });
     }

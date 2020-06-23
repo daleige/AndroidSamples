@@ -39,15 +39,10 @@ import java.util.Random;
  * desc   : 温度进度控件
  */
 public class MySmartProgressView extends View {
-    private Context mContext;
     /**
      * 控件宽高
      */
     private int width, height;
-    /**
-     * 粒子圆环的宽度
-     */
-    private final int mCircleWidth = 40;
     /**
      * 粒子总个数
      */
@@ -59,7 +54,7 @@ public class MySmartProgressView extends View {
     /**
      * 粒子外层圆环原点坐标和半径长度
      */
-    private int centerX, centerY, radius;
+    private int mCenterX, mCenterY, mRadius;
     /**
      * 粒子外层圆环的画笔
      */
@@ -68,11 +63,6 @@ public class MySmartProgressView extends View {
      * 粒子画笔
      */
     private Paint mPointPaint;
-    /**
-     * 圆弧画笔
-     */
-    private Paint mArcPaint;
-    private Paint mArcPathPaint;
     /**
      * 底色圆环画笔
      */
@@ -128,15 +118,22 @@ public class MySmartProgressView extends View {
     private Paint mSweptPaint;
     private RadialGradient mRadialGradient;
     private Random mRandom = new Random();
+    /**
+     * 宽高等于控件大小额矩形
+     */
     private RectF mRect;
 
 
     private Bitmap mBitmap;
-    private Canvas mBmpCanvas;
     private Paint mBmpPaint;
     private float scaleHeight;
     private float scaleWidth;
     private int mCurrentAngle;
+
+    /**
+     * 外层粒子圆环的边框大小
+     */
+    private int mOutCircleStrokeWidth = 25;
 
     public MySmartProgressView(Context context) {
         this(context, null);
@@ -152,18 +149,11 @@ public class MySmartProgressView extends View {
     }
 
     private void init() {
-        mContext = getContext();
-        width = Utils.dip2px(300, mContext);
-        height = Utils.dip2px(300, mContext);
-        centerX = width / 2;
-        centerY = width / 2;
-        radius = width / 2 - mCircleWidth / 2;
-        mRect = new RectF(-centerX, -centerX, centerX, centerX);
-
+        initView();
         mCirclePaint = new Paint();
         mCirclePaint.setColor(endRadialGradientColor);
         mCirclePaint.setStyle(Paint.Style.STROKE);
-        mCirclePaint.setStrokeWidth(mCircleWidth);
+        mCirclePaint.setStrokeWidth(mOutCircleStrokeWidth);
         mCirclePaint.setMaskFilter(new BlurMaskFilter(50, BlurMaskFilter.Blur.SOLID));
 
         mPointPaint = new Paint();
@@ -177,18 +167,21 @@ public class MySmartProgressView extends View {
         mRadialGradient = new RadialGradient(
                 0,
                 0,
-                radius,
+                mRadius,
                 radialArr,
                 radialPositionArr,
                 Shader.TileMode.CLAMP);
         mSweptPaint.setShader(mRadialGradient);
 
-        mArcPaint = new Paint();
+        /**
+         * 圆弧画笔
+         */
+        Paint mArcPaint = new Paint();
         mArcPaint.setColor(Color.RED);
         mArcPaint.setStyle(Paint.Style.FILL);
         mArcPaint.setStrokeWidth(20);
 
-        mArcPathPaint = new Paint();
+        Paint mArcPathPaint = new Paint();
         mArcPathPaint.setColor(Color.RED);
         mArcPathPaint.setStyle(Paint.Style.STROKE);
         mArcPathPaint.setAntiAlias(true);
@@ -242,7 +235,7 @@ public class MySmartProgressView extends View {
                 mRadialGradient = new RadialGradient(
                         0,
                         0,
-                        radius,
+                        mRadius,
                         radialArr,
                         pos,
                         Shader.TileMode.CLAMP);
@@ -256,7 +249,7 @@ public class MySmartProgressView extends View {
         for (int i = 0; i < pointCount; i++) {
             //通过clone创建对象，避免重复创建
             AnimPoint cloneAnimPoint = animPoint.clone();
-            cloneAnimPoint.init(mRandom, radius);
+            cloneAnimPoint.init(mRandom, mRadius);
             mPointList.add(cloneAnimPoint);
         }
         //画运动粒子
@@ -269,7 +262,7 @@ public class MySmartProgressView extends View {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 for (AnimPoint point : mPointList) {
-                    point.updatePoint(mRandom, radius);
+                    point.updatePoint(mRandom, mRadius);
                 }
                 invalidate();
             }
@@ -285,9 +278,9 @@ public class MySmartProgressView extends View {
                 backPositionArr[1] = value;
                 mBackCircleLinearGradient = new LinearGradient(
                         0,
-                        -centerX,
+                        -mCenterX,
                         0,
-                        centerY,
+                        mCenterY,
                         backShaderColorArr,
                         backPositionArr,
                         Shader.TileMode.CLAMP);
@@ -321,6 +314,20 @@ public class MySmartProgressView extends View {
         initBitmap();
     }
 
+    /**
+     * 初始化控件的各类宽高，边框，半径等大小
+     */
+    private void initView() {
+        width = Utils.dip2px(300, getContext());
+        height = Utils.dip2px(300, getContext());
+        mCenterX = width / 2;
+        mCenterY = width / 2;
+        // 粒子圆环的宽度
+        //TODO 这个25是外框距离圆环边框中点的距离，具体大小需要等UI设计图再确认
+        mRadius = width / 2 - 20;
+        mRect = new RectF(-mCenterX, -mCenterX, mCenterX, mCenterX);
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -334,14 +341,14 @@ public class MySmartProgressView extends View {
         super.onDraw(canvas);
         //step:画底色圆
         canvas.save();
-        canvas.translate(centerX, centerY);
-        canvas.drawCircle(0, 0, radius, mBackCirclePaiht);
+        canvas.translate(mCenterX, mCenterY);
+        canvas.drawCircle(0, 0, mRadius, mBackCirclePaiht);
         canvas.drawRect(mRect, mBackShadePaint);
         canvas.restore();
 
         //step2:画扇形区域的运动粒子
         canvas.save();
-        canvas.translate(centerX, centerY);
+        canvas.translate(mCenterX, mCenterY);
         //把画布裁剪成扇形
         canvas.clipPath(mArcPath);
         //画运动粒子
@@ -349,12 +356,12 @@ public class MySmartProgressView extends View {
             canvas.drawCircle(animPoint.getmX(), animPoint.getmY(),
                     animPoint.getRadius(), mPointPaint);
         }
-        canvas.drawCircle(0, 0, radius, mSweptPaint);
-        canvas.drawCircle(0, 0, radius, mCirclePaint);
+        canvas.drawCircle(0, 0, mRadius, mSweptPaint);
+        canvas.drawCircle(0, 0, mRadius, mCirclePaint);
         canvas.restore();
         //画指针
         canvas.save();
-        canvas.translate(centerX, centerY);
+        canvas.translate(mCenterX, mCenterY);
         canvas.rotate(mCurrentAngle / 10F);
         canvas.translate(-scaleWidth + 20, -scaleHeight - 10);
         canvas.drawBitmap(mBitmap, 0, 0, mBmpPaint);
@@ -384,8 +391,8 @@ public class MySmartProgressView extends View {
         mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.indicator);
         float bitmapWidth = mBitmap.getWidth();
         float bitmapHeight = mBitmap.getHeight();
-        scaleHeight = centerX;
-        scaleWidth = bitmapWidth * (centerX / bitmapHeight);
+        scaleHeight = mCenterX;
+        scaleWidth = bitmapWidth * (mCenterX / bitmapHeight);
         mBitmap = Bitmap.createScaledBitmap(mBitmap, (int) scaleWidth, (int) scaleHeight, false);
     }
 }
