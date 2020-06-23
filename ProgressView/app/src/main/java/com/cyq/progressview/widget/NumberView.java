@@ -87,10 +87,10 @@ public class NumberView extends FrameLayout {
         }
         //判断数字是增加还是减少，进而确定不同的动画效果
         mAscending = temperature > mCurrentValue;
-        mCurrentValue = value;
         mTvFirst.setText(String.valueOf(mCurrentValue));
         mTvSecond.setText(String.valueOf(value));
         mDownAnim.start();
         mTemperature = temperature;
+        mCurrentValue = value;
     }
 }

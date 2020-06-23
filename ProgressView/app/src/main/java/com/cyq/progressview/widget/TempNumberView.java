@@ -39,6 +39,8 @@ public class TempNumberView extends LinearLayout {
     private TextView mColon1View;
     private TextView mColon2View;
 
+    private LinearLayout mTempContainer, mClockContainer;
+
     public TempNumberView(Context context) {
         this(context, null);
     }
@@ -61,6 +63,8 @@ public class TempNumberView extends LinearLayout {
         mSecond2View = findViewById(R.id.mSecond2);
         mColon1View = findViewById(R.id.mColon1);
         mColon2View = findViewById(R.id.mColon2);
+        mTempContainer = findViewById(R.id.mTempNumberContainer);
+        mClockContainer = findViewById(R.id.mClockContainer);
         testCount();
     }
 
@@ -70,6 +74,10 @@ public class TempNumberView extends LinearLayout {
     Disposable disposable;
 
     void testCount() {
+        //设置为显示温度数字的模式
+        mTempContainer.setVisibility(VISIBLE);
+        mClockContainer.setVisibility(GONE);
+
         disposable = Observable.interval(0, 1000, TimeUnit.MILLISECONDS)
                 .map(new Function<Long, Long>() {
                     @Override
@@ -82,10 +90,10 @@ public class TempNumberView extends LinearLayout {
                     @Override
                     public void accept(Long count) throws Exception {
                         //TODO  测试 设置温度 1秒变化一次
-                        //setTemperature(Integer.parseInt(String.valueOf(count)));
+                        setTemperature(500-Integer.parseInt(String.valueOf(count)));
 
                         //TODO 测试计时器
-                        setClock(3610 - Integer.parseInt(String.valueOf(count)));
+                        //setClock(3610 - Integer.parseInt(String.valueOf(count)));
                     }
                 });
     }
