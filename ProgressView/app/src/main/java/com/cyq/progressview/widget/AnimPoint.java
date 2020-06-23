@@ -29,7 +29,7 @@ public class AnimPoint implements Cloneable {
      * 粒子初始位置的角度
      */
     private double anger;
-    private float distance = 1;
+    private float distance = 0.5F;
     private float velocity;
     private int num = 0;
 
@@ -41,7 +41,7 @@ public class AnimPoint implements Cloneable {
     public void init(Random random, float viewRadius) {
         anger = Math.toRadians(random.nextInt(360));
         velocity = random.nextFloat();
-        radius = random.nextInt(8) + 2;
+        radius = random.nextInt(5) + 2;
         mX = (float) (viewRadius * Math.cos(anger));
         mY = (float) (viewRadius * Math.sin(anger));
     }
@@ -56,7 +56,7 @@ public class AnimPoint implements Cloneable {
         mY = (float) (mY - distance * Math.sin(anger) * velocity);
         num++;
         //如果到了最大值 则重新给运动粒子一个轨迹属性
-        if (velocity * num > 190 || num > 800) {
+        if (velocity * num > 230 || num > 800) {
             num = 0;
             init(random, viewRadius);
         }

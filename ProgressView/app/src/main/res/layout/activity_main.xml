@@ -6,11 +6,13 @@
     android:background="@android:color/black"
     android:gravity="center_horizontal"
     android:orientation="vertical"
+    android:id="@+id/mContainer"
     tools:context=".MainActivity">
 
     <com.cyq.progressview.widget.MyProgressView
+        android:id="@+id/mProgress"
         android:layout_width="300dp"
         android:layout_height="300dp"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center" />
 
 </FrameLayout>

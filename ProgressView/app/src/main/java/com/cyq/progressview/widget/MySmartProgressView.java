@@ -15,12 +15,15 @@ import android.graphics.Path;
 import android.graphics.RadialGradient;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.os.Build;
 import android.os.Handler;
+import android.provider.CalendarContract;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import com.cyq.progressview.R;
 import com.cyq.progressview.Utils;
@@ -49,7 +52,7 @@ public class MySmartProgressView extends View {
     /**
      * 粒子总个数
      */
-    private int pointCount = 100;
+    private int pointCount = 200;
     /**
      * 粒子列表
      */
@@ -121,7 +124,7 @@ public class MySmartProgressView extends View {
     private int startColor4 = Color.parseColor("#A3FF8000");
     private int endColor4 = Color.parseColor("#23FF8000");
 
-    private float[] radialPositionArr = {0F, 0.6F, 1F};
+    private float[] radialPositionArr = {0F, 0.7F, 0.1F};
     private LinearGradient mBackCircleLinearGradient;
     private Paint mSweptPaint;
     private RadialGradient mRadialGradient;
@@ -202,7 +205,7 @@ public class MySmartProgressView extends View {
         //绘制扇形path
         mArcPath = new Path();
         final ValueAnimator arcAnimator = ValueAnimator.ofInt(0, 3600);
-        arcAnimator.setDuration(100000);
+        arcAnimator.setDuration(10000);
         arcAnimator.setRepeatMode(ValueAnimator.RESTART);
         arcAnimator.setRepeatCount(ValueAnimator.INFINITE);
         arcAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -224,6 +227,9 @@ public class MySmartProgressView extends View {
                 colors1, colors2, colors3, colors4);
         clickColorAnim.setDuration(10000);
         clickColorAnim.setRepeatCount(ValueAnimator.INFINITE);
+
+        final float[] pos = {0F, 06F, 1F};
+
         clickColorAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -231,6 +237,7 @@ public class MySmartProgressView extends View {
                 mPointPaint.setColor(colors.getOutColor());
                 mCirclePaint.setColor(colors.getOutColor());
                 //设置内圈变色圆的shader
+                radialArr[0] = Color.BLACK;
                 radialArr[1] = colors.getEndColor();
                 radialArr[2] = colors.getBeginColor();
                 mRadialGradient = new RadialGradient(
@@ -238,7 +245,7 @@ public class MySmartProgressView extends View {
                         0,
                         radius,
                         radialArr,
-                        radialPositionArr,
+                        pos,
                         Shader.TileMode.CLAMP);
                 mSweptPaint.setShader(mRadialGradient);
             }
@@ -349,7 +356,7 @@ public class MySmartProgressView extends View {
         //画指针
         canvas.save();
         canvas.translate(centerX, centerY);
-        canvas.rotate(mCurrentAngle/10F);
+        canvas.rotate(mCurrentAngle / 10F);
         canvas.translate(-scaleWidth + 20, -scaleHeight - 10);
         canvas.drawBitmap(mBitmap, 0, 0, mBmpPaint);
         canvas.restore();
@@ -362,6 +369,7 @@ public class MySmartProgressView extends View {
      * @param startAngle
      * @param sweepAngle
      */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void getSectorClip(float r, float startAngle, float sweepAngle) {
         mArcPath.reset();
         mArcPath.addArc(-r, -r, r, r, startAngle, sweepAngle);
