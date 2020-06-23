@@ -29,26 +29,15 @@ public class TempNumberView extends LinearLayout {
     private NumberView mTenView;
     private NumberView mHundredView;
 
-    private NumberView mHour1;
-    private NumberView mHour2;
-    private NumberView mMinute1;
-    private NumberView mMinute2;
-    private NumberView mSecond1;
-    private NumberView mSecond2;
+    private NumberView mHour1View;
+    private NumberView mHour2View;
+    private NumberView mMinute1View;
+    private NumberView mMinute2View;
+    private NumberView mSecond1View;
+    private NumberView mSecond2View;
 
-    private TextView mColon1;
-    private TextView mColon2;
-
-    private int mSingle;
-    private int mTen;
-    private int mHundred;
-
-    private int mHour1Value;
-    private int mHour2Value;
-    private int mMinute1Value;
-    private int mMinute2Value;
-    private int mSecond1Value;
-    private int mSecond2Value;
+    private TextView mColon1View;
+    private TextView mColon2View;
 
     public TempNumberView(Context context) {
         this(context, null);
@@ -64,15 +53,14 @@ public class TempNumberView extends LinearLayout {
         mSingleView = findViewById(R.id.mSingleNumber);
         mTenView = findViewById(R.id.mTenNumber);
         mHundredView = findViewById(R.id.mHundredNumber);
-        mHour1 = findViewById(R.id.mHour1);
-        mHour2 = findViewById(R.id.mHour2);
-        mMinute1 = findViewById(R.id.mMinute1);
-        mMinute2 = findViewById(R.id.mMinute2);
-        mSecond1 = findViewById(R.id.mSecond1);
-        mSecond2 = findViewById(R.id.mSecond2);
-        mColon1 = findViewById(R.id.mColon1);
-        mColon2 = findViewById(R.id.mColon2);
-
+        mHour1View = findViewById(R.id.mHour1);
+        mHour2View = findViewById(R.id.mHour2);
+        mMinute1View = findViewById(R.id.mMinute1);
+        mMinute2View = findViewById(R.id.mMinute2);
+        mSecond1View = findViewById(R.id.mSecond1);
+        mSecond2View = findViewById(R.id.mSecond2);
+        mColon1View = findViewById(R.id.mColon1);
+        mColon2View = findViewById(R.id.mColon2);
         testCount();
     }
 
@@ -108,9 +96,9 @@ public class TempNumberView extends LinearLayout {
      * @param temperature
      */
     private void setTemperature(int temperature) {
-        mSingle = temperature % 10;
-        mTen = temperature / 10 % 10;
-        mHundred = temperature / 100 % 10;
+        int mSingle = temperature % 10;
+        int mTen = temperature / 10 % 10;
+        int mHundred = temperature / 100 % 10;
         Log.e("test", "个 十 百：" + mSingle + "---" + mTen + "---" + mHundred);
         mSingleView.setCurrentValue(mSingle, temperature);
         if (temperature > 9) {
@@ -121,28 +109,26 @@ public class TempNumberView extends LinearLayout {
         }
     }
 
-
     /**
      * 设置时间
      */
     void setClock(int second) {
         Log.e("test", "时间-------------------：" + second);
-        //假如倒计时的时间为200s
         if (second > 60 - 1) {
             //大于1分钟
-            mSecond1.setVisibility(VISIBLE);
-            mSecond2.setVisibility(VISIBLE);
-            mMinute1.setVisibility(VISIBLE);
+            mSecond1View.setVisibility(VISIBLE);
+            mSecond2View.setVisibility(VISIBLE);
+            mMinute1View.setVisibility(VISIBLE);
         } else if (second > 60 * 10 - 1) {
             //大于十分钟
-            mMinute2.setVisibility(VISIBLE);
+            mMinute2View.setVisibility(VISIBLE);
         } else if (second > 60 * 60 - 1) {
             //大于60分钟
-            mColon2.setVisibility(VISIBLE);
-            mHour1.setVisibility(VISIBLE);
+            mColon2View.setVisibility(VISIBLE);
+            mHour1View.setVisibility(VISIBLE);
         } else if (second > 60 * 60 * 10 - 1) {
             //大于十个小时
-            mHour2.setVisibility(VISIBLE);
+            mHour2View.setVisibility(VISIBLE);
         }
 
         int hour = 0, min = 0, sec = 0;
@@ -154,14 +140,41 @@ public class TempNumberView extends LinearLayout {
         sec = (int) (second - hour * 3600 - min * 60);
         System.out.println();
 
+        int mHour1Value = hour / 10 % 10;
+        int mHour2Value = hour % 10;
+        int mMinute1Value = min / 10 % 10;
+        int mMinute2Value = min % 10;
+        int mSecond1Value = sec / 10 % 10;
+        int mSecond2Value = sec % 10;
         Log.e("test", hour + " : " + min + ":" + sec);
-        mHour1Value = hour / 10 % 10;
-        mHour2Value = hour % 10;
-        mMinute1Value = min / 10 % 10;
-        mMinute2Value = min % 10;
-        mSecond1Value = sec / 10 % 10;
-        mSecond2Value = sec % 10;
-        Log.e("test", hour + " : " + min + ":" + sec + " : " + hour + " : " + min + ":" + sec);
+        Log.e("test", mHour1Value + " : " + mHour2Value + ":" + mMinute1Value + " : " + mMinute2Value + " : " + mSecond1Value + ":" + mSecond2Value);
+
+        mSecond1View.setCurrentValue(mSecond1Value, second);
+        mSecond2View.setCurrentValue(mSecond2Value, second);
+        mMinute2View.setCurrentValue(mMinute2Value, second);
+
+        if (mHour1Value > 0) {
+            mHour1View.setVisibility(VISIBLE);
+            mHour2View.setVisibility(VISIBLE);
+            mMinute1View.setVisibility(VISIBLE);
+            mColon1View.setVisibility(VISIBLE);
+            mHour1View.setCurrentValue(mHour1Value, second);
+            mHour2View.setCurrentValue(mHour2Value, second);
+            mMinute1View.setCurrentValue(mMinute1Value, second);
+        } else if (mHour2Value > 0) {
+            mHour1View.setVisibility(GONE);
+            mHour2View.setVisibility(VISIBLE);
+            mMinute1View.setVisibility(VISIBLE);
+            mColon1View.setVisibility(VISIBLE);
+            mHour2View.setCurrentValue(mHour2Value, second);
+            mMinute1View.setCurrentValue(mMinute1Value, second);
+        } else if (mMinute1Value > 0) {
+            mHour1View.setVisibility(GONE);
+            mHour2View.setVisibility(GONE);
+            mMinute1View.setVisibility(VISIBLE);
+            mColon1View.setVisibility(GONE);
+            mMinute1View.setCurrentValue(mMinute1Value, second);
+        }
     }
 
     @Override

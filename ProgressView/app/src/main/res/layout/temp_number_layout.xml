@@ -48,34 +48,17 @@
         <com.cyq.progressview.widget.NumberView
             android:id="@+id/mHour1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
 
         <com.cyq.progressview.widget.NumberView
             android:id="@+id/mHour2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/mColon1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=":"
-            android:textColor="@android:color/white"
-            android:textSize="60sp" />
-
-        <com.cyq.progressview.widget.NumberView
-            android:id="@+id/mMinute1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <com.cyq.progressview.widget.NumberView
-            android:id="@+id/mMinute2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone" />
 
         <TextView
-            android:id="@+id/mColon2"
+            android:id="@+id/mColon1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=":"
@@ -84,16 +67,37 @@
             android:visibility="gone" />
 
         <com.cyq.progressview.widget.NumberView
-            android:id="@+id/mSecond1"
+            android:id="@+id/mMinute1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone" />
 
         <com.cyq.progressview.widget.NumberView
+            android:id="@+id/mMinute2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/mColon2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=":"
+            android:textColor="@android:color/white"
+            android:textSize="60sp"
+            android:visibility="visible" />
+
+        <com.cyq.progressview.widget.NumberView
+            android:id="@+id/mSecond1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible" />
+
+        <com.cyq.progressview.widget.NumberView
             android:id="@+id/mSecond2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
     </LinearLayout>
 </FrameLayout>
