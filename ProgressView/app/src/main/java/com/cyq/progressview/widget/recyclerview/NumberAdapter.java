@@ -27,7 +27,7 @@ public class NumberAdapter extends RecyclerView.Adapter<NumberAdapter.MyViewHold
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_number_list, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.widget_progress_item_number_list, parent, false);
         return new MyViewHolder(view);
     }
 

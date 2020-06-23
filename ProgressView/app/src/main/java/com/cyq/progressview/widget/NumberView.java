@@ -1,6 +1,5 @@
 package com.cyq.progressview.widget;
 
-import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
@@ -44,7 +43,7 @@ public class NumberView extends FrameLayout {
 
     public NumberView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        LayoutInflater.from(getContext()).inflate(R.layout.number_item_layout, this, true);
+        LayoutInflater.from(getContext()).inflate(R.layout.widget_progress_number_item_layout, this, true);
         mTvFirst = findViewById(R.id.tv_number_one);
         mTvSecond = findViewById(R.id.tv_number_tow);
         init();

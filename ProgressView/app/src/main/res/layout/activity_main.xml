@@ -9,7 +9,7 @@
     android:id="@+id/mContainer"
     tools:context=".MainActivity">
 
-    <com.cyq.progressview.widget.MyProgressView
+    <com.cyq.progressview.widget.ProgressLayout
         android:id="@+id/mProgress"
         android:layout_width="300dp"
         android:layout_height="300dp"

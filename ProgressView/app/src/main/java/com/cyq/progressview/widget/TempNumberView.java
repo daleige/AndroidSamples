@@ -49,7 +49,7 @@ public class TempNumberView extends LinearLayout {
 
     public TempNumberView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        LayoutInflater.from(getContext()).inflate(R.layout.temp_number_layout, this, true);
+        LayoutInflater.from(getContext()).inflate(R.layout.widget_progress_temp_number_layout, this, true);
         mSingleView = findViewById(R.id.mSingleNumber);
         mTenView = findViewById(R.id.mTenNumber);
         mHundredView = findViewById(R.id.mHundredNumber);

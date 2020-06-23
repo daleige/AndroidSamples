@@ -6,10 +6,10 @@ import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.cyq.progressview.widget.MyProgressView;
+import com.cyq.progressview.widget.ProgressLayout;
 
 public class MainActivity extends AppCompatActivity {
-    private MyProgressView mProgress;
+    private ProgressLayout mProgress;
     private boolean tagger = true;
     private FrameLayout mContainer;
 
@@ -22,24 +22,8 @@ public class MainActivity extends AppCompatActivity {
         mContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (tagger) {
-                    mProgress.animate()
-                            .translationY(-200)
-                            .scaleX(0.85f)
-                            .scaleY(0.85f)
-                            .setDuration(200)
-                            .withLayer()
-                            .start();
-                } else {
-                    mProgress.animate()
-                            .translationY(0)
-                            .scaleX(1f)
-                            .scaleY(1f)
-                            .setDuration(200)
-                            .withLayer()
-                            .start();
-                }
-                tagger = !tagger;
+
+
             }
         });
     }

@@ -16,24 +16,24 @@ import com.cyq.progressview.R;
  * date   : 2020/5/23 13:41
  * desc   : 自定义组合布局 底部的扇形粒子动画+数字切换
  */
-public class MyProgressView extends FrameLayout {
+public class ProgressLayout extends FrameLayout {
     private MySmartProgressView mMySmartProgressView;
     private FrameLayout mNumberContainer;
 
-    public MyProgressView(@NonNull Context context) {
+    public ProgressLayout(@NonNull Context context) {
         this(context, null);
     }
 
-    public MyProgressView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public ProgressLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public MyProgressView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ProgressLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
     private void init() {
-        LayoutInflater.from(getContext()).inflate(R.layout.progress_view_layout, this, true);
+        LayoutInflater.from(getContext()).inflate(R.layout.widget_progress_progress_view_layout, this, true);
     }
 }
