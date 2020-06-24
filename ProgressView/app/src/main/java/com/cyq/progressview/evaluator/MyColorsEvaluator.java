@@ -7,18 +7,19 @@ import android.animation.TypeEvaluator;
  * date   : 2020/5/20 17:42
  * desc   : 自定义属性动画的TypeEvaluator
  */
-public class MyColorsEvaluator implements TypeEvaluator<MyColors> {
-    private MyColors myColors;
+public class MyColorsEvaluator implements TypeEvaluator<ProgressColors> {
 
     @Override
-    public MyColors evaluate(float fraction, MyColors startValue, MyColors endValue) {
-        myColors = new MyColors();
-        myColors.setOutColor((Integer) getCurrentColor(fraction, startValue.getOutColor(),
-                endValue.getOutColor()));
-        myColors.setBeginColor((Integer) getCurrentColor(fraction, startValue.getBeginColor(),
-                endValue.getBeginColor()));
-        myColors.setEndColor((Integer) getCurrentColor(fraction, startValue.getEndColor(),
-                endValue.getEndColor()));
+    public ProgressColors evaluate(float fraction, ProgressColors startValue, ProgressColors endValue) {
+        ProgressColors myColors = new ProgressColors();
+        myColors.setInsideColor((Integer) getCurrentColor(fraction, startValue.getInsideColor(),
+                endValue.getInsideColor()));
+        myColors.setOutsizeColor((Integer) getCurrentColor(fraction, startValue.getOutsizeColor(),
+                endValue.getOutsizeColor()));
+        myColors.setProgressColor((Integer) getCurrentColor(fraction, startValue.getProgressColor(),
+                endValue.getProgressColor()));
+        myColors.setPointColor((Integer) getCurrentColor(fraction, startValue.getPointColor(),
+                endValue.getPointColor()));
         return myColors;
     }
 

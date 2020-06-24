@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:id="@+id/mContainer"
     tools:context=".MainActivity">
+
+    <com.cyq.progressview.test.TestView
+        android:layout_width="200px"
+        android:layout_height="200px" />
 
     <com.cyq.progressview.widget.ProgressLayout
         android:id="@+id/mProgress"

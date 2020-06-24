@@ -26,7 +26,7 @@ import androidx.annotation.RequiresApi;
 
 import com.cyq.progressview.R;
 import com.cyq.progressview.Utils;
-import com.cyq.progressview.evaluator.MyColors;
+import com.cyq.progressview.evaluator.ProgressColors;
 import com.cyq.progressview.evaluator.MyColorsEvaluator;
 
 import java.util.ArrayList;
@@ -58,7 +58,7 @@ public class MySmartProgressView extends View {
     /**
      * 粒子外层圆环的画笔
      */
-    private Paint mCirclePaint;
+    private Paint mOutCirclePaint;
     /**
      * 粒子画笔
      */
@@ -74,7 +74,7 @@ public class MySmartProgressView extends View {
     /**
      * 白色
      */
-    private int whiteColor = Color.parseColor("#FFFFFFFF");
+    private int whiteColor = Color.parseColor("#00FFFFFF");
     private int blackColor = Color.parseColor("#FF000000");
     private int endRadialGradientColor = Color.parseColor("#1978FF");
     private int middleRadialGradientColor = Color.parseColor("#1A001BFF");
@@ -90,30 +90,19 @@ public class MySmartProgressView extends View {
     /**
      * 底色圆环初始化动画渐变色
      */
-    private int[] backShaderColorArr = {transparentColor, transparentColor, blackColor};
+    private int[] backShaderColorArr = {transparentColor, transparentColor, middleRadialGradientColor};
     private float[] backPositionArr = {0, 0, 1};
-    private int[] radialArr = {blackColor, blackColor, middleRadialGradientColor};
+    /**
+     * 内环到外环的颜色变化数字
+     */
+    private int[] mRadialGradientColors = new int[3];
 
     /**
-     * 0.64透明度 //0.16透明度
+     * 四个进度阶段的颜色值0%-25%-50%-75%
      */
-    private int progressColor1 = Color.parseColor("#FF0066FF");
-    private int startColor1 = Color.parseColor("#A30066FF");
-    private int endColor1 = Color.parseColor("#230066FF");
+    private ProgressColors[] mProgressColorsArray = new ProgressColors[4];
 
-    private int progressColor2 = Color.parseColor("#FFFFDB00");
-    private int startColor2 = Color.parseColor("#A3FFDB00");
-    private int endColor2 = Color.parseColor("#23FFDB00");
-
-    private int progressColor3 = Color.parseColor("#FFFFA300");
-    private int startColor3 = Color.parseColor("#A3FFA300");
-    private int endColor3 = Color.parseColor("#23FFA300");
-
-    private int progressColor4 = Color.parseColor("#FFFF8000");
-    private int startColor4 = Color.parseColor("#A3FF8000");
-    private int endColor4 = Color.parseColor("#23FF8000");
-
-    private float[] radialPositionArr = {0F, 0.7F, 0.1F};
+    private float[] mRadialGradientStops = {0F, 0.6F, 1F};
     private LinearGradient mBackCircleLinearGradient;
     private Paint mSweptPaint;
     private RadialGradient mRadialGradient;
@@ -150,28 +139,7 @@ public class MySmartProgressView extends View {
 
     private void init() {
         initView();
-        mCirclePaint = new Paint();
-        mCirclePaint.setColor(endRadialGradientColor);
-        mCirclePaint.setStyle(Paint.Style.STROKE);
-        mCirclePaint.setStrokeWidth(mOutCircleStrokeWidth);
-        mCirclePaint.setMaskFilter(new BlurMaskFilter(50, BlurMaskFilter.Blur.SOLID));
-
-        mPointPaint = new Paint();
-        mPointPaint.setColor(whiteColor);
-        mPointPaint.setStyle(Paint.Style.FILL);
-        mPointPaint.setMaskFilter(new BlurMaskFilter(2, BlurMaskFilter.Blur.NORMAL));
-
-        mSweptPaint = new Paint();
-        mSweptPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        mSweptPaint.setColor(radialCircleColor);
-        mRadialGradient = new RadialGradient(
-                0,
-                0,
-                mRadius,
-                radialArr,
-                radialPositionArr,
-                Shader.TileMode.CLAMP);
-        mSweptPaint.setShader(mRadialGradient);
+        initPaint();
 
         /**
          * 圆弧画笔
@@ -210,34 +178,28 @@ public class MySmartProgressView extends View {
             }
         });
 
-        //颜色变化动画
-        MyColors colors1 = new MyColors(progressColor1, startColor1, endColor1);
-        MyColors colors2 = new MyColors(progressColor2, startColor2, endColor2);
-        MyColors colors3 = new MyColors(progressColor3, startColor3, endColor3);
-        MyColors colors4 = new MyColors(progressColor4, startColor4, endColor4);
         final ValueAnimator clickColorAnim = ValueAnimator.ofObject(new MyColorsEvaluator(),
-                colors1, colors2, colors3, colors4);
+                mProgressColorsArray[0],
+                mProgressColorsArray[1],
+                mProgressColorsArray[2],
+                mProgressColorsArray[3]);
         clickColorAnim.setDuration(10000);
         clickColorAnim.setRepeatCount(ValueAnimator.INFINITE);
-
-        final float[] pos = {0F, 06F, 1F};
 
         clickColorAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                MyColors colors = (MyColors) animation.getAnimatedValue();
-                mPointPaint.setColor(colors.getOutColor());
-                mCirclePaint.setColor(colors.getOutColor());
+                ProgressColors colors = (ProgressColors) animation.getAnimatedValue();
+                mPointPaint.setColor(colors.getPointColor());
+                mOutCirclePaint.setColor(colors.getProgressColor());
                 //设置内圈变色圆的shader
-                radialArr[0] = Color.BLACK;
-                radialArr[1] = colors.getEndColor();
-                radialArr[2] = colors.getBeginColor();
+                mRadialGradientColors[2] = colors.getInsideColor();
                 mRadialGradient = new RadialGradient(
                         0,
                         0,
-                        mRadius,
-                        radialArr,
-                        pos,
+                        mRadius - mOutCircleStrokeWidth / 2F,
+                        mRadialGradientColors,
+                        mRadialGradientStops,
                         Shader.TileMode.CLAMP);
                 mSweptPaint.setShader(mRadialGradient);
             }
@@ -268,6 +230,7 @@ public class MySmartProgressView extends View {
             }
         });
 
+        //初始化动画
         final ValueAnimator initAnimator = ValueAnimator.ofFloat(0, 1F);
         initAnimator.setDuration(1000);
         initAnimator.setInterpolator(new AccelerateInterpolator());
@@ -315,9 +278,66 @@ public class MySmartProgressView extends View {
     }
 
     /**
+     * 初始化各类画笔
+     */
+    private void initPaint() {
+        //step1：初始化外层圆环的画笔
+        mOutCirclePaint = new Paint();
+        mOutCirclePaint.setColor(endRadialGradientColor);
+        mOutCirclePaint.setStyle(Paint.Style.STROKE);
+        mOutCirclePaint.setStrokeWidth(mOutCircleStrokeWidth);
+        mOutCirclePaint.setMaskFilter(new BlurMaskFilter(50, BlurMaskFilter.Blur.SOLID));
+
+        //step2：初始化运动粒子的画笔
+        mPointPaint = new Paint();
+        mPointPaint.setColor(whiteColor);
+        mPointPaint.setStyle(Paint.Style.FILL);
+        mPointPaint.setMaskFilter(new BlurMaskFilter(2, BlurMaskFilter.Blur.NORMAL));
+
+        //step3：内圈到外圈渐变色画笔
+        mSweptPaint = new Paint();
+        mSweptPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        mRadialGradient = new RadialGradient(
+                0,
+                0,
+                mRadius - mOutCircleStrokeWidth / 2F,
+                mRadialGradientColors,
+                mRadialGradientStops,
+                Shader.TileMode.CLAMP);
+        mSweptPaint.setShader(mRadialGradient);
+    }
+
+    /**
      * 初始化控件的各类宽高，边框，半径等大小
      */
     private void initView() {
+        int insideColor1 = Color.parseColor("#FF001BFF");
+        int outsizeColor1 = Color.parseColor("#A60067FF");
+        int progressColor1 = Color.parseColor("#FF0066FF");
+        int pointColor1 = Color.parseColor("#FF1978FF");
+        int insideColor2 = Color.parseColor("#FFFFB600");
+        int outsizeColor2 = Color.parseColor("#A6FFB600");
+        int progressColor2 = Color.parseColor("#FFFFDB00");
+        int pointColor2 = Color.parseColor("#FFFFBD00");
+        int insideColor3 = Color.parseColor("#FFFF8700");
+        int outsizeColor3 = Color.parseColor("#A6FF7700");
+        int progressColor3 = Color.parseColor("#FFFFA300");
+        int pointColor3 = Color.parseColor("#FFFF9700");
+        int insideColor4 = Color.parseColor("#FFFF2200");
+        int outsizeColor4 = Color.parseColor("#A6FF1600");
+        int progressColor4 = Color.parseColor("#FFFF8000");
+        int pointColor4 = Color.parseColor("#FFFF5500");
+        ProgressColors progressColors1 = new ProgressColors(insideColor1, outsizeColor1, progressColor1, pointColor1);
+        ProgressColors progressColors2 = new ProgressColors(insideColor2, outsizeColor2, progressColor2, pointColor2);
+        ProgressColors progressColors3 = new ProgressColors(insideColor3, outsizeColor3, progressColor3, pointColor3);
+        ProgressColors progressColors4 = new ProgressColors(insideColor4, outsizeColor4, progressColor4, pointColor4);
+        mProgressColorsArray[0] = progressColors1;
+        mProgressColorsArray[1] = progressColors2;
+        mProgressColorsArray[2] = progressColors3;
+        mProgressColorsArray[3] = progressColors4;
+        mRadialGradientColors[0] = transparentColor;
+        mRadialGradientColors[1] = transparentColor;
+
         width = Utils.dip2px(300, getContext());
         height = Utils.dip2px(300, getContext());
         mCenterX = width / 2;
@@ -351,14 +371,18 @@ public class MySmartProgressView extends View {
         canvas.translate(mCenterX, mCenterY);
         //把画布裁剪成扇形
         canvas.clipPath(mArcPath);
+
         //画运动粒子
         for (AnimPoint animPoint : mPointList) {
             canvas.drawCircle(animPoint.getmX(), animPoint.getmY(),
                     animPoint.getRadius(), mPointPaint);
         }
+        //画变色圆饼
         canvas.drawCircle(0, 0, mRadius, mSweptPaint);
-        canvas.drawCircle(0, 0, mRadius, mCirclePaint);
+        //画进度圆环
+        canvas.drawCircle(0, 0, mRadius, mOutCirclePaint);
         canvas.restore();
+
         //画指针
         canvas.save();
         canvas.translate(mCenterX, mCenterY);
