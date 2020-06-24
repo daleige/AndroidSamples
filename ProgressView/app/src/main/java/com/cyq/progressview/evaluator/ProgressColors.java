@@ -26,14 +26,28 @@ public class ProgressColors {
      */
     private int pointColor;
 
+    /**
+     * 底色圆环颜色
+     */
+    private int bgCircleColor;
+
     public ProgressColors() {
     }
 
-    public ProgressColors(int insideColor, int outsizeColor, int progressColor, int pointColor) {
+    public ProgressColors(int insideColor, int outsizeColor, int progressColor, int pointColor, int bgCircleColor) {
         this.insideColor = insideColor;
         this.outsizeColor = outsizeColor;
         this.progressColor = progressColor;
         this.pointColor = pointColor;
+        this.bgCircleColor = bgCircleColor;
+    }
+
+    public int getBgCircleColor() {
+        return bgCircleColor;
+    }
+
+    public void setBgCircleColor(int bgCircleColor) {
+        this.bgCircleColor = bgCircleColor;
     }
 
     public int getInsideColor() {

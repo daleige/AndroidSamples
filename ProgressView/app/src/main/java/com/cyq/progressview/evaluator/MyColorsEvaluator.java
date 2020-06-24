@@ -20,6 +20,8 @@ public class MyColorsEvaluator implements TypeEvaluator<ProgressColors> {
                 endValue.getProgressColor()));
         myColors.setPointColor((Integer) getCurrentColor(fraction, startValue.getPointColor(),
                 endValue.getPointColor()));
+        myColors.setBgCircleColor((Integer) getCurrentColor(fraction, startValue.getBgCircleColor(),
+                endValue.getBgCircleColor()));
         return myColors;
     }
 

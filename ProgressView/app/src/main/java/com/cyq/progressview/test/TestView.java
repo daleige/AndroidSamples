@@ -33,7 +33,7 @@ public class TestView extends View {
     int endColor = Color.parseColor("#FFFF8700");
     int transparentColor = Color.parseColor("#00000000");
     int[] colors = {transparentColor, transparentColor, endColor};
-    float[] posts = {0F, 0.6F, 0.1F};
+    float[] posts = {0F, 0.6F, 1F};
 
     @Override
     protected void onDraw(Canvas canvas) {

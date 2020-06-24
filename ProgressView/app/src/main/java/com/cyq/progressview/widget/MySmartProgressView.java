@@ -122,7 +122,11 @@ public class MySmartProgressView extends View {
     /**
      * 外层粒子圆环的边框大小
      */
-    private int mOutCircleStrokeWidth = 25;
+    private final int mOutCircleStrokeWidth = 20;
+    /**
+     * 底色环的边框大小
+     */
+    private final int mBackCircleStrokeWidth = 12;
 
     public MySmartProgressView(Context context) {
         this(context, null);
@@ -156,7 +160,7 @@ public class MySmartProgressView extends View {
 
         mBackCirclePaiht = new Paint();
         mBackCirclePaiht.setColor(backCircleColor);
-        mBackCirclePaiht.setStrokeWidth(20);
+        mBackCirclePaiht.setStrokeWidth(mBackCircleStrokeWidth);
         mBackCirclePaiht.setAntiAlias(true);
         mBackCirclePaiht.setStyle(Paint.Style.STROKE);
 
@@ -192,6 +196,7 @@ public class MySmartProgressView extends View {
                 ProgressColors colors = (ProgressColors) animation.getAnimatedValue();
                 mPointPaint.setColor(colors.getPointColor());
                 mOutCirclePaint.setColor(colors.getProgressColor());
+                mBackCirclePaiht.setColor(colors.getBgCircleColor());
                 //设置内圈变色圆的shader
                 mRadialGradientColors[2] = colors.getInsideColor();
                 mRadialGradient = new RadialGradient(
@@ -315,22 +320,27 @@ public class MySmartProgressView extends View {
         int outsizeColor1 = Color.parseColor("#A60067FF");
         int progressColor1 = Color.parseColor("#FF0066FF");
         int pointColor1 = Color.parseColor("#FF1978FF");
+        int bgCircleColor1 = Color.parseColor("#290066FF");
         int insideColor2 = Color.parseColor("#FFFFB600");
         int outsizeColor2 = Color.parseColor("#A6FFB600");
         int progressColor2 = Color.parseColor("#FFFFDB00");
         int pointColor2 = Color.parseColor("#FFFFBD00");
+        //TODO 这个颜色值是错误的，需要UI确认后修改
+        int bgCircleColor2 = Color.parseColor("#290066FF");
         int insideColor3 = Color.parseColor("#FFFF8700");
         int outsizeColor3 = Color.parseColor("#A6FF7700");
         int progressColor3 = Color.parseColor("#FFFFA300");
         int pointColor3 = Color.parseColor("#FFFF9700");
+        int bgCircleColor3 = Color.parseColor("#1AFFA300");
         int insideColor4 = Color.parseColor("#FFFF2200");
         int outsizeColor4 = Color.parseColor("#A6FF1600");
         int progressColor4 = Color.parseColor("#FFFF8000");
         int pointColor4 = Color.parseColor("#FFFF5500");
-        ProgressColors progressColors1 = new ProgressColors(insideColor1, outsizeColor1, progressColor1, pointColor1);
-        ProgressColors progressColors2 = new ProgressColors(insideColor2, outsizeColor2, progressColor2, pointColor2);
-        ProgressColors progressColors3 = new ProgressColors(insideColor3, outsizeColor3, progressColor3, pointColor3);
-        ProgressColors progressColors4 = new ProgressColors(insideColor4, outsizeColor4, progressColor4, pointColor4);
+        int bgCircleColor4 = Color.parseColor("#1AFF5500");
+        ProgressColors progressColors1 = new ProgressColors(insideColor1, outsizeColor1, progressColor1, pointColor1, bgCircleColor1);
+        ProgressColors progressColors2 = new ProgressColors(insideColor2, outsizeColor2, progressColor2, pointColor2, bgCircleColor2);
+        ProgressColors progressColors3 = new ProgressColors(insideColor3, outsizeColor3, progressColor3, pointColor3, bgCircleColor3);
+        ProgressColors progressColors4 = new ProgressColors(insideColor4, outsizeColor4, progressColor4, pointColor4, bgCircleColor4);
         mProgressColorsArray[0] = progressColors1;
         mProgressColorsArray[1] = progressColors2;
         mProgressColorsArray[2] = progressColors3;
