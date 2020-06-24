@@ -397,7 +397,7 @@ public class MySmartProgressView extends View {
         canvas.save();
         canvas.translate(mCenterX, mCenterY);
         canvas.rotate(mCurrentAngle / 10F);
-        canvas.translate(-scaleWidth + 20, -scaleHeight - 10);
+        canvas.translate(-scaleWidth + 10, -scaleHeight - 10);
         canvas.drawBitmap(mBitmap, 0, 0, mBmpPaint);
         canvas.restore();
     }
