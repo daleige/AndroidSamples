@@ -46,7 +46,7 @@ public class MySmartProgressView extends View {
     /**
      * 粒子总个数
      */
-    private int pointCount = 200;
+    private int pointCount = 150;
     /**
      * 粒子列表
      */
@@ -169,7 +169,7 @@ public class MySmartProgressView extends View {
         //绘制扇形path
         mArcPath = new Path();
         final ValueAnimator arcAnimator = ValueAnimator.ofInt(0, 3600);
-        arcAnimator.setDuration(10000);
+        arcAnimator.setDuration(60000);
         arcAnimator.setRepeatMode(ValueAnimator.RESTART);
         arcAnimator.setRepeatCount(ValueAnimator.INFINITE);
         arcAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -187,7 +187,7 @@ public class MySmartProgressView extends View {
                 mProgressColorsArray[1],
                 mProgressColorsArray[2],
                 mProgressColorsArray[3]);
-        clickColorAnim.setDuration(10000);
+        clickColorAnim.setDuration(60000);
         clickColorAnim.setRepeatCount(ValueAnimator.INFINITE);
 
         clickColorAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -212,7 +212,6 @@ public class MySmartProgressView extends View {
 
         mPointList.clear();
         AnimPoint animPoint = new AnimPoint();
-        animPoint.setAlpha(1);
         for (int i = 0; i < pointCount; i++) {
             //通过clone创建对象，避免重复创建
             AnimPoint cloneAnimPoint = animPoint.clone();
@@ -297,7 +296,9 @@ public class MySmartProgressView extends View {
         mPointPaint = new Paint();
         mPointPaint.setColor(whiteColor);
         mPointPaint.setStyle(Paint.Style.FILL);
-        mPointPaint.setMaskFilter(new BlurMaskFilter(2, BlurMaskFilter.Blur.NORMAL));
+        mPointPaint.setMaskFilter(new BlurMaskFilter(3, BlurMaskFilter.Blur.NORMAL));
+        //关闭粒子画笔的硬件加速
+        //setLayerType(View.LAYER_TYPE_SOFTWARE, mPointPaint);
 
         //step3：内圈到外圈渐变色画笔
         mSweptPaint = new Paint();
@@ -393,7 +394,7 @@ public class MySmartProgressView extends View {
         canvas.drawCircle(0, 0, mRadius - mOutCircleStrokeWidth / 2F, mSweptPaint);
         canvas.restore();
 
-//        //画指针
+        //画指针
         canvas.save();
         canvas.translate(mCenterX, mCenterY);
         canvas.rotate(mCurrentAngle / 10F);

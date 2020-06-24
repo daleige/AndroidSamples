@@ -1,6 +1,7 @@
 package com.cyq.progressview.test;
 
 import android.content.Context;
+import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -38,6 +39,7 @@ public class TestView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        //setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         Paint mSweptPaint = new Paint();
         mSweptPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         RadialGradient mRadialGradient = new RadialGradient(
@@ -50,5 +52,15 @@ public class TestView extends View {
         mSweptPaint.setShader(mRadialGradient);
         canvas.save();
         canvas.drawCircle(100, 100, 100, mSweptPaint);
+
+
+        Paint mPaint2 = new Paint();
+        mPaint2.setColor(Color.WHITE);
+        mPaint2.setStyle(Paint.Style.FILL);
+        mPaint2.setMaskFilter(new BlurMaskFilter(25, BlurMaskFilter.Blur.NORMAL));
+
+        canvas.drawCircle(400, 100, 25, mPaint2);
+
+
     }
 }
