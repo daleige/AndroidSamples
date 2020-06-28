@@ -74,7 +74,7 @@ public class TestView extends View  {
 
 
         canvas.translate(500, 500);
-        int radius = 200;
+        int radius = 300;
         Point q1 = new Point();
         q1.x = (int) (radius * Math.cos(Math.toRadians(120)));
         q1.y = (int) (radius * Math.sin(Math.toRadians(120)));
@@ -100,7 +100,7 @@ public class TestView extends View  {
 
         canvas.drawCircle(0, 0, radius, circlrPaint);
 
-        int controllerRadius = 300;
+        int controllerRadius = 410;
         Point cFirst1 = new Point();
         Point cFirst2 = new Point();
         Point cSecond1 = new Point();
