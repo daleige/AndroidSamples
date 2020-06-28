@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.animation.BounceInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -53,7 +54,7 @@ public class NumberView extends FrameLayout {
         mHeight = Utils.dip2px(80, getContext());
         mDownAnim = ValueAnimator.ofFloat(0F, 1F);
         mDownAnim.setDuration(500);
-        mDownAnim.setInterpolator(new BounceInterpolator());
+        mDownAnim.setInterpolator(new OvershootInterpolator());
         mDownAnim.setRepeatCount(0);
         mDownAnim.setRepeatMode(ValueAnimator.RESTART);
         mDownAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {

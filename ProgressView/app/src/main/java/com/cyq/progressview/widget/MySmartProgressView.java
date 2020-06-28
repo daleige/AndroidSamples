@@ -156,154 +156,6 @@ public class MySmartProgressView extends View {
         initAnim();
     }
 
-    private void initAnim() {
-        // 绘制扇形path
-        mArcPath = new Path();
-        //自定义包含各个进度对应的颜色值和进度值的属性动画，
-        final ValueAnimator clickColorAnim = ValueAnimator.ofObject(new MyColorsEvaluator(),
-                mProgressColorsArray[0],
-                mProgressColorsArray[1],
-                mProgressColorsArray[2],
-                mProgressColorsArray[3]);
-        clickColorAnim.setDuration(60000);
-        clickColorAnim.setRepeatCount(ValueAnimator.INFINITE);
-        clickColorAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                ProgressColors colors = (ProgressColors) animation.getAnimatedValue();
-                //获取当前的进度0~3600之间
-                mCurrentAngle = colors.getProgress();
-                //获取此时的扇形区域path，用于裁剪动画粒子的canvas
-                getSectorClip(width / 2F, -90, mCurrentAngle / 10F);
-
-                //变更进度条的颜色值
-                mPointPaint.setColor(colors.getPointColor());
-                mOutCirclePaint.setColor(colors.getProgressColor());
-                mBackCirclePaiht.setColor(colors.getBgCircleColor());
-                //设置内圈变色圆的shader
-                mRadialGradientColors[2] = colors.getInsideColor();
-                mRadialGradient = new RadialGradient(
-                        0,
-                        0,
-                        mRadius - mOutCircleStrokeWidth / 2F,
-                        mRadialGradientColors,
-                        mRadialGradientStops,
-                        Shader.TileMode.CLAMP);
-                mSweptPaint.setShader(mRadialGradient);
-            }
-        });
-
-        //绘制运动的粒子
-        mPointList.clear();
-        AnimPoint animPoint = new AnimPoint();
-        for (int i = 0; i < pointCount; i++) {
-            //通过clone创建对象，避免重复创建
-            AnimPoint cloneAnimPoint = animPoint.clone();
-            cloneAnimPoint.init(mRandom, mRadius);
-            mPointList.add(cloneAnimPoint);
-        }
-        //画运动粒子
-        final ValueAnimator pointsAnimator = ValueAnimator.ofFloat(0.1F, 1F);
-        pointsAnimator.setDuration(1000);
-        pointsAnimator.setRepeatMode(ValueAnimator.RESTART);
-        pointsAnimator.setRepeatCount(ValueAnimator.INFINITE);
-        pointsAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                for (AnimPoint point : mPointList) {
-                    point.updatePoint(mRandom, mRadius);
-                }
-                invalidate();
-            }
-        });
-
-        //初始化动画
-        final ValueAnimator initAnimator = ValueAnimator.ofFloat(0, 1F);
-        initAnimator.setDuration(1000);
-        initAnimator.setInterpolator(new AccelerateInterpolator());
-        initAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float value = (float) animation.getAnimatedValue();
-                backPositionArr[1] = value;
-                mBackCircleLinearGradient = new LinearGradient(
-                        0,
-                        -mCenterX,
-                        0,
-                        mCenterY,
-                        backShaderColorArr,
-                        backPositionArr,
-                        Shader.TileMode.CLAMP);
-                mBackShadePaint.setShader(mBackCircleLinearGradient);
-                invalidate();
-            }
-        });
-        initAnimator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                super.onAnimationStart(animation);
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                AnimatorSet animatorSet = new AnimatorSet();
-                animatorSet.playTogether(clickColorAnim, pointsAnimator);
-                animatorSet.start();
-            }
-        });
-        postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                initAnimator.start();
-            }
-        }, 1000);
-    }
-
-    /**
-     * 初始化各类画笔
-     */
-    private void initPaint() {
-        //step1：初始化外层圆环的画笔
-        mOutCirclePaint = new Paint();
-        mOutCirclePaint.setColor(endRadialGradientColor);
-        mOutCirclePaint.setStyle(Paint.Style.STROKE);
-        mOutCirclePaint.setStrokeWidth(mOutCircleStrokeWidth);
-        mOutCirclePaint.setMaskFilter(new BlurMaskFilter(50, BlurMaskFilter.Blur.SOLID));
-
-        //step2：初始化运动粒子的画笔
-        mPointPaint = new Paint();
-        mPointPaint.setColor(whiteColor);
-        mPointPaint.setStyle(Paint.Style.FILL);
-        mPointPaint.setMaskFilter(new BlurMaskFilter(3, BlurMaskFilter.Blur.NORMAL));
-        //关闭粒子画笔的硬件加速
-        //setLayerType(View.LAYER_TYPE_SOFTWARE, mPointPaint);
-
-        //step3：内圈到外圈渐变色画笔
-        mSweptPaint = new Paint();
-        mSweptPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        mRadialGradient = new RadialGradient(
-                0,
-                0,
-                mRadius + mOutCircleStrokeWidth / 2F,
-                mRadialGradientColors,
-                mRadialGradientStops,
-                Shader.TileMode.CLAMP);
-        mSweptPaint.setShader(mRadialGradient);
-
-        //初始化底色圆画笔
-        mBackCirclePaiht = new Paint();
-        mBackCirclePaiht.setColor(backCircleColor);
-        mBackCirclePaiht.setStrokeWidth(mBackCircleStrokeWidth);
-        mBackCirclePaiht.setAntiAlias(true);
-        mBackCirclePaiht.setStyle(Paint.Style.STROKE);
-
-        //初始化底色圆得initAnimator画笔
-        mBackShadePaint = new Paint();
-    }
-
     /**
      * 初始化控件的各类宽高，边框，半径等大小
      */
@@ -349,12 +201,174 @@ public class MySmartProgressView extends View {
         mRect = new RectF(-mCenterX, -mCenterX, mCenterX, mCenterX);
     }
 
+    /**
+     * 初始化各类画笔
+     */
+    private void initPaint() {
+        //step1：初始化外层圆环的画笔
+        mOutCirclePaint = new Paint();
+        mOutCirclePaint.setColor(endRadialGradientColor);
+        mOutCirclePaint.setStyle(Paint.Style.STROKE);
+        mOutCirclePaint.setStrokeWidth(mOutCircleStrokeWidth);
+        mOutCirclePaint.setMaskFilter(new BlurMaskFilter(50, BlurMaskFilter.Blur.SOLID));
+
+        //step2：初始化运动粒子的画笔
+        mPointPaint = new Paint();
+        mPointPaint.setColor(whiteColor);
+        mPointPaint.setStyle(Paint.Style.FILL);
+        mPointPaint.setMaskFilter(new BlurMaskFilter(3, BlurMaskFilter.Blur.NORMAL));
+        //关闭粒子画笔的硬件加速
+        //setLayerType(View.LAYER_TYPE_SOFTWARE, mPointPaint);
+
+        //step3：内圈到外圈渐变色画笔
+        mSweptPaint = new Paint();
+        mSweptPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        mRadialGradient = new RadialGradient(
+                0,
+                0,
+                mRadius + mOutCircleStrokeWidth / 2F,
+                mRadialGradientColors,
+                mRadialGradientStops,
+                Shader.TileMode.CLAMP);
+        mSweptPaint.setShader(mRadialGradient);
+
+        //初始化底色圆画笔
+        mBackCirclePaiht = new Paint();
+        mBackCirclePaiht.setColor(backCircleColor);
+        mBackCirclePaiht.setStrokeWidth(mBackCircleStrokeWidth);
+        mBackCirclePaiht.setAntiAlias(true);
+        mBackCirclePaiht.setStyle(Paint.Style.STROKE);
+
+        //初始化底色圆得initAnimator画笔
+        mBackShadePaint = new Paint();
+    }
+
+    /**
+     * 初始化指针图片的Bitmap
+     */
+    private void initBitmap() {
+        mBmpPaint = new Paint();
+        mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.indicator);
+        float bitmapWidth = mBitmap.getWidth();
+        float bitmapHeight = mBitmap.getHeight();
+        scaleHeight = mCenterX;
+        scaleWidth = bitmapWidth * (mCenterX / bitmapHeight);
+        mBitmap = Bitmap.createScaledBitmap(mBitmap, (int) scaleWidth, (int) scaleHeight, false);
+    }
+
+    /**
+     * 初始化动画
+     */
+    private void initAnim() {
+        // 绘制扇形path
+        mArcPath = new Path();
+
+        //自定义包含各个进度对应的颜色值和进度值的属性动画，
+        final ValueAnimator clickColorAnim = ValueAnimator.ofObject(new MyColorsEvaluator(),
+                mProgressColorsArray[0],
+                mProgressColorsArray[1],
+                mProgressColorsArray[2],
+                mProgressColorsArray[3]);
+        clickColorAnim.setDuration(12000);
+        clickColorAnim.setRepeatCount(ValueAnimator.INFINITE);
+        clickColorAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                ProgressColors colors = (ProgressColors) animation.getAnimatedValue();
+                //获取当前的进度0~3600之间
+                mCurrentAngle = colors.getProgress();
+                //获取此时的扇形区域path，用于裁剪动画粒子的canvas
+                getSectorClip(width / 2F, -90, mCurrentAngle / 10F);
+                //变更进度条的颜色值
+                mPointPaint.setColor(colors.getPointColor());
+                mOutCirclePaint.setColor(colors.getProgressColor());
+                mBackCirclePaiht.setColor(colors.getBgCircleColor());
+                //设置内圈变色圆的shader
+                mRadialGradientColors[2] = colors.getInsideColor();
+                mRadialGradient = new RadialGradient(
+                        0,
+                        0,
+                        mRadius - mOutCircleStrokeWidth / 2F,
+                        mRadialGradientColors,
+                        mRadialGradientStops,
+                        Shader.TileMode.CLAMP);
+                mSweptPaint.setShader(mRadialGradient);
+            }
+        });
+        //绘制运动的粒子
+        mPointList.clear();
+        AnimPoint animPoint = new AnimPoint();
+        for (int i = 0; i < pointCount; i++) {
+            //通过clone创建对象，避免重复创建
+            AnimPoint cloneAnimPoint = animPoint.clone();
+            cloneAnimPoint.init(mRandom, mRadius);
+            mPointList.add(cloneAnimPoint);
+        }
+        //画运动粒子
+        final ValueAnimator pointsAnimator = ValueAnimator.ofFloat(0.1F, 1F);
+        pointsAnimator.setDuration(1000);
+        pointsAnimator.setRepeatMode(ValueAnimator.RESTART);
+        pointsAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        pointsAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                for (AnimPoint point : mPointList) {
+                    point.updatePoint(mRandom, mRadius);
+                }
+                invalidate();
+            }
+        });
+
+        //TODO 初始化动画 还需要和设计确认具体效果
+        final ValueAnimator initAnimator = ValueAnimator.ofFloat(0, 1F);
+        initAnimator.setDuration(1000);
+        initAnimator.setInterpolator(new AccelerateInterpolator());
+        initAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float value = (float) animation.getAnimatedValue();
+                backPositionArr[1] = value;
+                mBackCircleLinearGradient = new LinearGradient(
+                        0,
+                        -mCenterX,
+                        0,
+                        mCenterY,
+                        backShaderColorArr,
+                        backPositionArr,
+                        Shader.TileMode.CLAMP);
+                mBackShadePaint.setShader(mBackCircleLinearGradient);
+                invalidate();
+            }
+        });
+        initAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                AnimatorSet animatorSet = new AnimatorSet();
+                animatorSet.playTogether(clickColorAnim, pointsAnimator);
+                animatorSet.start();
+            }
+        });
+        postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                initAnimator.start();
+            }
+        }, 1000);
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         setMeasuredDimension(width, height);
     }
-
 
     @Override
     protected void onDraw(final Canvas canvas) {
@@ -405,18 +419,5 @@ public class MySmartProgressView extends View {
         mArcPath.addArc(-r, -r, r, r, startAngle, sweepAngle);
         mArcPath.lineTo(0, 0);
         mArcPath.close();
-    }
-
-    /**
-     * 初始化指针图片的Bitmap
-     */
-    private void initBitmap() {
-        mBmpPaint = new Paint();
-        mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.indicator);
-        float bitmapWidth = mBitmap.getWidth();
-        float bitmapHeight = mBitmap.getHeight();
-        scaleHeight = mCenterX;
-        scaleWidth = bitmapWidth * (mCenterX / bitmapHeight);
-        mBitmap = Bitmap.createScaledBitmap(mBitmap, (int) scaleWidth, (int) scaleHeight, false);
     }
 }
