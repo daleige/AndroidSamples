@@ -9,6 +9,7 @@ import android.graphics.Path;
 import android.graphics.RadialGradient;
 import android.graphics.Shader;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -22,7 +23,7 @@ import java.util.Random;
  * date   : 2020/6/24 14:06
  * desc   :
  */
-public class TestView extends View {
+public class TestView extends View  {
     public TestView(Context context) {
         this(context, null);
     }
@@ -33,7 +34,12 @@ public class TestView extends View {
 
     public TestView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
+        setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                invalidate();
+            }
+        });
     }
 
     int endColor = Color.parseColor("#FFFF8700");
@@ -148,7 +154,6 @@ public class TestView extends View {
         path1.cubicTo(cSecond1.x, cSecond1.y, cSecond2.x, cSecond2.y, q2.x, q2.y);
         path1.cubicTo(cThree1.x, cThree1.y, cThree2.x, cThree2.y, q3.x, q3.y);
         canvas.drawPath(path1, pathPaint);
-
     }
 
     class Point {

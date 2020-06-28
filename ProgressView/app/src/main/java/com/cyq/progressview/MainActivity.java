@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mContainer = findViewById(R.id.mContainer);
         mProgress = findViewById(R.id.mProgress);
-        mContainer.setOnClickListener(new View.OnClickListener() {
+        mProgress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (tagger) {
