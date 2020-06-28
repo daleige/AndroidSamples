@@ -8,6 +8,7 @@ import android.animation.TypeEvaluator;
  * desc   : 自定义属性动画的TypeEvaluator
  */
 public class MyColorsEvaluator implements TypeEvaluator<ProgressColors> {
+    private final float distance = 1.0F / 3.0F;
 
     @Override
     public ProgressColors evaluate(float fraction, ProgressColors startValue, ProgressColors endValue) {
@@ -22,6 +23,7 @@ public class MyColorsEvaluator implements TypeEvaluator<ProgressColors> {
                 endValue.getPointColor()));
         myColors.setBgCircleColor((Integer) getCurrentColor(fraction, startValue.getBgCircleColor(),
                 endValue.getBgCircleColor()));
+        myColors.setProgress((int) (startValue.getProgress() + fraction * distance * 3600));
         return myColors;
     }
 

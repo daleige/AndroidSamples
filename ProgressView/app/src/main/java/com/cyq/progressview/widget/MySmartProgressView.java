@@ -2,6 +2,7 @@ package com.cyq.progressview.widget;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -111,7 +112,10 @@ public class MySmartProgressView extends View {
      * 宽高等于控件大小额矩形
      */
     private RectF mRect;
-
+    /**
+     * 扇形粒子区域的路径，用于裁剪画布范围
+     */
+    private Path mArcPath;
 
     private Bitmap mBitmap;
     private Paint mBmpPaint;
@@ -148,22 +152,14 @@ public class MySmartProgressView extends View {
         initPaint();
         //初始化指针Bitmap画布
         initBitmap();
-        //绘制扇形path
-        mArcPath = new Path();
-        final ValueAnimator arcAnimator = ValueAnimator.ofInt(0, 3600);
-        arcAnimator.setDuration(60000);
-        arcAnimator.setRepeatMode(ValueAnimator.RESTART);
-        arcAnimator.setRepeatCount(ValueAnimator.INFINITE);
-        arcAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                int value = (int) animation.getAnimatedValue();
-                mCurrentAngle = value;
-                //获取此时的扇形区域path，用于裁剪动画粒子的canvas
-                getSectorClip(width / 2F, -90, value / 10F);
-            }
-        });
+        //初始化动画
+        initAnim();
+    }
 
+    private void initAnim() {
+        // 绘制扇形path
+        mArcPath = new Path();
+        //自定义包含各个进度对应的颜色值和进度值的属性动画，
         final ValueAnimator clickColorAnim = ValueAnimator.ofObject(new MyColorsEvaluator(),
                 mProgressColorsArray[0],
                 mProgressColorsArray[1],
@@ -171,11 +167,16 @@ public class MySmartProgressView extends View {
                 mProgressColorsArray[3]);
         clickColorAnim.setDuration(60000);
         clickColorAnim.setRepeatCount(ValueAnimator.INFINITE);
-
         clickColorAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 ProgressColors colors = (ProgressColors) animation.getAnimatedValue();
+                //获取当前的进度0~3600之间
+                mCurrentAngle = colors.getProgress();
+                //获取此时的扇形区域path，用于裁剪动画粒子的canvas
+                getSectorClip(width / 2F, -90, mCurrentAngle / 10F);
+
+                //变更进度条的颜色值
                 mPointPaint.setColor(colors.getPointColor());
                 mOutCirclePaint.setColor(colors.getProgressColor());
                 mBackCirclePaiht.setColor(colors.getBgCircleColor());
@@ -192,6 +193,7 @@ public class MySmartProgressView extends View {
             }
         });
 
+        //绘制运动的粒子
         mPointList.clear();
         AnimPoint animPoint = new AnimPoint();
         for (int i = 0; i < pointCount; i++) {
@@ -202,7 +204,7 @@ public class MySmartProgressView extends View {
         }
         //画运动粒子
         final ValueAnimator pointsAnimator = ValueAnimator.ofFloat(0.1F, 1F);
-        pointsAnimator.setDuration(Integer.MAX_VALUE);
+        pointsAnimator.setDuration(1000);
         pointsAnimator.setRepeatMode(ValueAnimator.RESTART);
         pointsAnimator.setRepeatCount(ValueAnimator.INFINITE);
         pointsAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -247,18 +249,17 @@ public class MySmartProgressView extends View {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                arcAnimator.start();
-                clickColorAnim.start();
-                pointsAnimator.start();
+                AnimatorSet animatorSet = new AnimatorSet();
+                animatorSet.playTogether(clickColorAnim, pointsAnimator);
+                animatorSet.start();
             }
         });
-        new Handler().postDelayed(new Runnable() {
+        postDelayed(new Runnable() {
             @Override
             public void run() {
                 initAnimator.start();
             }
         }, 1000);
-
     }
 
     /**
@@ -316,8 +317,7 @@ public class MySmartProgressView extends View {
         int outsizeColor2 = Color.parseColor("#A6FFB600");
         int progressColor2 = Color.parseColor("#FFFFDB00");
         int pointColor2 = Color.parseColor("#FFFFBD00");
-        //TODO 这个颜色值是错误的，需要UI确认后修改
-        int bgCircleColor2 = Color.parseColor("#290066FF");
+        int bgCircleColor2 = Color.parseColor("#1AFFDB00");
         int insideColor3 = Color.parseColor("#FFFF8700");
         int outsizeColor3 = Color.parseColor("#A6FF7700");
         int progressColor3 = Color.parseColor("#FFFFA300");
@@ -328,10 +328,10 @@ public class MySmartProgressView extends View {
         int progressColor4 = Color.parseColor("#FFFF8000");
         int pointColor4 = Color.parseColor("#FFFF5500");
         int bgCircleColor4 = Color.parseColor("#1AFF5500");
-        ProgressColors progressColors1 = new ProgressColors(insideColor1, outsizeColor1, progressColor1, pointColor1, bgCircleColor1);
-        ProgressColors progressColors2 = new ProgressColors(insideColor2, outsizeColor2, progressColor2, pointColor2, bgCircleColor2);
-        ProgressColors progressColors3 = new ProgressColors(insideColor3, outsizeColor3, progressColor3, pointColor3, bgCircleColor3);
-        ProgressColors progressColors4 = new ProgressColors(insideColor4, outsizeColor4, progressColor4, pointColor4, bgCircleColor4);
+        ProgressColors progressColors1 = new ProgressColors(0, insideColor1, outsizeColor1, progressColor1, pointColor1, bgCircleColor1);
+        ProgressColors progressColors2 = new ProgressColors(3600 / 3, insideColor2, outsizeColor2, progressColor2, pointColor2, bgCircleColor2);
+        ProgressColors progressColors3 = new ProgressColors(3600 / 3 * 2, insideColor3, outsizeColor3, progressColor3, pointColor3, bgCircleColor3);
+        ProgressColors progressColors4 = new ProgressColors(3600, insideColor4, outsizeColor4, progressColor4, pointColor4, bgCircleColor4);
         mProgressColorsArray[0] = progressColors1;
         mProgressColorsArray[1] = progressColors2;
         mProgressColorsArray[2] = progressColors3;
@@ -355,7 +355,6 @@ public class MySmartProgressView extends View {
         setMeasuredDimension(width, height);
     }
 
-    private Path mArcPath;
 
     @Override
     protected void onDraw(final Canvas canvas) {
