@@ -142,30 +142,12 @@ public class MySmartProgressView extends View {
     }
 
     private void init() {
+        //初始化宽高颜色值等
         initView();
+        //初始化画笔
         initPaint();
-
-        /**
-         * 圆弧画笔
-         */
-        Paint mArcPaint = new Paint();
-        mArcPaint.setColor(Color.RED);
-        mArcPaint.setStyle(Paint.Style.FILL);
-        mArcPaint.setStrokeWidth(20);
-
-        Paint mArcPathPaint = new Paint();
-        mArcPathPaint.setColor(Color.RED);
-        mArcPathPaint.setStyle(Paint.Style.STROKE);
-        mArcPathPaint.setAntiAlias(true);
-
-        mBackCirclePaiht = new Paint();
-        mBackCirclePaiht.setColor(backCircleColor);
-        mBackCirclePaiht.setStrokeWidth(mBackCircleStrokeWidth);
-        mBackCirclePaiht.setAntiAlias(true);
-        mBackCirclePaiht.setStyle(Paint.Style.STROKE);
-
-        mBackShadePaint = new Paint();
-
+        //初始化指针Bitmap画布
+        initBitmap();
         //绘制扇形path
         mArcPath = new Path();
         final ValueAnimator arcAnimator = ValueAnimator.ofInt(0, 3600);
@@ -277,8 +259,6 @@ public class MySmartProgressView extends View {
             }
         }, 1000);
 
-        //初始化指针Bitmap画布
-        initBitmap();
     }
 
     /**
@@ -311,6 +291,16 @@ public class MySmartProgressView extends View {
                 mRadialGradientStops,
                 Shader.TileMode.CLAMP);
         mSweptPaint.setShader(mRadialGradient);
+
+        //初始化底色圆画笔
+        mBackCirclePaiht = new Paint();
+        mBackCirclePaiht.setColor(backCircleColor);
+        mBackCirclePaiht.setStrokeWidth(mBackCircleStrokeWidth);
+        mBackCirclePaiht.setAntiAlias(true);
+        mBackCirclePaiht.setStyle(Paint.Style.STROKE);
+
+        //初始化底色圆得initAnimator画笔
+        mBackShadePaint = new Paint();
     }
 
     /**
