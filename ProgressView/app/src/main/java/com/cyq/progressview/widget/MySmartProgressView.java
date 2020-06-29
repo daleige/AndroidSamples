@@ -17,7 +17,6 @@ import android.graphics.RadialGradient;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.os.Build;
-import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -28,8 +27,8 @@ import androidx.annotation.RequiresApi;
 
 import com.cyq.progressview.R;
 import com.cyq.progressview.Utils;
-import com.cyq.progressview.evaluator.ProgressColors;
 import com.cyq.progressview.evaluator.MyColorsEvaluator;
+import com.cyq.progressview.evaluator.ProgressColors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -253,7 +252,7 @@ public class MySmartProgressView extends View {
         mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.indicator);
         float bitmapWidth = mBitmap.getWidth();
         float bitmapHeight = mBitmap.getHeight();
-        scaleHeight = mCenterX;
+        scaleHeight = mRadius+20;
         scaleWidth = bitmapWidth * (mCenterX / bitmapHeight);
         mBitmap = Bitmap.createScaledBitmap(mBitmap, (int) scaleWidth, (int) scaleHeight, false);
     }
@@ -369,6 +368,9 @@ public class MySmartProgressView extends View {
     @Override
     protected void onDraw(final Canvas canvas) {
         super.onDraw(canvas);
+        //画波动背景
+        drawBezierBackGround(canvas);
+
         //step:画底色圆
         canvas.save();
         canvas.translate(mCenterX, mCenterY);
@@ -400,9 +402,6 @@ public class MySmartProgressView extends View {
         canvas.translate(-scaleWidth + 10, -scaleHeight - 10);
         canvas.drawBitmap(mBitmap, 0, 0, mBmpPaint);
         canvas.restore();
-
-        //画波动背景
-        drawBezierBackGround(canvas);
     }
 
     /**
@@ -438,7 +437,6 @@ public class MySmartProgressView extends View {
         }
     }
 
-    private List<Point> mControllerPointList = new ArrayList<>();
     /**
      * 三阶贝塞尔曲线的控制点半径
      */
