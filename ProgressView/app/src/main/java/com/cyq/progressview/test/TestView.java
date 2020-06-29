@@ -156,7 +156,7 @@ public class TestView extends View  {
         canvas.drawPath(path1, pathPaint);
     }
 
-    class Point {
+    static class Point {
         public int x;
         public int y;
         public int anger;

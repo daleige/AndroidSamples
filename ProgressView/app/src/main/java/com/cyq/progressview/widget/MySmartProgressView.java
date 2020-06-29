@@ -154,6 +154,8 @@ public class MySmartProgressView extends View {
         initBitmap();
         //初始化动画
         initAnim();
+        //初始化波动背景控制点信息
+        initBezierPointInfo();
     }
 
     /**
@@ -404,6 +406,9 @@ public class MySmartProgressView extends View {
         canvas.translate(-scaleWidth + 10, -scaleHeight - 10);
         canvas.drawBitmap(mBitmap, 0, 0, mBmpPaint);
         canvas.restore();
+
+        //画波动背景
+        drawBezierBackGround(canvas);
     }
 
     /**
@@ -419,5 +424,88 @@ public class MySmartProgressView extends View {
         mArcPath.addArc(-r, -r, r, r, startAngle, sweepAngle);
         mArcPath.lineTo(0, 0);
         mArcPath.close();
+    }
+
+    /**
+     * 用于保存三阶贝塞尔曲线控制点信息类
+     */
+    private static class Point {
+        public int x;
+        public int y;
+        public int anger;
+
+        public Point() {
+        }
+
+        public Point(int x, int y, int anger) {
+            this.x = x;
+            this.y = y;
+            this.anger = anger;
+        }
+    }
+
+    private List<Point> mControllerPointList = new ArrayList<>();
+    /**
+     * 三阶贝塞尔曲线的控制点半径
+     */
+    private int mControllerRadius = mRadius + 100;
+    /**
+     * 三阶贝塞尔曲线两个控制点的随机角度
+     */
+    private int mAngerRange = 30;
+    private Point mPoint1 = new Point();
+    private Point mPoint2 = new Point();
+    private Point mPoint3 = new Point();
+    private Point mPoint1Controller1 = new Point();
+    private Point mPoint1Controller2 = new Point();
+    private Point mPoint2Controller1 = new Point();
+    private Point mPoint2Controller2 = new Point();
+    private Point mPoint3Controller1 = new Point();
+    private Point mPoint3Controller2 = new Point();
+
+    private Paint mControllerPointPaint;
+    private Paint mControllerCirclePaint;
+    private Paint mBezierPathPaint;
+
+    /**
+     * 初始化波动背景的三阶贝塞尔曲线控制点
+     */
+    private void initBezierPointInfo() {
+        mControllerPointPaint = new Paint();
+        mControllerPointPaint.setColor(Color.RED);
+        mControllerPointPaint.setStrokeWidth(10);
+        mControllerCirclePaint = new Paint();
+        mControllerCirclePaint.setColor(Color.WHITE);
+        mBezierPathPaint = new Paint();
+        mBezierPathPaint.setColor(Color.GREEN);
+
+        int theRadius = width / 2;
+        mPoint1.anger = 120;
+        mPoint1.x = (int) (theRadius * Math.cos(Math.toRadians(mPoint1.anger)));
+        mPoint1.y = (int) (theRadius * Math.sin(Math.toRadians(mPoint1.anger)));
+
+        mPoint2.anger = 240;
+        mPoint2.x = (int) (theRadius * Math.cos(Math.toRadians(mPoint2.anger)));
+        mPoint2.y = (int) (theRadius * Math.sin(Math.toRadians(mPoint2.anger)));
+
+        mPoint3.anger = 360;
+        mPoint3.x = (int) (theRadius * Math.cos(Math.toRadians(mPoint3.anger)));
+        mPoint3.y = (int) (theRadius * Math.sin(Math.toRadians(mPoint3.anger)));
+
+
+    }
+
+    /**
+     * 画波动背景
+     *
+     * @param canvas
+     */
+    private void drawBezierBackGround(Canvas canvas) {
+        canvas.save();
+        canvas.translate(mCenterX, mCenterY);
+        canvas.drawPoint(mPoint1.x, mPoint1.y, mControllerPointPaint);
+        canvas.drawPoint(mPoint2.x, mPoint2.y, mControllerPointPaint);
+        canvas.drawPoint(mPoint3.x, mPoint3.y, mControllerPointPaint);
+        canvas.restore();
     }
 }
