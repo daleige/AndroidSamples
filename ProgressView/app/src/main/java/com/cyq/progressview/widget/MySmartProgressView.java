@@ -19,6 +19,7 @@ import android.graphics.Shader;
 import android.os.Build;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 
@@ -76,10 +77,8 @@ public class MySmartProgressView extends View {
      * 白色
      */
     private int whiteColor = Color.parseColor("#00FFFFFF");
-    private int blackColor = Color.parseColor("#FF000000");
     private int endRadialGradientColor = Color.parseColor("#1978FF");
     private int middleRadialGradientColor = Color.parseColor("#1A001BFF");
-    private int radialCircleColor = Color.parseColor("#FF0066FF");
     /**
      * 底色圆环的颜色
      */
@@ -193,14 +192,15 @@ public class MySmartProgressView extends View {
         mRadialGradientColors[0] = transparentColor;
         mRadialGradientColors[1] = transparentColor;
 
-        width = Utils.dip2px(300, getContext());
-        height = Utils.dip2px(300, getContext());
+        width = Utils.dip2px(320, getContext());
+        height = Utils.dip2px(320, getContext());
         mCenterX = width / 2;
-        mCenterY = width / 2;
+        mCenterY = height / 2;
         // 粒子圆环的宽度
-        //TODO 这个25是外框距离圆环边框中点的距离，具体大小需要等UI设计图再确认
-        mRadius = width / 2 - 20;
-        mRect = new RectF(-mCenterX, -mCenterX, mCenterX, mCenterX);
+        //TODO 这个20是外框距离圆环边框中点的距离，具体大小需要等UI设计图再确认
+        mRadius = Utils.dip2px(300, getContext()) / 2 - 20;
+        mRect = new RectF(-mCenterY, -mCenterX, mCenterY, mCenterX);
+        mControllerRadius = mRadius + 150;
     }
 
     /**
@@ -367,12 +367,6 @@ public class MySmartProgressView extends View {
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        setMeasuredDimension(width, height);
-    }
-
-    @Override
     protected void onDraw(final Canvas canvas) {
         super.onDraw(canvas);
         //step:画底色圆
@@ -448,7 +442,7 @@ public class MySmartProgressView extends View {
     /**
      * 三阶贝塞尔曲线的控制点半径
      */
-    private int mControllerRadius = mRadius + 100;
+    private int mControllerRadius;
     /**
      * 三阶贝塞尔曲线两个控制点的随机角度
      */
@@ -467,6 +461,8 @@ public class MySmartProgressView extends View {
     private Paint mControllerCirclePaint;
     private Paint mBezierPathPaint;
 
+    private Path mControllerPath = new Path();
+
     /**
      * 初始化波动背景的三阶贝塞尔曲线控制点
      */
@@ -478,21 +474,40 @@ public class MySmartProgressView extends View {
         mControllerCirclePaint.setColor(Color.WHITE);
         mBezierPathPaint = new Paint();
         mBezierPathPaint.setColor(Color.GREEN);
+        mBezierPathPaint.setStyle(Paint.Style.STROKE);
 
-        int theRadius = width / 2;
+        int theRadius = mRadius + mOutCircleStrokeWidth / 2;
         mPoint1.anger = 120;
         mPoint1.x = (int) (theRadius * Math.cos(Math.toRadians(mPoint1.anger)));
         mPoint1.y = (int) (theRadius * Math.sin(Math.toRadians(mPoint1.anger)));
-
         mPoint2.anger = 240;
         mPoint2.x = (int) (theRadius * Math.cos(Math.toRadians(mPoint2.anger)));
         mPoint2.y = (int) (theRadius * Math.sin(Math.toRadians(mPoint2.anger)));
-
         mPoint3.anger = 360;
         mPoint3.x = (int) (theRadius * Math.cos(Math.toRadians(mPoint3.anger)));
         mPoint3.y = (int) (theRadius * Math.sin(Math.toRadians(mPoint3.anger)));
 
+        Log.e("test", "mControllerRadius：" + mControllerRadius);
+        mPoint1Controller1.anger = 60 - mRandom.nextInt(mAngerRange);
+        mPoint1Controller1.x = (int) (mControllerRadius * Math.cos(Math.toRadians(mPoint1Controller1.anger)));
+        mPoint1Controller1.y = (int) (mControllerRadius * Math.sin(Math.toRadians(mPoint1Controller1.anger)));
+        mPoint1Controller2.anger = 60 + mRandom.nextInt(mAngerRange);
+        mPoint1Controller2.x = (int) (mControllerRadius * Math.cos(Math.toRadians(mPoint1Controller2.anger)));
+        mPoint1Controller2.y = (int) (mControllerRadius * Math.sin(Math.toRadians(mPoint1Controller2.anger)));
 
+        mPoint2Controller1.anger = 180 - mRandom.nextInt(mAngerRange);
+        mPoint2Controller1.x = (int) (mControllerRadius * Math.cos(Math.toRadians(mPoint2Controller1.anger)));
+        mPoint2Controller1.y = (int) (mControllerRadius * Math.sin(Math.toRadians(mPoint2Controller1.anger)));
+        mPoint2Controller2.anger = 180 + mRandom.nextInt(mAngerRange);
+        mPoint2Controller2.x = (int) (mControllerRadius * Math.cos(Math.toRadians(mPoint2Controller2.anger)));
+        mPoint2Controller2.y = (int) (mControllerRadius * Math.sin(Math.toRadians(mPoint2Controller2.anger)));
+
+        mPoint3Controller1.anger = 300 - mRandom.nextInt(mAngerRange);
+        mPoint3Controller1.x = (int) (mControllerRadius * Math.cos(Math.toRadians(mPoint3Controller1.anger)));
+        mPoint3Controller1.y = (int) (mControllerRadius * Math.sin(Math.toRadians(mPoint3Controller1.anger)));
+        mPoint3Controller2.anger = 300 + mRandom.nextInt(mAngerRange);
+        mPoint3Controller2.x = (int) (mControllerRadius * Math.cos(Math.toRadians(mPoint3Controller2.anger)));
+        mPoint3Controller2.y = (int) (mControllerRadius * Math.sin(Math.toRadians(mPoint3Controller2.anger)));
     }
 
     /**
@@ -506,6 +521,19 @@ public class MySmartProgressView extends View {
         canvas.drawPoint(mPoint1.x, mPoint1.y, mControllerPointPaint);
         canvas.drawPoint(mPoint2.x, mPoint2.y, mControllerPointPaint);
         canvas.drawPoint(mPoint3.x, mPoint3.y, mControllerPointPaint);
+        canvas.drawPoint(mPoint1Controller1.x, mPoint1Controller1.y, mControllerPointPaint);
+        canvas.drawPoint(mPoint1Controller2.x, mPoint1Controller2.y, mControllerPointPaint);
+        canvas.drawPoint(mPoint2Controller1.x, mPoint2Controller1.y, mControllerPointPaint);
+        canvas.drawPoint(mPoint2Controller2.x, mPoint2Controller2.y, mControllerPointPaint);
+        canvas.drawPoint(mPoint3Controller1.x, mPoint3Controller1.y, mControllerPointPaint);
+        canvas.drawPoint(mPoint3Controller2.x, mPoint3Controller2.y, mControllerPointPaint);
+        canvas.drawPoint(0, 0, mControllerPointPaint);
+
+        mControllerPath.moveTo(mPoint3.x, mPoint3.y);
+        mControllerPath.cubicTo(mPoint1Controller1.x, mPoint1Controller1.y, mPoint1Controller2.x, mPoint1Controller2.y, mPoint1.x, mPoint1.y);
+        mControllerPath.cubicTo(mPoint2Controller1.x, mPoint2Controller1.y, mPoint2Controller2.x, mPoint2Controller2.y, mPoint2.x, mPoint2.y);
+        mControllerPath.cubicTo(mPoint3Controller1.x, mPoint3Controller1.y, mPoint3Controller2.x, mPoint3Controller2.y, mPoint3.x, mPoint3.y);
+        canvas.drawPath(mControllerPath, mBezierPathPaint);
         canvas.restore();
     }
 }

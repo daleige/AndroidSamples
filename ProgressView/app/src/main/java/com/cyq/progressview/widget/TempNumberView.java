@@ -107,7 +107,6 @@ public class TempNumberView extends LinearLayout {
         int mSingle = temperature % 10;
         int mTen = temperature / 10 % 10;
         int mHundred = temperature / 100 % 10;
-        Log.e("test", "个 十 百：" + mSingle + "---" + mTen + "---" + mHundred);
         mSingleView.setCurrentValue(mSingle, temperature);
         if (temperature > 9) {
             mTenView.setCurrentValue(mTen, temperature);
@@ -121,7 +120,6 @@ public class TempNumberView extends LinearLayout {
      * 设置时间
      */
     void setClock(int second) {
-        Log.e("test", "时间-------------------：" + second);
         if (second > 60 - 1) {
             //大于1分钟
             mSecond1View.setVisibility(VISIBLE);
@@ -154,8 +152,6 @@ public class TempNumberView extends LinearLayout {
         int mMinute2Value = min % 10;
         int mSecond1Value = sec / 10 % 10;
         int mSecond2Value = sec % 10;
-        Log.e("test", hour + " : " + min + ":" + sec);
-        Log.e("test", mHour1Value + " : " + mHour2Value + ":" + mMinute1Value + " : " + mMinute2Value + " : " + mSecond1Value + ":" + mSecond2Value);
 
         mSecond1View.setCurrentValue(mSecond1Value, second);
         mSecond2View.setCurrentValue(mSecond2Value, second);

@@ -12,19 +12,18 @@
     <com.cyq.progressview.test.TestView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
     <com.cyq.progressview.test.DIYBezierView
-        android:visibility="gone"
-        android:layout_gravity="center_horizontal"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:layout_height="300dp"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone" />
 
     <com.cyq.progressview.widget.ProgressLayout
         android:id="@+id/mProgress"
-        android:layout_width="300dp"
-        android:layout_marginTop="400dp"
-        android:layout_height="300dp"
-        android:layout_gravity="center_horizontal" />
+        android:layout_width="320dp"
+        android:layout_height="320dp"
+        android:layout_gravity="center" />
 
 </FrameLayout>
