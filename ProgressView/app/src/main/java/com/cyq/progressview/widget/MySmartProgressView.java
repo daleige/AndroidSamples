@@ -17,6 +17,7 @@ import android.graphics.RadialGradient;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.os.Build;
+import android.text.style.UpdateAppearance;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -152,6 +153,8 @@ public class MySmartProgressView extends View {
         initBitmap();
         //初始化动画
         initAnim();
+        //初始化波动背景动画
+        initBezierAnim();
         //初始化波动背景控制点信息
         initBezierPointInfo();
     }
@@ -252,7 +255,7 @@ public class MySmartProgressView extends View {
         mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.indicator);
         float bitmapWidth = mBitmap.getWidth();
         float bitmapHeight = mBitmap.getHeight();
-        scaleHeight = mRadius+20;
+        scaleHeight = mRadius + 20;
         scaleWidth = bitmapWidth * (mCenterX / bitmapHeight);
         mBitmap = Bitmap.createScaledBitmap(mBitmap, (int) scaleWidth, (int) scaleHeight, false);
     }
@@ -462,6 +465,30 @@ public class MySmartProgressView extends View {
     private Path mControllerPath = new Path();
 
     /**
+     * 初始化波动背景动画
+     */
+    private void initBezierAnim() {
+        final ValueAnimator bezierAnimator = ValueAnimator.ofFloat(0F, 1F);
+        bezierAnimator.setDuration(5000);
+        bezierAnimator.setRepeatMode(ValueAnimator.RESTART);
+        bezierAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        bezierAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float value = (float) animation.getAnimatedValue();
+                pointAnger = (int) (value * 120);
+                controllerAnger = (int) (value * 60) + pointAnger;
+                initBezierPointInfo();
+            }
+        });
+        bezierAnimator.start();
+    }
+
+    private int pointAnger = 0;
+    private int controllerAnger = 0;
+    private int theRadius;
+
+    /**
      * 初始化波动背景的三阶贝塞尔曲线控制点
      */
     private void initBezierPointInfo() {
@@ -474,36 +501,35 @@ public class MySmartProgressView extends View {
         mBezierPathPaint.setColor(Color.GREEN);
         mBezierPathPaint.setStyle(Paint.Style.STROKE);
 
-        int theRadius = mRadius + mOutCircleStrokeWidth / 2;
-        mPoint1.anger = 120;
+        theRadius = mRadius + mOutCircleStrokeWidth / 2;
+        mPoint1.anger = 120 + pointAnger;
         mPoint1.x = (int) (theRadius * Math.cos(Math.toRadians(mPoint1.anger)));
         mPoint1.y = (int) (theRadius * Math.sin(Math.toRadians(mPoint1.anger)));
-        mPoint2.anger = 240;
+        mPoint2.anger = 240 + pointAnger;
         mPoint2.x = (int) (theRadius * Math.cos(Math.toRadians(mPoint2.anger)));
         mPoint2.y = (int) (theRadius * Math.sin(Math.toRadians(mPoint2.anger)));
-        mPoint3.anger = 360;
+        mPoint3.anger = 360 + pointAnger;
         mPoint3.x = (int) (theRadius * Math.cos(Math.toRadians(mPoint3.anger)));
         mPoint3.y = (int) (theRadius * Math.sin(Math.toRadians(mPoint3.anger)));
 
-        Log.e("test", "mControllerRadius：" + mControllerRadius);
-        mPoint1Controller1.anger = 60 - mRandom.nextInt(mAngerRange);
+        mPoint1Controller1.anger = 30 + controllerAnger;
         mPoint1Controller1.x = (int) (mControllerRadius * Math.cos(Math.toRadians(mPoint1Controller1.anger)));
         mPoint1Controller1.y = (int) (mControllerRadius * Math.sin(Math.toRadians(mPoint1Controller1.anger)));
-        mPoint1Controller2.anger = 60 + mRandom.nextInt(mAngerRange);
+        mPoint1Controller2.anger = 60 + controllerAnger;
         mPoint1Controller2.x = (int) (mControllerRadius * Math.cos(Math.toRadians(mPoint1Controller2.anger)));
         mPoint1Controller2.y = (int) (mControllerRadius * Math.sin(Math.toRadians(mPoint1Controller2.anger)));
 
-        mPoint2Controller1.anger = 180 - mRandom.nextInt(mAngerRange);
+        mPoint2Controller1.anger = 150 + controllerAnger;
         mPoint2Controller1.x = (int) (mControllerRadius * Math.cos(Math.toRadians(mPoint2Controller1.anger)));
         mPoint2Controller1.y = (int) (mControllerRadius * Math.sin(Math.toRadians(mPoint2Controller1.anger)));
-        mPoint2Controller2.anger = 180 + mRandom.nextInt(mAngerRange);
+        mPoint2Controller2.anger = 180 + controllerAnger;
         mPoint2Controller2.x = (int) (mControllerRadius * Math.cos(Math.toRadians(mPoint2Controller2.anger)));
         mPoint2Controller2.y = (int) (mControllerRadius * Math.sin(Math.toRadians(mPoint2Controller2.anger)));
 
-        mPoint3Controller1.anger = 300 - mRandom.nextInt(mAngerRange);
+        mPoint3Controller1.anger = 270 + controllerAnger;
         mPoint3Controller1.x = (int) (mControllerRadius * Math.cos(Math.toRadians(mPoint3Controller1.anger)));
         mPoint3Controller1.y = (int) (mControllerRadius * Math.sin(Math.toRadians(mPoint3Controller1.anger)));
-        mPoint3Controller2.anger = 300 + mRandom.nextInt(mAngerRange);
+        mPoint3Controller2.anger = 300 + controllerAnger;
         mPoint3Controller2.x = (int) (mControllerRadius * Math.cos(Math.toRadians(mPoint3Controller2.anger)));
         mPoint3Controller2.y = (int) (mControllerRadius * Math.sin(Math.toRadians(mPoint3Controller2.anger)));
     }
@@ -527,6 +553,7 @@ public class MySmartProgressView extends View {
         canvas.drawPoint(mPoint3Controller2.x, mPoint3Controller2.y, mControllerPointPaint);
         canvas.drawPoint(0, 0, mControllerPointPaint);
 
+        mControllerPath.reset();
         mControllerPath.moveTo(mPoint3.x, mPoint3.y);
         mControllerPath.cubicTo(mPoint1Controller1.x, mPoint1Controller1.y, mPoint1Controller2.x, mPoint1Controller2.y, mPoint1.x, mPoint1.y);
         mControllerPath.cubicTo(mPoint2Controller1.x, mPoint2Controller1.y, mPoint2Controller2.x, mPoint2Controller2.y, mPoint2.x, mPoint2.y);
