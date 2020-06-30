@@ -122,7 +122,7 @@ public class MySmartProgressView extends View {
     /**
      * 外层粒子圆环的边框大小
      */
-    private final int mOutCircleStrokeWidth = 20;
+    private final int mOutCircleStrokeWidth = 25;
     /**
      * 底色环的边框大小
      */
