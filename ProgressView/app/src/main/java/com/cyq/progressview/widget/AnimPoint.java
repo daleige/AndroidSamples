@@ -46,7 +46,7 @@ public class AnimPoint implements Cloneable {
      */
     public void init(Random random, float viewRadius) {
         anger = Math.toRadians(random.nextInt(360));
-        velocity = random.nextFloat() * 3;
+        velocity = random.nextFloat() * 1.6F;
         radius = random.nextInt(6) + 2;
         mX = (float) (viewRadius * Math.cos(anger));
         mY = (float) (viewRadius * Math.sin(anger));
@@ -62,7 +62,7 @@ public class AnimPoint implements Cloneable {
      */
     public void updatePoint(Random random, float viewRadius) {
         //每一帧偏移的像素大小
-        float distance = 1.5F;
+        float distance = 1F;
         double moveAnger = anger + randomAnger;
         mX = (float) (mX - distance * Math.cos(moveAnger) * velocity);
         mY = (float) (mY - distance * Math.sin(moveAnger) * velocity);

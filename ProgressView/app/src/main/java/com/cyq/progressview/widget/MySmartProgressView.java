@@ -156,7 +156,7 @@ public class MySmartProgressView extends View {
         //初始化波动背景动画
         initBezierAnim();
         //初始化波动背景控制点信息
-        initBezierPointInfo();
+        //initBezierPointInfo();
     }
 
     /**
@@ -372,7 +372,7 @@ public class MySmartProgressView extends View {
     protected void onDraw(final Canvas canvas) {
         super.onDraw(canvas);
         //画波动背景
-        drawBezierBackGround(canvas);
+        //drawBezierBackGround(canvas);
 
         //step:画底色圆
         canvas.save();
