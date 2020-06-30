@@ -62,7 +62,7 @@ public class AnimPoint implements Cloneable {
      */
     public void updatePoint(Random random, float viewRadius) {
         //每一帧偏移的像素大小
-        float distance = 0.5F;
+        float distance = 1.5F;
         double moveAnger = anger + randomAnger;
         mX = (float) (mX - distance * Math.cos(moveAnger) * velocity);
         mY = (float) (mY - distance * Math.sin(moveAnger) * velocity);
@@ -70,8 +70,8 @@ public class AnimPoint implements Cloneable {
         radius = radius - 0.01F;
         num++;
         //如果到了最大值 则重新给运动粒子一个轨迹属性
-        int maxDistance = 230;
-        int maxNum = 800;
+        int maxDistance = 120;
+        int maxNum = 700;
         if (velocity * num > maxDistance || num > maxNum) {
             num = 0;
             init(random, viewRadius);
