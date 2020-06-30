@@ -17,9 +17,7 @@ import android.graphics.RadialGradient;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.os.Build;
-import android.text.style.UpdateAppearance;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 
@@ -102,7 +100,7 @@ public class MySmartProgressView extends View {
      */
     private ProgressColors[] mProgressColorsArray = new ProgressColors[4];
 
-    private float[] mRadialGradientStops = {0F, 0.6F, 1F};
+    private float[] mRadialGradientStops = {0F, 0.5F, 1F};
     private LinearGradient mBackCircleLinearGradient;
     private Paint mSweptPaint;
     private RadialGradient mRadialGradient;
@@ -115,7 +113,6 @@ public class MySmartProgressView extends View {
      * 扇形粒子区域的路径，用于裁剪画布范围
      */
     private Path mArcPath;
-
     private Bitmap mBitmap;
     private Paint mBmpPaint;
     private float scaleHeight;
@@ -153,10 +150,6 @@ public class MySmartProgressView extends View {
         initBitmap();
         //初始化动画
         initAnim();
-        //初始化波动背景动画
-        initBezierAnim();
-        //初始化波动背景控制点信息
-        //initBezierPointInfo();
     }
 
     /**
@@ -202,7 +195,6 @@ public class MySmartProgressView extends View {
         //TODO 这个20是外框距离圆环边框中点的距离，具体大小需要等UI设计图再确认
         mRadius = Utils.dip2px(300, getContext()) / 2 - 20;
         mRect = new RectF(-mCenterY, -mCenterX, mCenterY, mCenterX);
-        mControllerRadius = mRadius + 150;
     }
 
     /**
@@ -213,12 +205,14 @@ public class MySmartProgressView extends View {
         mOutCirclePaint = new Paint();
         mOutCirclePaint.setColor(endRadialGradientColor);
         mOutCirclePaint.setStyle(Paint.Style.STROKE);
+        mOutCirclePaint.setAntiAlias(true);
         mOutCirclePaint.setStrokeWidth(mOutCircleStrokeWidth);
         mOutCirclePaint.setMaskFilter(new BlurMaskFilter(50, BlurMaskFilter.Blur.SOLID));
 
         //step2：初始化运动粒子的画笔
         mPointPaint = new Paint();
         mPointPaint.setColor(whiteColor);
+        mPointPaint.setAntiAlias(true);
         mPointPaint.setStyle(Paint.Style.FILL);
         mPointPaint.setMaskFilter(new BlurMaskFilter(3, BlurMaskFilter.Blur.NORMAL));
         //关闭粒子画笔的硬件加速
@@ -226,6 +220,7 @@ public class MySmartProgressView extends View {
 
         //step3：内圈到外圈渐变色画笔
         mSweptPaint = new Paint();
+        mSweptPaint.setAntiAlias(true);
         mSweptPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mRadialGradient = new RadialGradient(
                 0,
@@ -238,6 +233,7 @@ public class MySmartProgressView extends View {
 
         //初始化底色圆画笔
         mBackCirclePaiht = new Paint();
+        mBackCirclePaiht.setAntiAlias(true);
         mBackCirclePaiht.setColor(backCircleColor);
         mBackCirclePaiht.setStrokeWidth(mBackCircleStrokeWidth);
         mBackCirclePaiht.setAntiAlias(true);
@@ -245,6 +241,7 @@ public class MySmartProgressView extends View {
 
         //初始化底色圆得initAnimator画笔
         mBackShadePaint = new Paint();
+        mBackShadePaint.setAntiAlias(true);
     }
 
     /**
@@ -292,7 +289,7 @@ public class MySmartProgressView extends View {
                 mRadialGradient = new RadialGradient(
                         0,
                         0,
-                        mRadius - mOutCircleStrokeWidth / 2F,
+                        mRadius + mOutCircleStrokeWidth / 2F,
                         mRadialGradientColors,
                         mRadialGradientStops,
                         Shader.TileMode.CLAMP);
@@ -395,7 +392,7 @@ public class MySmartProgressView extends View {
         //画进度圆环
         canvas.drawCircle(0, 0, mRadius, mOutCirclePaint);
         //画变色圆饼
-        canvas.drawCircle(0, 0, mRadius - mOutCircleStrokeWidth / 2F, mSweptPaint);
+        canvas.drawCircle(0, 0, mRadius + mOutCircleStrokeWidth / 2F, mSweptPaint);
         canvas.restore();
 
         //画指针
@@ -420,145 +417,5 @@ public class MySmartProgressView extends View {
         mArcPath.addArc(-r, -r, r, r, startAngle, sweepAngle);
         mArcPath.lineTo(0, 0);
         mArcPath.close();
-    }
-
-    /**
-     * 用于保存三阶贝塞尔曲线控制点信息类
-     */
-    private static class Point {
-        public int x;
-        public int y;
-        public int anger;
-
-        public Point() {
-        }
-
-        public Point(int x, int y, int anger) {
-            this.x = x;
-            this.y = y;
-            this.anger = anger;
-        }
-    }
-
-    /**
-     * 三阶贝塞尔曲线的控制点半径
-     */
-    private int mControllerRadius;
-    /**
-     * 三阶贝塞尔曲线两个控制点的随机角度
-     */
-    private int mAngerRange = 30;
-    private Point mPoint1 = new Point();
-    private Point mPoint2 = new Point();
-    private Point mPoint3 = new Point();
-    private Point mPoint1Controller1 = new Point();
-    private Point mPoint1Controller2 = new Point();
-    private Point mPoint2Controller1 = new Point();
-    private Point mPoint2Controller2 = new Point();
-    private Point mPoint3Controller1 = new Point();
-    private Point mPoint3Controller2 = new Point();
-
-    private Paint mControllerPointPaint;
-    private Paint mControllerCirclePaint;
-    private Paint mBezierPathPaint;
-
-    private Path mControllerPath = new Path();
-
-    /**
-     * 初始化波动背景动画
-     */
-    private void initBezierAnim() {
-        final ValueAnimator bezierAnimator = ValueAnimator.ofFloat(0F, 1F);
-        bezierAnimator.setDuration(5000);
-        bezierAnimator.setRepeatMode(ValueAnimator.RESTART);
-        bezierAnimator.setRepeatCount(ValueAnimator.INFINITE);
-        bezierAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float value = (float) animation.getAnimatedValue();
-                pointAnger = (int) (value * 120);
-                controllerAnger = (int) (value * 60) + pointAnger;
-                initBezierPointInfo();
-            }
-        });
-        bezierAnimator.start();
-    }
-
-    private int pointAnger = 0;
-    private int controllerAnger = 0;
-    private int theRadius;
-
-    /**
-     * 初始化波动背景的三阶贝塞尔曲线控制点
-     */
-    private void initBezierPointInfo() {
-        mControllerPointPaint = new Paint();
-        mControllerPointPaint.setColor(Color.RED);
-        mControllerPointPaint.setStrokeWidth(10);
-        mControllerCirclePaint = new Paint();
-        mControllerCirclePaint.setColor(Color.WHITE);
-        mBezierPathPaint = new Paint();
-        mBezierPathPaint.setColor(Color.GREEN);
-        mBezierPathPaint.setStyle(Paint.Style.STROKE);
-
-        theRadius = mRadius + mOutCircleStrokeWidth / 2;
-        mPoint1.anger = 120 + pointAnger;
-        mPoint1.x = (int) (theRadius * Math.cos(Math.toRadians(mPoint1.anger)));
-        mPoint1.y = (int) (theRadius * Math.sin(Math.toRadians(mPoint1.anger)));
-        mPoint2.anger = 240 + pointAnger;
-        mPoint2.x = (int) (theRadius * Math.cos(Math.toRadians(mPoint2.anger)));
-        mPoint2.y = (int) (theRadius * Math.sin(Math.toRadians(mPoint2.anger)));
-        mPoint3.anger = 360 + pointAnger;
-        mPoint3.x = (int) (theRadius * Math.cos(Math.toRadians(mPoint3.anger)));
-        mPoint3.y = (int) (theRadius * Math.sin(Math.toRadians(mPoint3.anger)));
-
-        mPoint1Controller1.anger = 30 + controllerAnger;
-        mPoint1Controller1.x = (int) (mControllerRadius * Math.cos(Math.toRadians(mPoint1Controller1.anger)));
-        mPoint1Controller1.y = (int) (mControllerRadius * Math.sin(Math.toRadians(mPoint1Controller1.anger)));
-        mPoint1Controller2.anger = 60 + controllerAnger;
-        mPoint1Controller2.x = (int) (mControllerRadius * Math.cos(Math.toRadians(mPoint1Controller2.anger)));
-        mPoint1Controller2.y = (int) (mControllerRadius * Math.sin(Math.toRadians(mPoint1Controller2.anger)));
-
-        mPoint2Controller1.anger = 150 + controllerAnger;
-        mPoint2Controller1.x = (int) (mControllerRadius * Math.cos(Math.toRadians(mPoint2Controller1.anger)));
-        mPoint2Controller1.y = (int) (mControllerRadius * Math.sin(Math.toRadians(mPoint2Controller1.anger)));
-        mPoint2Controller2.anger = 180 + controllerAnger;
-        mPoint2Controller2.x = (int) (mControllerRadius * Math.cos(Math.toRadians(mPoint2Controller2.anger)));
-        mPoint2Controller2.y = (int) (mControllerRadius * Math.sin(Math.toRadians(mPoint2Controller2.anger)));
-
-        mPoint3Controller1.anger = 270 + controllerAnger;
-        mPoint3Controller1.x = (int) (mControllerRadius * Math.cos(Math.toRadians(mPoint3Controller1.anger)));
-        mPoint3Controller1.y = (int) (mControllerRadius * Math.sin(Math.toRadians(mPoint3Controller1.anger)));
-        mPoint3Controller2.anger = 300 + controllerAnger;
-        mPoint3Controller2.x = (int) (mControllerRadius * Math.cos(Math.toRadians(mPoint3Controller2.anger)));
-        mPoint3Controller2.y = (int) (mControllerRadius * Math.sin(Math.toRadians(mPoint3Controller2.anger)));
-    }
-
-    /**
-     * 画波动背景
-     *
-     * @param canvas
-     */
-    private void drawBezierBackGround(Canvas canvas) {
-        canvas.save();
-        canvas.translate(mCenterX, mCenterY);
-        canvas.drawPoint(mPoint1.x, mPoint1.y, mControllerPointPaint);
-        canvas.drawPoint(mPoint2.x, mPoint2.y, mControllerPointPaint);
-        canvas.drawPoint(mPoint3.x, mPoint3.y, mControllerPointPaint);
-        canvas.drawPoint(mPoint1Controller1.x, mPoint1Controller1.y, mControllerPointPaint);
-        canvas.drawPoint(mPoint1Controller2.x, mPoint1Controller2.y, mControllerPointPaint);
-        canvas.drawPoint(mPoint2Controller1.x, mPoint2Controller1.y, mControllerPointPaint);
-        canvas.drawPoint(mPoint2Controller2.x, mPoint2Controller2.y, mControllerPointPaint);
-        canvas.drawPoint(mPoint3Controller1.x, mPoint3Controller1.y, mControllerPointPaint);
-        canvas.drawPoint(mPoint3Controller2.x, mPoint3Controller2.y, mControllerPointPaint);
-        canvas.drawPoint(0, 0, mControllerPointPaint);
-
-        mControllerPath.reset();
-        mControllerPath.moveTo(mPoint3.x, mPoint3.y);
-        mControllerPath.cubicTo(mPoint1Controller1.x, mPoint1Controller1.y, mPoint1Controller2.x, mPoint1Controller2.y, mPoint1.x, mPoint1.y);
-        mControllerPath.cubicTo(mPoint2Controller1.x, mPoint2Controller1.y, mPoint2Controller2.x, mPoint2Controller2.y, mPoint2.x, mPoint2.y);
-        mControllerPath.cubicTo(mPoint3Controller1.x, mPoint3Controller1.y, mPoint3Controller2.x, mPoint3Controller2.y, mPoint3.x, mPoint3.y);
-        canvas.drawPath(mControllerPath, mBezierPathPaint);
-        canvas.restore();
     }
 }
