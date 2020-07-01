@@ -31,7 +31,7 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
  * desc   : 全局的按钮控件，以下三类按钮的功能集合
  */
 @RequiresApi(api = Build.VERSION_CODES.M)
-public class A6Button extends FrameLayout implements View.OnTouchListener, A6ButtonInterface {
+public class MyButton extends FrameLayout implements View.OnTouchListener, A6ButtonInterface {
 
     private int mBtnType;
     private int mColorType;
@@ -47,28 +47,28 @@ public class A6Button extends FrameLayout implements View.OnTouchListener, A6But
     private ValueAnimator colorAnimator;
     private boolean mEnable;
 
-    public A6Button(Context context) {
+    public MyButton(Context context) {
         this(context, null);
     }
 
-    public A6Button(Context context, AttributeSet attrs) {
+    public MyButton(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public A6Button(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MyButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        TypedArray array = getContext().obtainStyledAttributes(attrs, R.styleable.A6Button);
-        mBtnType = array.getInt(R.styleable.A6Button_a6btn_type, ButtonBean.LIGHT_BUTTON);
-        mColorType = array.getInt(R.styleable.A6Button_a6btn_color, -1);
+        TypedArray array = getContext().obtainStyledAttributes(attrs, R.styleable.MyButton);
+        mBtnType = array.getInt(R.styleable.MyButton_a6btn_type, ButtonBean.LIGHT_BUTTON);
+        mColorType = array.getInt(R.styleable.MyButton_a6btn_color, -1);
         //如果设置了按钮颜色，则设置为按钮为高亮按钮
         if (mColorType > 0) {
             mBtnType = ButtonBean.LIGHT_BUTTON;
         } else {
             mColorType = ButtonBean.YELLOW;
         }
-        mActionType = array.getInt(R.styleable.A6Button_a6btn_action, ButtonBean.POSITIVE);
-        mEnable = array.getBoolean(R.styleable.A6Button_a6btn_enable, true);
-        text = array.getString(R.styleable.A6Button_a6btn_text);
+        mActionType = array.getInt(R.styleable.MyButton_a6btn_action, ButtonBean.POSITIVE);
+        mEnable = array.getBoolean(R.styleable.MyButton_a6btn_enable, true);
+        text = array.getString(R.styleable.MyButton_a6btn_text);
         array.recycle();
         init();
     }

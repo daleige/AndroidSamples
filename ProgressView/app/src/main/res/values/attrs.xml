@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--通用按钮样式-->
-    <declare-styleable name="A6Button">
+    <declare-styleable name="MyButton">
         <attr name="a6btn_color">
             <enum name="yellow" value="201" />
             <enum name="green" value="202" />

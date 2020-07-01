@@ -12,8 +12,8 @@
 
     <com.cyq.progressview.widget.ProgressLayout
         android:id="@+id/mProgress"
-        android:layout_width="320dp"
-        android:layout_height="320dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"/>
 
     <LinearLayout
@@ -24,7 +24,7 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <com.cyq.progressview.button.A6Button
+        <com.cyq.progressview.button.MyButton
             android:id="@+id/btn_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,18 +32,25 @@
             app:a6btn_text="预热到300°C"
             app:a6btn_type="light" />
 
-        <com.cyq.progressview.button.A6Button
+        <com.cyq.progressview.button.MyButton
             android:id="@+id/btn_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:a6btn_text="降温到30°C"
             app:a6btn_type="normal" />
 
-        <com.cyq.progressview.button.A6Button
+        <com.cyq.progressview.button.MyButton
             android:id="@+id/btn_3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:a6btn_text="保温"
+            app:a6btn_text="正计时"
+            app:a6btn_type="normal" />
+
+        <com.cyq.progressview.button.MyButton
+            android:id="@+id/btn_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:a6btn_text="倒计时"
             app:a6btn_type="normal" />
 
     </LinearLayout>
