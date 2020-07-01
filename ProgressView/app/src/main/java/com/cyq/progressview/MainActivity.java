@@ -1,14 +1,20 @@
 package com.cyq.progressview;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cyq.progressview.button.MyButton;
 import com.cyq.progressview.widget.ProgressLayout;
+
+import java.util.Random;
 
 /**
  * @author : ChenYangQi
@@ -24,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private MyButton mBtnDownTemp;
     private MyButton mBtnUpTimer;
     private MyButton mBtnDownTimer;
+    private Random mRandom = new Random();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +78,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private Handler mHandler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(@NonNull Message msg) {
+            if (msg.what == 101) {
+                temperature = temperature + 1 + mRandom.nextInt(20);
+                if (temperature >= 300) {
+                    temperature = 300;
+                    mHandler.removeCallbacksAndMessages(null);
+                } else {
+                    mHandler.sendEmptyMessageDelayed(101, 2000);
+                }
+                Log.i("test", "预热---->" + temperature);
+            }
+            return false;
+        }
+    });
+
+
     /**
-     * 模拟预热到300°C
+     * 当前温度
+     */
+    int temperature;
+
+    /**
+     * 模拟0°C预热到300°C
      */
     private void upTemperature() {
-
+        temperature = 0;
+        mHandler.removeCallbacksAndMessages(null);
+        mHandler.sendEmptyMessageDelayed(101, 2000);
     }
 
     /**
@@ -106,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (tagger) {
             //按钮下移
             mBtnContainer.animate()
-                    .translationY(600F)
+                    .translationY(700F)
                     .setDuration(200)
                     .withLayer()
                     .start();
