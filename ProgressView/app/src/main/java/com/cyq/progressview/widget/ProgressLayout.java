@@ -47,6 +47,6 @@ public class ProgressLayout extends FrameLayout {
         if (temperature < 0) {
             return;
         }
-        mMySmartProgressView.setCurrentTemperature(temperature);
+        mMySmartProgressView.setCurrentTemperature(temperature,targetTemperature);
     }
 }
