@@ -36,4 +36,17 @@ public class ProgressLayout extends FrameLayout {
     private void init() {
         LayoutInflater.from(getContext()).inflate(R.layout.widget_progress_progress_view_layout, this, true);
     }
+
+    /**
+     * 设置当前显示温度
+     *
+     * @param temperature 当前温度
+     * @param targetTemperature 目标温度
+     */
+    public void setTemperature(int temperature, int targetTemperature) {
+        if (temperature < 0) {
+            return;
+        }
+        mMySmartProgressView.setCurrentTemperature(temperature);
+    }
 }

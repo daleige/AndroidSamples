@@ -265,37 +265,36 @@ public class MySmartProgressView extends View {
         mArcPath = new Path();
 
         //自定义包含各个进度对应的颜色值和进度值的属性动画，
-        final ValueAnimator clickColorAnim = ValueAnimator.ofObject(new MyColorsEvaluator(),
+        final ValueAnimator progressAnim = ValueAnimator.ofObject(new MyColorsEvaluator(),
                 mProgressColorsArray[0],
                 mProgressColorsArray[1],
                 mProgressColorsArray[2],
                 mProgressColorsArray[3]);
-        clickColorAnim.setDuration(60000);
-        clickColorAnim.setRepeatCount(ValueAnimator.INFINITE);
-        clickColorAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                ProgressColors colors = (ProgressColors) animation.getAnimatedValue();
-                //获取当前的进度0~3600之间
-                mCurrentAngle = colors.getProgress();
-                //获取此时的扇形区域path，用于裁剪动画粒子的canvas
-                getSectorClip(width / 2F, -90, mCurrentAngle / 10F);
-                //变更进度条的颜色值
-                mPointPaint.setColor(colors.getPointColor());
-                mOutCirclePaint.setColor(colors.getProgressColor());
-                mBackCirclePaiht.setColor(colors.getBgCircleColor());
-                //设置内圈变色圆的shader
-                mRadialGradientColors[2] = colors.getInsideColor();
-                mRadialGradient = new RadialGradient(
-                        0,
-                        0,
-                        mRadius + mOutCircleStrokeWidth / 2F,
-                        mRadialGradientColors,
-                        mRadialGradientStops,
-                        Shader.TileMode.CLAMP);
-                mSweptPaint.setShader(mRadialGradient);
-            }
+        progressAnim.setDuration(60000);
+        progressAnim.setRepeatCount(ValueAnimator.INFINITE);
+        progressAnim.addUpdateListener(animation -> {
+            ProgressColors colors = (ProgressColors) animation.getAnimatedValue();
+            //获取当前的进度0~3600之间
+            mCurrentAngle = colors.getProgress();
+            //获取此时的扇形区域path，用于裁剪动画粒子的canvas
+            getSectorClip(width / 2F, -90, mCurrentAngle / 10F);
+            //变更进度条的颜色值
+            mPointPaint.setColor(colors.getPointColor());
+            mOutCirclePaint.setColor(colors.getProgressColor());
+            mBackCirclePaiht.setColor(colors.getBgCircleColor());
+            //设置内圈变色圆的shader
+            mRadialGradientColors[2] = colors.getInsideColor();
+            mRadialGradient = new RadialGradient(
+                    0,
+                    0,
+                    mRadius + mOutCircleStrokeWidth / 2F,
+                    mRadialGradientColors,
+                    mRadialGradientStops,
+                    Shader.TileMode.CLAMP);
+            mSweptPaint.setShader(mRadialGradient);
         });
+
+
         //绘制运动的粒子
         mPointList.clear();
         AnimPoint animPoint = new AnimPoint();
@@ -310,37 +309,31 @@ public class MySmartProgressView extends View {
         pointsAnimator.setDuration(1000);
         pointsAnimator.setRepeatMode(ValueAnimator.RESTART);
         pointsAnimator.setRepeatCount(ValueAnimator.INFINITE);
-        pointsAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                for (AnimPoint point : mPointList) {
-                    point.updatePoint(mRandom, mRadius);
-                }
-                invalidate();
+        pointsAnimator.addUpdateListener(animation -> {
+            for (AnimPoint point : mPointList) {
+                point.updatePoint(mRandom, mRadius);
             }
+            invalidate();
         });
+        pointsAnimator.start();
 
         //TODO 初始化动画 还需要和设计确认具体效果
         final ValueAnimator initAnimator = ValueAnimator.ofFloat(0, 1F);
         initAnimator.setDuration(1000);
         initAnimator.setInterpolator(new AccelerateInterpolator());
-        initAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float value = (float) animation.getAnimatedValue();
-                backPositionArr[1] = value;
-                mBackCircleLinearGradient = new LinearGradient(
-                        0,
-                        -mCenterX,
-                        0,
-                        mCenterY,
-                        backShaderColorArr,
-                        backPositionArr,
-                        Shader.TileMode.CLAMP);
-                mBackShadePaint.setShader(mBackCircleLinearGradient);
-                invalidate();
-            }
+        initAnimator.addUpdateListener(animation -> {
+            float value = (float) animation.getAnimatedValue();
+            backPositionArr[1] = value;
+            mBackCircleLinearGradient = new LinearGradient(
+                    0,
+                    -mCenterX,
+                    0,
+                    mCenterY,
+                    backShaderColorArr,
+                    backPositionArr,
+                    Shader.TileMode.CLAMP);
+            mBackShadePaint.setShader(mBackCircleLinearGradient);
+            invalidate();
         });
         initAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -352,9 +345,7 @@ public class MySmartProgressView extends View {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                AnimatorSet animatorSet = new AnimatorSet();
-                animatorSet.playTogether(clickColorAnim, pointsAnimator);
-                animatorSet.start();
+                //TODO 初始化动画运行完成
             }
         });
         postDelayed(new Runnable() {
@@ -417,5 +408,16 @@ public class MySmartProgressView extends View {
         mArcPath.addArc(-r, -r, r, r, startAngle, sweepAngle);
         mArcPath.lineTo(0, 0);
         mArcPath.close();
+    }
+
+    /**
+     * 设置当前的温度
+     *
+     * @param temperature       当前温度
+     * @param targetTemperature 目标温度
+     */
+    public void setCurrentTemperature(int temperature, int targetTemperature) {
+
+
     }
 }
