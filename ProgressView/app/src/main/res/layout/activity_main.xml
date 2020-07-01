@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mContainer"
     android:layout_width="match_parent"
@@ -9,21 +10,42 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <com.cyq.progressview.test.TestView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
-
-    <com.cyq.progressview.test.DIYBezierView
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_gravity="center_horizontal"
-        android:visibility="gone" />
-
     <com.cyq.progressview.widget.ProgressLayout
         android:id="@+id/mProgress"
         android:layout_width="320dp"
         android:layout_height="320dp"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"/>
 
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/mBtnContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <com.cyq.progressview.button.A6Button
+            android:id="@+id/btn_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:a6btn_color="blue"
+            app:a6btn_text="预热到300°C"
+            app:a6btn_type="light" />
+
+        <com.cyq.progressview.button.A6Button
+            android:id="@+id/btn_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:a6btn_text="降温到30°C"
+            app:a6btn_type="normal" />
+
+        <com.cyq.progressview.button.A6Button
+            android:id="@+id/btn_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:a6btn_text="保温"
+            app:a6btn_type="normal" />
+
+    </LinearLayout>
 </FrameLayout>

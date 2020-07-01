@@ -270,7 +270,7 @@ public class MySmartProgressView extends View {
                 mProgressColorsArray[1],
                 mProgressColorsArray[2],
                 mProgressColorsArray[3]);
-        clickColorAnim.setDuration(12000);
+        clickColorAnim.setDuration(60000);
         clickColorAnim.setRepeatCount(ValueAnimator.INFINITE);
         clickColorAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override

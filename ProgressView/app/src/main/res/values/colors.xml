@@ -3,4 +3,23 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <!-- 普通按钮 -->
+    <color name="normal_bt_color">#24D8D8D8</color>
+    <color name="normal_bt_press_color">#33D8D8D8</color>
+    <color name="normal_bt_trigger_color">#47D8D8D8</color>
+    <color name="btn_stork_color">#1AD8D8D8</color>
+    <!-- 主按钮 -->
+    <color name="main_bt_color">#FE4013</color>
+    <color name="main_bt_press_color">#F35703</color>
+    <color name="main_bt_trigger_color">#F66E25</color>
+    <!-- 清洁菜单按钮 -->
+    <color name="clean_bt_color">#049D00</color>
+    <color name="clean_bt_press_color">#39B636</color>
+    <color name="clean_bt_trigger_color">#6BCA69</color>
+    <!-- 设置按钮 -->
+    <color name="setting_bt_color">#1680F5</color>
+    <color name="setting_bt_press_color">#50A3FF</color>
+    <color name="setting_bt_trigger_color">#85BFFF</color>
+    <!-- 标准白 -->
+    <color name="standard_white_color">#ffffff</color>
 </resources>

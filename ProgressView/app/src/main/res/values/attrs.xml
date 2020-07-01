@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--通用按钮样式-->
+    <declare-styleable name="A6Button">
+        <attr name="a6btn_color">
+            <enum name="yellow" value="201" />
+            <enum name="green" value="202" />
+            <enum name="blue" value="203" />
+        </attr>
+        <attr name="a6btn_type">
+            <enum name="light" value="1001" />
+            <enum name="normal" value="1002" />
+            <enum name="action" value="1003" />
+        </attr>
+        <attr name="a6btn_action">
+            <enum name="positive" value="2001" />
+            <enum name="negative" value="2002" />
+        </attr>
+        <attr name="a6btn_enable" format="boolean" />
+        <attr name="a6btn_text" format="string" />
+    </declare-styleable>
+</resources>
