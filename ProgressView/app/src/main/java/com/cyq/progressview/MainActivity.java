@@ -16,7 +16,7 @@ import com.cyq.progressview.widget.ProgressLayout;
  */
 public class MainActivity extends AppCompatActivity {
     private ProgressLayout mProgress;
-    private boolean tagger = true;
+    private boolean tagger = false;
     private FrameLayout mContainer;
     private LinearLayout mBtnContainer;
 
@@ -27,40 +27,45 @@ public class MainActivity extends AppCompatActivity {
         mContainer = findViewById(R.id.mContainer);
         mProgress = findViewById(R.id.mProgress);
         mBtnContainer = findViewById(R.id.mBtnContainer);
+        layoutAnim();
         mContainer.setOnClickListener(v -> {
-            if (tagger) {
-                //按钮下移
-                mBtnContainer.animate()
-                        .translationY(500F)
-                        .setDuration(200)
-                        .withLayer()
-                        .start();
-
-                mBtnContainer.setVisibility(View.VISIBLE);
-                mProgress.animate()
-                        .translationY(0)
-                        .setDuration(200)
-                        .scaleX(1f)
-                        .scaleY(1f)
-                        .withLayer()
-                        .start();
-            } else {
-                //按钮上移
-                mBtnContainer.animate()
-                        .translationY(0F)
-                        .setDuration(200)
-                        .withLayer()
-                        .start();
-
-                mProgress.animate()
-                        .translationY(-250F)
-                        .scaleX(0.8f)
-                        .scaleY(0.8f)
-                        .setDuration(200)
-                        .withLayer()
-                        .start();
-            }
-            tagger = !tagger;
+            layoutAnim();
         });
+    }
+
+    private void layoutAnim() {
+        if (tagger) {
+            //按钮下移
+            mBtnContainer.animate()
+                    .translationY(500F)
+                    .setDuration(200)
+                    .withLayer()
+                    .start();
+
+            mBtnContainer.setVisibility(View.VISIBLE);
+            mProgress.animate()
+                    .translationY(0)
+                    .setDuration(200)
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .withLayer()
+                    .start();
+        } else {
+            //按钮上移
+            mBtnContainer.animate()
+                    .translationY(0F)
+                    .setDuration(200)
+                    .withLayer()
+                    .start();
+
+            mProgress.animate()
+                    .translationY(-250F)
+                    .scaleX(0.8f)
+                    .scaleY(0.8f)
+                    .setDuration(200)
+                    .withLayer()
+                    .start();
+        }
+        tagger = !tagger;
     }
 }
