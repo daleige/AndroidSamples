@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * 当前温度
      */
-    int temperature;
+    float temperature;
 
     /**
      * 模拟0°C预热到300°C

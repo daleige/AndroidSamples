@@ -18,7 +18,7 @@ import com.cyq.progressview.R;
  */
 public class ProgressLayout extends FrameLayout {
     private MySmartProgressView mMySmartProgressView;
-    private FrameLayout mNumberContainer;
+    private TempNumberView mTempNumberView;
 
     public ProgressLayout(@NonNull Context context) {
         this(context, null);
@@ -35,18 +35,17 @@ public class ProgressLayout extends FrameLayout {
 
     private void init() {
         LayoutInflater.from(getContext()).inflate(R.layout.widget_progress_progress_view_layout, this, true);
+        mMySmartProgressView = findViewById(R.id.mMySmartProgressView);
+        mTempNumberView = findViewById(R.id.mTempNumberView);
     }
 
     /**
      * 设置当前显示温度
      *
-     * @param temperature 当前温度
+     * @param temperature       当前温度
      * @param targetTemperature 目标温度
      */
-    public void setTemperature(int temperature, int targetTemperature) {
-        if (temperature < 0) {
-            return;
-        }
-        mMySmartProgressView.setCurrentTemperature(temperature,targetTemperature);
+    public void setTemperature(float temperature, float targetTemperature) {
+        mMySmartProgressView.setCurrentTemperature(temperature, targetTemperature);
     }
 }

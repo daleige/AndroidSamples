@@ -18,6 +18,7 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 
@@ -117,7 +118,7 @@ public class MySmartProgressView extends View {
     private Paint mBmpPaint;
     private float scaleHeight;
     private float scaleWidth;
-    private int mCurrentAngle;
+
 
     /**
      * 外层粒子圆环的边框大小
@@ -264,37 +265,6 @@ public class MySmartProgressView extends View {
         // 绘制扇形path
         mArcPath = new Path();
 
-        //自定义包含各个进度对应的颜色值和进度值的属性动画，
-        final ValueAnimator progressAnim = ValueAnimator.ofObject(new MyColorsEvaluator(),
-                mProgressColorsArray[0],
-                mProgressColorsArray[1],
-                mProgressColorsArray[2],
-                mProgressColorsArray[3]);
-        progressAnim.setDuration(60000);
-        progressAnim.setRepeatCount(ValueAnimator.INFINITE);
-        progressAnim.addUpdateListener(animation -> {
-            ProgressColors colors = (ProgressColors) animation.getAnimatedValue();
-            //获取当前的进度0~3600之间
-            mCurrentAngle = colors.getProgress();
-            //获取此时的扇形区域path，用于裁剪动画粒子的canvas
-            getSectorClip(width / 2F, -90, mCurrentAngle / 10F);
-            //变更进度条的颜色值
-            mPointPaint.setColor(colors.getPointColor());
-            mOutCirclePaint.setColor(colors.getProgressColor());
-            mBackCirclePaiht.setColor(colors.getBgCircleColor());
-            //设置内圈变色圆的shader
-            mRadialGradientColors[2] = colors.getInsideColor();
-            mRadialGradient = new RadialGradient(
-                    0,
-                    0,
-                    mRadius + mOutCircleStrokeWidth / 2F,
-                    mRadialGradientColors,
-                    mRadialGradientStops,
-                    Shader.TileMode.CLAMP);
-            mSweptPaint.setShader(mRadialGradient);
-        });
-
-
         //绘制运动的粒子
         mPointList.clear();
         AnimPoint animPoint = new AnimPoint();
@@ -411,13 +381,91 @@ public class MySmartProgressView extends View {
     }
 
     /**
+     * 温度环最大温度
+     */
+    private float maxTemperature;
+    /**
+     * 当前温度
+     */
+    private float currentTemperature;
+
+    /**
+     * 下一步的温度
+     */
+    private float nextTemperature;
+    /**
+     * 当前圆形的角度
+     */
+    private float mCurrentAngle = 0;
+    /**
+     * 临时项目温度
+     */
+    private float mTemporaryAnger = 0;
+    private ValueAnimator progressAnim;
+
+    /**
      * 设置当前的温度
      *
      * @param temperature       当前温度
      * @param targetTemperature 目标温度
      */
-    public void setCurrentTemperature(int temperature, int targetTemperature) {
+    public void setCurrentTemperature(float temperature, float targetTemperature) {
+        maxTemperature = targetTemperature;
+        nextTemperature = temperature;
+        //自定义包含各个进度对应的颜色值和进度值的属性动画，
+        progressAnim = ValueAnimator.ofObject(new MyColorsEvaluator(),
+                mProgressColorsArray[0],
+                mProgressColorsArray[1],
+                mProgressColorsArray[2],
+                mProgressColorsArray[3]);
+        progressAnim.setDuration(1500);
+        progressAnim.setRepeatCount(ValueAnimator.INFINITE);
+        progressAnim.addUpdateListener(animation -> {
+            ProgressColors colors = (ProgressColors) animation.getAnimatedValue();
+            //变更进度条的颜色值
+            mPointPaint.setColor(colors.getPointColor());
+            mOutCirclePaint.setColor(colors.getProgressColor());
+            mBackCirclePaiht.setColor(colors.getBgCircleColor());
+            //设置内圈变色圆的shader
+            mRadialGradientColors[2] = colors.getInsideColor();
+            mRadialGradient = new RadialGradient(
+                    0,
+                    0,
+                    mRadius + mOutCircleStrokeWidth / 2F,
+                    mRadialGradientColors,
+                    mRadialGradientStops,
+                    Shader.TileMode.CLAMP);
+            mSweptPaint.setShader(mRadialGradient);
 
+            //获取当前的进度0~3600之间
+            mTemporaryAnger = colors.getProgress();
+            mTemporaryAnger = currentTemperature * 10 + (nextTemperature - currentTemperature) / maxTemperature * mTemporaryAnger;
 
+            //获取此时的扇形区域path，用于裁剪动画粒子的canvas
+            Log.e("test", "mTemporaryAnger------>" + mTemporaryAnger);
+            getSectorClip(width / 2F, -90, mTemporaryAnger / 10F);
+        });
+        progressAnim.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                currentTemperature = nextTemperature;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        progressAnim.start();
     }
 }
