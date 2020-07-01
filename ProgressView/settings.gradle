@@ -1,2 +1,3 @@
+include ':app:frmesurfaceview'
 rootProject.name='ProgressView'
 include ':app'
