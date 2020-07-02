@@ -3,7 +3,6 @@ package com.cyq.progressview;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -32,6 +31,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private MyButton mBtnUpTimer;
     private MyButton mBtnDownTimer;
     private Random mRandom = new Random();
+    /**
+     * 当前温度
+     */
+    float temperature;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,22 +67,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.btn_1:
                 //预热
-                //upTemperature();
+                temperature = 0;
+                mHandler.removeCallbacksAndMessages(null);
                 mHandler.sendEmptyMessageDelayed(101, 0);
                 break;
 
             case R.id.btn_2:
                 //减温
-                downTemperature();
+                temperature = 300;
+                mHandler.removeCallbacksAndMessages(null);
+                mHandler.sendEmptyMessageDelayed(102, 0);
                 break;
 
             case R.id.btn_3:
                 //正计时
-                upTimer();
                 break;
             case R.id.btn_4:
                 //倒计时
-                downTimer();
                 break;
             default:
         }
@@ -88,54 +92,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Handler mHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(@NonNull Message msg) {
-            if (msg.what == 101) {
-                temperature = temperature + 1 + mRandom.nextInt(30);
-                if (temperature >= 300) {
-                    temperature = 300;
-                    mHandler.removeCallbacksAndMessages(null);
-                } else {
-                    mHandler.sendEmptyMessageDelayed(101, 2000);
-                }
-                mProgress.setTemperature(temperature, 300);
+            switch (msg.what) {
+                case 101:
+                    temperature = temperature + 1 + mRandom.nextInt(30);
+                    if (temperature >= 300) {
+                        temperature = 300;
+                        mHandler.removeCallbacksAndMessages(null);
+                    } else {
+                        mHandler.sendEmptyMessageDelayed(101, 2000);
+                    }
+                    mProgress.setTemperature(temperature, 300);
+                    break;
+                case 102:
+                    //模拟减温，随机减温0-30度之间
+                    temperature = temperature - mRandom.nextInt(30);
+                    if (temperature < 0) {
+                        temperature = 0;
+                        mHandler.removeCallbacksAndMessages(null);
+                    } else {
+                        mHandler.sendEmptyMessageDelayed(102, 2000);
+                    }
+                    mProgress.setTemperature(temperature, 300);
+                    break;
+                default:
             }
             return false;
         }
     });
-
-    /**
-     * 当前温度
-     */
-    float temperature;
-
-    /**
-     * 模拟0°C预热到300°C
-     */
-    private void upTemperature() {
-        temperature = 0;
-        mHandler.removeCallbacksAndMessages(null);
-        mHandler.sendEmptyMessageDelayed(101, 2000);
-    }
-
-    /**
-     * 模拟降温到0°C
-     */
-    private void downTemperature() {
-
-    }
-
-    /**
-     * 正计时
-     */
-    private void upTimer() {
-
-    }
-
-    /**
-     * 倒计时
-     */
-    private void downTimer() {
-
-    }
 
     /**
      * 触摸执行动画
