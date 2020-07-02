@@ -96,7 +96,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     mHandler.sendEmptyMessageDelayed(101, 2000);
                 }
-                Log.i("test", "预热---->" + temperature);
                 mProgress.setTemperature(temperature, 300);
             }
             return false;

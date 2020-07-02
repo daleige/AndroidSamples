@@ -410,6 +410,7 @@ public class MySmartProgressView extends View {
      * @param targetTemperature 目标温度
      */
     public void setCurrentTemperature(float temperature, float targetTemperature) {
+        Log.e("test", "当前温度：" + temperature + "----------最大温度：" + targetTemperature);
         maxTemperature = targetTemperature;
         nextTemperature = temperature;
         //自定义包含各个进度对应的颜色值和进度值的属性动画，
@@ -439,10 +440,9 @@ public class MySmartProgressView extends View {
 
             //获取当前的进度0~3600之间
             mTemporaryAnger = colors.getProgress();
-           // mTemporaryAnger = currentTemperature * 10 + (nextTemperature - currentTemperature) / maxTemperature * mTemporaryAnger;
+            // mTemporaryAnger = currentTemperature * 10 + (nextTemperature - currentTemperature) / maxTemperature * mTemporaryAnger;
 
             //获取此时的扇形区域path，用于裁剪动画粒子的canvas
-            Log.e("test", "mTemporaryAnger------>" + mTemporaryAnger);
             getSectorClip(width / 2F, -90, mTemporaryAnger / 10F);
         });
         progressAnim.addListener(new Animator.AnimatorListener() {
