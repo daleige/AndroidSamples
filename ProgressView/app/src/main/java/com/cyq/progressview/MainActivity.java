@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.cyq.progressview.button.MyButton;
 import com.cyq.progressview.widget.ProgressLayout;
+import com.yuyashuai.frameanimation.FrameAnimation;
 
 import java.util.Random;
 
@@ -51,6 +52,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBtnDownTemp.setOnClickListener(this);
         mBtnUpTimer.setOnClickListener(this);
         mBtnDownTimer.setOnClickListener(this);
+
+
+        mProgress.mWaveBgView.setRepeatMode(FrameAnimation.RepeatMode.INFINITE);
+        mProgress.mWaveBgView.setFrameInterval(12);
+        mProgress.mWaveBgView.setSupportInBitmap(true);
+        mProgress.mWaveBgView.playAnimationFromAssets("wave_version1");
     }
 
     @Override
@@ -169,5 +176,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .start();
         }
         tagger = !tagger;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mProgress.mWaveBgView.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mProgress.mWaveBgView.onResume();
     }
 }

@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.cyq.progressview.R;
+import com.yuyashuai.frameanimation.FrameAnimationView;
 
 
 /**
@@ -19,6 +20,7 @@ import com.cyq.progressview.R;
 public class ProgressLayout extends FrameLayout {
     private MySmartProgressView mMySmartProgressView;
     private TempNumberView mTempNumberView;
+    public FrameAnimationView mWaveBgView;
 
     public ProgressLayout(@NonNull Context context) {
         this(context, null);
@@ -37,6 +39,7 @@ public class ProgressLayout extends FrameLayout {
         LayoutInflater.from(getContext()).inflate(R.layout.widget_progress_progress_view_layout, this, true);
         mMySmartProgressView = findViewById(R.id.mMySmartProgressView);
         mTempNumberView = findViewById(R.id.mTempNumberView);
+        mWaveBgView = findViewById(R.id.mWaveBgView);
     }
 
     /**

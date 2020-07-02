@@ -4,13 +4,10 @@
     android:layout_width="360dp"
     android:layout_height="360dp">
 
-<!--    <com.airbnb.lottie.LottieAnimationView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_gravity="center"-->
-<!--        app:lottie_autoPlay="true"-->
-<!--        app:lottie_fileName="bg_wave.json"-->
-<!--        app:lottie_loop="true" />-->
+    <com.yuyashuai.frameanimation.FrameAnimationView
+        android:id="@+id/mWaveBgView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <com.cyq.progressview.widget.MySmartProgressView
         android:id="@+id/mMySmartProgressView"
