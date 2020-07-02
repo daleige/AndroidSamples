@@ -402,13 +402,11 @@ public class MySmartProgressView extends View {
         if (progressAnim != null && progressAnim.isRunning()) {
             progressAnim.cancel();
         }
-
-        Log.e("test", "当前温度：" + temperature + "----------最大温度：" + targetTemperature);
         //把当前温度和最大温度等比转换为0~3600表示
         currentProgress = temperature / targetTemperature * 3600;
         //自定义包含各个进度对应的颜色值和进度值的属性动画，
         progressAnim = ValueAnimator.ofFloat(lastTimeProgress, currentProgress);
-        progressAnim.setDuration(1000);
+        progressAnim.setDuration(1500);
         progressAnim.addUpdateListener(animation -> {
             float value = (float) animation.getAnimatedValue();
             mCurrentAngle = value;
