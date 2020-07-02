@@ -102,7 +102,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     });
 
-
     /**
      * 当前温度
      */
