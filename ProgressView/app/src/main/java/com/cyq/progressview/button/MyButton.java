@@ -21,7 +21,7 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 
 import com.cyq.progressview.R;
-import com.cyq.progressview.Utils;
+import com.cyq.progressview.utils.Utils;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 

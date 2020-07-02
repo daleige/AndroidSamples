@@ -7,12 +7,12 @@ import android.animation.TypeEvaluator;
  * date   : 2020/5/20 17:42
  * desc   : 自定义属性动画的TypeEvaluator
  */
-public class MyColorsEvaluator implements TypeEvaluator<ProgressColors> {
+public class MyColorsEvaluator implements TypeEvaluator<ProgressParameter> {
     private final float distance = 1.0F / 3.0F;
 
     @Override
-    public ProgressColors evaluate(float fraction, ProgressColors startValue, ProgressColors endValue) {
-        ProgressColors myColors = new ProgressColors();
+    public ProgressParameter evaluate(float fraction, ProgressParameter startValue, ProgressParameter endValue) {
+        ProgressParameter myColors = new ProgressParameter();
         myColors.setInsideColor((Integer) getCurrentColor(fraction, startValue.getInsideColor(),
                 endValue.getInsideColor()));
         myColors.setOutsizeColor((Integer) getCurrentColor(fraction, startValue.getOutsizeColor(),

@@ -5,7 +5,7 @@ package com.cyq.progressview.evaluator;
  * date   : 2020/5/20 17:43
  * desc   : 自定义动画属性，适用于进度圆进度变化时几种颜色的变化规律
  */
-public class ProgressColors {
+public class ProgressParameter {
     private int progress;
 
     /**
@@ -33,10 +33,10 @@ public class ProgressColors {
      */
     private int bgCircleColor;
 
-    public ProgressColors() {
+    public ProgressParameter() {
     }
 
-    public ProgressColors(int progress, int insideColor, int outsizeColor, int progressColor, int pointColor, int bgCircleColor) {
+    public ProgressParameter(int progress, int insideColor, int outsizeColor, int progressColor, int pointColor, int bgCircleColor) {
         this.insideColor = insideColor;
         this.outsizeColor = outsizeColor;
         this.progressColor = progressColor;

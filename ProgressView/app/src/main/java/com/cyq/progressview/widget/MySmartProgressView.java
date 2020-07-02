@@ -2,7 +2,6 @@ package com.cyq.progressview.widget;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -26,9 +25,9 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.cyq.progressview.R;
-import com.cyq.progressview.Utils;
-import com.cyq.progressview.evaluator.MyColorsEvaluator;
-import com.cyq.progressview.evaluator.ProgressColors;
+import com.cyq.progressview.utils.ArgbUtils;
+import com.cyq.progressview.utils.Utils;
+import com.cyq.progressview.evaluator.ProgressParameter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,7 +98,7 @@ public class MySmartProgressView extends View {
     /**
      * 四个进度阶段的颜色值0%-25%-50%-75%
      */
-    private ProgressColors[] mProgressColorsArray = new ProgressColors[4];
+    private ProgressParameter[] mProgressParameterArray = new ProgressParameter[4];
 
     private float[] mRadialGradientStops = {0F, 0.5F, 1F};
     private LinearGradient mBackCircleLinearGradient;
@@ -128,6 +127,8 @@ public class MySmartProgressView extends View {
      * 底色环的边框大小
      */
     private final int mBackCircleStrokeWidth = 12;
+
+    private float mCurrentAngle;
 
     public MySmartProgressView(Context context) {
         this(context, null);
@@ -177,14 +178,14 @@ public class MySmartProgressView extends View {
         int progressColor4 = Color.parseColor("#FFFF8000");
         int pointColor4 = Color.parseColor("#FFFF5500");
         int bgCircleColor4 = Color.parseColor("#1AFF5500");
-        ProgressColors progressColors1 = new ProgressColors(0, insideColor1, outsizeColor1, progressColor1, pointColor1, bgCircleColor1);
-        ProgressColors progressColors2 = new ProgressColors(3600 / 3, insideColor2, outsizeColor2, progressColor2, pointColor2, bgCircleColor2);
-        ProgressColors progressColors3 = new ProgressColors(3600 / 3 * 2, insideColor3, outsizeColor3, progressColor3, pointColor3, bgCircleColor3);
-        ProgressColors progressColors4 = new ProgressColors(3600, insideColor4, outsizeColor4, progressColor4, pointColor4, bgCircleColor4);
-        mProgressColorsArray[0] = progressColors1;
-        mProgressColorsArray[1] = progressColors2;
-        mProgressColorsArray[2] = progressColors3;
-        mProgressColorsArray[3] = progressColors4;
+        ProgressParameter progressParameter1 = new ProgressParameter(0, insideColor1, outsizeColor1, progressColor1, pointColor1, bgCircleColor1);
+        ProgressParameter progressParameter2 = new ProgressParameter(3600 / 3, insideColor2, outsizeColor2, progressColor2, pointColor2, bgCircleColor2);
+        ProgressParameter progressParameter3 = new ProgressParameter(3600 / 3 * 2, insideColor3, outsizeColor3, progressColor3, pointColor3, bgCircleColor3);
+        ProgressParameter progressParameter4 = new ProgressParameter(3600, insideColor4, outsizeColor4, progressColor4, pointColor4, bgCircleColor4);
+        mProgressParameterArray[0] = progressParameter1;
+        mProgressParameterArray[1] = progressParameter2;
+        mProgressParameterArray[2] = progressParameter3;
+        mProgressParameterArray[3] = progressParameter4;
         mRadialGradientColors[0] = transparentColor;
         mRadialGradientColors[1] = transparentColor;
 
@@ -380,49 +381,40 @@ public class MySmartProgressView extends View {
         mArcPath.close();
     }
 
+    private ValueAnimator progressAnim;
     /**
-     * 温度环最大温度
+     * 上一次圆环的进度，按0~3600计数
      */
-    private float maxTemperature;
-    /**
-     * 当前温度
-     */
-    private float currentTemperature;
+    private float lastTimeProgress = 0;
 
     /**
-     * 下一步的温度
+     * 当前圆环的进度
      */
-    private float nextTemperature;
-    /**
-     * 当前圆形的角度
-     */
-    private float mCurrentAngle = 0;
-    /**
-     * 临时项目温度
-     */
-    private float mTemporaryAnger = 0;
-    private ValueAnimator progressAnim;
+    private float currentProgress = 0;
 
     /**
      * 设置当前的温度
      *
-     * @param temperature       当前温度
-     * @param targetTemperature 目标温度
+     * @param temperature       当前真实温度
+     * @param targetTemperature 目标真实温度
      */
     public void setCurrentTemperature(float temperature, float targetTemperature) {
+        if (progressAnim != null && progressAnim.isRunning()) {
+            progressAnim.cancel();
+        }
+
         Log.e("test", "当前温度：" + temperature + "----------最大温度：" + targetTemperature);
-        maxTemperature = targetTemperature;
-        nextTemperature = temperature;
+        //把当前温度和最大温度等比转换为0~3600表示
+        currentProgress = temperature / targetTemperature * 3600;
         //自定义包含各个进度对应的颜色值和进度值的属性动画，
-        progressAnim = ValueAnimator.ofObject(new MyColorsEvaluator(),
-                mProgressColorsArray[0],
-                mProgressColorsArray[1],
-                mProgressColorsArray[2],
-                mProgressColorsArray[3]);
-        progressAnim.setDuration(1500);
+        progressAnim = ValueAnimator.ofFloat(lastTimeProgress, currentProgress);
+        progressAnim.setDuration(1000);
         progressAnim.setRepeatCount(ValueAnimator.INFINITE);
         progressAnim.addUpdateListener(animation -> {
-            ProgressColors colors = (ProgressColors) animation.getAnimatedValue();
+            float value = (float) animation.getAnimatedValue();
+            mCurrentAngle = value;
+            //根据当前的进度值获取圆环的颜色属性
+            ProgressParameter colors = ArgbUtils.getInstance().getProgressParameter(value);
             //变更进度条的颜色值
             mPointPaint.setColor(colors.getPointColor());
             mOutCirclePaint.setColor(colors.getProgressColor());
@@ -438,13 +430,10 @@ public class MySmartProgressView extends View {
                     Shader.TileMode.CLAMP);
             mSweptPaint.setShader(mRadialGradient);
 
-            //获取当前的进度0~3600之间
-            mTemporaryAnger = colors.getProgress();
-            // mTemporaryAnger = currentTemperature * 10 + (nextTemperature - currentTemperature) / maxTemperature * mTemporaryAnger;
-
             //获取此时的扇形区域path，用于裁剪动画粒子的canvas
-            getSectorClip(width / 2F, -90, mTemporaryAnger / 10F);
+            getSectorClip(width / 2F, -90, value / 10F);
         });
+
         progressAnim.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -453,12 +442,12 @@ public class MySmartProgressView extends View {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                currentTemperature = nextTemperature;
+                lastTimeProgress = currentProgress;
             }
 
             @Override
             public void onAnimationCancel(Animator animation) {
-
+                lastTimeProgress = currentProgress;
             }
 
             @Override
