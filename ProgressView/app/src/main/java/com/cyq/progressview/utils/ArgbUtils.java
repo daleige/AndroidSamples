@@ -2,7 +2,6 @@ package com.cyq.progressview.utils;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
-import android.util.Log;
 
 import androidx.vectordrawable.graphics.drawable.ArgbEvaluator;
 
@@ -51,7 +50,6 @@ public class ArgbUtils {
     @SuppressLint("RestrictedApi")
     public ProgressParameter getProgressParameter(float lastTimeValue, float progressValue) {
         float fraction = progressValue % 1200 / 1200;
-        Log.e("test", "fraction---->" + fraction);
         if (progressValue < 1200) {
             //第一个颜色段
             mParameter.setInsideColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, insideColor1, insideColor2));

@@ -81,9 +81,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.btn_3:
                 //正计时
+                temperature = 300;
+                mHandler.removeCallbacksAndMessages(null);
+                mHandler.sendEmptyMessageDelayed(103, 0);
                 break;
             case R.id.btn_4:
                 //倒计时
+                temperature = 300;
+                mHandler.removeCallbacksAndMessages(null);
+                mHandler.sendEmptyMessageDelayed(104, 0);
                 break;
             default:
         }
@@ -94,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public boolean handleMessage(@NonNull Message msg) {
             switch (msg.what) {
                 case 101:
-                    temperature = temperature + 1 + mRandom.nextInt(30);
+                    temperature = temperature + 1 + mRandom.nextInt(50);
                     if (temperature >= 300) {
                         temperature = 300;
                         mHandler.removeCallbacksAndMessages(null);
@@ -113,6 +119,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         mHandler.sendEmptyMessageDelayed(102, 2000);
                     }
                     mProgress.setTemperature(temperature, 300);
+                    break;
+                case 103:
+                    //模拟保温 正计时
+                    temperature = 300;
+                    mProgress.setTemperature(temperature, 300);
+                    break;
+                case 104:
+                    //模拟倒计时
+
                     break;
                 default:
             }

@@ -16,6 +16,7 @@ import android.graphics.RadialGradient;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.os.Build;
+import android.transition.Visibility;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -358,12 +359,14 @@ public class MySmartProgressView extends View {
         canvas.restore();
 
         //画指针
-        canvas.save();
-        canvas.translate(mCenterX, mCenterY);
-        canvas.rotate(mCurrentAngle / 10F);
-        canvas.translate(-scaleWidth + 10, -scaleHeight - 10);
-        canvas.drawBitmap(mBitmap, 0, 0, mBmpPaint);
-        canvas.restore();
+        if (mPointerVisible == VISIBLE) {
+            canvas.save();
+            canvas.translate(mCenterX, mCenterY);
+            canvas.rotate(mCurrentAngle / 10F);
+            canvas.translate(-scaleWidth + 10, -scaleHeight - 10);
+            canvas.drawBitmap(mBitmap, 0, 0, mBmpPaint);
+            canvas.restore();
+        }
     }
 
     /**
@@ -381,7 +384,6 @@ public class MySmartProgressView extends View {
         mArcPath.close();
     }
 
-    private ValueAnimator progressAnim;
     /**
      * 上一次圆环的进度，按0~3600计数
      */
@@ -391,6 +393,8 @@ public class MySmartProgressView extends View {
      * 当前圆环的进度
      */
     private float currentProgress = 0;
+
+    private ValueAnimator progressAnim;
 
     /**
      * 设置当前的温度
@@ -402,6 +406,11 @@ public class MySmartProgressView extends View {
         if (progressAnim != null && progressAnim.isRunning()) {
             progressAnim.cancel();
         }
+        //未达到目标温度时指针是可见的
+        if (temperature < targetTemperature) {
+            mPointerVisible = VISIBLE;
+        }
+
         //把当前温度和最大温度等比转换为0~3600表示
         currentProgress = temperature / targetTemperature * 3600;
         //自定义包含各个进度对应的颜色值和进度值的属性动画，
@@ -440,6 +449,9 @@ public class MySmartProgressView extends View {
             @Override
             public void onAnimationEnd(Animator animation) {
                 lastTimeProgress = currentProgress;
+                if (mCurrentAngle >= 3600) {
+                    setPointerVisible(GONE);
+                }
             }
 
             @Override
@@ -453,5 +465,56 @@ public class MySmartProgressView extends View {
             }
         });
         progressAnim.start();
+    }
+
+    private float mPointerTranslation;
+
+    /**
+     * 标记指针此时是否可见
+     */
+    private int mPointerVisible = VISIBLE;
+
+    /**
+     * 设置指针显示或者是隐藏的动画
+     *
+     * @param visible = VISIBLE or GONE
+     */
+    private void setPointerVisible(int visible) {
+        if (visible == mPointerVisible) {
+            return;
+        }
+        if (visible == GONE) {
+            //隐藏指针，在保温状态 或者 温度达到预定温度是需要隐藏
+            ValueAnimator gonePointerAnimator = ValueAnimator.ofFloat(0, 1);
+            gonePointerAnimator.setDuration(1000);
+            gonePointerAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    mPointerTranslation = (float) gonePointerAnimator.getAnimatedValue();
+                }
+            });
+            gonePointerAnimator.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mPointerVisible = GONE;
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                    mPointerVisible = GONE;
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+            gonePointerAnimator.start();
+        }
     }
 }
