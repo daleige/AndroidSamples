@@ -49,8 +49,8 @@ public class ArgbUtils {
      * @return
      */
     @SuppressLint("RestrictedApi")
-    public ProgressParameter getProgressParameter(float progressValue) {
-        float fraction = progressValue / 3600F;
+    public ProgressParameter getProgressParameter(float lastTimeValue, float progressValue) {
+        float fraction = progressValue % 1200 / 1200;
         Log.e("test", "fraction---->" + fraction);
         if (progressValue < 1200) {
             //第一个颜色段
@@ -66,7 +66,7 @@ public class ArgbUtils {
             mParameter.setProgressColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, progressColor2, progressColor3));
             mParameter.setPointColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, pointColor2, pointColor3));
             mParameter.setBgCircleColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, bgCircleColor2, bgCircleColor3));
-        } else {
+        } else if (progressValue < 3600) {
             //第三个颜色段
             mParameter.setInsideColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, insideColor3, insideColor4));
             mParameter.setOutsizeColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, outsizeColor3, outsizeColor4));

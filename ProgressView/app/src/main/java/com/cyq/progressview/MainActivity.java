@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public boolean handleMessage(@NonNull Message msg) {
             if (msg.what == 101) {
-                temperature = temperature + 1 + mRandom.nextInt(50);
+                temperature = temperature + 1 + mRandom.nextInt(30);
                 if (temperature >= 300) {
                     temperature = 300;
                     mHandler.removeCallbacksAndMessages(null);

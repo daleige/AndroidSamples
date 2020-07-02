@@ -411,7 +411,7 @@ public class MySmartProgressView extends View {
             float value = (float) animation.getAnimatedValue();
             mCurrentAngle = value;
             //根据当前的进度值获取圆环的颜色属性
-            ProgressParameter colors = ArgbUtils.getInstance().getProgressParameter(value);
+            ProgressParameter colors = ArgbUtils.getInstance().getProgressParameter(lastTimeProgress, value);
             //变更进度条的颜色值
             mPointPaint.setColor(colors.getPointColor());
             mOutCirclePaint.setColor(colors.getProgressColor());
