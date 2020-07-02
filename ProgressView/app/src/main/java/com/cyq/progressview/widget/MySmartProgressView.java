@@ -409,7 +409,6 @@ public class MySmartProgressView extends View {
         //自定义包含各个进度对应的颜色值和进度值的属性动画，
         progressAnim = ValueAnimator.ofFloat(lastTimeProgress, currentProgress);
         progressAnim.setDuration(1000);
-        progressAnim.setRepeatCount(ValueAnimator.INFINITE);
         progressAnim.addUpdateListener(animation -> {
             float value = (float) animation.getAnimatedValue();
             mCurrentAngle = value;
