@@ -439,7 +439,7 @@ public class MySmartProgressView extends View {
 
             //获取当前的进度0~3600之间
             mTemporaryAnger = colors.getProgress();
-            mTemporaryAnger = currentTemperature * 10 + (nextTemperature - currentTemperature) / maxTemperature * mTemporaryAnger;
+           // mTemporaryAnger = currentTemperature * 10 + (nextTemperature - currentTemperature) / maxTemperature * mTemporaryAnger;
 
             //获取此时的扇形区域path，用于裁剪动画粒子的canvas
             Log.e("test", "mTemporaryAnger------>" + mTemporaryAnger);

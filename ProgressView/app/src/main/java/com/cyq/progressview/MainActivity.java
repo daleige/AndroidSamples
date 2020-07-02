@@ -53,9 +53,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBtnUpTimer.setOnClickListener(this);
         mBtnDownTimer.setOnClickListener(this);
 
-
         mProgress.mWaveBgView.setRepeatMode(FrameAnimation.RepeatMode.INFINITE);
-        mProgress.mWaveBgView.setFrameInterval(12);
+        mProgress.mWaveBgView.setFrameInterval(34);
         mProgress.mWaveBgView.setSupportInBitmap(true);
         mProgress.mWaveBgView.playAnimationFromAssets("wave_version1");
     }
@@ -65,7 +64,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.btn_1:
                 //预热
-                upTemperature();
+                //upTemperature();
+                mHandler.sendEmptyMessageDelayed(101, 0);
                 break;
 
             case R.id.btn_2:
