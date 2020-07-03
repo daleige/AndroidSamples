@@ -49,6 +49,9 @@ public class ProgressLayout extends FrameLayout {
      * @param targetTemperature 目标温度
      */
     public void setTemperature(float temperature, float targetTemperature) {
+        //温度设置
         mMySmartProgressView.setCurrentTemperature(temperature, targetTemperature);
+        //动画数字控件设置温度模式
+        mTempNumberView.setTemperature((int) temperature, TempNumberView.TEMPERATURE_MODE);
     }
 }

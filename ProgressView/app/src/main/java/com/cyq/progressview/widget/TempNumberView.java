@@ -25,6 +25,15 @@ import io.reactivex.functions.Function;
  * desc   : 温度变化的数字滚动控件
  */
 public class TempNumberView extends LinearLayout {
+    /**
+     * 温度模式
+     */
+    public static final int TEMPERATURE_MODE = 4658;
+    /**
+     * 时间模式
+     */
+    public static final int TIMER_MODE = 9889;
+    private int mMode = TIMER_MODE;
     private NumberView mSingleView;
     private NumberView mTenView;
     private NumberView mHundredView;
@@ -65,7 +74,9 @@ public class TempNumberView extends LinearLayout {
         mColon2View = findViewById(R.id.mColon2);
         mTempContainer = findViewById(R.id.mTempNumberContainer);
         mClockContainer = findViewById(R.id.mClockContainer);
-        testCount();
+        checkMode(mMode);
+
+        //testCount();
     }
 
     /**
@@ -90,7 +101,7 @@ public class TempNumberView extends LinearLayout {
                     @Override
                     public void accept(Long count) throws Exception {
                         //TODO  测试 设置温度 1秒变化一次
-                        setTemperature(500-Integer.parseInt(String.valueOf(count)));
+                        //setTemperature(500-Integer.parseInt(String.valueOf(count)));
 
                         //TODO 测试计时器
                         //setClock(3610 - Integer.parseInt(String.valueOf(count)));
@@ -103,23 +114,23 @@ public class TempNumberView extends LinearLayout {
      *
      * @param temperature
      */
-    private void setTemperature(int temperature) {
+    public void setTemperature(int temperature, int mode) {
+        checkMode(mode);
         int mSingle = temperature % 10;
         int mTen = temperature / 10 % 10;
         int mHundred = temperature / 100 % 10;
         mSingleView.setCurrentValue(mSingle, temperature);
-        if (temperature > 9) {
-            mTenView.setCurrentValue(mTen, temperature);
-        }
-        if (temperature > 99) {
-            mHundredView.setCurrentValue(mHundred, temperature);
-        }
+        mTenView.setCurrentValue(mTen, temperature);
+        mHundredView.setCurrentValue(mHundred, temperature);
     }
 
     /**
-     * 设置时间
+     * 设置时间 单位秒
+     *
+     * @param second
+     * @param mode
      */
-    void setClock(int second) {
+    void setClock(int second, int mode) {
         if (second > 60 - 1) {
             //大于1分钟
             mSecond1View.setVisibility(VISIBLE);
@@ -178,6 +189,25 @@ public class TempNumberView extends LinearLayout {
             mMinute1View.setVisibility(VISIBLE);
             mColon1View.setVisibility(GONE);
             mMinute1View.setCurrentValue(mMinute1Value, second);
+        }
+    }
+
+    /**
+     * 判断当前控件展示的模式
+     *
+     * @param mode
+     */
+    private void checkMode(int mode) {
+        if (mode == mMode) {
+            return;
+        }
+        if (mode == TEMPERATURE_MODE) {
+            mTempContainer.setVisibility(VISIBLE);
+            mClockContainer.setVisibility(GONE);
+        }
+        if (mode == TIMER_MODE) {
+            mTempContainer.setVisibility(GONE);
+            mClockContainer.setVisibility(VISIBLE);
         }
     }
 

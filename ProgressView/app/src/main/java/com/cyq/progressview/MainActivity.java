@@ -31,6 +31,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private MyButton mBtnUpTimer;
     private MyButton mBtnDownTimer;
     private Random mRandom = new Random();
+
+    private final int targetTemperature = 90;
+
     /**
      * 当前温度
      */
@@ -74,20 +77,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.btn_2:
                 //减温
-                temperature = 300;
+                temperature = targetTemperature;
                 mHandler.removeCallbacksAndMessages(null);
                 mHandler.sendEmptyMessageDelayed(102, 0);
                 break;
 
             case R.id.btn_3:
                 //正计时
-                temperature = 300;
+                temperature = targetTemperature;
                 mHandler.removeCallbacksAndMessages(null);
                 mHandler.sendEmptyMessageDelayed(103, 0);
                 break;
             case R.id.btn_4:
                 //倒计时
-                temperature = 300;
+                temperature = targetTemperature;
                 mHandler.removeCallbacksAndMessages(null);
                 mHandler.sendEmptyMessageDelayed(104, 0);
                 break;
@@ -100,14 +103,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public boolean handleMessage(@NonNull Message msg) {
             switch (msg.what) {
                 case 101:
-                    temperature = temperature + 1 + mRandom.nextInt(30);
-                    if (temperature >= 300) {
-                        temperature = 300;
+                    //temperature = temperature + 1 + mRandom.nextInt(30);
+                    temperature++;
+                    if (temperature >= targetTemperature) {
+                        temperature = targetTemperature;
                         mHandler.removeCallbacksAndMessages(null);
                     } else {
                         mHandler.sendEmptyMessageDelayed(101, 2000);
                     }
-                    mProgress.setTemperature(temperature, 300);
+                    mProgress.setTemperature(temperature, targetTemperature);
                     break;
                 case 102:
                     //模拟减温，随机减温0-30度之间
@@ -118,12 +122,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     } else {
                         mHandler.sendEmptyMessageDelayed(102, 2000);
                     }
-                    mProgress.setTemperature(temperature, 300);
+                    mProgress.setTemperature(temperature, targetTemperature);
                     break;
                 case 103:
                     //模拟保温 正计时
-                    temperature = 300;
-                    mProgress.setTemperature(temperature, 300);
+                    temperature = targetTemperature;
+                    mProgress.setTemperature(temperature, targetTemperature);
                     break;
                 case 104:
                     //模拟倒计时
