@@ -61,6 +61,7 @@ public class AnimNumberView extends LinearLayout {
 
     private LinearLayout mTempContainer, mClockContainer;
     private Disposable mTimerDisposable;
+    private OnTimerComplete mTimerListener;
 
     public AnimNumberView(Context context) {
         this(context, null);
@@ -140,6 +141,9 @@ public class AnimNumberView extends LinearLayout {
                 .doOnComplete(() -> {
                     Log.e("test", "计时结束");
                     disposeTimer();
+                    if (mTimerListener != null) {
+                        mTimerListener.onComplete();
+                    }
                 })
                 .subscribe();
     }
@@ -230,11 +234,27 @@ public class AnimNumberView extends LinearLayout {
         }
     }
 
-    private void disposeTimer(){
+    private void disposeTimer() {
         if (mTimerDisposable != null && !mTimerDisposable.isDisposed()) {
             mTimerDisposable.dispose();
             mTimerDisposable = null;
         }
+    }
+
+    /**
+     * 设置计时完成的回调
+     *
+     * @param mTimerListener
+     */
+    public void setOnTimerCompleteListener(OnTimerComplete mTimerListener) {
+        this.mTimerListener = mTimerListener;
+    }
+
+    public interface OnTimerComplete {
+        /**
+         * 完成回调
+         */
+        void onComplete();
     }
 
     @Override

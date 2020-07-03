@@ -3,6 +3,7 @@ package com.cyq.progressview;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -61,11 +62,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBtnDownTemp.setOnClickListener(this);
         mBtnUpTimer.setOnClickListener(this);
         mBtnDownTimer.setOnClickListener(this);
-
-        mProgress.mWaveBgView.setRepeatMode(FrameAnimation.RepeatMode.INFINITE);
-        mProgress.mWaveBgView.setFrameInterval(34);
-        mProgress.mWaveBgView.setSupportInBitmap(true);
-        mProgress.mWaveBgView.playAnimationFromAssets("wave_version1");
     }
 
     @Override
@@ -88,10 +84,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_3:
                 //正计时
                 mProgress.setTimer(30, AnimNumberView.UP_TIMER);
+                mProgress.setOnCompleteListener(new ProgressLayout.OnCompleteListener() {
+                    @Override
+                    public void onComplete() {
+                        Log.e("test", "正计时结束");
+                    }
+                });
                 break;
             case R.id.btn_4:
                 //倒计时
                 mProgress.setTimer(30, AnimNumberView.DOWN_TIMER);
+                mProgress.setOnCompleteListener(new ProgressLayout.OnCompleteListener() {
+                    @Override
+                    public void onComplete() {
+                        Log.e("test", "倒计时结束");
+                    }
+                });
                 break;
             default:
         }
@@ -171,12 +179,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onPause() {
         super.onPause();
-        mProgress.mWaveBgView.onPause();
+        mProgress.onPause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mProgress.mWaveBgView.onResume();
+        mProgress.onResume();
     }
 }

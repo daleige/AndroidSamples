@@ -71,10 +71,6 @@ public class NumberView extends FrameLayout {
         });
     }
 
-    public int getCurrentValue() {
-        return mCurrentValue;
-    }
-
     /**
      * 设置下一位数字的值
      *

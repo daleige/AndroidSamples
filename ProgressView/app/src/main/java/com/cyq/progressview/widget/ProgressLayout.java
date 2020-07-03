@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.cyq.progressview.R;
+import com.yuyashuai.frameanimation.FrameAnimation;
 import com.yuyashuai.frameanimation.FrameAnimationView;
 
 
@@ -20,7 +21,8 @@ import com.yuyashuai.frameanimation.FrameAnimationView;
 public class ProgressLayout extends FrameLayout {
     private MySmartProgressView mMySmartProgressView;
     private AnimNumberView mAnimNumberView;
-    public FrameAnimationView mWaveBgView;
+    private FrameAnimationView mWaveBgView;
+    private OnCompleteListener mCompleteListener;
 
     public ProgressLayout(@NonNull Context context) {
         this(context, null);
@@ -40,6 +42,10 @@ public class ProgressLayout extends FrameLayout {
         mMySmartProgressView = findViewById(R.id.mMySmartProgressView);
         mAnimNumberView = findViewById(R.id.mTempNumberView);
         mWaveBgView = findViewById(R.id.mWaveBgView);
+        mWaveBgView.setRepeatMode(FrameAnimation.RepeatMode.INFINITE);
+        mWaveBgView.setFrameInterval(34);
+        mWaveBgView.setSupportInBitmap(true);
+        mWaveBgView.playAnimationFromAssets("wave_version1");
     }
 
     /**
@@ -64,7 +70,15 @@ public class ProgressLayout extends FrameLayout {
      * @param timerMode
      */
     public void setTimer(int second, int timerMode) {
-        mAnimNumberView.setTimer(second,timerMode);
+        mAnimNumberView.setTimer(second, timerMode);
+        mAnimNumberView.setOnTimerCompleteListener(new AnimNumberView.OnTimerComplete() {
+            @Override
+            public void onComplete() {
+                if (mCompleteListener != null) {
+                    mCompleteListener.onComplete();
+                }
+            }
+        });
     }
 
     /**
@@ -76,5 +90,24 @@ public class ProgressLayout extends FrameLayout {
         if (mode == AnimNumberView.UP_TIMER) {
             setTimer(-1, mode);
         }
+    }
+
+    public void setOnCompleteListener(OnCompleteListener mCompleteListener) {
+        this.mCompleteListener = mCompleteListener;
+    }
+
+    public interface OnCompleteListener {
+        /**
+         * 计时完成的回调
+         */
+        void onComplete();
+    }
+
+    public void onPause() {
+        mWaveBgView.onPause();
+    }
+
+    public void onResume() {
+        mWaveBgView.onResume();
     }
 }
