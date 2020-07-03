@@ -14,7 +14,7 @@
         android:layout_height="320dp"
         android:layout_gravity="center" />
 
-    <com.cyq.progressview.widget.TempNumberView
+    <com.cyq.progressview.widget.AnimNumberView
         android:id="@+id/mTempNumberView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

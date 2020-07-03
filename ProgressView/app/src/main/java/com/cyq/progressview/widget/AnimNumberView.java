@@ -1,6 +1,7 @@
 package com.cyq.progressview.widget;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,18 +14,20 @@ import com.cyq.progressview.R;
 
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author : ChenYangQi
  * date   : 2020/6/20 15:41
  * desc   : 温度变化的数字滚动控件
  */
-public class TempNumberView extends LinearLayout {
+public class AnimNumberView extends LinearLayout {
     /**
      * 温度模式
      */
@@ -33,6 +36,14 @@ public class TempNumberView extends LinearLayout {
      * 时间模式
      */
     public static final int TIMER_MODE = 9889;
+    /**
+     * 正计时
+     */
+    public static final int UP_TIMER = 78648;
+    /**
+     * 倒计时
+     */
+    public static final int DOWN_TIMER = 56544;
     private int mMode = TIMER_MODE;
     private NumberView mSingleView;
     private NumberView mTenView;
@@ -49,16 +60,17 @@ public class TempNumberView extends LinearLayout {
     private TextView mColon2View;
 
     private LinearLayout mTempContainer, mClockContainer;
+    private Disposable mTimerDisposable;
 
-    public TempNumberView(Context context) {
+    public AnimNumberView(Context context) {
         this(context, null);
     }
 
-    public TempNumberView(Context context, @Nullable AttributeSet attrs) {
+    public AnimNumberView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public TempNumberView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public AnimNumberView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         LayoutInflater.from(getContext()).inflate(R.layout.widget_progress_temp_number_layout, this, true);
         mSingleView = findViewById(R.id.mSingleNumber);
@@ -75,39 +87,12 @@ public class TempNumberView extends LinearLayout {
         mTempContainer = findViewById(R.id.mTempNumberContainer);
         mClockContainer = findViewById(R.id.mClockContainer);
         checkMode(mMode);
-
-        //testCount();
     }
 
     /**
      * 全局变量
      */
     Disposable disposable;
-
-    void testCount() {
-        //设置为显示温度数字的模式
-        mTempContainer.setVisibility(VISIBLE);
-        mClockContainer.setVisibility(GONE);
-
-        disposable = Observable.interval(0, 1000, TimeUnit.MILLISECONDS)
-                .map(new Function<Long, Long>() {
-                    @Override
-                    public Long apply(Long aLong) throws Exception {
-                        return aLong + 1;
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Long>() {
-                    @Override
-                    public void accept(Long count) throws Exception {
-                        //TODO  测试 设置温度 1秒变化一次
-                        //setTemperature(500-Integer.parseInt(String.valueOf(count)));
-
-                        //TODO 测试计时器
-                        //setClock(3610 - Integer.parseInt(String.valueOf(count)));
-                    }
-                });
-    }
 
     /**
      * 设置温度
@@ -125,12 +110,46 @@ public class TempNumberView extends LinearLayout {
     }
 
     /**
+     * 设计正计时倒计时
+     *
+     * @param second
+     * @param timerMode
+     */
+    public void setTimer(int second, int timerMode) {
+        disposeTimer();
+        checkMode(TIMER_MODE);
+        if (timerMode == UP_TIMER && second <= 0) {
+            //没有设置正计时的目标时间
+            second = Integer.MAX_VALUE;
+        }
+
+        final int finalSecond = second;
+        mTimerDisposable = Flowable.intervalRange(0, second + 1, 0, 1, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(aLong -> {
+                    Log.e("test", "当前时间：" + aLong);
+                    if (timerMode == UP_TIMER) {
+                        setClock(aLong.intValue());
+                    }
+
+                    if (timerMode == DOWN_TIMER) {
+                        setClock(finalSecond - aLong.intValue());
+                    }
+                })
+                .doOnComplete(() -> {
+                    Log.e("test", "计时结束");
+                    disposeTimer();
+                })
+                .subscribe();
+    }
+
+    /**
      * 设置时间 单位秒
      *
      * @param second
-     * @param mode
      */
-    void setClock(int second, int mode) {
+    private void setClock(int second) {
         if (second > 60 - 1) {
             //大于1分钟
             mSecond1View.setVisibility(VISIBLE);
@@ -208,6 +227,13 @@ public class TempNumberView extends LinearLayout {
         if (mode == TIMER_MODE) {
             mTempContainer.setVisibility(GONE);
             mClockContainer.setVisibility(VISIBLE);
+        }
+    }
+
+    private void disposeTimer(){
+        if (mTimerDisposable != null && !mTimerDisposable.isDisposed()) {
+            mTimerDisposable.dispose();
+            mTimerDisposable = null;
         }
     }
 

@@ -19,7 +19,7 @@ import com.yuyashuai.frameanimation.FrameAnimationView;
  */
 public class ProgressLayout extends FrameLayout {
     private MySmartProgressView mMySmartProgressView;
-    private TempNumberView mTempNumberView;
+    private AnimNumberView mAnimNumberView;
     public FrameAnimationView mWaveBgView;
 
     public ProgressLayout(@NonNull Context context) {
@@ -38,7 +38,7 @@ public class ProgressLayout extends FrameLayout {
     private void init() {
         LayoutInflater.from(getContext()).inflate(R.layout.widget_progress_progress_view_layout, this, true);
         mMySmartProgressView = findViewById(R.id.mMySmartProgressView);
-        mTempNumberView = findViewById(R.id.mTempNumberView);
+        mAnimNumberView = findViewById(R.id.mTempNumberView);
         mWaveBgView = findViewById(R.id.mWaveBgView);
     }
 
@@ -52,6 +52,29 @@ public class ProgressLayout extends FrameLayout {
         //温度设置
         mMySmartProgressView.setCurrentTemperature(temperature, targetTemperature);
         //动画数字控件设置温度模式
-        mTempNumberView.setTemperature((int) temperature, TempNumberView.TEMPERATURE_MODE);
+        mAnimNumberView.setTemperature((int) temperature, AnimNumberView.TEMPERATURE_MODE);
+    }
+
+    /**
+     * 设置正计时 or 倒计时
+     * 如果是正计时传入second>0表示设置了目标时间，达到时间停止计时并回调到达的转态
+     * 如果是倒计时，计时结束回调计时结束的状态
+     *
+     * @param second
+     * @param timerMode
+     */
+    public void setTimer(int second, int timerMode) {
+        mAnimNumberView.setTimer(second,timerMode);
+    }
+
+    /**
+     * 正计时，无最终到达时间限制
+     *
+     * @param mode
+     */
+    public void setTimer(int mode) {
+        if (mode == AnimNumberView.UP_TIMER) {
+            setTimer(-1, mode);
+        }
     }
 }

@@ -11,10 +11,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cyq.progressview.button.MyButton;
+import com.cyq.progressview.widget.AnimNumberView;
 import com.cyq.progressview.widget.ProgressLayout;
 import com.yuyashuai.frameanimation.FrameAnimation;
 
+import java.sql.Time;
 import java.util.Random;
+import java.util.TimerTask;
 
 /**
  * @author : ChenYangQi
@@ -32,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private MyButton mBtnDownTimer;
     private Random mRandom = new Random();
 
-    private final int targetTemperature = 90;
+    private final int targetTemperature = 240;
 
     /**
      * 当前温度
@@ -84,15 +87,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.btn_3:
                 //正计时
-                temperature = targetTemperature;
-                mHandler.removeCallbacksAndMessages(null);
-                mHandler.sendEmptyMessageDelayed(103, 0);
+                mProgress.setTimer(30, AnimNumberView.UP_TIMER);
                 break;
             case R.id.btn_4:
                 //倒计时
-                temperature = targetTemperature;
-                mHandler.removeCallbacksAndMessages(null);
-                mHandler.sendEmptyMessageDelayed(104, 0);
+                mProgress.setTimer(30, AnimNumberView.DOWN_TIMER);
                 break;
             default:
         }
@@ -123,15 +122,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         mHandler.sendEmptyMessageDelayed(102, 2000);
                     }
                     mProgress.setTemperature(temperature, targetTemperature);
-                    break;
-                case 103:
-                    //模拟保温 正计时
-                    temperature = targetTemperature;
-                    mProgress.setTemperature(temperature, targetTemperature);
-                    break;
-                case 104:
-                    //模拟倒计时
-
                     break;
                 default:
             }
@@ -168,9 +158,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .start();
 
             mProgress.animate()
-                    .translationY(-250F)
-                    .scaleX(0.8f)
-                    .scaleY(0.8f)
+                    .translationY(-300F)
+                    .scaleX(0.9f)
+                    .scaleY(0.9f)
                     .setDuration(200)
                     .withLayer()
                     .start();
