@@ -65,7 +65,7 @@ public class MySmartProgressView extends View {
     /**
      * 底色圆环画笔
      */
-    private Paint mBackCirclePaiht;
+    private Paint mBackCirclePaint;
     /**
      * 开始时底色圆环渐变的画笔
      */
@@ -193,11 +193,11 @@ public class MySmartProgressView extends View {
         mSweptPaint.setShader(mRadialGradient);
 
         //初始化底色圆画笔
-        mBackCirclePaiht = new Paint();
-        mBackCirclePaiht.setAntiAlias(true);
-        mBackCirclePaiht.setStrokeWidth(mBackCircleStrokeWidth);
-        mBackCirclePaiht.setAntiAlias(true);
-        mBackCirclePaiht.setStyle(Paint.Style.STROKE);
+        mBackCirclePaint = new Paint();
+        mBackCirclePaint.setAntiAlias(true);
+        mBackCirclePaint.setStrokeWidth(mBackCircleStrokeWidth);
+        mBackCirclePaint.setAntiAlias(true);
+        mBackCirclePaint.setStyle(Paint.Style.STROKE);
 
         //初始化底色圆得initAnimator画笔
         mBackShadePaint = new Paint();
@@ -294,7 +294,7 @@ public class MySmartProgressView extends View {
         //step:画底色圆
         canvas.save();
         canvas.translate(mCenterX, mCenterY);
-        canvas.drawCircle(0, 0, mRadius, mBackCirclePaiht);
+        canvas.drawCircle(0, 0, mRadius, mBackCirclePaint);
         canvas.drawRect(mRect, mBackShadePaint);
         canvas.restore();
 
@@ -381,7 +381,7 @@ public class MySmartProgressView extends View {
             //变更进度条的颜色值
             mPointPaint.setColor(colors.getPointColor());
             mOutCirclePaint.setColor(colors.getProgressColor());
-            mBackCirclePaiht.setColor(colors.getBgCircleColor());
+            mBackCirclePaint.setColor(colors.getBgCircleColor());
             //设置内圈变色圆的shader
             mRadialGradientColors[2] = colors.getInsideColor();
             mRadialGradient = new RadialGradient(
