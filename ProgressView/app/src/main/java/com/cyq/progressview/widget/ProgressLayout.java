@@ -70,6 +70,7 @@ public class ProgressLayout extends FrameLayout {
      * @param timerMode
      */
     public void setTimer(int second, int timerMode) {
+        mMySmartProgressView.startkeepWarw();
         mAnimNumberView.setTimer(second, timerMode);
         mAnimNumberView.setOnTimerCompleteListener(new AnimNumberView.OnTimerComplete() {
             @Override

@@ -103,8 +103,6 @@ public class MySmartProgressView extends View {
     private Paint mBmpPaint;
     private float scaleHeight;
     private float scaleWidth;
-
-
     /**
      * 外层粒子圆环的边框大小
      */
@@ -113,8 +111,11 @@ public class MySmartProgressView extends View {
      * 底色环的边框大小
      */
     private final int mBackCircleStrokeWidth = 12;
-
     private float mCurrentAngle;
+    /**
+     * 是否是保温
+     */
+    private boolean isKeepWare = false;
 
     public MySmartProgressView(Context context) {
         this(context, null);
@@ -424,6 +425,28 @@ public class MySmartProgressView extends View {
         progressAnim.start();
     }
 
+    /**
+     * 保温模式
+     */
+    public void startkeepWarw() {
+        ProgressParameter colors = ArgbUtils.getInstance().getProgressParameter(3600, 3600);
+        //变更进度条的颜色值
+        mPointPaint.setColor(colors.getPointColor());
+        mOutCirclePaint.setColor(colors.getProgressColor());
+        mBackCirclePaint.setColor(colors.getBgCircleColor());
+        //设置内圈变色圆的shader
+        mRadialGradientColors[2] = colors.getInsideColor();
+        mRadialGradient = new RadialGradient(
+                0,
+                0,
+                mRadius + mOutCircleStrokeWidth / 2F,
+                mRadialGradientColors,
+                mRadialGradientStops,
+                Shader.TileMode.CLAMP);
+        mSweptPaint.setShader(mRadialGradient);
+        getSectorClip(width / 2F, -90, 360);
+    }
+
     private float mPointerTranslation;
 
     /**
@@ -473,5 +496,14 @@ public class MySmartProgressView extends View {
             });
             gonePointerAnimator.start();
         }
+    }
+
+    /**
+     * 设置是否是保温模式，保温模式满环展示
+     *
+     * @param keepWare
+     */
+    public void setIsKeepWare(boolean keepWare) {
+        isKeepWare = keepWare;
     }
 }
