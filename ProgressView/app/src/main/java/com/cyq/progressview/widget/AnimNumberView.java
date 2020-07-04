@@ -224,11 +224,12 @@ public class AnimNumberView extends LinearLayout {
         if (mode == mMode) {
             return;
         }
+        mMode = mode;
         if (mode == TEMPERATURE_MODE) {
             mTempContainer.setVisibility(VISIBLE);
             mClockContainer.setVisibility(GONE);
         }
-        if (mode == TIMER_MODE) {
+        if (mode == TIMER_MODE || mode == UP_TIMER || mode == DOWN_TIMER) {
             mTempContainer.setVisibility(GONE);
             mClockContainer.setVisibility(VISIBLE);
         }

@@ -14,11 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.cyq.progressview.button.MyButton;
 import com.cyq.progressview.widget.AnimNumberView;
 import com.cyq.progressview.widget.ProgressLayout;
-import com.yuyashuai.frameanimation.FrameAnimation;
 
-import java.sql.Time;
 import java.util.Random;
-import java.util.TimerTask;
 
 /**
  * @author : ChenYangQi
@@ -83,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.btn_3:
                 //正计时
+                mHandler.removeCallbacksAndMessages(null);
                 mProgress.setTimer(30, AnimNumberView.UP_TIMER);
                 mProgress.setOnCompleteListener(new ProgressLayout.OnCompleteListener() {
                     @Override
@@ -93,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_4:
                 //倒计时
+                mHandler.removeCallbacksAndMessages(null);
                 mProgress.setTimer(30, AnimNumberView.DOWN_TIMER);
                 mProgress.setOnCompleteListener(new ProgressLayout.OnCompleteListener() {
                     @Override

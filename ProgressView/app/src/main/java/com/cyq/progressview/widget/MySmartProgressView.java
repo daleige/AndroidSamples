@@ -428,7 +428,7 @@ public class MySmartProgressView extends View {
     /**
      * 保温模式
      */
-    public void startkeepWarw() {
+    public void startKeepWare() {
         ProgressParameter colors = ArgbUtils.getInstance().getProgressParameter(3600, 3600);
         //变更进度条的颜色值
         mPointPaint.setColor(colors.getPointColor());
