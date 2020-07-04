@@ -289,9 +289,6 @@ public class MySmartProgressView extends View {
     @Override
     protected void onDraw(final Canvas canvas) {
         super.onDraw(canvas);
-        //画波动背景
-        //drawBezierBackGround(canvas);
-
         //step:画底色圆
         canvas.save();
         canvas.translate(mCenterX, mCenterY);
@@ -303,7 +300,9 @@ public class MySmartProgressView extends View {
         canvas.save();
         canvas.translate(mCenterX, mCenterY);
         //把画布裁剪成扇形
-        canvas.clipPath(mArcPath);
+        if (!isKeepWare) {
+            canvas.clipPath(mArcPath);
+        }
 
         //画运动粒子
         for (AnimPoint animPoint : mPointList) {
@@ -317,13 +316,15 @@ public class MySmartProgressView extends View {
         canvas.restore();
 
         //画指针
-        if (mPointerVisible == VISIBLE) {
-            canvas.save();
-            canvas.translate(mCenterX, mCenterY);
-            canvas.rotate(mCurrentAngle / 10F);
-            canvas.translate(-scaleWidth + 10, -scaleHeight - 10);
-            canvas.drawBitmap(mBitmap, 0, 0, mBmpPaint);
-            canvas.restore();
+        if (!isKeepWare) {
+            if (mPointerVisible == VISIBLE) {
+                canvas.save();
+                canvas.translate(mCenterX, mCenterY);
+                canvas.rotate(mCurrentAngle / 10F);
+                canvas.translate(-scaleWidth + 10, -scaleHeight - 10);
+                canvas.drawBitmap(mBitmap, 0, 0, mBmpPaint);
+                canvas.restore();
+            }
         }
     }
 
@@ -361,6 +362,7 @@ public class MySmartProgressView extends View {
      * @param targetTemperature 目标真实温度
      */
     public void setCurrentTemperature(float temperature, float targetTemperature) {
+        isKeepWare = false;
         if (progressAnim != null && progressAnim.isRunning()) {
             progressAnim.cancel();
         }
@@ -429,7 +431,8 @@ public class MySmartProgressView extends View {
      * 保温模式
      */
     public void startKeepWare() {
-        ProgressParameter colors = ArgbUtils.getInstance().getProgressParameter(3600, 3600);
+        isKeepWare = true;
+        ProgressParameter colors = ArgbUtils.getInstance().getProgressParameter(3600 - 1, 3600);
         //变更进度条的颜色值
         mPointPaint.setColor(colors.getPointColor());
         mOutCirclePaint.setColor(colors.getProgressColor());
