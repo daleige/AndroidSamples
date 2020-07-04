@@ -1,7 +1,6 @@
 package com.cyq.progressview.widget;
 
 import android.content.Context;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,11 +14,8 @@ import com.cyq.progressview.R;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -105,9 +101,9 @@ public class AnimNumberView extends LinearLayout {
         int mSingle = temperature % 10;
         int mTen = temperature / 10 % 10;
         int mHundred = temperature / 100 % 10;
-        mSingleView.setCurrentValue(mSingle, temperature);
-        mTenView.setCurrentValue(mTen, temperature);
-        mHundredView.setCurrentValue(mHundred, temperature);
+        mSingleView.setCurrentValue(mSingle,mode);
+        mTenView.setCurrentValue(mTen,mode);
+        mHundredView.setCurrentValue(mHundred,mode);
     }
 
     /**
@@ -125,17 +121,21 @@ public class AnimNumberView extends LinearLayout {
         }
 
         final int finalSecond = second;
-        mTimerDisposable = Flowable.intervalRange(0, second + 1, 0, 1, TimeUnit.SECONDS)
+        mTimerDisposable = Flowable.intervalRange(0,
+                second + 1,
+                0,
+                1,
+                TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(aLong -> {
                     Log.e("test", "当前时间：" + aLong);
                     if (timerMode == UP_TIMER) {
-                        setClock(aLong.intValue());
+                        setClock(aLong.intValue(),UP_TIMER);
                     }
 
                     if (timerMode == DOWN_TIMER) {
-                        setClock(finalSecond - aLong.intValue());
+                        setClock(finalSecond - aLong.intValue(),DOWN_TIMER);
                     }
                 })
                 .doOnComplete(() -> {
@@ -153,7 +153,7 @@ public class AnimNumberView extends LinearLayout {
      *
      * @param second
      */
-    private void setClock(int second) {
+    private void setClock(int second,int mode) {
         if (second > 60 - 1) {
             //大于1分钟
             mSecond1View.setVisibility(VISIBLE);
@@ -187,31 +187,31 @@ public class AnimNumberView extends LinearLayout {
         int mSecond1Value = sec / 10 % 10;
         int mSecond2Value = sec % 10;
 
-        mSecond1View.setCurrentValue(mSecond1Value, second);
-        mSecond2View.setCurrentValue(mSecond2Value, second);
-        mMinute2View.setCurrentValue(mMinute2Value, second);
+        mSecond1View.setCurrentValue(mSecond1Value,mode);
+        mSecond2View.setCurrentValue(mSecond2Value,mode);
+        mMinute2View.setCurrentValue(mMinute2Value,mode);
 
         if (mHour1Value > 0) {
             mHour1View.setVisibility(VISIBLE);
             mHour2View.setVisibility(VISIBLE);
             mMinute1View.setVisibility(VISIBLE);
             mColon1View.setVisibility(VISIBLE);
-            mHour1View.setCurrentValue(mHour1Value, second);
-            mHour2View.setCurrentValue(mHour2Value, second);
-            mMinute1View.setCurrentValue(mMinute1Value, second);
+            mHour1View.setCurrentValue(mHour1Value,mode);
+            mHour2View.setCurrentValue(mHour2Value,mode);
+            mMinute1View.setCurrentValue(mMinute1Value,mode);
         } else if (mHour2Value > 0) {
             mHour1View.setVisibility(GONE);
             mHour2View.setVisibility(VISIBLE);
             mMinute1View.setVisibility(VISIBLE);
             mColon1View.setVisibility(VISIBLE);
-            mHour2View.setCurrentValue(mHour2Value, second);
-            mMinute1View.setCurrentValue(mMinute1Value, second);
+            mHour2View.setCurrentValue(mHour2Value,mode);
+            mMinute1View.setCurrentValue(mMinute1Value,mode);
         } else if (mMinute1Value > 0) {
             mHour1View.setVisibility(GONE);
             mHour2View.setVisibility(GONE);
             mMinute1View.setVisibility(VISIBLE);
             mColon1View.setVisibility(GONE);
-            mMinute1View.setCurrentValue(mMinute1Value, second);
+            mMinute1View.setCurrentValue(mMinute1Value,mode);
         }
     }
 

@@ -3,6 +3,7 @@ package com.cyq.progressview.widget;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
@@ -14,19 +15,21 @@ import androidx.annotation.Nullable;
 import com.cyq.progressview.R;
 import com.cyq.progressview.utils.Utils;
 
+import static com.cyq.progressview.widget.AnimNumberView.UP_TIMER;
+
 /**
  * @author : ChenYangQi
  * date   : 2020/5/23 14:22
  * desc   :有动画效果的改变的数字控件
  */
 public class NumberView extends FrameLayout {
+    private int UP_OR_DOWN_MODE;
     private TextView mTvFirst;
     private TextView mTvSecond;
     private ValueAnimator mUpAnim;
     private ValueAnimator mDownAnim;
     private int mHeight;
     private int mCurrentValue;
-    private int mTemperature;
 
     /**
      * 是升序还是降序
@@ -60,7 +63,8 @@ public class NumberView extends FrameLayout {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float value = (float) animation.getAnimatedValue();
-                if (mAscending) {
+                Log.e("test", "升序还是降序：" + mAscending);
+                if (UP_OR_DOWN_MODE==UP_TIMER) {
                     mTvFirst.setTranslationY(-mHeight * value);
                     mTvSecond.setTranslationY(-mHeight * value);
                 } else {
@@ -74,19 +78,17 @@ public class NumberView extends FrameLayout {
     /**
      * 设置下一位数字的值
      *
-     * @param value       个，十，百位的值
-     * @param temperature 真实的值
+     * @param value 个，十，百位的值
      */
-    public void setCurrentValue(int value, int temperature) {
-        if (temperature == this.mTemperature || value == mCurrentValue) {
+    public void setCurrentValue(int value, int mode) {
+        if (value == mCurrentValue) {
             return;
         }
+        UP_OR_DOWN_MODE = mode;
         //判断数字是增加还是减少，进而确定不同的动画效果
-        mAscending = temperature > mCurrentValue;
         mTvFirst.setText(String.valueOf(mCurrentValue));
         mTvSecond.setText(String.valueOf(value));
         mDownAnim.start();
-        mTemperature = temperature;
         mCurrentValue = value;
     }
 }
