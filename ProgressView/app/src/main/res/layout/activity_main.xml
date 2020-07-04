@@ -10,6 +10,11 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <com.cyq.progressview.test.TestView
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <com.cyq.progressview.widget.ProgressLayout
         android:id="@+id/mProgress"
         android:layout_width="360dp"

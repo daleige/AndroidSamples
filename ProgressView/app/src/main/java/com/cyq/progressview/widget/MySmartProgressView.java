@@ -238,13 +238,17 @@ public class MySmartProgressView extends View {
         //初始化底色圆得initAnimator画笔
         mBackShadePaint = new Paint();
         mBackShadePaint.setAntiAlias(true);
+
+        //指针画笔颜色
+        mBmpPaint = new Paint();
+        //关闭指针画笔的硬件加速
+        //setLayerType(View.LAYER_TYPE_SOFTWARE, mBmpPaint);
     }
 
     /**
      * 初始化指针图片的Bitmap
      */
     private void initBitmap() {
-        mBmpPaint = new Paint();
         mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.indicator);
         float bitmapWidth = mBitmap.getWidth();
         float bitmapHeight = mBitmap.getHeight();
@@ -356,7 +360,7 @@ public class MySmartProgressView extends View {
                 canvas.save();
                 canvas.translate(mCenterX, mCenterY);
                 canvas.rotate(mCurrentAngle / 10F);
-                canvas.translate(-scaleWidth/2, -mCenterY+10);
+                canvas.translate(-scaleWidth / 2, -mCenterY + 10);
                 canvas.drawBitmap(mBitmap, 0, 0, mBmpPaint);
                 canvas.restore();
             }
@@ -408,6 +412,8 @@ public class MySmartProgressView extends View {
             mPointPaint.setColor(colors.getPointColor());
             mOutCirclePaint.setColor(colors.getProgressColor());
             mBackCirclePaint.setColor(colors.getBgCircleColor());
+            //更改指针颜色
+            mBmpPaint.setARGB(255, 211, 53, 243);
             //设置内圈变色圆的shader
             mRadialGradientColors[2] = colors.getInsideColor();
             mRadialGradient = new RadialGradient(
