@@ -23,6 +23,10 @@ public class ProgressLayout extends FrameLayout {
     private AnimNumberView mAnimNumberView;
     private FrameAnimationView mWaveBgView;
     private OnCompleteListener mCompleteListener;
+    /**
+     * 用于标记是预热还是保温模式
+     */
+    private boolean isKeepWare = false;
 
     public ProgressLayout(@NonNull Context context) {
         this(context, null);
@@ -42,10 +46,6 @@ public class ProgressLayout extends FrameLayout {
         mMySmartProgressView = findViewById(R.id.mMySmartProgressView);
         mAnimNumberView = findViewById(R.id.mTempNumberView);
         mWaveBgView = findViewById(R.id.mWaveBgView);
-        mWaveBgView.setRepeatMode(FrameAnimation.RepeatMode.INFINITE);
-        mWaveBgView.setFrameInterval(34);
-        mWaveBgView.setSupportInBitmap(true);
-        mWaveBgView.playAnimationFromAssets("wave_version1");
     }
 
     /**
@@ -55,6 +55,7 @@ public class ProgressLayout extends FrameLayout {
      * @param targetTemperature 目标温度
      */
     public void setTemperature(float temperature, float targetTemperature) {
+        checkIsKeepWareState(false);
         //温度设置
         mMySmartProgressView.setCurrentTemperature(temperature, targetTemperature);
         //动画数字控件设置温度模式
@@ -70,6 +71,7 @@ public class ProgressLayout extends FrameLayout {
      * @param timerMode
      */
     public void setTimer(int second, int timerMode) {
+        checkIsKeepWareState(true);
         mMySmartProgressView.startKeepWare();
         mAnimNumberView.setTimer(second, timerMode);
         mAnimNumberView.setOnTimerCompleteListener(new AnimNumberView.OnTimerComplete() {
@@ -90,6 +92,25 @@ public class ProgressLayout extends FrameLayout {
     public void setTimer(int mode) {
         if (mode == AnimNumberView.UP_TIMER) {
             setTimer(-1, mode);
+        }
+    }
+
+    private void checkIsKeepWareState(boolean mode) {
+        if (isKeepWare == mode) {
+            return;
+        }
+        isKeepWare = mode;
+        if (mode) {
+            mWaveBgView.setVisibility(VISIBLE);
+            mWaveBgView.setRepeatMode(FrameAnimation.RepeatMode.INFINITE);
+            mWaveBgView.setFrameInterval(34);
+            mWaveBgView.setSupportInBitmap(true);
+            mWaveBgView.playAnimationFromAssets("wave_version1");
+        } else {
+            mWaveBgView.setVisibility(GONE);
+            if (mWaveBgView.isPlaying()) {
+                mWaveBgView.stopAnimationSafely();
+            }
         }
     }
 
