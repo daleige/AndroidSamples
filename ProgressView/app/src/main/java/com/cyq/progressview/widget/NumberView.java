@@ -3,7 +3,6 @@ package com.cyq.progressview.widget;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
@@ -15,26 +14,20 @@ import androidx.annotation.Nullable;
 import com.cyq.progressview.R;
 import com.cyq.progressview.utils.Utils;
 
-import static com.cyq.progressview.widget.AnimNumberView.UP_TIMER;
-
 /**
  * @author : ChenYangQi
  * date   : 2020/5/23 14:22
  * desc   :有动画效果的改变的数字控件
  */
 public class NumberView extends FrameLayout {
-    private int UP_OR_DOWN_MODE;
+    public static final int UP_ANIMATOR_MODE = 54536;
+    public static final int DOWN_ANIMATOR_MODE = 87981;
+    private int UP_OR_DOWN_MODE = UP_ANIMATOR_MODE;
     private TextView mTvFirst;
     private TextView mTvSecond;
-    private ValueAnimator mUpAnim;
-    private ValueAnimator mDownAnim;
+    private ValueAnimator mNumberAnim;
     private int mHeight;
     private int mCurrentValue;
-
-    /**
-     * 是升序还是降序
-     */
-    private boolean mAscending;
 
     public NumberView(@NonNull Context context) {
         this(context, null);
@@ -54,17 +47,16 @@ public class NumberView extends FrameLayout {
 
     private void init() {
         mHeight = Utils.dip2px(80, getContext());
-        mDownAnim = ValueAnimator.ofFloat(0F, 1F);
-        mDownAnim.setDuration(500);
-        mDownAnim.setInterpolator(new OvershootInterpolator());
-        mDownAnim.setRepeatCount(0);
-        mDownAnim.setRepeatMode(ValueAnimator.RESTART);
-        mDownAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        mNumberAnim = ValueAnimator.ofFloat(0F, 1F);
+        mNumberAnim.setDuration(500);
+        mNumberAnim.setInterpolator(new OvershootInterpolator());
+        mNumberAnim.setRepeatCount(0);
+        mNumberAnim.setRepeatMode(ValueAnimator.RESTART);
+        mNumberAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float value = (float) animation.getAnimatedValue();
-                Log.e("test", "升序还是降序：" + mAscending);
-                if (UP_OR_DOWN_MODE==UP_TIMER) {
+                if (UP_OR_DOWN_MODE == UP_ANIMATOR_MODE) {
                     mTvFirst.setTranslationY(-mHeight * value);
                     mTvSecond.setTranslationY(-mHeight * value);
                 } else {
@@ -88,7 +80,29 @@ public class NumberView extends FrameLayout {
         //判断数字是增加还是减少，进而确定不同的动画效果
         mTvFirst.setText(String.valueOf(mCurrentValue));
         mTvSecond.setText(String.valueOf(value));
-        mDownAnim.start();
+        if (mNumberAnim.isRunning()) {
+            mNumberAnim.cancel();
+        }
+        mNumberAnim.start();
         mCurrentValue = value;
+    }
+
+    private int mTrueValue = 0;
+
+    /**
+     * 设置下一位数值
+     *
+     * @param value     对应个、十、百位的数值
+     * @param trueValue 全部数值 比如123
+     * @param a         用来重载方法的，参数无实际用途
+     */
+    public void setCurrentValue(int value, int trueValue, int a) {
+        if (trueValue > mTrueValue) {
+            UP_OR_DOWN_MODE = UP_ANIMATOR_MODE;
+        } else {
+            UP_OR_DOWN_MODE = DOWN_ANIMATOR_MODE;
+        }
+        mTrueValue = trueValue;
+        setCurrentValue(value, UP_OR_DOWN_MODE);
     }
 }

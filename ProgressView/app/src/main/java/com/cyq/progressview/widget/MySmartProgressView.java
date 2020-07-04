@@ -378,7 +378,6 @@ public class MySmartProgressView extends View {
         mArcPath.close();
     }
 
-
     /**
      * 设置当前的温度
      *
