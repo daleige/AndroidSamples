@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_3:
                 //正计时
                 mHandler.removeCallbacksAndMessages(null);
-                mProgress.setTimer(30, AnimNumberView.UP_TIMER);
+                mProgress.setTimer(-1, AnimNumberView.UP_TIMER);
                 mProgress.setOnCompleteListener(new ProgressLayout.OnCompleteListener() {
                     @Override
                     public void onComplete() {
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_4:
                 //倒计时
                 mHandler.removeCallbacksAndMessages(null);
-                mProgress.setTimer(30, AnimNumberView.DOWN_TIMER);
+                mProgress.setTimer(3700, AnimNumberView.DOWN_TIMER);
                 mProgress.setOnCompleteListener(new ProgressLayout.OnCompleteListener() {
                     @Override
                     public void onComplete() {
@@ -112,8 +112,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (mHandler == null) {
                         break;
                     }
-                    temperature = temperature + 1 + mRandom.nextInt(30);
-                    //temperature++;
+                    //temperature = temperature + 1 + mRandom.nextInt(30);
+                    temperature++;
                     if (temperature >= targetTemperature) {
                         temperature = targetTemperature;
                         mHandler.removeCallbacksAndMessages(null);
@@ -127,8 +127,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (mHandler == null) {
                         break;
                     }
-                    temperature = temperature - mRandom.nextInt(30);
-                    //temperature--;
+                    //temperature = temperature - mRandom.nextInt(30);
+                    temperature--;
                     if (temperature < 0) {
                         temperature = 0;
                         mHandler.removeCallbacksAndMessages(null);

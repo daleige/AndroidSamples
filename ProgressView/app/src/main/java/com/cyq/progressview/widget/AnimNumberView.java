@@ -2,7 +2,6 @@ package com.cyq.progressview.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -61,6 +60,10 @@ public class AnimNumberView extends LinearLayout {
     private LinearLayout mTempContainer, mClockContainer;
     private Disposable mTimerDisposable;
     private OnTimerComplete mTimerListener;
+    /**
+     * 全局变量
+     */
+    Disposable disposable;
 
     public AnimNumberView(Context context) {
         this(context, null);
@@ -90,11 +93,6 @@ public class AnimNumberView extends LinearLayout {
     }
 
     /**
-     * 全局变量
-     */
-    Disposable disposable;
-
-    /**
      * 设置温度
      *
      * @param temperature
@@ -120,9 +118,8 @@ public class AnimNumberView extends LinearLayout {
         checkMode(TIMER_MODE);
         if (timerMode == UP_TIMER && second <= 0) {
             //没有设置正计时的目标时间
-            second = Integer.MAX_VALUE;
+            second = Integer.MAX_VALUE / 2;
         }
-
         final int finalSecond = second;
         mTimerDisposable = Flowable.intervalRange(0,
                 second + 1,
@@ -132,7 +129,6 @@ public class AnimNumberView extends LinearLayout {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(aLong -> {
-                    Log.e("test", "当前时间：" + aLong);
                     if (timerMode == UP_TIMER) {
                         setClock(aLong.intValue(), UP_ANIMATOR_MODE);
                     }
@@ -142,7 +138,6 @@ public class AnimNumberView extends LinearLayout {
                     }
                 })
                 .doOnComplete(() -> {
-                    Log.e("test", "计时结束");
                     disposeTimer();
                     if (mTimerListener != null) {
                         mTimerListener.onComplete();
@@ -174,7 +169,7 @@ public class AnimNumberView extends LinearLayout {
             mHour2View.setVisibility(VISIBLE);
         }
 
-        int hour = 0, min = 0, sec = 0;
+        int hour, min, sec;
         //计算出小时
         hour = (int) (second / (60 * 60));
         // 计算出分钟
@@ -238,6 +233,9 @@ public class AnimNumberView extends LinearLayout {
         }
     }
 
+    /**
+     * 解绑计时器
+     */
     private void disposeTimer() {
         if (mTimerDisposable != null && !mTimerDisposable.isDisposed()) {
             mTimerDisposable.dispose();
@@ -256,7 +254,7 @@ public class AnimNumberView extends LinearLayout {
 
     public interface OnTimerComplete {
         /**
-         * 完成回调
+         * 计时完成回调
          */
         void onComplete();
     }
