@@ -3,6 +3,7 @@ package com.cyq.progressview.widget;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,10 +23,10 @@ import android.view.animation.AccelerateInterpolator;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.vectordrawable.graphics.drawable.ArgbEvaluator;
 
 import com.cyq.progressview.R;
 import com.cyq.progressview.evaluator.ProgressParameter;
-import com.cyq.progressview.utils.ArgbUtils;
 import com.cyq.progressview.utils.Utils;
 
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ import java.util.Random;
  * date   : 2020/5/6 14:24
  * desc   : 温度进度控件
  */
+@SuppressLint("RestrictedApi")
 public class MySmartProgressView extends View {
     /**
      * 控件宽高
@@ -70,7 +72,6 @@ public class MySmartProgressView extends View {
      * 开始时底色圆环渐变的画笔
      */
     private Paint mBackShadePaint;
-
     /**
      * 底色圆环初始化动画渐变色
      */
@@ -80,12 +81,10 @@ public class MySmartProgressView extends View {
      * 内环到外环的颜色变化数字
      */
     private int[] mRadialGradientColors = new int[3];
-
     /**
      * 四个进度阶段的颜色值0%-25%-50%-75%
      */
     private ProgressParameter[] mProgressParameterArray = new ProgressParameter[4];
-
     private float[] mRadialGradientStops = {0F, 0.5F, 1F};
     private LinearGradient mBackCircleLinearGradient;
     private Paint mSweptPaint;
@@ -116,6 +115,44 @@ public class MySmartProgressView extends View {
      * 是否是保温
      */
     private boolean isKeepWare = false;
+    /**
+     * 温度环的颜色属性
+     */
+    private int insideColor1 = Color.parseColor("#FF001BFF");
+    private int outsizeColor1 = Color.parseColor("#A60067FF");
+    private int progressColor1 = Color.parseColor("#FF0066FF");
+    private int pointColor1 = Color.parseColor("#FF1978FF");
+    private int bgCircleColor1 = Color.parseColor("#290066FF");
+    private int insideColor2 = Color.parseColor("#FFFFB600");
+    private int outsizeColor2 = Color.parseColor("#A6FFB600");
+    private int progressColor2 = Color.parseColor("#FFFFDB00");
+    private int pointColor2 = Color.parseColor("#FFFFBD00");
+    private int bgCircleColor2 = Color.parseColor("#1AFFDB00");
+    private int insideColor3 = Color.parseColor("#FFFF8700");
+    private int outsizeColor3 = Color.parseColor("#A6FF7700");
+    private int progressColor3 = Color.parseColor("#FFFFA300");
+    private int pointColor3 = Color.parseColor("#FFFF9700");
+    private int bgCircleColor3 = Color.parseColor("#1AFFA300");
+    private int insideColor4 = Color.parseColor("#FFFF2200");
+    private int outsizeColor4 = Color.parseColor("#A6FF1600");
+    private int progressColor4 = Color.parseColor("#FFFF8000");
+    private int pointColor4 = Color.parseColor("#FFFF5500");
+    private int bgCircleColor4 = Color.parseColor("#1AFF5500");
+    private ProgressParameter mParameter = new ProgressParameter();
+    /**
+     * 上一次圆环的进度，按0~3600计数
+     */
+    private float lastTimeProgress = 0;
+
+    /**
+     * 当前圆环的进度
+     */
+    private float currentProgress = 0;
+
+    /**
+     * 跳到下一个圆环进度的动画
+     */
+    private ValueAnimator progressAnim;
 
     public MySmartProgressView(Context context) {
         this(context, null);
@@ -177,8 +214,6 @@ public class MySmartProgressView extends View {
         mPointPaint.setAntiAlias(true);
         mPointPaint.setStyle(Paint.Style.FILL);
         mPointPaint.setMaskFilter(new BlurMaskFilter(3, BlurMaskFilter.Blur.NORMAL));
-        //关闭粒子画笔的硬件加速
-        //setLayerType(View.LAYER_TYPE_SOFTWARE, mPointPaint);
 
         //step3：内圈到外圈渐变色画笔
         mSweptPaint = new Paint();
@@ -343,17 +378,6 @@ public class MySmartProgressView extends View {
         mArcPath.close();
     }
 
-    /**
-     * 上一次圆环的进度，按0~3600计数
-     */
-    private float lastTimeProgress = 0;
-
-    /**
-     * 当前圆环的进度
-     */
-    private float currentProgress = 0;
-
-    private ValueAnimator progressAnim;
 
     /**
      * 设置当前的温度
@@ -380,7 +404,7 @@ public class MySmartProgressView extends View {
             float value = (float) animation.getAnimatedValue();
             mCurrentAngle = value;
             //根据当前的进度值获取圆环的颜色属性
-            ProgressParameter colors = ArgbUtils.getInstance().getProgressParameter(lastTimeProgress, value);
+            ProgressParameter colors = getProgressParameter(value);
             //变更进度条的颜色值
             mPointPaint.setColor(colors.getPointColor());
             mOutCirclePaint.setColor(colors.getProgressColor());
@@ -432,13 +456,12 @@ public class MySmartProgressView extends View {
      */
     public void startKeepWare() {
         isKeepWare = true;
-        ProgressParameter colors = ArgbUtils.getInstance().getProgressParameter(3600 - 1, 3600);
         //变更进度条的颜色值
-        mPointPaint.setColor(colors.getPointColor());
-        mOutCirclePaint.setColor(colors.getProgressColor());
-        mBackCirclePaint.setColor(colors.getBgCircleColor());
+        mPointPaint.setColor(pointColor4);
+        mOutCirclePaint.setColor(progressColor4);
+        mBackCirclePaint.setColor(bgCircleColor4);
         //设置内圈变色圆的shader
-        mRadialGradientColors[2] = colors.getInsideColor();
+        mRadialGradientColors[2] = insideColor4;
         mRadialGradient = new RadialGradient(
                 0,
                 0,
@@ -447,7 +470,7 @@ public class MySmartProgressView extends View {
                 mRadialGradientStops,
                 Shader.TileMode.CLAMP);
         mSweptPaint.setShader(mRadialGradient);
-        getSectorClip(width / 2F, -90, 360);
+        invalidate();
     }
 
     private float mPointerTranslation;
@@ -502,11 +525,35 @@ public class MySmartProgressView extends View {
     }
 
     /**
-     * 设置是否是保温模式，保温模式满环展示
+     * 获取当前进度值（0~3600）对应的颜色值
      *
-     * @param keepWare
+     * @param progressValue 0~3600之间的圆环进度值
+     * @return
      */
-    public void setIsKeepWare(boolean keepWare) {
-        isKeepWare = keepWare;
+    private ProgressParameter getProgressParameter(float progressValue) {
+        float fraction = progressValue % 1200 / 1200;
+        if (progressValue < 1200) {
+            //第一个颜色段
+            mParameter.setInsideColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, insideColor1, insideColor2));
+            mParameter.setOutsizeColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, outsizeColor1, outsizeColor2));
+            mParameter.setProgressColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, progressColor1, progressColor2));
+            mParameter.setPointColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, pointColor1, pointColor2));
+            mParameter.setBgCircleColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, bgCircleColor1, bgCircleColor2));
+        } else if (progressValue < 2400) {
+            //第二个颜色段
+            mParameter.setInsideColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, insideColor2, insideColor3));
+            mParameter.setOutsizeColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, outsizeColor2, outsizeColor3));
+            mParameter.setProgressColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, progressColor2, progressColor3));
+            mParameter.setPointColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, pointColor2, pointColor3));
+            mParameter.setBgCircleColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, bgCircleColor2, bgCircleColor3));
+        } else if (progressValue < 3600) {
+            //第三个颜色段
+            mParameter.setInsideColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, insideColor3, insideColor4));
+            mParameter.setOutsizeColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, outsizeColor3, outsizeColor4));
+            mParameter.setProgressColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, progressColor3, progressColor4));
+            mParameter.setPointColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, pointColor3, pointColor4));
+            mParameter.setBgCircleColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, bgCircleColor3, bgCircleColor4));
+        }
+        return mParameter;
     }
 }

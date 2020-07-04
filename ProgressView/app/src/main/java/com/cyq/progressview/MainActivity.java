@@ -109,6 +109,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public boolean handleMessage(@NonNull Message msg) {
             switch (msg.what) {
                 case 101:
+                    if (mHandler == null) {
+                        break;
+                    }
                     temperature = temperature + 1 + mRandom.nextInt(30);
                     //temperature++;
                     if (temperature >= targetTemperature) {
@@ -121,6 +124,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 case 102:
                     //模拟减温，随机减温0-30度之间
+                    if (mHandler == null) {
+                        break;
+                    }
                     temperature = temperature - mRandom.nextInt(30);
                     //temperature--;
                     if (temperature < 0) {
