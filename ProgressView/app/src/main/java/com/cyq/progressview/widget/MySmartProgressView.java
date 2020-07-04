@@ -248,8 +248,8 @@ public class MySmartProgressView extends View {
         mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.indicator);
         float bitmapWidth = mBitmap.getWidth();
         float bitmapHeight = mBitmap.getHeight();
-        scaleHeight = mRadius + 20;
-        scaleWidth = bitmapWidth * (mCenterX / bitmapHeight);
+        scaleHeight = mRadius * 0.5F;
+        scaleWidth = bitmapWidth * mRadius * 0.5F / bitmapHeight;
         mBitmap = Bitmap.createScaledBitmap(mBitmap, (int) scaleWidth, (int) scaleHeight, false);
     }
 
@@ -356,7 +356,7 @@ public class MySmartProgressView extends View {
                 canvas.save();
                 canvas.translate(mCenterX, mCenterY);
                 canvas.rotate(mCurrentAngle / 10F);
-                canvas.translate(-scaleWidth + 10, -scaleHeight - 10);
+                canvas.translate(-scaleWidth/2, -mCenterY+10);
                 canvas.drawBitmap(mBitmap, 0, 0, mBmpPaint);
                 canvas.restore();
             }
