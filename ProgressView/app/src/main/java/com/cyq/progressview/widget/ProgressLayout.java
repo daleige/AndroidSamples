@@ -23,6 +23,8 @@ public class ProgressLayout extends FrameLayout {
     private AnimNumberView mAnimNumberView;
     private FrameAnimationView mWaveBgView;
     private OnCompleteListener mCompleteListener;
+    private FrameAnimationView mInitAnimView;
+
     /**
      * 用于标记是预热还是保温模式
      */
@@ -46,6 +48,35 @@ public class ProgressLayout extends FrameLayout {
         mMySmartProgressView = findViewById(R.id.mMySmartProgressView);
         mAnimNumberView = findViewById(R.id.mTempNumberView);
         mWaveBgView = findViewById(R.id.mWaveBgView);
+        mInitAnimView = findViewById(R.id.mInitAnimView);
+
+        mInitAnimView.setVisibility(VISIBLE);
+        mInitAnimView.setRepeatMode(FrameAnimation.RepeatMode.ONCE);
+        mInitAnimView.setFrameInterval(17);
+        mInitAnimView.setSupportInBitmap(true);
+        mInitAnimView.setAnimationListener(new FrameAnimation.FrameAnimationListener() {
+            @Override
+            public void onAnimationStart() {
+
+            }
+
+            @Override
+            public void onAnimationEnd() {
+                mMySmartProgressView.setVisibility(VISIBLE);
+                mAnimNumberView.setVisibility(VISIBLE);
+            }
+
+            @Override
+            public void onProgress(float v, int i, int i1) {
+
+            }
+        });
+        postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mInitAnimView.playAnimationFromAssets("init_jndicator_version1");
+            }
+        }, 1000);
     }
 
     /**
@@ -102,6 +133,9 @@ public class ProgressLayout extends FrameLayout {
         isKeepWare = mode;
         if (mode) {
             mWaveBgView.setVisibility(VISIBLE);
+            if (mInitAnimView.isPlaying()) {
+                mInitAnimView.stopAnimationSafely();
+            }
             mWaveBgView.setRepeatMode(FrameAnimation.RepeatMode.INFINITE);
             mWaveBgView.setFrameInterval(34);
             mWaveBgView.setSupportInBitmap(true);
