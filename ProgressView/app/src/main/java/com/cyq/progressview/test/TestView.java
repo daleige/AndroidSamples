@@ -6,6 +6,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -36,7 +40,6 @@ public class TestView extends View {
     int[] colors = {transparentColor, transparentColor, endColor};
     float[] posts = {0F, 0.6F, 1F};
 
-    Paint mPaint = new Paint();
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -62,10 +65,20 @@ public class TestView extends View {
 //        mPaint2.setMaskFilter(new BlurMaskFilter(25, BlurMaskFilter.Blur.NORMAL));
 //
 //        canvas.drawCircle(400, 100, 25, mPaint2);
-        setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.binding_icon_wifi_off);
-        mPaint.setColor(Color.RED);
-        canvas.drawRect(0, 0, bitmap.getWidth(),  bitmap.getHeight(), mPaint);
+
+        RectF rect = new RectF(0, 0, 25, 140);
+
+        Paint mBitmapPaint = new Paint();
+        //setLayerType(LAYER_TYPE_SOFTWARE, null);
+        Bitmap bitmapDST = BitmapFactory.decodeResource(getResources(), R.drawable.indicator);
+        Bitmap bitmapSRT = Bitmap.createBitmap(bitmapDST.getWidth(), bitmapDST.getHeight(), Bitmap.Config.ARGB_8888);
+        bitmapSRT.eraseColor(Color.parseColor("#FF0000"));
+        int layoutId = canvas.saveLayer(rect, null, Canvas.ALL_SAVE_FLAG);
+        canvas.drawBitmap(bitmapDST, null, rect, mBitmapPaint);
+        mBitmapPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.MULTIPLY));
+        canvas.drawBitmap(bitmapSRT, null, rect, mBitmapPaint);
+        mBitmapPaint.setXfermode(null);
+        canvas.restoreToCount(layoutId);
     }
 
 }
