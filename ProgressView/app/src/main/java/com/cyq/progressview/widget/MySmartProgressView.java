@@ -13,6 +13,8 @@ import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.RadialGradient;
 import android.graphics.RectF;
 import android.graphics.Shader;
@@ -98,7 +100,27 @@ public class MySmartProgressView extends View {
      * 扇形粒子区域的路径，用于裁剪画布范围
      */
     private Path mArcPath;
-    private Bitmap mBitmap;
+    /**
+     * 指针目标图层
+     */
+    private Bitmap mBitmapDST;
+    /**
+     * 指针源图层
+     */
+    private Bitmap mBitmapSRT;
+    /**
+     * 离屏绘制图层混合的指针区域
+     */
+    private RectF mPointerRectF;
+    /**
+     * 绘制指针的layoutId
+     */
+    private int mPointerLayoutId;
+    /**
+     * 指针的图层混合模式
+     */
+    private PorterDuffXfermode mXfermode;
+
     private Paint mBmpPaint;
     private float scaleHeight;
     private float scaleWidth;
@@ -249,12 +271,12 @@ public class MySmartProgressView extends View {
      * 初始化指针图片的Bitmap
      */
     private void initBitmap() {
-        mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.indicator);
-        float bitmapWidth = mBitmap.getWidth();
-        float bitmapHeight = mBitmap.getHeight();
-        scaleHeight = mRadius * 0.5F;
-        scaleWidth = bitmapWidth * mRadius * 0.5F / bitmapHeight;
-        mBitmap = Bitmap.createScaledBitmap(mBitmap, (int) scaleWidth, (int) scaleHeight, false);
+        mBitmapDST = BitmapFactory.decodeResource(getResources(), R.drawable.indicator);
+        //初始化指针的图层混合模式
+        mXfermode = new PorterDuffXfermode(PorterDuff.Mode.MULTIPLY);
+        mPointerRectF = new RectF(0, 0, 20, 150);
+        mBitmapSRT = Bitmap.createBitmap(20, 150, Bitmap.Config.ARGB_8888);
+        mBitmapSRT.eraseColor(Color.parseColor("#FF0000"));
     }
 
     /**
@@ -357,12 +379,15 @@ public class MySmartProgressView extends View {
         //画指针
         if (!isKeepWare) {
             if (mPointerVisible == VISIBLE) {
-                canvas.save();
                 canvas.translate(mCenterX, mCenterY);
                 canvas.rotate(mCurrentAngle / 10F);
-                canvas.translate(-scaleWidth / 2, -mCenterY + 10);
-                canvas.drawBitmap(mBitmap, 0, 0, mBmpPaint);
-                canvas.restore();
+                canvas.translate(-mPointerRectF.width() / 2, -mCenterY + 10);
+                mPointerLayoutId = canvas.saveLayer(mPointerRectF, mBmpPaint);
+                canvas.drawBitmap(mBitmapDST, null, mPointerRectF, mBmpPaint);
+                mBmpPaint.setXfermode(mXfermode);
+                canvas.drawBitmap(mBitmapSRT, null, mPointerRectF, mBmpPaint);
+                mBmpPaint.setXfermode(null);
+                canvas.restoreToCount(mPointerLayoutId);
             }
         }
     }
