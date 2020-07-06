@@ -120,10 +120,8 @@ public class MySmartProgressView extends View {
      * 指针的颜色
      */
     private int mPointerColor;
-
     private Paint mBmpPaint;
-    private float scaleHeight;
-    private float scaleWidth;
+
     /**
      * 外层粒子圆环的边框大小
      */
