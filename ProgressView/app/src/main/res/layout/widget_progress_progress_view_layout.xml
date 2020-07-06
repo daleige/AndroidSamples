@@ -3,10 +3,10 @@
     android:layout_width="360dp"
     android:layout_height="360dp">
 
-    <com.yuyashuai.frameanimation.FrameAnimationView
-        android:id="@+id/mWaveBgView"
-        android:layout_width="360dp"
-        android:layout_height="360dp" />
+<!--    <com.yuyashuai.frameanimation.FrameAnimationView-->
+<!--        android:id="@+id/mWaveBgView"-->
+<!--        android:layout_width="360dp"-->
+<!--        android:layout_height="360dp" />-->
 
     <com.yuyashuai.frameanimation.FrameAnimationView
         android:id="@+id/mInitAnimView"

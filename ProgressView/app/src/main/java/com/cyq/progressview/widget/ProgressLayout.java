@@ -21,9 +21,9 @@ import com.yuyashuai.frameanimation.FrameAnimationView;
 public class ProgressLayout extends FrameLayout {
     private MySmartProgressView mMySmartProgressView;
     private AnimNumberView mAnimNumberView;
-    private FrameAnimationView mWaveBgView;
     private OnCompleteListener mCompleteListener;
     private FrameAnimationView mInitAnimView;
+    //    private FrameAnimationView mWaveBgView;
 
     /**
      * 用于标记是预热还是保温模式
@@ -47,7 +47,7 @@ public class ProgressLayout extends FrameLayout {
         LayoutInflater.from(getContext()).inflate(R.layout.widget_progress_progress_view_layout, this, true);
         mMySmartProgressView = findViewById(R.id.mMySmartProgressView);
         mAnimNumberView = findViewById(R.id.mTempNumberView);
-        mWaveBgView = findViewById(R.id.mWaveBgView);
+        //mWaveBgView = findViewById(R.id.mWaveBgView);
         mInitAnimView = findViewById(R.id.mInitAnimView);
 
         mInitAnimView.setVisibility(VISIBLE);
@@ -127,25 +127,25 @@ public class ProgressLayout extends FrameLayout {
     }
 
     private void checkIsKeepWareState(boolean mode) {
-        if (isKeepWare == mode) {
-            return;
-        }
-        isKeepWare = mode;
-        if (mode) {
-            mWaveBgView.setVisibility(VISIBLE);
-            if (mInitAnimView.isPlaying()) {
-                mInitAnimView.stopAnimationSafely();
-            }
-            mWaveBgView.setRepeatMode(FrameAnimation.RepeatMode.INFINITE);
-            mWaveBgView.setFrameInterval(34);
-            mWaveBgView.setSupportInBitmap(true);
-            mWaveBgView.playAnimationFromAssets("wave_version1");
-        } else {
-            mWaveBgView.setVisibility(GONE);
-            if (mWaveBgView.isPlaying()) {
-                mWaveBgView.stopAnimationSafely();
-            }
-        }
+//        if (isKeepWare == mode) {
+//            return;
+//        }
+//        isKeepWare = mode;
+//        if (mode) {
+//            mWaveBgView.setVisibility(VISIBLE);
+//            if (mInitAnimView.isPlaying()) {
+//                mInitAnimView.stopAnimationSafely();
+//            }
+//            mWaveBgView.setRepeatMode(FrameAnimation.RepeatMode.INFINITE);
+//            mWaveBgView.setFrameInterval(34);
+//            mWaveBgView.setSupportInBitmap(true);
+//            mWaveBgView.playAnimationFromAssets("wave_version1");
+//        } else {
+//            mWaveBgView.setVisibility(GONE);
+//            if (mWaveBgView.isPlaying()) {
+//                mWaveBgView.stopAnimationSafely();
+//            }
+//        }
     }
 
     public void setOnCompleteListener(OnCompleteListener mCompleteListener) {
@@ -160,10 +160,12 @@ public class ProgressLayout extends FrameLayout {
     }
 
     public void onPause() {
-        mWaveBgView.onPause();
+        //mWaveBgView.onPause();
+        mInitAnimView.onResume();
     }
 
     public void onResume() {
-        mWaveBgView.onResume();
+        //mWaveBgView.onResume();
+        mInitAnimView.onResume();
     }
 }
