@@ -23,7 +23,10 @@ public class ProgressLayout extends FrameLayout {
     private AnimNumberView mAnimNumberView;
     private OnCompleteListener mCompleteListener;
     private FrameAnimationView mInitAnimView;
-    //    private FrameAnimationView mWaveBgView;
+    /**
+     * 此版本去掉波动背景，先预留在这里，可续可能会重新使用
+     */
+    private FrameAnimationView mWaveBgView;
 
     /**
      * 用于标记是预热还是保温模式
