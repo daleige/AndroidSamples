@@ -2,6 +2,7 @@ package com.cyq.progressview.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -210,6 +211,10 @@ public class AnimNumberView extends LinearLayout {
             mMinute1View.setVisibility(VISIBLE);
             mColon1View.setVisibility(GONE);
             mMinute1View.setCurrentValue(mMinute1Value, mode);
+        }else {
+            mHour1View.setVisibility(GONE);
+            mHour2View.setVisibility(GONE);
+            mColon1View.setVisibility(GONE);
         }
     }
 

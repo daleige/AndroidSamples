@@ -33,6 +33,8 @@ public class ProgressParameter {
      */
     private int bgCircleColor;
 
+
+
     public ProgressParameter() {
     }
 
