@@ -83,10 +83,6 @@ public class MySmartProgressView extends View {
      * 内环到外环的颜色变化数字
      */
     private int[] mRadialGradientColors = new int[3];
-    /**
-     * 四个进度阶段的颜色值0%-25%-50%-75%
-     */
-    private ProgressParameter[] mProgressParameterArray = new ProgressParameter[4];
     private float[] mRadialGradientStops = {0F, 0.5F, 1F};
     private LinearGradient mBackCircleLinearGradient;
     private Paint mSweptPaint;
@@ -120,6 +116,10 @@ public class MySmartProgressView extends View {
      * 指针的图层混合模式
      */
     private PorterDuffXfermode mXfermode;
+    /**
+     * 指针的颜色
+     */
+    private int mPointerColor;
 
     private Paint mBmpPaint;
     private float scaleHeight;
@@ -204,6 +204,7 @@ public class MySmartProgressView extends View {
      * 初始化控件的各类宽高，边框，半径等大小
      */
     private void initView() {
+        mPointerColor = progressColor1;
         int middleRadialGradientColor = Color.parseColor("#1A001BFF");
         //透明颜色
         int transparentColor = Color.parseColor("#00000000");
@@ -263,8 +264,6 @@ public class MySmartProgressView extends View {
 
         //指针画笔颜色
         mBmpPaint = new Paint();
-        //关闭指针画笔的硬件加速
-        //setLayerType(View.LAYER_TYPE_SOFTWARE, mBmpPaint);
     }
 
     /**
@@ -276,7 +275,7 @@ public class MySmartProgressView extends View {
         mXfermode = new PorterDuffXfermode(PorterDuff.Mode.MULTIPLY);
         mPointerRectF = new RectF(0, 0, 20, 150);
         mBitmapSRT = Bitmap.createBitmap(20, 150, Bitmap.Config.ARGB_8888);
-        mBitmapSRT.eraseColor(Color.parseColor("#FF0000"));
+        mBitmapSRT.eraseColor(mPointerColor);
     }
 
     /**
@@ -383,6 +382,7 @@ public class MySmartProgressView extends View {
                 canvas.rotate(mCurrentAngle / 10F);
                 canvas.translate(-mPointerRectF.width() / 2, -mCenterY + 10);
                 mPointerLayoutId = canvas.saveLayer(mPointerRectF, mBmpPaint);
+                mBitmapSRT.eraseColor(mPointerColor);
                 canvas.drawBitmap(mBitmapDST, null, mPointerRectF, mBmpPaint);
                 mBmpPaint.setXfermode(mXfermode);
                 canvas.drawBitmap(mBitmapSRT, null, mPointerRectF, mBmpPaint);
@@ -438,7 +438,7 @@ public class MySmartProgressView extends View {
             mOutCirclePaint.setColor(colors.getProgressColor());
             mBackCirclePaint.setColor(colors.getBgCircleColor());
             //更改指针颜色
-            mBmpPaint.setARGB(255, 211, 53, 243);
+            mPointerColor = colors.getPointColor();
             //设置内圈变色圆的shader
             mRadialGradientColors[2] = colors.getInsideColor();
             mRadialGradient = new RadialGradient(
