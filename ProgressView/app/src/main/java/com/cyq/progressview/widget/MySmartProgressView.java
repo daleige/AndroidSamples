@@ -387,7 +387,7 @@ public class MySmartProgressView extends View {
         //画进度圆环
         canvas.drawCircle(0, 0, mRadius, mOutCirclePaint);
         //画变色圆饼
-        canvas.drawCircle(0, 0, mRadius + mOutCircleStrokeWidth / 2F, mSweptPaint);
+        canvas.drawCircle(0, 0, mRadius - mOutCircleStrokeWidth / 2F, mSweptPaint);
         canvas.restore();
 
         //画指针
@@ -510,7 +510,7 @@ public class MySmartProgressView extends View {
         mRadialGradient = new RadialGradient(
                 0,
                 0,
-                mRadius + mOutCircleStrokeWidth / 2F,
+                mRadius - mOutCircleStrokeWidth / 2F,
                 mRadialGradientColors,
                 mRadialGradientStops,
                 Shader.TileMode.CLAMP);
