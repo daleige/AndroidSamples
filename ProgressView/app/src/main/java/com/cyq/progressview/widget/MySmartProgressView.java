@@ -175,6 +175,12 @@ public class MySmartProgressView extends View {
      */
     private ValueAnimator progressAnim;
 
+    public MySmartProgressView(Context context, int width, int height) {
+        this(context);
+        this.width = width;
+        this.height = height;
+    }
+
     public MySmartProgressView(Context context) {
         this(context, null);
     }
@@ -584,14 +590,5 @@ public class MySmartProgressView extends View {
             mParameter.setBgCircleColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, bgCircleColor3, bgCircleColor4));
         }
         return mParameter;
-    }
-
-    /**
-     * 设置宽高
-     *
-     * @param width
-     */
-    public void setDimension(int width) {
-        this.height = this.width = width;
     }
 }

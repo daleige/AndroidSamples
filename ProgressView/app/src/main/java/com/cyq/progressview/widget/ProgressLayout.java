@@ -3,7 +3,8 @@ package com.cyq.progressview.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
+import android.view.Gravity;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -25,17 +26,14 @@ public class ProgressLayout extends FrameLayout {
     private AnimNumberView mAnimNumberView;
     private OnCompleteListener mCompleteListener;
     private FrameAnimationView mInitAnimView;
-    /**
-     * 此版本去掉波动背景，先预留在这里，可续可能会重新使用
-     */
-    private FrameAnimationView mWaveBgView;
-
+    private int height;
+    private int width;
     /**
      * 用于标记是预热还是保温模式
      */
     private boolean isKeepWare = false;
-    private int height;
-    private int width;
+    private LayoutParams frameAnimationViewLp;
+    private LayoutParams animNumberViewLp;
 
     public ProgressLayout(@NonNull Context context) {
         this(context, null);
@@ -51,6 +49,7 @@ public class ProgressLayout extends FrameLayout {
         width = array.getDimensionPixelSize(R.styleable.ProgressLayout_progressLayout_width, Utils.dip2px(318, getContext()));
         height = array.getDimensionPixelOffset(R.styleable.ProgressLayout_progressLayout_height, Utils.dip2px(318, getContext()));
         array.recycle();
+        setMeasuredDimension(width, height);
         init();
     }
 
@@ -61,12 +60,24 @@ public class ProgressLayout extends FrameLayout {
     }
 
     private void init() {
-        LayoutInflater.from(getContext()).inflate(R.layout.widget_progress_progress_view_layout, this, true);
-        mMySmartProgressView = findViewById(R.id.mMySmartProgressView);
-        mMySmartProgressView.setDimension(width);
-        mAnimNumberView = findViewById(R.id.mTempNumberView);
-        //mWaveBgView = findViewById(R.id.mWaveBgView);
-        mInitAnimView = findViewById(R.id.mInitAnimView);
+        mInitAnimView = new FrameAnimationView(getContext());
+        frameAnimationViewLp = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        frameAnimationViewLp.gravity = Gravity.CENTER;
+        mInitAnimView.setLayoutParams(frameAnimationViewLp);
+
+        mMySmartProgressView = new MySmartProgressView(getContext(), width, height);
+        mMySmartProgressView.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+        mAnimNumberView = new AnimNumberView(getContext());
+        animNumberViewLp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        animNumberViewLp.gravity = Gravity.CENTER;
+        mAnimNumberView.setLayoutParams(animNumberViewLp);
+
+        addView(mInitAnimView);
+        addView(mMySmartProgressView);
+        addView(mAnimNumberView);
+        mMySmartProgressView.setVisibility(GONE);
+        mAnimNumberView.setVisibility(GONE);
 
         mInitAnimView.setVisibility(VISIBLE);
         mInitAnimView.setRepeatMode(FrameAnimation.RepeatMode.ONCE);
@@ -104,7 +115,6 @@ public class ProgressLayout extends FrameLayout {
      * @param targetTemperature 目标温度
      */
     public void setTemperature(float temperature, float targetTemperature) {
-        checkIsKeepWareState(false);
         //温度设置
         mMySmartProgressView.setCurrentTemperature(temperature, targetTemperature);
         //动画数字控件设置温度模式
@@ -120,15 +130,11 @@ public class ProgressLayout extends FrameLayout {
      * @param timerMode
      */
     public void setTimer(int second, int timerMode) {
-        checkIsKeepWareState(true);
         mMySmartProgressView.startKeepWare();
         mAnimNumberView.setTimer(second, timerMode);
-        mAnimNumberView.setOnTimerCompleteListener(new AnimNumberView.OnTimerComplete() {
-            @Override
-            public void onComplete() {
-                if (mCompleteListener != null) {
-                    mCompleteListener.onComplete();
-                }
+        mAnimNumberView.setOnTimerCompleteListener(() -> {
+            if (mCompleteListener != null) {
+                mCompleteListener.onComplete();
             }
         });
     }
@@ -144,28 +150,6 @@ public class ProgressLayout extends FrameLayout {
         }
     }
 
-    private void checkIsKeepWareState(boolean mode) {
-//        if (isKeepWare == mode) {
-//            return;
-//        }
-//        isKeepWare = mode;
-//        if (mode) {
-//            mWaveBgView.setVisibility(VISIBLE);
-//            if (mInitAnimView.isPlaying()) {
-//                mInitAnimView.stopAnimationSafely();
-//            }
-//            mWaveBgView.setRepeatMode(FrameAnimation.RepeatMode.INFINITE);
-//            mWaveBgView.setFrameInterval(34);
-//            mWaveBgView.setSupportInBitmap(true);
-//            mWaveBgView.playAnimationFromAssets("wave_version1");
-//        } else {
-//            mWaveBgView.setVisibility(GONE);
-//            if (mWaveBgView.isPlaying()) {
-//                mWaveBgView.stopAnimationSafely();
-//            }
-//        }
-    }
-
     public void setOnCompleteListener(OnCompleteListener mCompleteListener) {
         this.mCompleteListener = mCompleteListener;
     }
@@ -178,12 +162,10 @@ public class ProgressLayout extends FrameLayout {
     }
 
     public void onPause() {
-        //mWaveBgView.onPause();
         mInitAnimView.onResume();
     }
 
     public void onResume() {
-        //mWaveBgView.onResume();
         mInitAnimView.onResume();
     }
 }
