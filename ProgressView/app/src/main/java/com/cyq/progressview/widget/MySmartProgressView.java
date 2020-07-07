@@ -20,6 +20,7 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 
@@ -583,5 +584,14 @@ public class MySmartProgressView extends View {
             mParameter.setBgCircleColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, bgCircleColor3, bgCircleColor4));
         }
         return mParameter;
+    }
+
+    /**
+     * 设置宽高
+     *
+     * @param width
+     */
+    public void setDimension(int width) {
+        this.height = this.width = width;
     }
 }

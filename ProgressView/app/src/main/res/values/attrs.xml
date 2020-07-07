@@ -19,4 +19,9 @@
         <attr name="a6btn_enable" format="boolean" />
         <attr name="a6btn_text" format="string" />
     </declare-styleable>
+
+    <declare-styleable name="ProgressLayout">
+        <attr name="progressLayout_width" format="dimension" />
+        <attr name="progressLayout_height" format="dimension" />
+    </declare-styleable>
 </resources>

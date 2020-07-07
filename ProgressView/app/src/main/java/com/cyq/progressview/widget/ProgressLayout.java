@@ -1,6 +1,7 @@
 package com.cyq.progressview.widget;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
@@ -9,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.cyq.progressview.R;
+import com.cyq.progressview.utils.Utils;
 import com.yuyashuai.frameanimation.FrameAnimation;
 import com.yuyashuai.frameanimation.FrameAnimationView;
 
@@ -32,6 +34,8 @@ public class ProgressLayout extends FrameLayout {
      * 用于标记是预热还是保温模式
      */
     private boolean isKeepWare = false;
+    private int height;
+    private int width;
 
     public ProgressLayout(@NonNull Context context) {
         this(context, null);
@@ -43,12 +47,23 @@ public class ProgressLayout extends FrameLayout {
 
     public ProgressLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.ProgressLayout);
+        width = array.getDimensionPixelSize(R.styleable.ProgressLayout_progressLayout_width, Utils.dip2px(318, getContext()));
+        height = array.getDimensionPixelOffset(R.styleable.ProgressLayout_progressLayout_height, Utils.dip2px(318, getContext()));
+        array.recycle();
         init();
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        setMeasuredDimension(width, height);
     }
 
     private void init() {
         LayoutInflater.from(getContext()).inflate(R.layout.widget_progress_progress_view_layout, this, true);
         mMySmartProgressView = findViewById(R.id.mMySmartProgressView);
+        mMySmartProgressView.setDimension(width);
         mAnimNumberView = findViewById(R.id.mTempNumberView);
         //mWaveBgView = findViewById(R.id.mWaveBgView);
         mInitAnimView = findViewById(R.id.mInitAnimView);

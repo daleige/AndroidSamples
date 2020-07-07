@@ -34,6 +34,11 @@ public class AnimPoint implements Cloneable {
     private int num = 0;
 
     /**
+     * 透明度80~100
+     */
+    private float alpha = 0.8F;
+
+    /**
      * 随机偏移角度
      */
     private double randomAnger = 0;
