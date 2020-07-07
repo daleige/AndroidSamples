@@ -85,8 +85,8 @@ public class MySmartProgressView extends View {
     /**
      * 内环到外环的颜色变化数字
      */
-    private int[] mRadialGradientColors = new int[3];
-    private float[] mRadialGradientStops = {0F, 0.5F, 1F};
+    private int[] mRadialGradientColors = new int[8];
+    private float[] mRadialGradientStops = {0F, 0.62F, 0.86F, 0.861F, 0.939F, 0.939F, 0.98F, 1F};
     private LinearGradient mBackCircleLinearGradient;
     private Paint mSweptPaint;
     private RadialGradient mRadialGradient;
@@ -228,6 +228,10 @@ public class MySmartProgressView extends View {
         backShaderColorArr = new int[]{transparentColor, transparentColor, middleRadialGradientColor};
         mRadialGradientColors[0] = transparentColor;
         mRadialGradientColors[1] = transparentColor;
+        mRadialGradientColors[3] = transparentColor;
+        mRadialGradientColors[4] = transparentColor;
+        mRadialGradientColors[6] = transparentColor;
+        mRadialGradientColors[7] = transparentColor;
         mCenterX = width / 2;
         mCenterY = height / 2;
         // 粒子圆环的宽度
@@ -239,6 +243,19 @@ public class MySmartProgressView extends View {
      * 初始化各类画笔
      */
     private void initPaint() {
+        //step3：内圈到外圈渐变色画笔
+        mSweptPaint = new Paint();
+        mSweptPaint.setAntiAlias(true);
+        mSweptPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        mRadialGradient = new RadialGradient(
+                0,
+                0,
+                mCenterX,
+                mRadialGradientColors,
+                mRadialGradientStops,
+                Shader.TileMode.CLAMP);
+        mSweptPaint.setShader(mRadialGradient);
+
         //step1：初始化外层圆环的画笔
         mOutCirclePaint = new Paint();
         mOutCirclePaint.setStyle(Paint.Style.STROKE);
@@ -251,19 +268,6 @@ public class MySmartProgressView extends View {
         mPointPaint.setAntiAlias(true);
         mPointPaint.setStyle(Paint.Style.FILL);
         mPointPaint.setMaskFilter(new BlurMaskFilter(3, BlurMaskFilter.Blur.NORMAL));
-
-        //step3：内圈到外圈渐变色画笔
-        mSweptPaint = new Paint();
-        mSweptPaint.setAntiAlias(true);
-        mSweptPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        mRadialGradient = new RadialGradient(
-                0,
-                0,
-                mRadius - mOutCircleStrokeWidth / 2F,
-                mRadialGradientColors,
-                mRadialGradientStops,
-                Shader.TileMode.CLAMP);
-        mSweptPaint.setShader(mRadialGradient);
 
         //初始化底色圆画笔
         mBackCirclePaint = new Paint();
@@ -387,7 +391,7 @@ public class MySmartProgressView extends View {
         //画进度圆环
         canvas.drawCircle(0, 0, mRadius, mOutCirclePaint);
         //画变色圆饼
-        canvas.drawCircle(0, 0, mRadius - mOutCircleStrokeWidth / 2F, mSweptPaint);
+        canvas.drawCircle(0, 0, mCenterX, mSweptPaint);
         canvas.restore();
 
         //画指针
@@ -456,10 +460,11 @@ public class MySmartProgressView extends View {
             mPointerColor = colors.getPointColor();
             //设置内圈变色圆的shader
             mRadialGradientColors[2] = colors.getInsideColor();
+            mRadialGradientColors[5] = colors.getOutsizeColor();
             mRadialGradient = new RadialGradient(
                     0,
                     0,
-                    mRadius - mOutCircleStrokeWidth / 2F,
+                    mCenterX,
                     mRadialGradientColors,
                     mRadialGradientStops,
                     Shader.TileMode.CLAMP);
