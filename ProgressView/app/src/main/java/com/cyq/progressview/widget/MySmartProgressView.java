@@ -175,22 +175,22 @@ public class MySmartProgressView extends View {
      */
     private ValueAnimator progressAnim;
 
-    public MySmartProgressView(Context context, int width, int height) {
-        this(context);
-        this.width = width;
-        this.height = height;
+    public MySmartProgressView(Context context, int parentWidth, int parentHeight) {
+        this(context, parentWidth);
     }
 
-    public MySmartProgressView(Context context) {
-        this(context, null);
+
+    public MySmartProgressView(Context context, int parentWidth) {
+        this(context, null, parentWidth);
     }
 
-    public MySmartProgressView(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, 0);
+    public MySmartProgressView(Context context, @Nullable AttributeSet attrs, int parentWidth) {
+        this(context, attrs, 0, parentWidth);
     }
 
-    public MySmartProgressView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public MySmartProgressView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int parentWidth) {
         super(context, attrs, defStyleAttr);
+        this.height = this.width = parentWidth;
         init();
     }
 
@@ -209,6 +209,7 @@ public class MySmartProgressView extends View {
      * 初始化控件的各类宽高，边框，半径等大小
      */
     private void initView() {
+        Log.e("test", "------------------" + width + "-------" + width + "***" + getWidth());
         mPointerColor = progressColor1;
         int middleRadialGradientColor = Color.parseColor("#1A001BFF");
         //透明颜色
@@ -216,8 +217,6 @@ public class MySmartProgressView extends View {
         backShaderColorArr = new int[]{transparentColor, transparentColor, middleRadialGradientColor};
         mRadialGradientColors[0] = transparentColor;
         mRadialGradientColors[1] = transparentColor;
-        width = Utils.dip2px(320, getContext());
-        height = Utils.dip2px(320, getContext());
         mCenterX = width / 2;
         mCenterY = height / 2;
         // 粒子圆环的宽度
@@ -590,5 +589,16 @@ public class MySmartProgressView extends View {
             mParameter.setBgCircleColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, bgCircleColor3, bgCircleColor4));
         }
         return mParameter;
+    }
+
+    /**
+     * 初始化设置控件宽高
+     *
+     * @param width
+     * @param height
+     */
+    public void setDimension(int width, int height) {
+        this.width = width;
+        this.height = height;
     }
 }

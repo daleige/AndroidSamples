@@ -3,6 +3,7 @@ package com.cyq.progressview.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -14,7 +15,6 @@ import com.cyq.progressview.R;
 import com.cyq.progressview.utils.Utils;
 import com.yuyashuai.frameanimation.FrameAnimation;
 import com.yuyashuai.frameanimation.FrameAnimationView;
-
 
 /**
  * @author : ChenYangQi
@@ -34,6 +34,7 @@ public class ProgressLayout extends FrameLayout {
     private boolean isKeepWare = false;
     private LayoutParams frameAnimationViewLp;
     private LayoutParams animNumberViewLp;
+    private LayoutParams mySmartProgressViewLp;
 
     public ProgressLayout(@NonNull Context context) {
         this(context, null);
@@ -61,12 +62,15 @@ public class ProgressLayout extends FrameLayout {
 
     private void init() {
         mInitAnimView = new FrameAnimationView(getContext());
-        frameAnimationViewLp = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        frameAnimationViewLp = new LayoutParams(width, height);
         frameAnimationViewLp.gravity = Gravity.CENTER;
         mInitAnimView.setLayoutParams(frameAnimationViewLp);
-
-        mMySmartProgressView = new MySmartProgressView(getContext(), width, height);
-        mMySmartProgressView.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        Log.e("test", "*************" + width + "******" + height);
+        mMySmartProgressView = new MySmartProgressView(getContext(),width,height);
+        mMySmartProgressView.setDimension(width, height);
+        mySmartProgressViewLp = new LayoutParams(width, height);
+        mySmartProgressViewLp.gravity = Gravity.CENTER;
+        mMySmartProgressView.setLayoutParams(mySmartProgressViewLp);
 
         mAnimNumberView = new AnimNumberView(getContext());
         animNumberViewLp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
