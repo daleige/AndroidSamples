@@ -21,7 +21,13 @@
     </declare-styleable>
 
     <declare-styleable name="ProgressLayout">
+        <!--        控件宽-->
         <attr name="progressLayout_width" format="dimension" />
+        <!--        控件高-->
         <attr name="progressLayout_height" format="dimension" />
+        <!--        外阴影宽度-->
+        <attr name="progressLayout_outer_shader_width" format="dimension" />
+        <!--        圆环宽度-->
+        <attr name="progressLayout_circle_stroke_width" format="dimension" />
     </declare-styleable>
 </resources>

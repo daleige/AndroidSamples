@@ -58,7 +58,12 @@ public class MySmartProgressView extends View {
     /**
      * 粒子外层圆环原点坐标和半径长度
      */
-    private int mCenterX, mCenterY, mRadius;
+    private int mCenterX, mCenterY;
+
+    /**
+     * 主圆环内径到外径的中点到圆心的半径
+     */
+    private int mRadius;
     /**
      * 粒子外层圆环的画笔
      */
@@ -126,7 +131,12 @@ public class MySmartProgressView extends View {
     /**
      * 外层粒子圆环的边框大小
      */
-    private final int mOutCircleStrokeWidth = 25;
+    private int mOutCircleStrokeWidth;
+
+    /**
+     * 外阴影的宽度
+     */
+    private int outerShaderWidth;
     /**
      * 底色环的边框大小
      */
@@ -175,22 +185,32 @@ public class MySmartProgressView extends View {
      */
     private ValueAnimator progressAnim;
 
-    public MySmartProgressView(Context context, int parentWidth, int parentHeight) {
-        this(context, parentWidth);
+    /**
+     * 构造方法
+     *
+     * @param context
+     * @param parentWidth       控件宽度
+     * @param outerShaderWidth  外阴影的宽度
+     * @param circleStrokeWidth 住圆框的宽度
+     */
+    public MySmartProgressView(Context context, int parentWidth, int parentHeight, int outerShaderWidth, int circleStrokeWidth) {
+        this(context, parentWidth, outerShaderWidth, circleStrokeWidth);
     }
 
 
-    public MySmartProgressView(Context context, int parentWidth) {
-        this(context, null, parentWidth);
+    public MySmartProgressView(Context context, int parentWidth, int outerShaderWidth, int circleStrokeWidth) {
+        this(context, null, parentWidth, outerShaderWidth, circleStrokeWidth);
     }
 
-    public MySmartProgressView(Context context, @Nullable AttributeSet attrs, int parentWidth) {
-        this(context, attrs, 0, parentWidth);
+    public MySmartProgressView(Context context, @Nullable AttributeSet attrs, int parentWidth, int outerShaderWidth, int circleStrokeWidth) {
+        this(context, attrs, 0, parentWidth, outerShaderWidth, circleStrokeWidth);
     }
 
-    public MySmartProgressView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int parentWidth) {
+    public MySmartProgressView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int parentWidth, int outerShaderWidth, int circleStrokeWidth) {
         super(context, attrs, defStyleAttr);
         this.height = this.width = parentWidth;
+        this.mOutCircleStrokeWidth = circleStrokeWidth;
+        this.outerShaderWidth = outerShaderWidth;
         init();
     }
 
@@ -209,10 +229,8 @@ public class MySmartProgressView extends View {
      * 初始化控件的各类宽高，边框，半径等大小
      */
     private void initView() {
-        Log.e("test", "------------------" + width + "-------" + width + "***" + getWidth());
         mPointerColor = progressColor1;
         int middleRadialGradientColor = Color.parseColor("#1A001BFF");
-        //透明颜色
         int transparentColor = Color.parseColor("#00000000");
         backShaderColorArr = new int[]{transparentColor, transparentColor, middleRadialGradientColor};
         mRadialGradientColors[0] = transparentColor;
@@ -220,8 +238,7 @@ public class MySmartProgressView extends View {
         mCenterX = width / 2;
         mCenterY = height / 2;
         // 粒子圆环的宽度
-        //TODO 这个20是外框距离圆环边框中点的距离，具体大小需要等UI设计图再确认
-        mRadius = Utils.dip2px(300, getContext()) / 2 - 20;
+        mRadius = mCenterX - outerShaderWidth - mOutCircleStrokeWidth / 2;
         mRect = new RectF(-mCenterY, -mCenterX, mCenterY, mCenterX);
     }
 
@@ -234,7 +251,7 @@ public class MySmartProgressView extends View {
         mOutCirclePaint.setStyle(Paint.Style.STROKE);
         mOutCirclePaint.setAntiAlias(true);
         mOutCirclePaint.setStrokeWidth(mOutCircleStrokeWidth);
-        mOutCirclePaint.setMaskFilter(new BlurMaskFilter(50, BlurMaskFilter.Blur.SOLID));
+        //mOutCirclePaint.setMaskFilter(new BlurMaskFilter(50, BlurMaskFilter.Blur.SOLID));
 
         //step2：初始化运动粒子的画笔
         mPointPaint = new Paint();

@@ -2,8 +2,8 @@ package com.cyq.progressview.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -28,6 +28,8 @@ public class ProgressLayout extends FrameLayout {
     private FrameAnimationView mInitAnimView;
     private int height;
     private int width;
+    private int outerShaderWidth;
+    private int circleStrokeWidth;
     /**
      * 用于标记是预热还是保温模式
      */
@@ -49,6 +51,8 @@ public class ProgressLayout extends FrameLayout {
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.ProgressLayout);
         width = array.getDimensionPixelSize(R.styleable.ProgressLayout_progressLayout_width, Utils.dip2px(318, getContext()));
         height = array.getDimensionPixelOffset(R.styleable.ProgressLayout_progressLayout_height, Utils.dip2px(318, getContext()));
+        outerShaderWidth = array.getDimensionPixelOffset(R.styleable.ProgressLayout_progressLayout_outer_shader_width, Utils.dip2px(10, getContext()));
+        circleStrokeWidth = array.getDimensionPixelOffset(R.styleable.ProgressLayout_progressLayout_circle_stroke_width, Utils.dip2px(13, getContext()));
         array.recycle();
         setMeasuredDimension(width, height);
         init();
@@ -61,12 +65,12 @@ public class ProgressLayout extends FrameLayout {
     }
 
     private void init() {
+        //setBackgroundColor(Color.GRAY);
         mInitAnimView = new FrameAnimationView(getContext());
         frameAnimationViewLp = new LayoutParams(width, height);
         frameAnimationViewLp.gravity = Gravity.CENTER;
         mInitAnimView.setLayoutParams(frameAnimationViewLp);
-        Log.e("test", "*************" + width + "******" + height);
-        mMySmartProgressView = new MySmartProgressView(getContext(),width,height);
+        mMySmartProgressView = new MySmartProgressView(getContext(), width, height, outerShaderWidth, circleStrokeWidth);
         mMySmartProgressView.setDimension(width, height);
         mySmartProgressViewLp = new LayoutParams(width, height);
         mySmartProgressViewLp.gravity = Gravity.CENTER;
