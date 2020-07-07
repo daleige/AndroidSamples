@@ -1,4 +1,4 @@
-package com.cyq.progressview.evaluator;
+package com.cyq.progressview.widget;
 
 /**
  * @author : ChenYangQi

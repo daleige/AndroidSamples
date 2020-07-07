@@ -20,7 +20,6 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 
@@ -29,8 +28,6 @@ import androidx.annotation.RequiresApi;
 import androidx.vectordrawable.graphics.drawable.ArgbEvaluator;
 
 import com.cyq.progressview.R;
-import com.cyq.progressview.evaluator.ProgressParameter;
-import com.cyq.progressview.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -137,10 +134,6 @@ public class MySmartProgressView extends View {
      * 外阴影的宽度
      */
     private int outerShaderWidth;
-    /**
-     * 底色环的边框大小
-     */
-    private final int mBackCircleStrokeWidth = 12;
     private float mCurrentAngle;
     /**
      * 是否是保温
@@ -266,7 +259,7 @@ public class MySmartProgressView extends View {
         mRadialGradient = new RadialGradient(
                 0,
                 0,
-                mRadius + mOutCircleStrokeWidth / 2F,
+                mRadius - mOutCircleStrokeWidth / 2F,
                 mRadialGradientColors,
                 mRadialGradientStops,
                 Shader.TileMode.CLAMP);
@@ -275,8 +268,7 @@ public class MySmartProgressView extends View {
         //初始化底色圆画笔
         mBackCirclePaint = new Paint();
         mBackCirclePaint.setAntiAlias(true);
-        mBackCirclePaint.setStrokeWidth(mBackCircleStrokeWidth);
-        mBackCirclePaint.setAntiAlias(true);
+        mBackCirclePaint.setStrokeWidth(mOutCircleStrokeWidth);
         mBackCirclePaint.setStyle(Paint.Style.STROKE);
 
         //初始化底色圆得initAnimator画笔
@@ -285,6 +277,8 @@ public class MySmartProgressView extends View {
 
         //指针画笔颜色
         mBmpPaint = new Paint();
+
+
     }
 
     /**
@@ -465,7 +459,7 @@ public class MySmartProgressView extends View {
             mRadialGradient = new RadialGradient(
                     0,
                     0,
-                    mRadius + mOutCircleStrokeWidth / 2F,
+                    mRadius - mOutCircleStrokeWidth / 2F,
                     mRadialGradientColors,
                     mRadialGradientStops,
                     Shader.TileMode.CLAMP);
