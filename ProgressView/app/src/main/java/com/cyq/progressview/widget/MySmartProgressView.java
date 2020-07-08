@@ -292,13 +292,14 @@ public class MySmartProgressView extends View {
      * 初始化指针图片的Bitmap
      */
     private void initBitmap() {
-//        float f = 93F / 656F;
-//        float mBitmapDSTWidth=
+        float f = 130F / 656F;
         mBitmapDST = BitmapFactory.decodeResource(getResources(), R.drawable.indicator);
+        float mBitmapDSTHeight = width * f;
+        float mBitmapDSTWidth = mBitmapDSTHeight * mBitmapDST.getWidth() / mBitmapDST.getHeight();
         //初始化指针的图层混合模式
         mXfermode = new PorterDuffXfermode(PorterDuff.Mode.MULTIPLY);
-        mPointerRectF = new RectF(0, 0, 20, 150);
-        mBitmapSRT = Bitmap.createBitmap(20, 150, Bitmap.Config.ARGB_8888);
+        mPointerRectF = new RectF(0, 0, mBitmapDSTWidth, mBitmapDSTHeight);
+        mBitmapSRT = Bitmap.createBitmap((int) mBitmapDSTWidth, (int) mBitmapDSTHeight, Bitmap.Config.ARGB_8888);
         mBitmapSRT.eraseColor(mPointerColor);
     }
 
@@ -403,7 +404,7 @@ public class MySmartProgressView extends View {
             if (mPointerVisible == VISIBLE) {
                 canvas.translate(mCenterX, mCenterY);
                 canvas.rotate(mCurrentAngle / 10F);
-                canvas.translate(-mPointerRectF.width() / 2, -mCenterY + 10);
+                canvas.translate(-mPointerRectF.width() / 2, -mCenterY);
                 mPointerLayoutId = canvas.saveLayer(mPointerRectF, mBmpPaint);
                 mBitmapSRT.eraseColor(mPointerColor);
                 canvas.drawBitmap(mBitmapDST, null, mPointerRectF, mBmpPaint);
