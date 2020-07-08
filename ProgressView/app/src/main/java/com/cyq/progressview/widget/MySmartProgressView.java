@@ -1,7 +1,6 @@
 package com.cyq.progressview.widget;
 
 import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -22,7 +21,6 @@ import android.graphics.SweepGradient;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 
 import androidx.annotation.Nullable;
@@ -40,9 +38,7 @@ import java.util.Random;
  * date   : 2020/5/6 14:24
  * desc   : 温度进度控件
  */
-@SuppressLint("RestrictedApi")
 public class MySmartProgressView extends View {
-    private Context mContext;
     /**
      * 控件宽高
      */
@@ -90,7 +86,6 @@ public class MySmartProgressView extends View {
      */
     private int[] mRadialGradientColors = new int[6];
     private float[] mRadialGradientStops = {0F, 0.62F, 0.86F, 0.94F, 0.98F, 1F};
-    private LinearGradient mBackCircleLinearGradient;
     private Paint mSweptPaint;
     private RadialGradient mRadialGradient;
     private Random mRandom = new Random();
@@ -242,7 +237,6 @@ public class MySmartProgressView extends View {
                                int outerShaderWidth,
                                int circleStrokeWidth) {
         super(context, attrs, defStyleAttr);
-        this.mContext = getContext();
         this.height = this.width = parentWidth;
         this.mOutCircleStrokeWidth = circleStrokeWidth;
         this.outerShaderWidth = outerShaderWidth;
@@ -617,6 +611,7 @@ public class MySmartProgressView extends View {
      * @param progressValue 0~3600之间的圆环进度值
      * @return
      */
+    @SuppressLint("RestrictedApi")
     private ProgressParameter getProgressParameter(float progressValue) {
         float fraction = 0F;
         if (progressValue >= 360 && progressValue < 1800) {
