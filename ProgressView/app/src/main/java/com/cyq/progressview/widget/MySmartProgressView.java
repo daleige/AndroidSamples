@@ -292,6 +292,8 @@ public class MySmartProgressView extends View {
      * 初始化指针图片的Bitmap
      */
     private void initBitmap() {
+//        float f = 93F / 656F;
+//        float mBitmapDSTWidth=
         mBitmapDST = BitmapFactory.decodeResource(getResources(), R.drawable.indicator);
         //初始化指针的图层混合模式
         mXfermode = new PorterDuffXfermode(PorterDuff.Mode.MULTIPLY);
@@ -313,7 +315,7 @@ public class MySmartProgressView extends View {
         for (int i = 0; i < pointCount; i++) {
             //通过clone创建对象，避免重复创建
             AnimPoint cloneAnimPoint = animPoint.clone();
-            cloneAnimPoint.init(mRandom, mRadius - mOutCircleStrokeWidth / 2);
+            cloneAnimPoint.init(mRandom, mRadius - mOutCircleStrokeWidth / 2F);
             mPointList.add(cloneAnimPoint);
         }
         //画运动粒子
@@ -509,12 +511,12 @@ public class MySmartProgressView extends View {
     public void startKeepWare() {
         isKeepWare = true;
         //变更进度条的颜色值
-        mPointPaint.setColor(pointColor4);
-        mOutCirclePaint.setColor(progressColor4);
-        mBackCirclePaint.setColor(bgCircleColor4);
+        mPointPaint.setColor(pointColor5);
+        mOutCirclePaint.setColor(progressColor5);
+        mBackCirclePaint.setColor(bgCircleColor5);
         //设置内圈变色圆的shader
-        mRadialGradientColors[2] = insideColor4;
-        mRadialGradientColors[3] = outsizeColor4;
+        mRadialGradientColors[2] = insideColor5;
+        mRadialGradientColors[3] = outsizeColor5;
         mRadialGradient = new RadialGradient(
                 0,
                 0,
@@ -584,7 +586,7 @@ public class MySmartProgressView extends View {
      * @return
      */
     private ProgressParameter getProgressParameter(float progressValue) {
-        float fraction=0F;
+        float fraction = 0F;
         if (progressValue >= 360 && progressValue < 1800) {
             fraction = progressValue % 360 / 360;
         }
