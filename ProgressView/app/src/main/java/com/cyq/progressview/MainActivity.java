@@ -151,14 +151,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //按钮下移
             mBtnContainer.animate()
                     .translationY(700F)
-                    .setDuration(200)
+                    .setDuration(150)
                     .withLayer()
                     .start();
 
             mBtnContainer.setVisibility(View.VISIBLE);
             mProgress.animate()
                     .translationY(0)
-                    .setDuration(200)
+                    .setDuration(150)
                     .scaleX(1f)
                     .scaleY(1f)
                     .withLayer()
@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //按钮上移
             mBtnContainer.animate()
                     .translationY(0F)
-                    .setDuration(200)
+                    .setDuration(150)
                     .withLayer()
                     .start();
 
@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .translationY(-300F)
                     .scaleX(0.9f)
                     .scaleY(0.9f)
-                    .setDuration(200)
+                    .setDuration(150)
                     .withLayer()
                     .start();
         }

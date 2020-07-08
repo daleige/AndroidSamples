@@ -85,8 +85,8 @@ public class MySmartProgressView extends View {
     /**
      * 内环到外环的颜色变化数字
      */
-    private int[] mRadialGradientColors = new int[8];
-    private float[] mRadialGradientStops = {0F, 0.62F, 0.86F, 0.861F, 0.939F, 0.939F, 0.98F, 1F};
+    private int[] mRadialGradientColors = new int[6];
+    private float[] mRadialGradientStops = {0F, 0.62F, 0.86F, 0.94F, 0.98F, 1F};
     private LinearGradient mBackCircleLinearGradient;
     private Paint mSweptPaint;
     private RadialGradient mRadialGradient;
@@ -228,10 +228,8 @@ public class MySmartProgressView extends View {
         backShaderColorArr = new int[]{transparentColor, transparentColor, middleRadialGradientColor};
         mRadialGradientColors[0] = transparentColor;
         mRadialGradientColors[1] = transparentColor;
-        mRadialGradientColors[3] = transparentColor;
         mRadialGradientColors[4] = transparentColor;
-        mRadialGradientColors[6] = transparentColor;
-        mRadialGradientColors[7] = transparentColor;
+        mRadialGradientColors[5] = transparentColor;
         mCenterX = width / 2;
         mCenterY = height / 2;
         // 粒子圆环的宽度
@@ -310,7 +308,7 @@ public class MySmartProgressView extends View {
         for (int i = 0; i < pointCount; i++) {
             //通过clone创建对象，避免重复创建
             AnimPoint cloneAnimPoint = animPoint.clone();
-            cloneAnimPoint.init(mRandom, mRadius);
+            cloneAnimPoint.init(mRandom, mRadius - mOutCircleStrokeWidth / 2);
             mPointList.add(cloneAnimPoint);
         }
         //画运动粒子
@@ -368,33 +366,32 @@ public class MySmartProgressView extends View {
     @Override
     protected void onDraw(final Canvas canvas) {
         super.onDraw(canvas);
-        //step:画底色圆
-        canvas.save();
-        canvas.translate(mCenterX, mCenterY);
-        canvas.drawCircle(0, 0, mRadius, mBackCirclePaint);
-        canvas.drawRect(mRect, mBackShadePaint);
-        canvas.restore();
-
-        //step2:画扇形区域的运动粒子
+        //step 1:画扇形区域的运动粒子
         canvas.save();
         canvas.translate(mCenterX, mCenterY);
         //把画布裁剪成扇形
         if (!isKeepWare) {
             canvas.clipPath(mArcPath);
         }
-
         //画运动粒子
         for (AnimPoint animPoint : mPointList) {
             canvas.drawCircle(animPoint.getmX(), animPoint.getmY(),
                     animPoint.getRadius(), mPointPaint);
         }
-        //画进度圆环
-        canvas.drawCircle(0, 0, mRadius, mOutCirclePaint);
         //画变色圆饼
         canvas.drawCircle(0, 0, mCenterX, mSweptPaint);
+        //画进度圆环
+        canvas.drawCircle(0, 0, mRadius, mOutCirclePaint);
         canvas.restore();
 
-        //画指针
+        //step 2:画底色圆
+        canvas.save();
+        canvas.translate(mCenterX, mCenterY);
+        canvas.drawCircle(0, 0, mRadius, mBackCirclePaint);
+        canvas.drawRect(mRect, mBackShadePaint);
+        canvas.restore();
+
+        //step 3: 画指针
         if (!isKeepWare) {
             if (mPointerVisible == VISIBLE) {
                 canvas.translate(mCenterX, mCenterY);
@@ -460,7 +457,7 @@ public class MySmartProgressView extends View {
             mPointerColor = colors.getPointColor();
             //设置内圈变色圆的shader
             mRadialGradientColors[2] = colors.getInsideColor();
-            mRadialGradientColors[5] = colors.getOutsizeColor();
+            mRadialGradientColors[3] = colors.getOutsizeColor();
             mRadialGradient = new RadialGradient(
                     0,
                     0,
