@@ -509,10 +509,11 @@ public class MySmartProgressView extends View {
         mBackCirclePaint.setColor(bgCircleColor4);
         //设置内圈变色圆的shader
         mRadialGradientColors[2] = insideColor4;
+        mRadialGradientColors[3] = outsizeColor4;
         mRadialGradient = new RadialGradient(
                 0,
                 0,
-                mRadius - mOutCircleStrokeWidth / 2F,
+                mCenterX,
                 mRadialGradientColors,
                 mRadialGradientStops,
                 Shader.TileMode.CLAMP);
