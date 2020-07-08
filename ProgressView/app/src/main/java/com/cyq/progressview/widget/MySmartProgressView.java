@@ -193,6 +193,7 @@ public class MySmartProgressView extends View {
      */
     private float mOutCircleAnger;
     private ValueAnimator mPointsAnimator;
+    private boolean isCleanMode = false;
 
     /**
      * 构造方法
@@ -305,8 +306,8 @@ public class MySmartProgressView extends View {
         //step2：初始化运动粒子的画笔
         mPointPaint = new Paint();
         //mPointPaint.setStyle(Paint.Style.FILL);
-        //设备端羽化效果CPU不支持，暂不设置
-        //mPointPaint.setMaskFilter(new BlurMaskFilter(4, BlurMaskFilter.Blur.NORMAL));
+        //TODO 设备端羽化效果CPU不支持，暂不设置
+        mPointPaint.setMaskFilter(new BlurMaskFilter(4, BlurMaskFilter.Blur.NORMAL));
 
         //初始化底色圆画笔
         mBackCirclePaint = new Paint();

@@ -36,7 +36,7 @@ public class AnimPoint implements Cloneable {
     /**
      * 透明度 0~255
      */
-    private int alpha = 125;
+    private int alpha = 153;
 
     /**
      * 随机偏移角度
@@ -57,7 +57,7 @@ public class AnimPoint implements Cloneable {
         mY = (float) (viewRadius * Math.sin(anger));
         //随机偏移角度-30°~30°
         randomAnger = Math.toRadians(30 - random.nextInt(60));
-        alpha = 125 + random.nextInt(130);
+        alpha = 153 + random.nextInt(102);
     }
 
     /**
