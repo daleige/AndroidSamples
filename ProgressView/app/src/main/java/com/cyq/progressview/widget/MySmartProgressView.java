@@ -69,6 +69,10 @@ public class MySmartProgressView extends View {
      */
     private Paint mOutCirclePaint;
     /**
+     * 底色圆画笔
+     */
+    private Paint mBackShadePaint;
+    /**
      * 粒子画笔
      */
     private Paint mPointPaint;
@@ -76,15 +80,6 @@ public class MySmartProgressView extends View {
      * 底色圆环画笔
      */
     private Paint mBackCirclePaint;
-    /**
-     * 开始时底色圆环渐变的画笔
-     */
-    private Paint mBackShadePaint;
-    /**
-     * 底色圆环初始化动画渐变色
-     */
-    private int[] backShaderColorArr;
-    private float[] backPositionArr = {0, 0, 1};
     /**
      * 保温圆环的线性渐变色
      */
@@ -206,7 +201,6 @@ public class MySmartProgressView extends View {
      * 保温模式下圆环当前的角度
      */
     private float mOutCircleAnger;
-    private AnimPoint mAnimPoint;
     private ValueAnimator mPointsAnimator;
 
     /**
@@ -271,12 +265,7 @@ public class MySmartProgressView extends View {
      */
     private void initView() {
         mPointerColor = progressColor1;
-        int middleRadialGradientColor = Color.parseColor("#1A001BFF");
         int transparentColor = Color.parseColor("#00000000");
-        backShaderColorArr = new int[]{
-                transparentColor,
-                transparentColor,
-                middleRadialGradientColor};
         mRadialGradientColors[0] = transparentColor;
         mRadialGradientColors[1] = transparentColor;
         mRadialGradientColors[4] = transparentColor;
@@ -339,6 +328,7 @@ public class MySmartProgressView extends View {
         //初始化底色圆得initAnimator画笔
         mBackShadePaint = new Paint();
         mBackShadePaint.setAntiAlias(true);
+        mBackShadePaint.setColor(bgCircleColor1);
 
         //指针画笔颜色
         mBmpPaint = new Paint();
@@ -368,7 +358,7 @@ public class MySmartProgressView extends View {
 
         //绘制运动的粒子
         mPointList.clear();
-        mAnimPoint = new AnimPoint();
+        AnimPoint mAnimPoint = new AnimPoint();
         for (int i = 0; i < pointCount; i++) {
             //通过clone创建对象，避免重复创建
             AnimPoint cloneAnimPoint = mAnimPoint.clone();
@@ -397,44 +387,6 @@ public class MySmartProgressView extends View {
         mOutCircleAnim.addUpdateListener(animation -> {
             mOutCircleAnger = (float) animation.getAnimatedValue();
         });
-
-        //TODO 初始化动画 还需要和设计确认具体效果
-        final ValueAnimator initAnimator = ValueAnimator.ofFloat(0, 1F);
-        initAnimator.setDuration(1000);
-        initAnimator.setInterpolator(new AccelerateInterpolator());
-        initAnimator.addUpdateListener(animation -> {
-            float value = (float) animation.getAnimatedValue();
-            backPositionArr[1] = value;
-            mBackCircleLinearGradient = new LinearGradient(
-                    0,
-                    -mCenterX,
-                    0,
-                    mCenterY,
-                    backShaderColorArr,
-                    backPositionArr,
-                    Shader.TileMode.CLAMP);
-            mBackShadePaint.setShader(mBackCircleLinearGradient);
-            invalidate();
-        });
-        initAnimator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                super.onAnimationStart(animation);
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                //TODO 初始化动画运行完成
-            }
-        });
-        postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                initAnimator.start();
-            }
-        }, 1000);
     }
 
     @Override
@@ -456,7 +408,7 @@ public class MySmartProgressView extends View {
         canvas.drawCircle(0, 0, mCenterX, mSweptPaint);
         //step 2:画底色圆
         canvas.drawCircle(0, 0, mRadius, mBackCirclePaint);
-        canvas.drawRect(mRect, mBackShadePaint);
+//        canvas.drawRect(mRect, mBackShadePaint);
         canvas.restore();
 
         //画进度圆环
