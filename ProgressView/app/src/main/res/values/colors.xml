@@ -60,6 +60,6 @@
     <color name="progress_outsize_color_clear">#A600B66B</color>
     <color name="progress_progress_color_clear">#FF21EB8E</color>
 
-    <color name="progress_linearGradient_color1">#FF6C00</color>
+    <color name="progress_linearGradient_color1">#FFFF5500</color>
     <color name="progress_linearGradient_color2">#FFAE22</color>
 </resources>
