@@ -374,7 +374,7 @@ public class MySmartProgressView extends View {
     @Override
     protected void onDraw(final Canvas canvas) {
         super.onDraw(canvas);
-        //step 1:画扇形区域的运动粒子
+        //画扇形区域的运动粒子
         canvas.save();
         canvas.translate(mCenterX, mCenterY);
         //把画布裁剪成扇形
@@ -390,16 +390,12 @@ public class MySmartProgressView extends View {
         canvas.drawCircle(0, 0, mCenterX, mSweptPaint);
         //画进度圆环
         canvas.drawCircle(0, 0, mRadius, mOutCirclePaint);
-        canvas.restore();
-
         //step 2:画底色圆
-        canvas.save();
-        canvas.translate(mCenterX, mCenterY);
         canvas.drawCircle(0, 0, mRadius, mBackCirclePaint);
         canvas.drawRect(mRect, mBackShadePaint);
         canvas.restore();
 
-        //step 3: 画指针
+        //画指针
         if (!isKeepWare) {
             if (mPointerVisible == VISIBLE) {
                 canvas.translate(mCenterX, mCenterY);
