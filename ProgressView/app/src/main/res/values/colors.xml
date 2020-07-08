@@ -22,4 +22,41 @@
     <color name="setting_bt_trigger_color">#85BFFF</color>
     <!-- 标准白 -->
     <color name="standard_white_color">#ffffff</color>
+
+    <!-- Alpha 10%=1A  Alpha 65%=A6 Alpha 100%=FF -->
+    <color name="progress_bg_circle_color1">#1AD8D8D8</color>
+    <color name="progress_inside_color1">#FF001BFF</color>
+    <color name="progress_point_color1">#FF1978FF</color>
+    <color name="progress_outsize_color1">#A60067FF</color>
+    <color name="progress_progress_color1">#FF00D3FF</color>
+
+    <color name="progress_bg_circle_color2">#1AD8D8D8</color>
+    <color name="progress_inside_color2">#FFADDF00</color>
+    <color name="progress_point_color2">#FFF8FF01</color>
+    <color name="progress_outsize_color2">#A6D4FF00</color>
+    <color name="progress_progress_color2">#FFF8FF01</color>
+
+    <color name="progress_bg_circle_color3">#1AD8D8D8</color>
+    <color name="progress_inside_color3">#FFFFB600</color>
+    <color name="progress_point_color3">#FFFFDB00</color>
+    <color name="progress_outsize_color3">#A6FFB600</color>
+    <color name="progress_progress_color3">#FFFFDB00</color>
+
+    <color name="progress_bg_circle_color4">#1AD8D8D8</color>
+    <color name="progress_inside_color4">#FFFF8700</color>
+    <color name="progress_point_color4">#FFFF9700</color>
+    <color name="progress_outsize_color4">#A6FF7700</color>
+    <color name="progress_progress_color4">#FFFFA300</color>
+
+    <color name="progress_bg_circle_color5">#1AD8D8D8</color>
+    <color name="progress_inside_color5">#FFFF2200</color>
+    <color name="progress_point_color5">#FFFF5500</color>
+    <color name="progress_outsize_color5">#A6FF1600</color>
+    <color name="progress_progress_color5">#FFFF8000</color>
+
+    <color name="progress_bg_circle_color_clear">#1AD8D8D8</color>
+    <color name="progress_inside_color_clear">#FF00B66B</color>
+    <color name="progress_point_color_clear">#FF21EB8E</color>
+    <color name="progress_outsize_color_clear">#A600B66B</color>
+    <color name="progress_progress_color_clear">#FF21EB8E</color>
 </resources>

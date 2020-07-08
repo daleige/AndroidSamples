@@ -40,6 +40,7 @@ import java.util.Random;
  */
 @SuppressLint("RestrictedApi")
 public class MySmartProgressView extends View {
+    private Context mContext;
     /**
      * 控件宽高
      */
@@ -142,26 +143,31 @@ public class MySmartProgressView extends View {
     /**
      * 温度环的颜色属性
      */
-    private int insideColor1 = Color.parseColor("#FF001BFF");
-    private int outsizeColor1 = Color.parseColor("#A60067FF");
-    private int progressColor1 = Color.parseColor("#FF0066FF");
-    private int pointColor1 = Color.parseColor("#FF1978FF");
-    private int bgCircleColor1 = Color.parseColor("#290066FF");
-    private int insideColor2 = Color.parseColor("#FFFFB600");
-    private int outsizeColor2 = Color.parseColor("#A6FFB600");
-    private int progressColor2 = Color.parseColor("#FFFFDB00");
-    private int pointColor2 = Color.parseColor("#FFFFBD00");
-    private int bgCircleColor2 = Color.parseColor("#1AFFDB00");
-    private int insideColor3 = Color.parseColor("#FFFF8700");
-    private int outsizeColor3 = Color.parseColor("#A6FF7700");
-    private int progressColor3 = Color.parseColor("#FFFFA300");
-    private int pointColor3 = Color.parseColor("#FFFF9700");
-    private int bgCircleColor3 = Color.parseColor("#1AFFA300");
-    private int insideColor4 = Color.parseColor("#FFFF2200");
-    private int outsizeColor4 = Color.parseColor("#A6FF1600");
-    private int progressColor4 = Color.parseColor("#FFFF8000");
-    private int pointColor4 = Color.parseColor("#FFFF5500");
-    private int bgCircleColor4 = Color.parseColor("#1AFF5500");
+    private int insideColor1 = getContext().getColor(R.color.progress_inside_color1);
+    private int outsizeColor1 = getContext().getColor(R.color.progress_outsize_color1);
+    private int progressColor1 = getContext().getColor(R.color.progress_progress_color1);
+    private int pointColor1 = getContext().getColor(R.color.progress_point_color1);
+    private int bgCircleColor1 = getContext().getColor(R.color.progress_bg_circle_color1);
+    private int insideColor2 = getContext().getColor(R.color.progress_inside_color2);
+    private int outsizeColor2 = getContext().getColor(R.color.progress_outsize_color2);
+    private int progressColor2 = getContext().getColor(R.color.progress_progress_color2);
+    private int pointColor2 = getContext().getColor(R.color.progress_point_color2);
+    private int bgCircleColor2 = getContext().getColor(R.color.progress_bg_circle_color2);
+    private int insideColor3 = getContext().getColor(R.color.progress_inside_color3);
+    private int outsizeColor3 = getContext().getColor(R.color.progress_outsize_color3);
+    private int progressColor3 = getContext().getColor(R.color.progress_progress_color3);
+    private int pointColor3 = getContext().getColor(R.color.progress_point_color3);
+    private int bgCircleColor3 = getContext().getColor(R.color.progress_bg_circle_color3);
+    private int insideColor4 = getContext().getColor(R.color.progress_inside_color4);
+    private int outsizeColor4 = getContext().getColor(R.color.progress_outsize_color4);
+    private int progressColor4 = getContext().getColor(R.color.progress_progress_color4);
+    private int pointColor4 = getContext().getColor(R.color.progress_point_color4);
+    private int bgCircleColor4 = getContext().getColor(R.color.progress_bg_circle_color4);
+    private int insideColor5 = getContext().getColor(R.color.progress_inside_color5);
+    private int outsizeColor5 = getContext().getColor(R.color.progress_outsize_color5);
+    private int progressColor5 = getContext().getColor(R.color.progress_progress_color5);
+    private int pointColor5 = getContext().getColor(R.color.progress_point_color5);
+    private int bgCircleColor5 = getContext().getColor(R.color.progress_bg_circle_color5);
     private ProgressParameter mParameter = new ProgressParameter();
     /**
      * 上一次圆环的进度，按0~3600计数
@@ -201,6 +207,7 @@ public class MySmartProgressView extends View {
 
     public MySmartProgressView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int parentWidth, int outerShaderWidth, int circleStrokeWidth) {
         super(context, attrs, defStyleAttr);
+        this.mContext = getContext();
         this.height = this.width = parentWidth;
         this.mOutCircleStrokeWidth = circleStrokeWidth;
         this.outerShaderWidth = outerShaderWidth;
@@ -279,8 +286,6 @@ public class MySmartProgressView extends View {
 
         //指针画笔颜色
         mBmpPaint = new Paint();
-
-
     }
 
     /**
@@ -579,28 +584,53 @@ public class MySmartProgressView extends View {
      * @return
      */
     private ProgressParameter getProgressParameter(float progressValue) {
-        float fraction = progressValue % 1200 / 1200;
-        if (progressValue < 1200) {
+        float fraction=0F;
+        if (progressValue >= 360 && progressValue < 1800) {
+            fraction = progressValue % 360 / 360;
+        }
+
+        if (progressValue < 360) {
             //第一个颜色段
+            mParameter.setInsideColor(insideColor1);
+            mParameter.setOutsizeColor(outsizeColor1);
+            mParameter.setProgressColor(progressColor1);
+            mParameter.setPointColor(pointColor1);
+            mParameter.setBgCircleColor(bgCircleColor1);
+        } else if (progressValue < 720) {
+            //第二个颜色段
             mParameter.setInsideColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, insideColor1, insideColor2));
             mParameter.setOutsizeColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, outsizeColor1, outsizeColor2));
             mParameter.setProgressColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, progressColor1, progressColor2));
             mParameter.setPointColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, pointColor1, pointColor2));
             mParameter.setBgCircleColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, bgCircleColor1, bgCircleColor2));
-        } else if (progressValue < 2400) {
-            //第二个颜色段
+        } else if (progressValue < 1080) {
+            //第三个颜色段
             mParameter.setInsideColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, insideColor2, insideColor3));
             mParameter.setOutsizeColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, outsizeColor2, outsizeColor3));
             mParameter.setProgressColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, progressColor2, progressColor3));
             mParameter.setPointColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, pointColor2, pointColor3));
             mParameter.setBgCircleColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, bgCircleColor2, bgCircleColor3));
-        } else if (progressValue < 3600) {
-            //第三个颜色段
+        } else if (progressValue < 1440) {
+            //第四个颜色段
             mParameter.setInsideColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, insideColor3, insideColor4));
             mParameter.setOutsizeColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, outsizeColor3, outsizeColor4));
             mParameter.setProgressColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, progressColor3, progressColor4));
             mParameter.setPointColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, pointColor3, pointColor4));
             mParameter.setBgCircleColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, bgCircleColor3, bgCircleColor4));
+
+        } else if (progressValue < 1800) {
+            //第五个颜色段
+            mParameter.setInsideColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, insideColor4, insideColor5));
+            mParameter.setOutsizeColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, outsizeColor4, outsizeColor5));
+            mParameter.setProgressColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, progressColor4, progressColor5));
+            mParameter.setPointColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, pointColor4, pointColor5));
+            mParameter.setBgCircleColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, bgCircleColor4, bgCircleColor5));
+        } else {
+            mParameter.setInsideColor(insideColor5);
+            mParameter.setOutsizeColor(outsizeColor5);
+            mParameter.setProgressColor(progressColor5);
+            mParameter.setPointColor(pointColor5);
+            mParameter.setBgCircleColor(bgCircleColor5);
         }
         return mParameter;
     }
