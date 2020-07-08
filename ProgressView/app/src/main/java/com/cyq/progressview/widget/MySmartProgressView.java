@@ -18,10 +18,12 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.RadialGradient;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.graphics.SweepGradient;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.LinearInterpolator;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -83,6 +85,11 @@ public class MySmartProgressView extends View {
      */
     private int[] backShaderColorArr;
     private float[] backPositionArr = {0, 0, 1};
+    /**
+     * 保温圆环的线性渐变色
+     */
+    private SweepGradient mSweepGradient;
+
     /**
      * 内环到外环的颜色变化数字
      */
@@ -169,6 +176,12 @@ public class MySmartProgressView extends View {
     private int pointColor5 = getContext().getColor(R.color.progress_point_color5);
     private int bgCircleColor5 = getContext().getColor(R.color.progress_bg_circle_color5);
     private ProgressParameter mParameter = new ProgressParameter();
+
+    /**
+     * 保温的进度圆变色值
+     */
+    private int mLinearGradientColor1 = getContext().getColor(R.color.progress_linearGradient_color1);
+    private int mLinearGradientColor2 = getContext().getColor(R.color.progress_linearGradient_color2);
     /**
      * 上一次圆环的进度，按0~3600计数
      */
@@ -185,6 +198,16 @@ public class MySmartProgressView extends View {
     private ValueAnimator progressAnim;
 
     /**
+     * 保温模式下进度条变色旋转动画
+     */
+    private ValueAnimator mOutCircleAnim;
+
+    /**
+     * 保温模式下圆环当前的角度
+     */
+    private float mOutCircleAnger;
+
+    /**
      * 构造方法
      *
      * @param context
@@ -192,20 +215,36 @@ public class MySmartProgressView extends View {
      * @param outerShaderWidth  外阴影的宽度
      * @param circleStrokeWidth 住圆框的宽度
      */
-    public MySmartProgressView(Context context, int parentWidth, int parentHeight, int outerShaderWidth, int circleStrokeWidth) {
+    public MySmartProgressView(Context context,
+                               int parentWidth,
+                               int parentHeight,
+                               int outerShaderWidth,
+                               int circleStrokeWidth) {
         this(context, parentWidth, outerShaderWidth, circleStrokeWidth);
     }
 
 
-    public MySmartProgressView(Context context, int parentWidth, int outerShaderWidth, int circleStrokeWidth) {
+    public MySmartProgressView(Context context,
+                               int parentWidth,
+                               int outerShaderWidth,
+                               int circleStrokeWidth) {
         this(context, null, parentWidth, outerShaderWidth, circleStrokeWidth);
     }
 
-    public MySmartProgressView(Context context, @Nullable AttributeSet attrs, int parentWidth, int outerShaderWidth, int circleStrokeWidth) {
+    public MySmartProgressView(Context context,
+                               @Nullable AttributeSet attrs,
+                               int parentWidth,
+                               int outerShaderWidth,
+                               int circleStrokeWidth) {
         this(context, attrs, 0, parentWidth, outerShaderWidth, circleStrokeWidth);
     }
 
-    public MySmartProgressView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int parentWidth, int outerShaderWidth, int circleStrokeWidth) {
+    public MySmartProgressView(Context context,
+                               @Nullable AttributeSet attrs,
+                               int defStyleAttr,
+                               int parentWidth,
+                               int outerShaderWidth,
+                               int circleStrokeWidth) {
         super(context, attrs, defStyleAttr);
         this.mContext = getContext();
         this.height = this.width = parentWidth;
@@ -232,7 +271,10 @@ public class MySmartProgressView extends View {
         mPointerColor = progressColor1;
         int middleRadialGradientColor = Color.parseColor("#1A001BFF");
         int transparentColor = Color.parseColor("#00000000");
-        backShaderColorArr = new int[]{transparentColor, transparentColor, middleRadialGradientColor};
+        backShaderColorArr = new int[]{
+                transparentColor,
+                transparentColor,
+                middleRadialGradientColor};
         mRadialGradientColors[0] = transparentColor;
         mRadialGradientColors[1] = transparentColor;
         mRadialGradientColors[4] = transparentColor;
@@ -266,7 +308,19 @@ public class MySmartProgressView extends View {
         mOutCirclePaint.setStyle(Paint.Style.STROKE);
         mOutCirclePaint.setAntiAlias(true);
         mOutCirclePaint.setStrokeWidth(mOutCircleStrokeWidth);
-        //mOutCirclePaint.setMaskFilter(new BlurMaskFilter(50, BlurMaskFilter.Blur.SOLID));
+        int[] mLinearGradientColors = {
+                mLinearGradientColor2,
+                mLinearGradientColor2,
+                mLinearGradientColor1,
+                mLinearGradientColor1,
+                mLinearGradientColor2,
+                mLinearGradientColor2};
+        float[] mLinearGradientPositions = {0F, 0.05F, 0.12F, 0.88F, 0.95F, 1F};
+        mSweepGradient = new SweepGradient(
+                0F,
+                0F,
+                mLinearGradientColors,
+                mLinearGradientPositions);
 
         //step2：初始化运动粒子的画笔
         mPointPaint = new Paint();
@@ -286,6 +340,8 @@ public class MySmartProgressView extends View {
 
         //指针画笔颜色
         mBmpPaint = new Paint();
+
+
     }
 
     /**
@@ -331,6 +387,16 @@ public class MySmartProgressView extends View {
             invalidate();
         });
         pointsAnimator.start();
+
+        //保温模式圆环变色旋转动画
+        mOutCircleAnim = ValueAnimator.ofFloat(-90F, 270F);
+        mOutCircleAnim.setDuration(4000);
+        mOutCircleAnim.setRepeatMode(ValueAnimator.RESTART);
+        mOutCircleAnim.setRepeatCount(ValueAnimator.INFINITE);
+        mOutCircleAnim.setInterpolator(new LinearInterpolator());
+        mOutCircleAnim.addUpdateListener(animation -> {
+            mOutCircleAnger = (float) animation.getAnimatedValue();
+        });
 
         //TODO 初始化动画 还需要和设计确认具体效果
         final ValueAnimator initAnimator = ValueAnimator.ofFloat(0, 1F);
@@ -386,13 +452,23 @@ public class MySmartProgressView extends View {
             canvas.drawCircle(animPoint.getmX(), animPoint.getmY(),
                     animPoint.getRadius(), mPointPaint);
         }
-        //画变色圆饼
+        //画渐变色圆饼
         canvas.drawCircle(0, 0, mCenterX, mSweptPaint);
-        //画进度圆环
-        canvas.drawCircle(0, 0, mRadius, mOutCirclePaint);
         //step 2:画底色圆
         canvas.drawCircle(0, 0, mRadius, mBackCirclePaint);
         canvas.drawRect(mRect, mBackShadePaint);
+        canvas.restore();
+
+        //画进度圆环
+        canvas.save();
+        canvas.translate(mCenterX, mCenterY);
+        if (!isKeepWare) {
+            canvas.clipPath(mArcPath);
+        }
+        if (isKeepWare) {
+            canvas.rotate(mOutCircleAnger);
+        }
+        canvas.drawCircle(0, 0, mRadius, mOutCirclePaint);
         canvas.restore();
 
         //画指针
@@ -435,6 +511,9 @@ public class MySmartProgressView extends View {
      */
     public void setCurrentTemperature(float temperature, float targetTemperature) {
         isKeepWare = false;
+        //清除进度圆环的变色SweepGradient
+        mOutCirclePaint.setShader(null);
+
         if (progressAnim != null && progressAnim.isRunning()) {
             progressAnim.cancel();
         }
@@ -507,6 +586,8 @@ public class MySmartProgressView extends View {
      */
     public void startKeepWare() {
         isKeepWare = true;
+        //设置外环颜色渐变
+        mOutCirclePaint.setShader(mSweepGradient);
         //变更进度条的颜色值
         mPointPaint.setColor(pointColor5);
         mOutCirclePaint.setColor(progressColor5);
@@ -522,6 +603,8 @@ public class MySmartProgressView extends View {
                 mRadialGradientStops,
                 Shader.TileMode.CLAMP);
         mSweptPaint.setShader(mRadialGradient);
+        //开始外圈变色旋转动画
+        mOutCircleAnim.start();
         invalidate();
     }
 

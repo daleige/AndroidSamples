@@ -50,13 +50,16 @@
 
     <color name="progress_bg_circle_color5">#1AD8D8D8</color>
     <color name="progress_inside_color5">#FFFF2200</color>
-    <color name="progress_point_color5">#FFFF5500</color>
+    <color name="progress_point_color5">#FFFF9B19</color>
     <color name="progress_outsize_color5">#A6FF1600</color>
-    <color name="progress_progress_color5">#FFFF8000</color>
+    <color name="progress_progress_color5">#FFFF5500</color>
 
     <color name="progress_bg_circle_color_clear">#1AD8D8D8</color>
     <color name="progress_inside_color_clear">#FF00B66B</color>
     <color name="progress_point_color_clear">#FF21EB8E</color>
     <color name="progress_outsize_color_clear">#A600B66B</color>
     <color name="progress_progress_color_clear">#FF21EB8E</color>
+
+    <color name="progress_linearGradient_color1">#FF6C00</color>
+    <color name="progress_linearGradient_color2">#FFAE22</color>
 </resources>
