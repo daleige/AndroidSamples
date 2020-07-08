@@ -34,9 +34,9 @@ public class AnimPoint implements Cloneable {
     private int num = 0;
 
     /**
-     * 透明度80~100
+     * 透明度 0~255
      */
-    private float alpha = 0.8F;
+    private int alpha = 125;
 
     /**
      * 随机偏移角度
@@ -52,11 +52,12 @@ public class AnimPoint implements Cloneable {
     public void init(Random random, float viewRadius) {
         anger = Math.toRadians(random.nextInt(360));
         velocity = random.nextFloat() * 1.6F;
-        radius = random.nextInt(6) + 2;
+        radius = random.nextInt(4) + 4;
         mX = (float) (viewRadius * Math.cos(anger));
         mY = (float) (viewRadius * Math.sin(anger));
         //随机偏移角度-30°~30°
         randomAnger = Math.toRadians(30 - random.nextInt(60));
+        alpha = 125 + random.nextInt(130);
     }
 
     /**
@@ -72,7 +73,7 @@ public class AnimPoint implements Cloneable {
         mX = (float) (mX - distance * Math.cos(moveAnger) * velocity);
         mY = (float) (mY - distance * Math.sin(moveAnger) * velocity);
         //模拟半径逐渐变小
-        radius = radius - 0.01F;
+        radius = radius - 0.02F * velocity;
         num++;
         //如果到了最大值 则重新给运动粒子一个轨迹属性
         int maxDistance = 120;
@@ -153,5 +154,13 @@ public class AnimPoint implements Cloneable {
 
     public void setRandomAnger(double randomAnger) {
         this.randomAnger = randomAnger;
+    }
+
+    public int getAlpha() {
+        return alpha;
+    }
+
+    public void setAlpha(int alpha) {
+        this.alpha = alpha;
     }
 }

@@ -46,7 +46,7 @@ public class MySmartProgressView extends View {
     /**
      * 粒子总个数
      */
-    private int pointCount = 150;
+    private int pointCount = 100;
     /**
      * 粒子列表
      */
@@ -89,10 +89,6 @@ public class MySmartProgressView extends View {
     private Paint mSweptPaint;
     private RadialGradient mRadialGradient;
     private Random mRandom = new Random();
-    /**
-     * 宽高等于控件大小额矩形
-     */
-    private RectF mRect;
     /**
      * 扇形粒子区域的路径，用于裁剪画布范围
      */
@@ -268,7 +264,6 @@ public class MySmartProgressView extends View {
         mCenterY = height / 2;
         // 粒子圆环的宽度
         mRadius = mCenterX - outerShaderWidth - mOutCircleStrokeWidth / 2;
-        mRect = new RectF(-mCenterY, -mCenterX, mCenterY, mCenterX);
     }
 
     /**
@@ -309,9 +304,9 @@ public class MySmartProgressView extends View {
 
         //step2：初始化运动粒子的画笔
         mPointPaint = new Paint();
-        mPointPaint.setAntiAlias(true);
-        mPointPaint.setStyle(Paint.Style.FILL);
-        mPointPaint.setMaskFilter(new BlurMaskFilter(3, BlurMaskFilter.Blur.NORMAL));
+        //mPointPaint.setStyle(Paint.Style.FILL);
+        //设备端羽化效果CPU不支持，暂不设置
+        //mPointPaint.setMaskFilter(new BlurMaskFilter(4, BlurMaskFilter.Blur.NORMAL));
 
         //初始化底色圆画笔
         mBackCirclePaint = new Paint();
@@ -395,6 +390,7 @@ public class MySmartProgressView extends View {
         }
         //画运动粒子
         for (AnimPoint animPoint : mPointList) {
+            mPointPaint.setAlpha(animPoint.getAlpha());
             canvas.drawCircle(animPoint.getmX(), animPoint.getmY(),
                     animPoint.getRadius(), mPointPaint);
         }
@@ -402,7 +398,6 @@ public class MySmartProgressView extends View {
         canvas.drawCircle(0, 0, mCenterX, mSweptPaint);
         //step 2:画底色圆
         canvas.drawCircle(0, 0, mRadius, mBackCirclePaint);
-//        canvas.drawRect(mRect, mBackShadePaint);
         canvas.restore();
 
         //画进度圆环

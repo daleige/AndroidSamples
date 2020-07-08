@@ -11,6 +11,7 @@
     tools:context=".MainActivity">
 
     <View
+        android:visibility="gone"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:background="@color/progress_progress_color5"/>
@@ -18,7 +19,7 @@
     <com.cyq.progressview.test.TestView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <com.cyq.progressview.widget.ProgressLayout
         android:id="@+id/mProgress"
