@@ -206,6 +206,8 @@ public class MySmartProgressView extends View {
      * 保温模式下圆环当前的角度
      */
     private float mOutCircleAnger;
+    private AnimPoint mAnimPoint;
+    private ValueAnimator mPointsAnimator;
 
     /**
      * 构造方法
@@ -340,8 +342,6 @@ public class MySmartProgressView extends View {
 
         //指针画笔颜色
         mBmpPaint = new Paint();
-
-
     }
 
     /**
@@ -368,25 +368,25 @@ public class MySmartProgressView extends View {
 
         //绘制运动的粒子
         mPointList.clear();
-        AnimPoint animPoint = new AnimPoint();
+        mAnimPoint = new AnimPoint();
         for (int i = 0; i < pointCount; i++) {
             //通过clone创建对象，避免重复创建
-            AnimPoint cloneAnimPoint = animPoint.clone();
+            AnimPoint cloneAnimPoint = mAnimPoint.clone();
             cloneAnimPoint.init(mRandom, mRadius - mOutCircleStrokeWidth / 2F);
             mPointList.add(cloneAnimPoint);
         }
         //画运动粒子
-        final ValueAnimator pointsAnimator = ValueAnimator.ofFloat(0.1F, 1F);
-        pointsAnimator.setDuration(1000);
-        pointsAnimator.setRepeatMode(ValueAnimator.RESTART);
-        pointsAnimator.setRepeatCount(ValueAnimator.INFINITE);
-        pointsAnimator.addUpdateListener(animation -> {
+        mPointsAnimator = ValueAnimator.ofFloat(0.1F, 1F);
+        mPointsAnimator.setDuration(1000);
+        mPointsAnimator.setRepeatMode(ValueAnimator.RESTART);
+        mPointsAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        mPointsAnimator.addUpdateListener(animation -> {
             for (AnimPoint point : mPointList) {
                 point.updatePoint(mRandom, mRadius);
             }
             invalidate();
         });
-        pointsAnimator.start();
+        mPointsAnimator.start();
 
         //保温模式圆环变色旋转动画
         mOutCircleAnim = ValueAnimator.ofFloat(-90F, 270F);
@@ -726,5 +726,12 @@ public class MySmartProgressView extends View {
     public void setDimension(int width, int height) {
         this.width = width;
         this.height = height;
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mPointsAnimator.cancel();
+        mOutCircleAnim.cancel();
     }
 }
