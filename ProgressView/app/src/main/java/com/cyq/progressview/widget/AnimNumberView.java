@@ -3,6 +3,7 @@ package com.cyq.progressview.widget;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -10,6 +11,8 @@ import androidx.annotation.Nullable;
 
 import com.cyq.progressview.R;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
@@ -60,6 +63,7 @@ public class AnimNumberView extends LinearLayout {
     private LinearLayout mTempContainer, mClockContainer;
     private Disposable mTimerDisposable;
     private OnTimerComplete mTimerListener;
+
     /**
      * 全局变量
      */
@@ -102,6 +106,11 @@ public class AnimNumberView extends LinearLayout {
         int mSingle = temperature % 10;
         int mTen = temperature / 10 % 10;
         int mHundred = temperature / 100 % 10;
+        //设置控件的尺寸
+        mSingleView.setLayoutSize(90, 190, 80);
+        mTenView.setLayoutSize(90, 190, 80);
+        mHundredView.setLayoutSize(90, 190, 80);
+
         mSingleView.setCurrentValue(mSingle, temperature, 0);
         mTenView.setCurrentValue(mTen, temperature, 0);
         mHundredView.setCurrentValue(mHundred, temperature, 0);
@@ -210,7 +219,7 @@ public class AnimNumberView extends LinearLayout {
             mMinute1View.setVisibility(VISIBLE);
             mColon1View.setVisibility(GONE);
             mMinute1View.setCurrentValue(mMinute1Value, mode);
-        }else {
+        } else {
             mHour1View.setVisibility(GONE);
             mHour2View.setVisibility(GONE);
             mColon1View.setVisibility(GONE);

@@ -3,9 +3,13 @@ package com.cyq.progressview.widget;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
+import android.widget.GridLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,28 +33,23 @@ public class NumberView extends FrameLayout {
     private int mHeight;
     private int mCurrentValue;
 
-    private int width;
-    private int height;
-    private int textSize;
+    private int width = 0;
+    private int height = 0;
+    private int textSize = 0;
 
-    public NumberView(@NonNull Context context, int width, int height, int textSize) {
-        this(context, null, width, height, textSize);
+    public NumberView(@NonNull Context context) {
+        this(context, null);
     }
 
-    public NumberView(@NonNull Context context, @Nullable AttributeSet attrs, int width, int height, int textSize) {
-        this(context, attrs, 0, width, height, textSize);
+    public NumberView(@NonNull Context context, @Nullable AttributeSet attrs) {
+        this(context, attrs, 0);
     }
 
-    public NumberView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int width, int height, int textSize) {
+    public NumberView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        this.width = width;
-        this.height = height;
-        this.textSize = textSize;
         LayoutInflater.from(getContext()).inflate(R.layout.widget_progress_number_item_layout, this, true);
         mTvFirst = findViewById(R.id.tv_number_one);
         mTvSecond = findViewById(R.id.tv_number_tow);
-        setLayoutParams(new LayoutParams(width, height));
-
         init();
     }
 
@@ -113,5 +112,32 @@ public class NumberView extends FrameLayout {
         }
         mTrueValue = trueValue;
         setCurrentValue(value, UP_OR_DOWN_MODE);
+    }
+
+    private LinearLayout.LayoutParams containerLp;
+    private FrameLayout.LayoutParams tvFirstLp;
+    private FrameLayout.MarginLayoutParams tvSecondLp;
+
+    public void setLayoutSize(int w, int h, int s) {
+        if (this.width == w) {
+            return;
+        }
+        this.width = w;
+        this.height = h;
+        this.textSize = s;
+
+        containerLp = new LinearLayout.LayoutParams(width, height);
+        setLayoutParams(containerLp);
+
+        tvFirstLp = new FrameLayout.LayoutParams(width, height);
+        mTvFirst.setLayoutParams(tvFirstLp);
+        mTvFirst.setGravity(Gravity.CENTER);
+        mTvFirst.setTextSize(textSize);
+
+        tvSecondLp = new FrameLayout.LayoutParams(width, height);
+        tvSecondLp.topMargin = height;
+        mTvSecond.setLayoutParams(tvSecondLp);
+        mTvSecond.setGravity(Gravity.CENTER);
+        mTvSecond.setTextSize(textSize);
     }
 }
