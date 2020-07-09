@@ -68,6 +68,8 @@ public class AnimNumberView extends LinearLayout {
     private int numberHeight;
     private int numberTextSize;
 
+    private TextView mTvCircle;
+
     /**
      * 全局变量
      */
@@ -97,6 +99,7 @@ public class AnimNumberView extends LinearLayout {
         mColon2View = findViewById(R.id.mColon2);
         mTempContainer = findViewById(R.id.mTempNumberContainer);
         mClockContainer = findViewById(R.id.mClockContainer);
+        mTvCircle = findViewById(R.id.tv_number_one);
         checkMode(mMode);
     }
 
@@ -111,9 +114,10 @@ public class AnimNumberView extends LinearLayout {
         int mTen = temperature / 10 % 10;
         int mHundred = temperature / 100 % 10;
         //设置控件的尺寸
-        mSingleView.setLayoutSize(118, 228, 96);
-        mTenView.setLayoutSize(118, 228, 96);
-        mHundredView.setLayoutSize(118, 228, 96);
+        mSingleView.setLayoutSize(92, 190, 80);
+        mTenView.setLayoutSize(92, 190, 80);
+        mHundredView.setLayoutSize(92, 190, 80);
+        mTvCircle.setTextSize(80);
 
         mSingleView.setCurrentValue(mSingle, temperature, 0);
         mTenView.setCurrentValue(mTen, temperature, 0);
@@ -196,16 +200,17 @@ public class AnimNumberView extends LinearLayout {
 
         if (mHour1Value > 0) {
             //展示六位数字
-            numberWidth = 78;
+            numberWidth = 72;
             numberHeight = 152;
             numberTextSize = 64;
+
             mHour1View.setVisibility(VISIBLE);
             mHour2View.setVisibility(VISIBLE);
             mColon1View.setVisibility(VISIBLE);
             mMinute1View.setVisibility(VISIBLE);
         } else if (mHour2Value > 0) {
             //展示五位数字
-            numberWidth = 88;
+            numberWidth = 82;
             numberHeight = 171;
             numberTextSize = 72;
             mHour1View.setVisibility(GONE);
@@ -214,7 +219,7 @@ public class AnimNumberView extends LinearLayout {
             mMinute1View.setVisibility(VISIBLE);
         } else if (mMinute1Value > 0) {
             //展示四位数字
-            numberWidth = 98;
+            numberWidth = 92;
             numberHeight = 190;
             numberTextSize = 80;
             mHour1View.setVisibility(GONE);
@@ -223,7 +228,7 @@ public class AnimNumberView extends LinearLayout {
             mMinute1View.setVisibility(VISIBLE);
         } else {
             //展示三位数字
-            numberWidth = 118;
+            numberWidth = 112;
             numberHeight = 228;
             numberTextSize = 96;
             mHour1View.setVisibility(GONE);
@@ -232,12 +237,14 @@ public class AnimNumberView extends LinearLayout {
             mMinute1View.setVisibility(GONE);
         }
 
-        mHour1View.setLayoutSize(numberWidth,numberHeight,numberTextSize);
-        mHour2View.setLayoutSize(numberWidth,numberHeight,numberTextSize);
-        mMinute1View.setLayoutSize(numberWidth,numberHeight,numberTextSize);
-        mMinute2View.setLayoutSize(numberWidth,numberHeight,numberTextSize);
-        mSecond1View.setLayoutSize(numberWidth,numberHeight,numberTextSize);
-        mSecond2View.setLayoutSize(numberWidth,numberHeight,numberTextSize);
+        mColon1View.setTextSize(numberTextSize);
+        mColon2View.setTextSize(numberTextSize);
+        mHour1View.setLayoutSize(numberWidth, numberHeight, numberTextSize);
+        mHour2View.setLayoutSize(numberWidth, numberHeight, numberTextSize);
+        mMinute1View.setLayoutSize(numberWidth, numberHeight, numberTextSize);
+        mMinute2View.setLayoutSize(numberWidth, numberHeight, numberTextSize);
+        mSecond1View.setLayoutSize(numberWidth, numberHeight, numberTextSize);
+        mSecond2View.setLayoutSize(numberWidth, numberHeight, numberTextSize);
 
         mHour1View.setCurrentValue(mHour1Value, mode);
         mHour2View.setCurrentValue(mHour2Value, mode);
