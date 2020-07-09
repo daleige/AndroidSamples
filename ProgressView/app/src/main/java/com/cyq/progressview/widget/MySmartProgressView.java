@@ -421,10 +421,10 @@ public class MySmartProgressView extends View {
         }
         //画渐变色圆饼
         canvas.drawCircle(0, 0, mCenterX, mSweptPaint);
-        //step 2:画底色圆
-        canvas.drawCircle(0, 0, mRadius, mBackCirclePaint);
         canvas.restore();
 
+        //step 2:画底色圆
+        canvas.drawCircle(mCenterX, mCenterY, mRadius, mBackCirclePaint);
         //画进度圆环
         canvas.save();
         canvas.translate(mCenterX, mCenterY);

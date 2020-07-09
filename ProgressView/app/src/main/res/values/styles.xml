@@ -26,4 +26,9 @@
         <item name="android:textColor">#ffffff</item>
     </style>
 
+    <!--    温度控件字体样式-->
+    <style name="progress_text_font">
+        <item name="android:fontFamily">@font/rubik_regular</item>
+    </style>
+
 </resources>

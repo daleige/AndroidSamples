@@ -28,8 +28,9 @@
 
         <TextView
             android:id="@+id/tv_number_one"
+            style="@style/progress_text_font"
             android:layout_width="wrap_content"
-            android:layout_height="80dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
             android:padding="0dp"
@@ -59,6 +60,7 @@
 
         <TextView
             android:id="@+id/mColon1"
+            style="@style/progress_text_font"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=":"
@@ -80,6 +82,7 @@
 
         <TextView
             android:id="@+id/mColon2"
+            style="@style/progress_text_font"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=":"

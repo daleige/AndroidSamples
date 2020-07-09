@@ -29,24 +29,33 @@ public class NumberView extends FrameLayout {
     private int mHeight;
     private int mCurrentValue;
 
-    public NumberView(@NonNull Context context) {
-        this(context, null);
+    private int width;
+    private int height;
+    private int textSize;
+
+    public NumberView(@NonNull Context context, int width, int height, int textSize) {
+        this(context, null, width, height, textSize);
     }
 
-    public NumberView(@NonNull Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, 0);
+    public NumberView(@NonNull Context context, @Nullable AttributeSet attrs, int width, int height, int textSize) {
+        this(context, attrs, 0, width, height, textSize);
     }
 
-    public NumberView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public NumberView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int width, int height, int textSize) {
         super(context, attrs, defStyleAttr);
+        this.width = width;
+        this.height = height;
+        this.textSize = textSize;
         LayoutInflater.from(getContext()).inflate(R.layout.widget_progress_number_item_layout, this, true);
         mTvFirst = findViewById(R.id.tv_number_one);
         mTvSecond = findViewById(R.id.tv_number_tow);
+        setLayoutParams(new LayoutParams(width, height));
+
         init();
     }
 
     private void init() {
-        mHeight = Utils.dip2px(80, getContext());
+        mHeight = Utils.dip2px(95, getContext());
         mNumberAnim = ValueAnimator.ofFloat(0F, 1F);
         mNumberAnim.setDuration(500);
         mNumberAnim.setInterpolator(new OvershootInterpolator());
