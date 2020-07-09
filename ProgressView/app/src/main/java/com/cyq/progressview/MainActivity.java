@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mProgress.setCleanMode(60 * 15, new ProgressLayout.OnCompleteListener() {
                     @Override
                     public void onComplete() {
-                        Log.e("tset", "清洁完成----------》");
+                        Log.e("test", "清洁完成----------》");
                         Toast.makeText(MainActivity.this, "清洁完成", Toast.LENGTH_LONG).show();
                     }
                 });
