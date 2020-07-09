@@ -64,6 +64,10 @@ public class AnimNumberView extends LinearLayout {
     private Disposable mTimerDisposable;
     private OnTimerComplete mTimerListener;
 
+    private int numberWidth;
+    private int numberHeight;
+    private int numberTextSize;
+
     /**
      * 全局变量
      */
@@ -107,9 +111,9 @@ public class AnimNumberView extends LinearLayout {
         int mTen = temperature / 10 % 10;
         int mHundred = temperature / 100 % 10;
         //设置控件的尺寸
-        mSingleView.setLayoutSize(90, 190, 80);
-        mTenView.setLayoutSize(90, 190, 80);
-        mHundredView.setLayoutSize(90, 190, 80);
+        mSingleView.setLayoutSize(118, 228, 96);
+        mTenView.setLayoutSize(118, 228, 96);
+        mHundredView.setLayoutSize(118, 228, 96);
 
         mSingleView.setCurrentValue(mSingle, temperature, 0);
         mTenView.setCurrentValue(mTen, temperature, 0);
@@ -177,16 +181,12 @@ public class AnimNumberView extends LinearLayout {
             //大于十个小时
             mHour2View.setVisibility(VISIBLE);
         }
-
         int hour, min, sec;
-        //计算出小时
         hour = (int) (second / (60 * 60));
-        // 计算出分钟
         min = (int) ((second - hour * 3600) / 60);
-        // 计算出秒数
         sec = (int) (second - hour * 3600 - min * 60);
         System.out.println();
-
+        //计算HH：MM：SS 6个位置的值
         int mHour1Value = hour / 10 % 10;
         int mHour2Value = hour % 10;
         int mMinute1Value = min / 10 % 10;
@@ -194,36 +194,57 @@ public class AnimNumberView extends LinearLayout {
         int mSecond1Value = sec / 10 % 10;
         int mSecond2Value = sec % 10;
 
-        mSecond1View.setCurrentValue(mSecond1Value, mode);
-        mSecond2View.setCurrentValue(mSecond2Value, mode);
-        mMinute2View.setCurrentValue(mMinute2Value, mode);
-
         if (mHour1Value > 0) {
+            //展示六位数字
+            numberWidth = 78;
+            numberHeight = 152;
+            numberTextSize = 64;
             mHour1View.setVisibility(VISIBLE);
             mHour2View.setVisibility(VISIBLE);
-            mMinute1View.setVisibility(VISIBLE);
             mColon1View.setVisibility(VISIBLE);
-            mHour1View.setCurrentValue(mHour1Value, mode);
-            mHour2View.setCurrentValue(mHour2Value, mode);
-            mMinute1View.setCurrentValue(mMinute1Value, mode);
+            mMinute1View.setVisibility(VISIBLE);
         } else if (mHour2Value > 0) {
+            //展示五位数字
+            numberWidth = 88;
+            numberHeight = 171;
+            numberTextSize = 72;
             mHour1View.setVisibility(GONE);
             mHour2View.setVisibility(VISIBLE);
-            mMinute1View.setVisibility(VISIBLE);
             mColon1View.setVisibility(VISIBLE);
-            mHour2View.setCurrentValue(mHour2Value, mode);
-            mMinute1View.setCurrentValue(mMinute1Value, mode);
-        } else if (mMinute1Value > 0) {
-            mHour1View.setVisibility(GONE);
-            mHour2View.setVisibility(GONE);
             mMinute1View.setVisibility(VISIBLE);
-            mColon1View.setVisibility(GONE);
-            mMinute1View.setCurrentValue(mMinute1Value, mode);
-        } else {
+        } else if (mMinute1Value > 0) {
+            //展示四位数字
+            numberWidth = 98;
+            numberHeight = 190;
+            numberTextSize = 80;
             mHour1View.setVisibility(GONE);
             mHour2View.setVisibility(GONE);
             mColon1View.setVisibility(GONE);
+            mMinute1View.setVisibility(VISIBLE);
+        } else {
+            //展示三位数字
+            numberWidth = 118;
+            numberHeight = 228;
+            numberTextSize = 96;
+            mHour1View.setVisibility(GONE);
+            mHour2View.setVisibility(GONE);
+            mColon1View.setVisibility(GONE);
+            mMinute1View.setVisibility(GONE);
         }
+
+        mHour1View.setLayoutSize(numberWidth,numberHeight,numberTextSize);
+        mHour2View.setLayoutSize(numberWidth,numberHeight,numberTextSize);
+        mMinute1View.setLayoutSize(numberWidth,numberHeight,numberTextSize);
+        mMinute2View.setLayoutSize(numberWidth,numberHeight,numberTextSize);
+        mSecond1View.setLayoutSize(numberWidth,numberHeight,numberTextSize);
+        mSecond2View.setLayoutSize(numberWidth,numberHeight,numberTextSize);
+
+        mHour1View.setCurrentValue(mHour1Value, mode);
+        mHour2View.setCurrentValue(mHour2Value, mode);
+        mMinute1View.setCurrentValue(mMinute1Value, mode);
+        mMinute2View.setCurrentValue(mMinute2Value, mode);
+        mSecond1View.setCurrentValue(mSecond1Value, mode);
+        mSecond2View.setCurrentValue(mSecond2Value, mode);
     }
 
     /**

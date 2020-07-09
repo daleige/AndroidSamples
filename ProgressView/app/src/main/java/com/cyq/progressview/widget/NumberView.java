@@ -30,7 +30,7 @@ public class NumberView extends FrameLayout {
     private TextView mTvFirst;
     private TextView mTvSecond;
     private ValueAnimator mNumberAnim;
-    private int mHeight;
+    private int mHeight = 0;
     private int mCurrentValue;
 
     private int width = 0;
@@ -54,7 +54,6 @@ public class NumberView extends FrameLayout {
     }
 
     private void init() {
-        mHeight = Utils.dip2px(95, getContext());
         mNumberAnim = ValueAnimator.ofFloat(0F, 1F);
         mNumberAnim.setDuration(500);
         mNumberAnim.setInterpolator(new OvershootInterpolator());
@@ -118,10 +117,18 @@ public class NumberView extends FrameLayout {
     private FrameLayout.LayoutParams tvFirstLp;
     private FrameLayout.MarginLayoutParams tvSecondLp;
 
+    /**
+     * 设置宽、高、字体大小
+     *
+     * @param w
+     * @param h
+     * @param s
+     */
     public void setLayoutSize(int w, int h, int s) {
         if (this.width == w) {
             return;
         }
+        this.mHeight = h;
         this.width = w;
         this.height = h;
         this.textSize = s;
