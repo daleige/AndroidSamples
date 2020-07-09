@@ -20,6 +20,7 @@ import android.graphics.Shader;
 import android.graphics.SweepGradient;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
@@ -32,6 +33,15 @@ import com.cyq.progressview.R;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Flowable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
+import static com.cyq.progressview.widget.NumberView.DOWN_ANIMATOR_MODE;
+import static com.cyq.progressview.widget.NumberView.UP_ANIMATOR_MODE;
 
 /**
  * @author : ChenYangQi
@@ -161,6 +171,11 @@ public class MySmartProgressView extends View {
     private int progressColor5 = getContext().getColor(R.color.progress_progress_color5);
     private int pointColor5 = getContext().getColor(R.color.progress_point_color5);
     private int bgCircleColor5 = getContext().getColor(R.color.progress_bg_circle_color5);
+    private int insideColorClean = getContext().getColor(R.color.progress_inside_color_clear);
+    private int outsizeColorClean = getContext().getColor(R.color.progress_outsize_color_clear);
+    private int progressColorClean = getContext().getColor(R.color.progress_progress_color_clear);
+    private int pointColorClean = getContext().getColor(R.color.progress_point_color_clear);
+    private int bgCircleColorClean = getContext().getColor(R.color.progress_bg_circle_color_clear);
     private ProgressParameter mParameter = new ProgressParameter();
 
     /**
@@ -193,6 +208,9 @@ public class MySmartProgressView extends View {
      */
     private float mOutCircleAnger;
     private ValueAnimator mPointsAnimator;
+    /**
+     * 是否为清洁模式
+     */
     private boolean isCleanMode = false;
 
     /**
@@ -202,29 +220,33 @@ public class MySmartProgressView extends View {
      * @param parentWidth       控件宽度
      * @param outerShaderWidth  外阴影的宽度
      * @param circleStrokeWidth 住圆框的宽度
+     * @param isCleanMode       是否是清洁模式
      */
     public MySmartProgressView(Context context,
                                int parentWidth,
                                int parentHeight,
                                int outerShaderWidth,
-                               int circleStrokeWidth) {
-        this(context, parentWidth, outerShaderWidth, circleStrokeWidth);
+                               int circleStrokeWidth,
+                               boolean isCleanMode) {
+        this(context, parentWidth, outerShaderWidth, circleStrokeWidth, isCleanMode);
     }
 
 
     public MySmartProgressView(Context context,
                                int parentWidth,
                                int outerShaderWidth,
-                               int circleStrokeWidth) {
-        this(context, null, parentWidth, outerShaderWidth, circleStrokeWidth);
+                               int circleStrokeWidth,
+                               boolean isCleanMode) {
+        this(context, null, parentWidth, outerShaderWidth, circleStrokeWidth, isCleanMode);
     }
 
     public MySmartProgressView(Context context,
                                @Nullable AttributeSet attrs,
                                int parentWidth,
                                int outerShaderWidth,
-                               int circleStrokeWidth) {
-        this(context, attrs, 0, parentWidth, outerShaderWidth, circleStrokeWidth);
+                               int circleStrokeWidth,
+                               boolean isCleanMode) {
+        this(context, attrs, 0, parentWidth, outerShaderWidth, circleStrokeWidth, isCleanMode);
     }
 
     public MySmartProgressView(Context context,
@@ -232,11 +254,13 @@ public class MySmartProgressView extends View {
                                int defStyleAttr,
                                int parentWidth,
                                int outerShaderWidth,
-                               int circleStrokeWidth) {
+                               int circleStrokeWidth,
+                               boolean isCleanMode) {
         super(context, attrs, defStyleAttr);
         this.height = this.width = parentWidth;
         this.mOutCircleStrokeWidth = circleStrokeWidth;
         this.outerShaderWidth = outerShaderWidth;
+        this.isCleanMode = isCleanMode;
         init();
     }
 
@@ -356,8 +380,8 @@ public class MySmartProgressView extends View {
             mPointList.add(cloneAnimPoint);
         }
         //画运动粒子
-        mPointsAnimator = ValueAnimator.ofFloat(0.1F, 1F);
-        mPointsAnimator.setDuration(1000);
+        mPointsAnimator = ValueAnimator.ofFloat(0F, 1F);
+        mPointsAnimator.setDuration(Integer.MAX_VALUE);
         mPointsAnimator.setRepeatMode(ValueAnimator.RESTART);
         mPointsAnimator.setRepeatCount(ValueAnimator.INFINITE);
         mPointsAnimator.addUpdateListener(animation -> {
@@ -468,12 +492,21 @@ public class MySmartProgressView extends View {
         currentProgress = temperature / targetTemperature * 3600;
         //自定义包含各个进度对应的颜色值和进度值的属性动画，
         progressAnim = ValueAnimator.ofFloat(lastTimeProgress, currentProgress);
-        progressAnim.setDuration(1500);
+        progressAnim.setDuration(1000);
         progressAnim.addUpdateListener(animation -> {
             float value = (float) animation.getAnimatedValue();
             mCurrentAngle = value;
             //根据当前的进度值获取圆环的颜色属性
-            ProgressParameter colors = getProgressParameter(value);
+            ProgressParameter colors = new ProgressParameter();
+            if (isCleanMode) {
+                colors.setBgCircleColor(bgCircleColorClean);
+                colors.setInsideColor(insideColorClean);
+                colors.setOutsizeColor(outsizeColorClean);
+                colors.setPointColor(pointColorClean);
+                colors.setProgressColor(progressColorClean);
+            } else {
+                colors = getProgressParameter(value);
+            }
             //变更进度条的颜色值
             mPointPaint.setColor(colors.getPointColor());
             mOutCirclePaint.setColor(colors.getProgressColor());
@@ -483,6 +516,7 @@ public class MySmartProgressView extends View {
             //设置内圈变色圆的shader
             mRadialGradientColors[2] = colors.getInsideColor();
             mRadialGradientColors[3] = colors.getOutsizeColor();
+
             mRadialGradient = new RadialGradient(
                     0,
                     0,
@@ -491,7 +525,6 @@ public class MySmartProgressView extends View {
                     mRadialGradientStops,
                     Shader.TileMode.CLAMP);
             mSweptPaint.setShader(mRadialGradient);
-
             //获取此时的扇形区域path，用于裁剪动画粒子的canvas
             getSectorClip(width / 2F, -90, value / 10F);
         });
@@ -550,8 +583,6 @@ public class MySmartProgressView extends View {
         invalidate();
     }
 
-    private float mPointerTranslation;
-
     /**
      * 标记指针此时是否可见
      */
@@ -567,37 +598,7 @@ public class MySmartProgressView extends View {
             return;
         }
         if (visible == GONE) {
-            //隐藏指针，在保温状态 或者 温度达到预定温度是需要隐藏
-            ValueAnimator gonePointerAnimator = ValueAnimator.ofFloat(0, 1);
-            gonePointerAnimator.setDuration(1000);
-            gonePointerAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    mPointerTranslation = (float) gonePointerAnimator.getAnimatedValue();
-                }
-            });
-            gonePointerAnimator.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mPointerVisible = GONE;
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-                    mPointerVisible = GONE;
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-
-                }
-            });
-            gonePointerAnimator.start();
+            mPointerVisible = GONE;
         }
     }
 
@@ -658,6 +659,44 @@ public class MySmartProgressView extends View {
             mParameter.setBgCircleColor(bgCircleColor5);
         }
         return mParameter;
+    }
+
+    private Disposable mTimerDisposable;
+
+    /**
+     * 设置清洁模式
+     *
+     * @param second    倒计时时间
+     * @param cleanMode 清洁模式tag
+     */
+    public void setCleanMode(int second, boolean cleanMode) {
+        disposeTimer();
+        isCleanMode = cleanMode;
+        mTimerDisposable = Flowable.intervalRange(0,
+                second + 1,
+                0,
+                1,
+                TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(aLong -> {
+                    setCurrentTemperature(second - aLong.intValue(), second);
+                })
+                .doOnComplete(() -> {
+                    //精度环这里不做结果回调处理
+                    disposeTimer();
+                })
+                .subscribe();
+    }
+
+    /**
+     * 解绑计时器
+     */
+    private void disposeTimer() {
+        if (mTimerDisposable != null && !mTimerDisposable.isDisposed()) {
+            mTimerDisposable.dispose();
+            mTimerDisposable = null;
+        }
     }
 
     /**

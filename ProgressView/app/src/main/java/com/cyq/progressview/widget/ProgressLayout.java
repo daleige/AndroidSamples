@@ -37,6 +37,10 @@ public class ProgressLayout extends FrameLayout {
     private LayoutParams frameAnimationViewLp;
     private LayoutParams animNumberViewLp;
     private LayoutParams mySmartProgressViewLp;
+    /**
+     * 是否为清洁模式
+     */
+    private boolean isCleanMode = false;
 
     public ProgressLayout(@NonNull Context context) {
         this(context, null);
@@ -53,6 +57,7 @@ public class ProgressLayout extends FrameLayout {
         height = array.getDimensionPixelOffset(R.styleable.ProgressLayout_progressLayout_height, Utils.dip2px(318, getContext()));
         outerShaderWidth = array.getDimensionPixelOffset(R.styleable.ProgressLayout_progressLayout_outer_shader_width, Utils.dip2px(10, getContext()));
         circleStrokeWidth = array.getDimensionPixelOffset(R.styleable.ProgressLayout_progressLayout_circle_stroke_width, Utils.dip2px(13, getContext()));
+        isCleanMode = array.getBoolean(R.styleable.ProgressLayout_progressLayout_clean_mode, false);
         array.recycle();
         setMeasuredDimension(width, height);
         init();
@@ -70,7 +75,7 @@ public class ProgressLayout extends FrameLayout {
         frameAnimationViewLp = new LayoutParams(width, height);
         frameAnimationViewLp.gravity = Gravity.CENTER;
         mInitAnimView.setLayoutParams(frameAnimationViewLp);
-        mMySmartProgressView = new MySmartProgressView(getContext(), width, height, outerShaderWidth, circleStrokeWidth);
+        mMySmartProgressView = new MySmartProgressView(getContext(), width, height, outerShaderWidth, circleStrokeWidth, isCleanMode);
         mMySmartProgressView.setDimension(width, height);
         mySmartProgressViewLp = new LayoutParams(width, height);
         mySmartProgressViewLp.gravity = Gravity.CENTER;
@@ -156,6 +161,15 @@ public class ProgressLayout extends FrameLayout {
         if (mode == AnimNumberView.UP_TIMER) {
             setTimer(-1, mode);
         }
+    }
+
+    /**
+     * 设置清洁模式
+     * @param second
+     */
+    public void setCleanMode(int second) {
+        isCleanMode = true;
+        mMySmartProgressView.setCleanMode(second, true);
     }
 
     public void setOnCompleteListener(OnCompleteListener mCompleteListener) {

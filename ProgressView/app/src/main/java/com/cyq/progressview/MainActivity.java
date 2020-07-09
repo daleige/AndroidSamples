@@ -124,18 +124,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 case 102:
                     //模拟减温，随机减温0-30度之间
-                    if (mHandler == null) {
-                        break;
-                    }
-                    temperature = temperature - mRandom.nextInt(30);
-                    //temperature--;
-                    if (temperature < 0) {
-                        temperature = 0;
-                        mHandler.removeCallbacksAndMessages(null);
-                    } else {
-                        mHandler.sendEmptyMessageDelayed(102, 2000);
-                    }
-                    mProgress.setTemperature(temperature, targetTemperature);
+                    mProgress.setCleanMode(60 * 15);
                     break;
                 default:
             }

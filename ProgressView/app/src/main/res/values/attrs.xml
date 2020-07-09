@@ -29,5 +29,7 @@
         <attr name="progressLayout_outer_shader_width" format="dimension" />
         <!--        圆环宽度-->
         <attr name="progressLayout_circle_stroke_width" format="dimension" />
+        <!--        是否是清洁模式-->
+        <attr name="progressLayout_clean_mode" format="boolean" />
     </declare-styleable>
 </resources>
