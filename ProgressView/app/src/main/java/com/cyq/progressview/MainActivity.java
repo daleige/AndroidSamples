@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -73,9 +74,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.btn_2:
                 //减温
-                temperature = targetTemperature;
-                mHandler.removeCallbacksAndMessages(null);
-                mHandler.sendEmptyMessageDelayed(102, 0);
+                mProgress.setCleanMode(60 * 15, new ProgressLayout.OnCompleteListener() {
+                    @Override
+                    public void onComplete() {
+                        Log.e("tset", "清洁完成----------》");
+                        Toast.makeText(MainActivity.this, "清洁完成", Toast.LENGTH_LONG).show();
+                    }
+                });
                 break;
 
             case R.id.btn_3:
@@ -124,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 case 102:
                     //模拟减温，随机减温0-30度之间
-                    mProgress.setCleanMode(60 * 15);
+
                     break;
                 default:
             }

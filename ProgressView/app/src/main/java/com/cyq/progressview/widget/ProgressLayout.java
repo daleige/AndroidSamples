@@ -165,11 +165,22 @@ public class ProgressLayout extends FrameLayout {
 
     /**
      * 设置清洁模式
+     *
      * @param second
      */
-    public void setCleanMode(int second) {
+    public void setCleanMode(int second, OnCompleteListener completeListener) {
         isCleanMode = true;
+        mCompleteListener = completeListener;
         mMySmartProgressView.setCleanMode(second, true);
+        mAnimNumberView.setTimer(second, AnimNumberView.DOWN_TIMER);
+        mAnimNumberView.setOnTimerCompleteListener(new AnimNumberView.OnTimerComplete() {
+            @Override
+            public void onComplete() {
+                if (mCompleteListener != null) {
+                    mCompleteListener.onComplete();
+                }
+            }
+        });
     }
 
     public void setOnCompleteListener(OnCompleteListener mCompleteListener) {

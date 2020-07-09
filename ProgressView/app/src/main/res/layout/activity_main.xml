@@ -45,14 +45,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:a6btn_color="blue"
-            app:a6btn_text="预热到300°C"
+            app:a6btn_text="预热到240°C"
             app:a6btn_type="light" />
 
         <com.cyq.progressview.button.MyButton
             android:id="@+id/btn_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:a6btn_text="降温到30°C"
+            app:a6btn_text="清洁模式°C"
             app:a6btn_type="normal" />
 
         <com.cyq.progressview.button.MyButton
