@@ -11,6 +11,11 @@
         android:orientation="horizontal"
         android:visibility="gone">
 
+        <Space
+            android:layout_width="23dp"
+            android:layout_height="95dp"
+            android:layout_marginStart="8dp" />
+
         <com.cyq.progressview.widget.NumberView
             android:id="@+id/mHundredNumber"
             android:layout_width="wrap_content"
@@ -26,19 +31,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/tv_number_one"
-            style="@style/progress_text_font"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:padding="0dp"
-            android:text="°"
-            android:textColor="@android:color/white"
-            android:textSize="60sp" />
+        <ImageView
+            android:layout_width="23dp"
+            android:layout_height="95dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/temperature_symbol" />
     </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/mClockContainer"
