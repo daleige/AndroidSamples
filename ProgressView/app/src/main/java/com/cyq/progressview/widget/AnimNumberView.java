@@ -49,27 +49,21 @@ public class AnimNumberView extends LinearLayout {
     private NumberView mSingleView;
     private NumberView mTenView;
     private NumberView mHundredView;
-
     private NumberView mHour1View;
     private NumberView mHour2View;
     private NumberView mMinute1View;
     private NumberView mMinute2View;
     private NumberView mSecond1View;
     private NumberView mSecond2View;
-
     private TextView mColon1View;
     private TextView mColon2View;
-
     private LinearLayout mTempContainer, mClockContainer;
     private Disposable mTimerDisposable;
     private OnTimerComplete mTimerListener;
-
     private int numberWidth;
     private int numberHeight;
     private int numberTextSize;
-
     private TextView mTvCircle;
-
     /**
      * 全局变量
      */
@@ -118,10 +112,9 @@ public class AnimNumberView extends LinearLayout {
         mTenView.setLayoutSize(92, 190, 80);
         mHundredView.setLayoutSize(92, 190, 80);
         mTvCircle.setTextSize(80);
-
-        mSingleView.setCurrentValue(mSingle, temperature, 0);
-        mTenView.setCurrentValue(mTen, temperature, 0);
-        mHundredView.setCurrentValue(mHundred, temperature, 0);
+        mSingleView.setCurrentValue(NumberView.POSITION_ONE, mSingle, temperature, 0);
+        mTenView.setCurrentValue(NumberView.POSITION_TOW, mTen, temperature, 0);
+        mHundredView.setCurrentValue(NumberView.POSITION_THREE, mHundred, temperature, 0);
     }
 
     /**
@@ -203,7 +196,6 @@ public class AnimNumberView extends LinearLayout {
             numberWidth = 72;
             numberHeight = 152;
             numberTextSize = 64;
-
             mHour1View.setVisibility(VISIBLE);
             mHour2View.setVisibility(VISIBLE);
             mColon1View.setVisibility(VISIBLE);
@@ -246,12 +238,12 @@ public class AnimNumberView extends LinearLayout {
         mSecond1View.setLayoutSize(numberWidth, numberHeight, numberTextSize);
         mSecond2View.setLayoutSize(numberWidth, numberHeight, numberTextSize);
 
-        mHour1View.setCurrentValue(mHour1Value, mode);
-        mHour2View.setCurrentValue(mHour2Value, mode);
-        mMinute1View.setCurrentValue(mMinute1Value, mode);
-        mMinute2View.setCurrentValue(mMinute2Value, mode);
-        mSecond1View.setCurrentValue(mSecond1Value, mode);
-        mSecond2View.setCurrentValue(mSecond2Value, mode);
+        mHour1View.setCurrentValue(NumberView.POSITION_SIX, mHour1Value, mode);
+        mHour2View.setCurrentValue(NumberView.POSITION_FIVE, mHour2Value, mode);
+        mMinute1View.setCurrentValue(NumberView.POSITION_FORT, mMinute1Value, mode);
+        mMinute2View.setCurrentValue(NumberView.POSITION_THREE, mMinute2Value, mode);
+        mSecond1View.setCurrentValue(NumberView.POSITION_TOW, mSecond1Value, mode);
+        mSecond2View.setCurrentValue(NumberView.POSITION_ONE, mSecond2Value, mode);
     }
 
     /**
