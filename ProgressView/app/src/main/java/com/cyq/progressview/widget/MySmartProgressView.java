@@ -541,8 +541,6 @@ public class MySmartProgressView extends View {
         mXfermode = new PorterDuffXfermode(PorterDuff.Mode.MULTIPLY);
         mPointerRectF = new RectF(0, 0, mBitmapDstWidth, mBitmapDstHeight);
         mBitmapSRT = Bitmap.createBitmap((int) mBitmapDstWidth, (int) mBitmapDstHeight, Bitmap.Config.ARGB_8888);
-        Log.e("test","------------指针宽高："+mPointerRectF.width()+"---"+mPointerRectF.height());
-        Log.e("test","------------指针宽高："+mBitmapSRT.getWidth()+"---"+mBitmapSRT.getHeight());
         mBitmapSRT.eraseColor(mPointerColor);
     }
 

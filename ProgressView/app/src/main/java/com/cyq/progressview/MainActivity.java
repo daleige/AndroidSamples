@@ -170,16 +170,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         tagger = !tagger;
     }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mProgress.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mProgress.onResume();
-    }
 }

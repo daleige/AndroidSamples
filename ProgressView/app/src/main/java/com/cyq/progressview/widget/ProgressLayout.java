@@ -1,18 +1,20 @@
 package com.cyq.progressview.widget;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.cyq.progressview.R;
 import com.cyq.progressview.utils.Utils;
-import com.yuyashuai.frameanimation.FrameAnimation;
 import com.yuyashuai.frameanimation.FrameAnimationView;
 
 /**
@@ -24,7 +26,6 @@ public class ProgressLayout extends FrameLayout {
     private MySmartProgressView mMySmartProgressView;
     private AnimNumberView mAnimNumberView;
     private OnCompleteListener mCompleteListener;
-    private FrameAnimationView mInitAnimView;
     private int height;
     private int width;
     private int outerShaderWidth;
@@ -40,7 +41,7 @@ public class ProgressLayout extends FrameLayout {
      * 是否为清洁模式
      */
     private boolean isCleanMode = false;
-    private final String INIT_INDICATOR = "init_indicator_version1";
+    private LayoutParams params;
 
     public ProgressLayout(@NonNull Context context) {
         this(context, null);
@@ -74,10 +75,6 @@ public class ProgressLayout extends FrameLayout {
     }
 
     private void init() {
-        mInitAnimView = new FrameAnimationView(getContext());
-        frameAnimationViewLp = new LayoutParams(width, height);
-        frameAnimationViewLp.gravity = Gravity.CENTER;
-        mInitAnimView.setLayoutParams(frameAnimationViewLp);
         mMySmartProgressView = new MySmartProgressView(getContext(), width, height, outerShaderWidth, circleStrokeWidth, isCleanMode);
         mMySmartProgressView.setDimension(width, height);
         mySmartProgressViewLp = new LayoutParams(width, height);
@@ -89,39 +86,54 @@ public class ProgressLayout extends FrameLayout {
         animNumberViewLp.gravity = Gravity.CENTER;
         mAnimNumberView.setLayoutParams(animNumberViewLp);
 
-        addView(mInitAnimView);
         addView(mMySmartProgressView);
         addView(mAnimNumberView);
         mMySmartProgressView.setVisibility(GONE);
         mAnimNumberView.setVisibility(GONE);
 
-        mInitAnimView.setVisibility(VISIBLE);
-        mInitAnimView.setRepeatMode(FrameAnimation.RepeatMode.ONCE);
-        mInitAnimView.setFrameInterval(17);
-        mInitAnimView.setSupportInBitmap(true);
-        mInitAnimView.setAnimationListener(new FrameAnimation.FrameAnimationListener() {
+        ImageView imageView = new ImageView(getContext());
+        params = new LayoutParams(6, 6);
+        params.gravity = Gravity.CENTER;
+        imageView.setLayoutParams(params);
+        imageView.setBackground(getResources().getDrawable(R.drawable.indicator_blue));
+        addView(imageView);
+
+        ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1);
+        valueAnimator.setDuration(340);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
-            public void onAnimationStart() {
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float value = (float) animation.getAnimatedValue();
+                params.height = (int) (126 * value);
+                params.width = (int) (22 * value);
+                imageView.setLayoutParams(params);
+                imageView.setTranslationY(-250 * value);
+            }
+        });
+        valueAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
 
             }
 
             @Override
-            public void onAnimationEnd() {
+            public void onAnimationEnd(Animator animation) {
                 mMySmartProgressView.setVisibility(VISIBLE);
                 mAnimNumberView.setVisibility(VISIBLE);
+                imageView.setVisibility(GONE);
             }
 
             @Override
-            public void onProgress(float v, int i, int i1) {
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
 
             }
         });
-        postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mInitAnimView.playAnimationFromAssets(INIT_INDICATOR);
-            }
-        }, 500);
+        valueAnimator.start();
     }
 
     /**
@@ -195,13 +207,5 @@ public class ProgressLayout extends FrameLayout {
          * 计时完成的回调
          */
         void onComplete();
-    }
-
-    public void onPause() {
-        mInitAnimView.onResume();
-    }
-
-    public void onResume() {
-        mInitAnimView.onResume();
     }
 }
