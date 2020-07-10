@@ -634,33 +634,32 @@ public class MySmartProgressView extends View {
             mParameter.setBgCircleColor(bgCircleColor1);
         } else if (progressValue < 720) {
             //第二个颜色段
-            mParameter.setInsideColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, insideColor1, insideColor2));
-            mParameter.setOutsizeColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, outsizeColor1, outsizeColor2));
-            mParameter.setProgressColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, progressColor1, progressColor2));
-            mParameter.setPointColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, pointColor1, pointColor2));
-            mParameter.setBgCircleColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, bgCircleColor1, bgCircleColor2));
+            mParameter.setInsideColor(evaluate(fraction, insideColor1, insideColor2));
+            mParameter.setOutsizeColor(evaluate(fraction, outsizeColor1, outsizeColor2));
+            mParameter.setProgressColor(evaluate(fraction, progressColor1, progressColor2));
+            mParameter.setPointColor(evaluate(fraction, pointColor1, pointColor2));
+            mParameter.setBgCircleColor(evaluate(fraction, bgCircleColor1, bgCircleColor2));
         } else if (progressValue < 1080) {
             //第三个颜色段
-            mParameter.setInsideColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, insideColor2, insideColor3));
-            mParameter.setOutsizeColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, outsizeColor2, outsizeColor3));
-            mParameter.setProgressColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, progressColor2, progressColor3));
-            mParameter.setPointColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, pointColor2, pointColor3));
-            mParameter.setBgCircleColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, bgCircleColor2, bgCircleColor3));
+            mParameter.setInsideColor(evaluate(fraction, insideColor2, insideColor3));
+            mParameter.setOutsizeColor(evaluate(fraction, outsizeColor2, outsizeColor3));
+            mParameter.setProgressColor(evaluate(fraction, progressColor2, progressColor3));
+            mParameter.setPointColor(evaluate(fraction, pointColor2, pointColor3));
+            mParameter.setBgCircleColor(evaluate(fraction, bgCircleColor2, bgCircleColor3));
         } else if (progressValue < 1440) {
             //第四个颜色段
-            mParameter.setInsideColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, insideColor3, insideColor4));
-            mParameter.setOutsizeColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, outsizeColor3, outsizeColor4));
-            mParameter.setProgressColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, progressColor3, progressColor4));
-            mParameter.setPointColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, pointColor3, pointColor4));
-            mParameter.setBgCircleColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, bgCircleColor3, bgCircleColor4));
-
+            mParameter.setInsideColor(evaluate(fraction, insideColor3, insideColor4));
+            mParameter.setOutsizeColor(evaluate(fraction, outsizeColor3, outsizeColor4));
+            mParameter.setProgressColor(evaluate(fraction, progressColor3, progressColor4));
+            mParameter.setPointColor(evaluate(fraction, pointColor3, pointColor4));
+            mParameter.setBgCircleColor(evaluate(fraction, bgCircleColor3, bgCircleColor4));
         } else if (progressValue < 1800) {
             //第五个颜色段
-            mParameter.setInsideColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, insideColor4, insideColor5));
-            mParameter.setOutsizeColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, outsizeColor4, outsizeColor5));
-            mParameter.setProgressColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, progressColor4, progressColor5));
-            mParameter.setPointColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, pointColor4, pointColor5));
-            mParameter.setBgCircleColor((Integer) ArgbEvaluator.getInstance().evaluate(fraction, bgCircleColor4, bgCircleColor5));
+            mParameter.setInsideColor(evaluate(fraction, insideColor4, insideColor5));
+            mParameter.setOutsizeColor(evaluate(fraction, outsizeColor4, outsizeColor5));
+            mParameter.setProgressColor(evaluate(fraction, progressColor4, progressColor5));
+            mParameter.setPointColor(evaluate(fraction, pointColor4, pointColor5));
+            mParameter.setBgCircleColor(evaluate(fraction, bgCircleColor4, bgCircleColor5));
         } else {
             mParameter.setInsideColor(insideColor5);
             mParameter.setOutsizeColor(outsizeColor5);
@@ -669,6 +668,42 @@ public class MySmartProgressView extends View {
             mParameter.setBgCircleColor(bgCircleColor5);
         }
         return mParameter;
+    }
+
+    /**
+     * 根据fraction的值确定位于两端颜色之间的具体颜色
+     *
+     * @param fraction 0-1F之间
+     * @param startValue 开始颜色值
+     * @param endValue 结束颜色值
+     * @return
+     */
+    private int evaluate(float fraction, Object startValue, Object endValue) {
+        int startInt = (Integer) startValue;
+        float startA = ((startInt >> 24) & 0xff) / 255.0f;
+        float startR = ((startInt >> 16) & 0xff) / 255.0f;
+        float startG = ((startInt >> 8) & 0xff) / 255.0f;
+        float startB = ((startInt) & 0xff) / 255.0f;
+        int endInt = (Integer) endValue;
+        float endA = ((endInt >> 24) & 0xff) / 255.0f;
+        float endR = ((endInt >> 16) & 0xff) / 255.0f;
+        float endG = ((endInt >> 8) & 0xff) / 255.0f;
+        float endB = ((endInt) & 0xff) / 255.0f;
+        startR = (float) Math.pow(startR, 2.2);
+        startG = (float) Math.pow(startG, 2.2);
+        startB = (float) Math.pow(startB, 2.2);
+        endR = (float) Math.pow(endR, 2.2);
+        endG = (float) Math.pow(endG, 2.2);
+        endB = (float) Math.pow(endB, 2.2);
+        float a = startA + fraction * (endA - startA);
+        float r = startR + fraction * (endR - startR);
+        float g = startG + fraction * (endG - startG);
+        float b = startB + fraction * (endB - startB);
+        a = a * 255.0f;
+        r = (float) Math.pow(r, 1.0 / 2.2) * 255.0f;
+        g = (float) Math.pow(g, 1.0 / 2.2) * 255.0f;
+        b = (float) Math.pow(b, 1.0 / 2.2) * 255.0f;
+        return Math.round(a) << 24 | Math.round(r) << 16 | Math.round(g) << 8 | Math.round(b);
     }
 
     /**
