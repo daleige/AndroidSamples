@@ -2,7 +2,6 @@ package com.cyq.progressview.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -41,6 +40,7 @@ public class ProgressLayout extends FrameLayout {
      * 是否为清洁模式
      */
     private boolean isCleanMode = false;
+    private final String INIT_INDICATOR="init_indicator_version1";
 
     public ProgressLayout(@NonNull Context context) {
         this(context, null);
@@ -70,7 +70,6 @@ public class ProgressLayout extends FrameLayout {
     }
 
     private void init() {
-        //setBackgroundColor(Color.GRAY);
         mInitAnimView = new FrameAnimationView(getContext());
         frameAnimationViewLp = new LayoutParams(width, height);
         frameAnimationViewLp.gravity = Gravity.CENTER;
@@ -116,9 +115,9 @@ public class ProgressLayout extends FrameLayout {
         postDelayed(new Runnable() {
             @Override
             public void run() {
-                mInitAnimView.playAnimationFromAssets("init_jndicator_version1");
+                mInitAnimView.playAnimationFromAssets(INIT_INDICATOR);
             }
-        }, 1000);
+        }, 500);
     }
 
     /**

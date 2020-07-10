@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         app:progressLayout_circle_stroke_width="13dp"
-        app:progressLayout_clean_mode="true"
+        app:progressLayout_clean_mode="false"
         app:progressLayout_height="318dp"
         app:progressLayout_outer_shader_width="10dp"
         app:progressLayout_width="318dp" />
