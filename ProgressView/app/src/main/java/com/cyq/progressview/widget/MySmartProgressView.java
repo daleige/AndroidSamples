@@ -118,7 +118,7 @@ public class MySmartProgressView extends View {
     /**
      * 指针的颜色
      */
-    private int mPointerColor;
+    private int mIndicatorColor;
     private Paint mBmpPaint;
     /**
      * 外层粒子圆环的边框大小
@@ -141,31 +141,37 @@ public class MySmartProgressView extends View {
     private int progressColor1 = getContext().getColor(R.color.progress_progress_color1);
     private int pointColor1 = getContext().getColor(R.color.progress_point_color1);
     private int bgCircleColor1 = getContext().getColor(R.color.progress_bg_circle_color1);
+    private int indicatorColor1 = getContext().getColor(R.color.progress_indicator_color1);
     private int insideColor2 = getContext().getColor(R.color.progress_inside_color2);
     private int outsizeColor2 = getContext().getColor(R.color.progress_outsize_color2);
     private int progressColor2 = getContext().getColor(R.color.progress_progress_color2);
     private int pointColor2 = getContext().getColor(R.color.progress_point_color2);
     private int bgCircleColor2 = getContext().getColor(R.color.progress_bg_circle_color2);
+    private int indicatorColor2 = getContext().getColor(R.color.progress_indicator_color2);
     private int insideColor3 = getContext().getColor(R.color.progress_inside_color3);
     private int outsizeColor3 = getContext().getColor(R.color.progress_outsize_color3);
     private int progressColor3 = getContext().getColor(R.color.progress_progress_color3);
     private int pointColor3 = getContext().getColor(R.color.progress_point_color3);
     private int bgCircleColor3 = getContext().getColor(R.color.progress_bg_circle_color3);
+    private int indicatorColor3 = getContext().getColor(R.color.progress_indicator_color3);
     private int insideColor4 = getContext().getColor(R.color.progress_inside_color4);
     private int outsizeColor4 = getContext().getColor(R.color.progress_outsize_color4);
     private int progressColor4 = getContext().getColor(R.color.progress_progress_color4);
     private int pointColor4 = getContext().getColor(R.color.progress_point_color4);
     private int bgCircleColor4 = getContext().getColor(R.color.progress_bg_circle_color4);
+    private int indicatorColor4 = getContext().getColor(R.color.progress_indicator_color4);
     private int insideColor5 = getContext().getColor(R.color.progress_inside_color5);
     private int outsizeColor5 = getContext().getColor(R.color.progress_outsize_color5);
     private int progressColor5 = getContext().getColor(R.color.progress_progress_color5);
     private int pointColor5 = getContext().getColor(R.color.progress_point_color5);
     private int bgCircleColor5 = getContext().getColor(R.color.progress_bg_circle_color5);
+    private int indicatorColor5 = getContext().getColor(R.color.progress_indicator_color5);
     private int insideColorClean = getContext().getColor(R.color.progress_inside_color_clear);
     private int outsizeColorClean = getContext().getColor(R.color.progress_outsize_color_clear);
     private int progressColorClean = getContext().getColor(R.color.progress_progress_color_clear);
     private int pointColorClean = getContext().getColor(R.color.progress_point_color_clear);
     private int bgCircleColorClean = getContext().getColor(R.color.progress_bg_circle_color_clear);
+    private int indicatorColorClean = getContext().getColor(R.color.progress_indicator_color_clear);
     private ProgressParameter mParameter = new ProgressParameter();
     /**
      * 保温的进度圆变色值
@@ -307,7 +313,7 @@ public class MySmartProgressView extends View {
                 canvas.rotate(mCurrentAngle / 10F);
                 canvas.translate(-mPointerRectF.width() / 2, -mCenterY);
                 mPointerLayoutId = canvas.saveLayer(mPointerRectF, mBmpPaint);
-                mBitmapSRT.eraseColor(mPointerColor);
+                mBitmapSRT.eraseColor(mIndicatorColor);
                 canvas.drawBitmap(mBitmapDST, null, mPointerRectF, mBmpPaint);
                 mBmpPaint.setXfermode(mXfermode);
                 canvas.drawBitmap(mBitmapSRT, null, mPointerRectF, mBmpPaint);
@@ -350,6 +356,7 @@ public class MySmartProgressView extends View {
                 parameter.setOutsizeColor(outsizeColorClean);
                 parameter.setPointColor(pointColorClean);
                 parameter.setProgressColor(progressColorClean);
+                parameter.setIndicatorColor(indicatorColorClean);
             } else {
                 parameter = getProgressParameter(value);
             }
@@ -358,7 +365,7 @@ public class MySmartProgressView extends View {
             mOutCirclePaint.setColor(parameter.getProgressColor());
             mBackCirclePaint.setColor(parameter.getBgCircleColor());
             //更改指针颜色
-            mPointerColor = parameter.getPointColor();
+            mIndicatorColor = parameter.getIndicatorColor();
             //设置内圈变色圆的shader
             mRadialGradientColors[2] = parameter.getInsideColor();
             mRadialGradientColors[3] = parameter.getOutsizeColor();
@@ -464,7 +471,7 @@ public class MySmartProgressView extends View {
      * 初始化控件的各类宽高，边框，半径等大小
      */
     private void initView() {
-        mPointerColor = progressColor1;
+        mIndicatorColor = indicatorColor1;
         int transparentColor = Color.parseColor("#00000000");
         mRadialGradientColors[0] = transparentColor;
         mRadialGradientColors[1] = transparentColor;
@@ -541,7 +548,7 @@ public class MySmartProgressView extends View {
         mXfermode = new PorterDuffXfermode(PorterDuff.Mode.MULTIPLY);
         mPointerRectF = new RectF(0, 0, mBitmapDstWidth, mBitmapDstHeight);
         mBitmapSRT = Bitmap.createBitmap((int) mBitmapDstWidth, (int) mBitmapDstHeight, Bitmap.Config.ARGB_8888);
-        mBitmapSRT.eraseColor(mPointerColor);
+        mBitmapSRT.eraseColor(mIndicatorColor);
     }
 
     /**
@@ -631,6 +638,7 @@ public class MySmartProgressView extends View {
             mParameter.setProgressColor(progressColor1);
             mParameter.setPointColor(pointColor1);
             mParameter.setBgCircleColor(bgCircleColor1);
+            mParameter.setIndicatorColor(indicatorColor1);
         } else if (progressValue < 720) {
             //第二个颜色段
             mParameter.setInsideColor(evaluate(fraction, insideColor1, insideColor2));
@@ -638,6 +646,7 @@ public class MySmartProgressView extends View {
             mParameter.setProgressColor(evaluate(fraction, progressColor1, progressColor2));
             mParameter.setPointColor(evaluate(fraction, pointColor1, pointColor2));
             mParameter.setBgCircleColor(evaluate(fraction, bgCircleColor1, bgCircleColor2));
+            mParameter.setIndicatorColor(evaluate(fraction, indicatorColor1, indicatorColor2));
         } else if (progressValue < 1080) {
             //第三个颜色段
             mParameter.setInsideColor(evaluate(fraction, insideColor2, insideColor3));
@@ -645,6 +654,7 @@ public class MySmartProgressView extends View {
             mParameter.setProgressColor(evaluate(fraction, progressColor2, progressColor3));
             mParameter.setPointColor(evaluate(fraction, pointColor2, pointColor3));
             mParameter.setBgCircleColor(evaluate(fraction, bgCircleColor2, bgCircleColor3));
+            mParameter.setIndicatorColor(evaluate(fraction, indicatorColor2, indicatorColor3));
         } else if (progressValue < 1440) {
             //第四个颜色段
             mParameter.setInsideColor(evaluate(fraction, insideColor3, insideColor4));
@@ -652,6 +662,7 @@ public class MySmartProgressView extends View {
             mParameter.setProgressColor(evaluate(fraction, progressColor3, progressColor4));
             mParameter.setPointColor(evaluate(fraction, pointColor3, pointColor4));
             mParameter.setBgCircleColor(evaluate(fraction, bgCircleColor3, bgCircleColor4));
+            mParameter.setIndicatorColor(evaluate(fraction, indicatorColor3, indicatorColor4));
         } else if (progressValue < 1800) {
             //第五个颜色段
             mParameter.setInsideColor(evaluate(fraction, insideColor4, insideColor5));
@@ -659,12 +670,14 @@ public class MySmartProgressView extends View {
             mParameter.setProgressColor(evaluate(fraction, progressColor4, progressColor5));
             mParameter.setPointColor(evaluate(fraction, pointColor4, pointColor5));
             mParameter.setBgCircleColor(evaluate(fraction, bgCircleColor4, bgCircleColor5));
+            mParameter.setIndicatorColor(evaluate(fraction, indicatorColor4, indicatorColor5));
         } else {
             mParameter.setInsideColor(insideColor5);
             mParameter.setOutsizeColor(outsizeColor5);
             mParameter.setProgressColor(progressColor5);
             mParameter.setPointColor(pointColor5);
             mParameter.setBgCircleColor(bgCircleColor5);
+            mParameter.setIndicatorColor(indicatorColorClean);
         }
         return mParameter;
     }
@@ -672,9 +685,9 @@ public class MySmartProgressView extends View {
     /**
      * 根据fraction的值确定位于两端颜色之间的具体颜色
      *
-     * @param fraction 0-1F之间
+     * @param fraction   0-1F之间
      * @param startValue 开始颜色值
-     * @param endValue 结束颜色值
+     * @param endValue   结束颜色值
      * @return
      */
     private int evaluate(float fraction, Object startValue, Object endValue) {

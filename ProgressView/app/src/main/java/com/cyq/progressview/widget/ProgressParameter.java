@@ -33,18 +33,22 @@ public class ProgressParameter {
      */
     private int bgCircleColor;
 
-
+    /**
+     * 指针颜色
+     */
+    private int indicatorColor;
 
     public ProgressParameter() {
     }
 
-    public ProgressParameter(int progress, int insideColor, int outsizeColor, int progressColor, int pointColor, int bgCircleColor) {
+    public ProgressParameter(int progress, int insideColor, int outsizeColor, int progressColor, int pointColor, int bgCircleColor, int indicatorColor) {
         this.insideColor = insideColor;
         this.outsizeColor = outsizeColor;
         this.progressColor = progressColor;
         this.pointColor = pointColor;
         this.bgCircleColor = bgCircleColor;
         this.progress = progress;
+        this.indicatorColor = indicatorColor;
     }
 
     public int getProgress() {
@@ -93,5 +97,13 @@ public class ProgressParameter {
 
     public void setPointColor(int pointColor) {
         this.pointColor = pointColor;
+    }
+
+    public int getIndicatorColor() {
+        return indicatorColor;
+    }
+
+    public void setIndicatorColor(int indicatorColor) {
+        this.indicatorColor = indicatorColor;
     }
 }
