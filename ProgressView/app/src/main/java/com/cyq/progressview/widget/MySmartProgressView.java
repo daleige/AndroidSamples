@@ -6,7 +6,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -24,7 +23,6 @@ import android.view.animation.LinearInterpolator;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.vectordrawable.graphics.drawable.ArgbEvaluator;
 
 import com.cyq.progressview.R;
 
@@ -404,7 +402,7 @@ public class MySmartProgressView extends View {
     /**
      * 设置保温模式
      */
-    public void startKeepWare() {
+    public void setKeepWareMode() {
         isKeepWare = true;
         //设置外环颜色渐变
         mOutCirclePaint.setShader(mSweepGradient);
