@@ -40,7 +40,7 @@ public class ProgressLayout extends FrameLayout {
      * 是否为清洁模式
      */
     private boolean isCleanMode = false;
-    private final String INIT_INDICATOR="init_indicator_version1";
+    private final String INIT_INDICATOR = "init_indicator_version1";
 
     public ProgressLayout(@NonNull Context context) {
         this(context, null);
@@ -53,10 +53,14 @@ public class ProgressLayout extends FrameLayout {
     public ProgressLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.ProgressLayout);
-        width = array.getDimensionPixelSize(R.styleable.ProgressLayout_progressLayout_width, Utils.dip2px(328, getContext()));
-        height = array.getDimensionPixelOffset(R.styleable.ProgressLayout_progressLayout_height, Utils.dip2px(328, getContext()));
-        outerShaderWidth = array.getDimensionPixelOffset(R.styleable.ProgressLayout_progressLayout_outer_shader_width, Utils.dip2px(10, getContext()));
-        circleStrokeWidth = array.getDimensionPixelOffset(R.styleable.ProgressLayout_progressLayout_circle_stroke_width, Utils.dip2px(13, getContext()));
+        width = array.getDimensionPixelSize(R.styleable.ProgressLayout_progressLayout_width,
+                Utils.dip2px(328, getContext()));
+        height = array.getDimensionPixelOffset(R.styleable.ProgressLayout_progressLayout_height,
+                Utils.dip2px(328, getContext()));
+        outerShaderWidth = array.getDimensionPixelOffset(R.styleable.ProgressLayout_progressLayout_outer_shader_width,
+                Utils.dip2px(10, getContext()));
+        circleStrokeWidth = array.getDimensionPixelOffset(R.styleable.ProgressLayout_progressLayout_circle_stroke_width,
+                Utils.dip2px(13, getContext()));
         isCleanMode = array.getBoolean(R.styleable.ProgressLayout_progressLayout_clean_mode, false);
         array.recycle();
         setMeasuredDimension(width, height);

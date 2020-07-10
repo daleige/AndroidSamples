@@ -9,7 +9,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
@@ -20,7 +19,6 @@ import android.graphics.Shader;
 import android.graphics.SweepGradient;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
@@ -39,9 +37,6 @@ import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-
-import static com.cyq.progressview.widget.NumberView.DOWN_ANIMATOR_MODE;
-import static com.cyq.progressview.widget.NumberView.UP_ANIMATOR_MODE;
 
 /**
  * @author : ChenYangQi
@@ -65,7 +60,6 @@ public class MySmartProgressView extends View {
      * 粒子外层圆环原点坐标和半径长度
      */
     private int mCenterX, mCenterY;
-
     /**
      * 主圆环内径到外径的中点到圆心的半径
      */
@@ -90,7 +84,6 @@ public class MySmartProgressView extends View {
      * 保温圆环的线性渐变色
      */
     private SweepGradient mSweepGradient;
-
     /**
      * 内环到外环的颜色变化数字
      */
@@ -128,12 +121,10 @@ public class MySmartProgressView extends View {
      */
     private int mPointerColor;
     private Paint mBmpPaint;
-
     /**
      * 外层粒子圆环的边框大小
      */
     private int mOutCircleStrokeWidth;
-
     /**
      * 外阴影的宽度
      */
@@ -177,7 +168,6 @@ public class MySmartProgressView extends View {
     private int pointColorClean = getContext().getColor(R.color.progress_point_color_clear);
     private int bgCircleColorClean = getContext().getColor(R.color.progress_bg_circle_color_clear);
     private ProgressParameter mParameter = new ProgressParameter();
-
     /**
      * 保温的进度圆变色值
      */
@@ -187,22 +177,18 @@ public class MySmartProgressView extends View {
      * 上一次圆环的进度，按0~3600计数
      */
     private float lastTimeProgress = 0;
-
     /**
      * 当前圆环的进度
      */
     private float currentProgress = 0;
-
     /**
      * 跳到下一个圆环进度的动画
      */
     private ValueAnimator progressAnim;
-
     /**
      * 保温模式下进度条变色旋转动画
      */
     private ValueAnimator mOutCircleAnim;
-
     /**
      * 保温模式下圆环当前的角度
      */
@@ -211,7 +197,15 @@ public class MySmartProgressView extends View {
     /**
      * 是否为清洁模式
      */
-    private boolean isCleanMode = false;
+    private boolean isCleanMode;
+    /**
+     * 标记指针此时是否可见
+     */
+    private int mPointerVisible = VISIBLE;
+    /**
+     * 清洁模式计时器
+     */
+    private Disposable mTimerDisposable;
 
     /**
      * 构造方法
@@ -275,6 +269,198 @@ public class MySmartProgressView extends View {
         initAnim();
     }
 
+    @Override
+    protected void onDraw(final Canvas canvas) {
+        super.onDraw(canvas);
+        //画扇形区域的运动粒子
+        canvas.save();
+        canvas.translate(mCenterX, mCenterY);
+        //把画布裁剪成扇形
+        if (!isKeepWare) {
+            canvas.clipPath(mArcPath);
+        }
+        //画运动粒子
+        for (AnimPoint animPoint : mPointList) {
+            mPointPaint.setAlpha(animPoint.getAlpha());
+            canvas.drawCircle(animPoint.getmX(), animPoint.getmY(),
+                    animPoint.getRadius(), mPointPaint);
+        }
+        //画渐变色圆饼
+        canvas.drawCircle(0, 0, mCenterX, mSweptPaint);
+        canvas.restore();
+        //step 2:画底色圆
+        canvas.drawCircle(mCenterX, mCenterY, mRadius, mBackCirclePaint);
+        //画进度圆环
+        canvas.save();
+        canvas.translate(mCenterX, mCenterY);
+        if (!isKeepWare) {
+            canvas.clipPath(mArcPath);
+        }
+        if (isKeepWare) {
+            canvas.rotate(mOutCircleAnger);
+        }
+        canvas.drawCircle(0, 0, mRadius, mOutCirclePaint);
+        canvas.restore();
+        //画指针
+        if (!isKeepWare) {
+            if (mPointerVisible == VISIBLE) {
+                canvas.translate(mCenterX, mCenterY);
+                canvas.rotate(mCurrentAngle / 10F);
+                canvas.translate(-mPointerRectF.width() / 2, -mCenterY);
+                mPointerLayoutId = canvas.saveLayer(mPointerRectF, mBmpPaint);
+                mBitmapSRT.eraseColor(mPointerColor);
+                canvas.drawBitmap(mBitmapDST, null, mPointerRectF, mBmpPaint);
+                mBmpPaint.setXfermode(mXfermode);
+                canvas.drawBitmap(mBitmapSRT, null, mPointerRectF, mBmpPaint);
+                mBmpPaint.setXfermode(null);
+                canvas.restoreToCount(mPointerLayoutId);
+            }
+        }
+    }
+
+    /**
+     * 设置当前的温度
+     *
+     * @param temperature       当前真实温度
+     * @param targetTemperature 目标真实温度
+     */
+    public void setCurrentTemperature(float temperature, float targetTemperature) {
+        isKeepWare = false;
+        //清除进度圆环的变色SweepGradient
+        mOutCirclePaint.setShader(null);
+        if (progressAnim != null && progressAnim.isRunning()) {
+            progressAnim.cancel();
+        }
+        //未达到目标温度时指针是可见的
+        if (temperature < targetTemperature) {
+            mPointerVisible = VISIBLE;
+        }
+        //把当前温度和最大温度等比转换为0~3600表示
+        currentProgress = temperature / targetTemperature * 3600;
+        //自定义包含各个进度对应的颜色值和进度值的属性动画，
+        progressAnim = ValueAnimator.ofFloat(lastTimeProgress, currentProgress);
+        progressAnim.setDuration(1000);
+        progressAnim.addUpdateListener(animation -> {
+            float value = (float) animation.getAnimatedValue();
+            mCurrentAngle = value;
+            //根据当前的进度值获取圆环的颜色属性
+            ProgressParameter parameter = new ProgressParameter();
+            if (isCleanMode) {
+                parameter.setBgCircleColor(bgCircleColorClean);
+                parameter.setInsideColor(insideColorClean);
+                parameter.setOutsizeColor(outsizeColorClean);
+                parameter.setPointColor(pointColorClean);
+                parameter.setProgressColor(progressColorClean);
+            } else {
+                parameter = getProgressParameter(value);
+            }
+            //变更进度条的颜色值
+            mPointPaint.setColor(parameter.getPointColor());
+            mOutCirclePaint.setColor(parameter.getProgressColor());
+            mBackCirclePaint.setColor(parameter.getBgCircleColor());
+            //更改指针颜色
+            mPointerColor = parameter.getPointColor();
+            //设置内圈变色圆的shader
+            mRadialGradientColors[2] = parameter.getInsideColor();
+            mRadialGradientColors[3] = parameter.getOutsizeColor();
+            mRadialGradient = new RadialGradient(
+                    0,
+                    0,
+                    mCenterX,
+                    mRadialGradientColors,
+                    mRadialGradientStops,
+                    Shader.TileMode.CLAMP);
+            mSweptPaint.setShader(mRadialGradient);
+            //获取此时的扇形区域path，用于裁剪动画粒子的canvas
+            getSectorClip(width / 2F, -90, value / 10F);
+        });
+        progressAnim.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                lastTimeProgress = currentProgress;
+                if (mCurrentAngle >= 3600) {
+                    setPointerVisible(GONE);
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                lastTimeProgress = currentProgress;
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        progressAnim.start();
+    }
+
+    /**
+     * 设置保温模式
+     */
+    public void startKeepWare() {
+        isKeepWare = true;
+        //设置外环颜色渐变
+        mOutCirclePaint.setShader(mSweepGradient);
+        //变更进度条的颜色值
+        mPointPaint.setColor(pointColor5);
+        mOutCirclePaint.setColor(progressColor5);
+        mBackCirclePaint.setColor(bgCircleColor5);
+        //设置内圈变色圆的shader
+        mRadialGradientColors[2] = insideColor5;
+        mRadialGradientColors[3] = outsizeColor5;
+        mRadialGradient = new RadialGradient(
+                0,
+                0,
+                mCenterX,
+                mRadialGradientColors,
+                mRadialGradientStops,
+                Shader.TileMode.CLAMP);
+        mSweptPaint.setShader(mRadialGradient);
+        //开始外圈变色旋转动画
+        mOutCircleAnim.start();
+        invalidate();
+    }
+
+    /**
+     * 设置清洁模式
+     *
+     * @param second    倒计时时间
+     * @param cleanMode 清洁模式tag
+     */
+    public void setCleanMode(int second, boolean cleanMode) {
+        disposeTimer();
+        isCleanMode = cleanMode;
+        //精度环这里不做结果回调处理
+        mTimerDisposable = Flowable.intervalRange(0,
+                second + 1,
+                0,
+                1,
+                TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(aLong -> setCurrentTemperature(second - aLong.intValue(), second))
+                .doOnComplete(this::disposeTimer)
+                .subscribe();
+    }
+
+    /**
+     * 初始化设置控件宽高
+     *
+     * @param width
+     * @param height
+     */
+    public void setDimension(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
+
     /**
      * 初始化控件的各类宽高，边框，半径等大小
      */
@@ -329,21 +515,17 @@ public class MySmartProgressView extends View {
 
         //step2：初始化运动粒子的画笔
         mPointPaint = new Paint();
-        //mPointPaint.setStyle(Paint.Style.FILL);
-        //TODO 设备端羽化效果CPU不支持，暂不设置
-        mPointPaint.setMaskFilter(new BlurMaskFilter(4, BlurMaskFilter.Blur.NORMAL));
-
+        //TODO 设备端羽化效果GPU硬件不支持，暂不设置
+        //mPointPaint.setMaskFilter(new BlurMaskFilter(4, BlurMaskFilter.Blur.NORMAL));
         //初始化底色圆画笔
         mBackCirclePaint = new Paint();
         mBackCirclePaint.setAntiAlias(true);
         mBackCirclePaint.setStrokeWidth(mOutCircleStrokeWidth);
         mBackCirclePaint.setStyle(Paint.Style.STROKE);
-
         //初始化底色圆得initAnimator画笔
         mBackShadePaint = new Paint();
         mBackShadePaint.setAntiAlias(true);
         mBackShadePaint.setColor(bgCircleColor1);
-
         //指针画笔颜色
         mBmpPaint = new Paint();
     }
@@ -354,12 +536,12 @@ public class MySmartProgressView extends View {
     private void initBitmap() {
         float f = 130F / 656F;
         mBitmapDST = BitmapFactory.decodeResource(getResources(), R.drawable.indicator);
-        float mBitmapDSTHeight = width * f;
-        float mBitmapDSTWidth = mBitmapDSTHeight * mBitmapDST.getWidth() / mBitmapDST.getHeight();
+        float mBitmapDstHeight = width * f;
+        float mBitmapDstWidth = mBitmapDstHeight * mBitmapDST.getWidth() / mBitmapDST.getHeight();
         //初始化指针的图层混合模式
         mXfermode = new PorterDuffXfermode(PorterDuff.Mode.MULTIPLY);
-        mPointerRectF = new RectF(0, 0, mBitmapDSTWidth, mBitmapDSTHeight);
-        mBitmapSRT = Bitmap.createBitmap((int) mBitmapDSTWidth, (int) mBitmapDSTHeight, Bitmap.Config.ARGB_8888);
+        mPointerRectF = new RectF(0, 0, mBitmapDstWidth, mBitmapDstHeight);
+        mBitmapSRT = Bitmap.createBitmap((int) mBitmapDstWidth, (int) mBitmapDstHeight, Bitmap.Config.ARGB_8888);
         mBitmapSRT.eraseColor(mPointerColor);
     }
 
@@ -369,7 +551,6 @@ public class MySmartProgressView extends View {
     private void initAnim() {
         // 绘制扇形path
         mArcPath = new Path();
-
         //绘制运动的粒子
         mPointList.clear();
         AnimPoint mAnimPoint = new AnimPoint();
@@ -391,7 +572,6 @@ public class MySmartProgressView extends View {
             invalidate();
         });
         mPointsAnimator.start();
-
         //保温模式圆环变色旋转动画
         mOutCircleAnim = ValueAnimator.ofFloat(-90F, 270F);
         mOutCircleAnim.setDuration(4000);
@@ -401,57 +581,6 @@ public class MySmartProgressView extends View {
         mOutCircleAnim.addUpdateListener(animation -> {
             mOutCircleAnger = (float) animation.getAnimatedValue();
         });
-    }
-
-    @Override
-    protected void onDraw(final Canvas canvas) {
-        super.onDraw(canvas);
-        //画扇形区域的运动粒子
-        canvas.save();
-        canvas.translate(mCenterX, mCenterY);
-        //把画布裁剪成扇形
-        if (!isKeepWare) {
-            canvas.clipPath(mArcPath);
-        }
-        //画运动粒子
-        for (AnimPoint animPoint : mPointList) {
-            mPointPaint.setAlpha(animPoint.getAlpha());
-            canvas.drawCircle(animPoint.getmX(), animPoint.getmY(),
-                    animPoint.getRadius(), mPointPaint);
-        }
-        //画渐变色圆饼
-        canvas.drawCircle(0, 0, mCenterX, mSweptPaint);
-        canvas.restore();
-
-        //step 2:画底色圆
-        canvas.drawCircle(mCenterX, mCenterY, mRadius, mBackCirclePaint);
-        //画进度圆环
-        canvas.save();
-        canvas.translate(mCenterX, mCenterY);
-        if (!isKeepWare) {
-            canvas.clipPath(mArcPath);
-        }
-        if (isKeepWare) {
-            canvas.rotate(mOutCircleAnger);
-        }
-        canvas.drawCircle(0, 0, mRadius, mOutCirclePaint);
-        canvas.restore();
-
-        //画指针
-        if (!isKeepWare) {
-            if (mPointerVisible == VISIBLE) {
-                canvas.translate(mCenterX, mCenterY);
-                canvas.rotate(mCurrentAngle / 10F);
-                canvas.translate(-mPointerRectF.width() / 2, -mCenterY);
-                mPointerLayoutId = canvas.saveLayer(mPointerRectF, mBmpPaint);
-                mBitmapSRT.eraseColor(mPointerColor);
-                canvas.drawBitmap(mBitmapDST, null, mPointerRectF, mBmpPaint);
-                mBmpPaint.setXfermode(mXfermode);
-                canvas.drawBitmap(mBitmapSRT, null, mPointerRectF, mBmpPaint);
-                mBmpPaint.setXfermode(null);
-                canvas.restoreToCount(mPointerLayoutId);
-            }
-        }
     }
 
     /**
@@ -470,125 +599,6 @@ public class MySmartProgressView extends View {
     }
 
     /**
-     * 设置当前的温度
-     *
-     * @param temperature       当前真实温度
-     * @param targetTemperature 目标真实温度
-     */
-    public void setCurrentTemperature(float temperature, float targetTemperature) {
-        isKeepWare = false;
-        //清除进度圆环的变色SweepGradient
-        mOutCirclePaint.setShader(null);
-
-        if (progressAnim != null && progressAnim.isRunning()) {
-            progressAnim.cancel();
-        }
-        //未达到目标温度时指针是可见的
-        if (temperature < targetTemperature) {
-            mPointerVisible = VISIBLE;
-        }
-
-        //把当前温度和最大温度等比转换为0~3600表示
-        currentProgress = temperature / targetTemperature * 3600;
-        //自定义包含各个进度对应的颜色值和进度值的属性动画，
-        progressAnim = ValueAnimator.ofFloat(lastTimeProgress, currentProgress);
-        progressAnim.setDuration(1000);
-        progressAnim.addUpdateListener(animation -> {
-            float value = (float) animation.getAnimatedValue();
-            mCurrentAngle = value;
-            //根据当前的进度值获取圆环的颜色属性
-            ProgressParameter colors = new ProgressParameter();
-            if (isCleanMode) {
-                colors.setBgCircleColor(bgCircleColorClean);
-                colors.setInsideColor(insideColorClean);
-                colors.setOutsizeColor(outsizeColorClean);
-                colors.setPointColor(pointColorClean);
-                colors.setProgressColor(progressColorClean);
-            } else {
-                colors = getProgressParameter(value);
-            }
-            //变更进度条的颜色值
-            mPointPaint.setColor(colors.getPointColor());
-            mOutCirclePaint.setColor(colors.getProgressColor());
-            mBackCirclePaint.setColor(colors.getBgCircleColor());
-            //更改指针颜色
-            mPointerColor = colors.getPointColor();
-            //设置内圈变色圆的shader
-            mRadialGradientColors[2] = colors.getInsideColor();
-            mRadialGradientColors[3] = colors.getOutsizeColor();
-
-            mRadialGradient = new RadialGradient(
-                    0,
-                    0,
-                    mCenterX,
-                    mRadialGradientColors,
-                    mRadialGradientStops,
-                    Shader.TileMode.CLAMP);
-            mSweptPaint.setShader(mRadialGradient);
-            //获取此时的扇形区域path，用于裁剪动画粒子的canvas
-            getSectorClip(width / 2F, -90, value / 10F);
-        });
-
-        progressAnim.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                lastTimeProgress = currentProgress;
-                if (mCurrentAngle >= 3600) {
-                    setPointerVisible(GONE);
-                }
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-                lastTimeProgress = currentProgress;
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-        progressAnim.start();
-    }
-
-    /**
-     * 保温模式
-     */
-    public void startKeepWare() {
-        isKeepWare = true;
-        //设置外环颜色渐变
-        mOutCirclePaint.setShader(mSweepGradient);
-        //变更进度条的颜色值
-        mPointPaint.setColor(pointColor5);
-        mOutCirclePaint.setColor(progressColor5);
-        mBackCirclePaint.setColor(bgCircleColor5);
-        //设置内圈变色圆的shader
-        mRadialGradientColors[2] = insideColor5;
-        mRadialGradientColors[3] = outsizeColor5;
-        mRadialGradient = new RadialGradient(
-                0,
-                0,
-                mCenterX,
-                mRadialGradientColors,
-                mRadialGradientStops,
-                Shader.TileMode.CLAMP);
-        mSweptPaint.setShader(mRadialGradient);
-        //开始外圈变色旋转动画
-        mOutCircleAnim.start();
-        invalidate();
-    }
-
-    /**
-     * 标记指针此时是否可见
-     */
-    private int mPointerVisible = VISIBLE;
-
-    /**
      * 设置指针显示或者是隐藏的动画
      *
      * @param visible = VISIBLE or GONE
@@ -604,6 +614,7 @@ public class MySmartProgressView extends View {
 
     /**
      * 获取当前进度值（0~3600）对应的颜色值
+     * 每段的颜色值根据设计稿给的色阶确定
      *
      * @param progressValue 0~3600之间的圆环进度值
      * @return
@@ -614,7 +625,6 @@ public class MySmartProgressView extends View {
         if (progressValue >= 360 && progressValue < 1800) {
             fraction = progressValue % 360 / 360;
         }
-
         if (progressValue < 360) {
             //第一个颜色段
             mParameter.setInsideColor(insideColor1);
@@ -661,36 +671,8 @@ public class MySmartProgressView extends View {
         return mParameter;
     }
 
-    private Disposable mTimerDisposable;
-
     /**
-     * 设置清洁模式
-     *
-     * @param second    倒计时时间
-     * @param cleanMode 清洁模式tag
-     */
-    public void setCleanMode(int second, boolean cleanMode) {
-        disposeTimer();
-        isCleanMode = cleanMode;
-        mTimerDisposable = Flowable.intervalRange(0,
-                second + 1,
-                0,
-                1,
-                TimeUnit.SECONDS)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(aLong -> {
-                    setCurrentTemperature(second - aLong.intValue(), second);
-                })
-                .doOnComplete(() -> {
-                    //精度环这里不做结果回调处理
-                    disposeTimer();
-                })
-                .subscribe();
-    }
-
-    /**
-     * 解绑计时器
+     * 解绑清洁倒计时的计时器
      */
     private void disposeTimer() {
         if (mTimerDisposable != null && !mTimerDisposable.isDisposed()) {
@@ -700,16 +682,8 @@ public class MySmartProgressView extends View {
     }
 
     /**
-     * 初始化设置控件宽高
-     *
-     * @param width
-     * @param height
+     * 动画取消 资源释放
      */
-    public void setDimension(int width, int height) {
-        this.width = width;
-        this.height = height;
-    }
-
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
