@@ -18,6 +18,7 @@ import android.graphics.Shader;
 import android.graphics.SweepGradient;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
@@ -540,6 +541,8 @@ public class MySmartProgressView extends View {
         mXfermode = new PorterDuffXfermode(PorterDuff.Mode.MULTIPLY);
         mPointerRectF = new RectF(0, 0, mBitmapDstWidth, mBitmapDstHeight);
         mBitmapSRT = Bitmap.createBitmap((int) mBitmapDstWidth, (int) mBitmapDstHeight, Bitmap.Config.ARGB_8888);
+        Log.e("test","------------指针宽高："+mPointerRectF.width()+"---"+mPointerRectF.height());
+        Log.e("test","------------指针宽高："+mBitmapSRT.getWidth()+"---"+mBitmapSRT.getHeight());
         mBitmapSRT.eraseColor(mPointerColor);
     }
 

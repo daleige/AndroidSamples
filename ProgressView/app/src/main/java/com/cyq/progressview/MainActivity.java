@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.btn_2:
-                //减温
+                //清洁模式
                 mProgress.setCleanMode(60 * 15, new ProgressLayout.OnCompleteListener() {
                     @Override
                     public void onComplete() {
