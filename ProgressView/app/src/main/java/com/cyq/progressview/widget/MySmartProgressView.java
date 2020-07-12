@@ -677,7 +677,7 @@ public class MySmartProgressView extends View {
             mParameter.setProgressColor(progressColor5);
             mParameter.setPointColor(pointColor5);
             mParameter.setBgCircleColor(bgCircleColor5);
-            mParameter.setIndicatorColor(indicatorColorClean);
+            mParameter.setIndicatorColor(indicatorColor5);
         }
         return mParameter;
     }

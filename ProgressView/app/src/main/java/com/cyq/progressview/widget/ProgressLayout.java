@@ -15,7 +15,6 @@ import androidx.annotation.Nullable;
 
 import com.cyq.progressview.R;
 import com.cyq.progressview.utils.Utils;
-import com.yuyashuai.frameanimation.FrameAnimationView;
 
 /**
  * @author : ChenYangQi
