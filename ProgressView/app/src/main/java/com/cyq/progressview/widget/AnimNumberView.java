@@ -3,7 +3,6 @@ package com.cyq.progressview.widget;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -11,8 +10,6 @@ import androidx.annotation.Nullable;
 
 import com.cyq.progressview.R;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
@@ -60,9 +57,9 @@ public class AnimNumberView extends LinearLayout {
     private LinearLayout mTempContainer, mClockContainer;
     private Disposable mTimerDisposable;
     private OnTimerComplete mTimerListener;
-    private int numberWidth;
-    private int numberHeight;
-    private int numberTextSize;
+    private int numberWidth = 92;
+    private int numberHeight = 190;
+    private int numberTextSize = 80;
     private TextView mTvCircle;
     /**
      * 全局变量
@@ -79,7 +76,8 @@ public class AnimNumberView extends LinearLayout {
 
     public AnimNumberView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        LayoutInflater.from(getContext()).inflate(R.layout.widget_progress_temp_number_layout, this, true);
+        LayoutInflater.from(getContext()).inflate(R.layout.widget_progress_temp_number_layout,
+                this, true);
         mSingleView = findViewById(R.id.mSingleNumber);
         mTenView = findViewById(R.id.mTenNumber);
         mHundredView = findViewById(R.id.mHundredNumber);
@@ -95,6 +93,7 @@ public class AnimNumberView extends LinearLayout {
         mClockContainer = findViewById(R.id.mClockContainer);
         mTvCircle = findViewById(R.id.tv_number_one);
         checkMode(mMode);
+        setLayoutSize(numberWidth, numberHeight, numberTextSize);
     }
 
     /**
@@ -108,10 +107,10 @@ public class AnimNumberView extends LinearLayout {
         int mTen = temperature / 10 % 10;
         int mHundred = temperature / 100 % 10;
         //设置控件的尺寸
-        mSingleView.setLayoutSize(92, 190, 80);
-        mTenView.setLayoutSize(92, 190, 80);
-        mHundredView.setLayoutSize(92, 190, 80);
-        mTvCircle.setTextSize(80);
+        numberWidth = 92;
+        numberHeight = 190;
+        numberTextSize = 80;
+        setLayoutSize(numberWidth, numberHeight, numberTextSize);
         mSingleView.setCurrentValue(NumberView.POSITION_ONE, mSingle, temperature, 0);
         mTenView.setCurrentValue(NumberView.POSITION_TOW, mTen, temperature, 0);
         mHundredView.setCurrentValue(NumberView.POSITION_THREE, mHundred, temperature, 0);
@@ -162,27 +161,10 @@ public class AnimNumberView extends LinearLayout {
      * @param second
      */
     private void setClock(int second, int mode) {
-        if (second > 60 - 1) {
-            //大于1分钟
-            mSecond1View.setVisibility(VISIBLE);
-            mSecond2View.setVisibility(VISIBLE);
-            mMinute1View.setVisibility(VISIBLE);
-        } else if (second > 60 * 10 - 1) {
-            //大于十分钟
-            mMinute2View.setVisibility(VISIBLE);
-        } else if (second > 60 * 60 - 1) {
-            //大于60分钟
-            mColon2View.setVisibility(VISIBLE);
-            mHour1View.setVisibility(VISIBLE);
-        } else if (second > 60 * 60 * 10 - 1) {
-            //大于十个小时
-            mHour2View.setVisibility(VISIBLE);
-        }
         int hour, min, sec;
-        hour = (int) (second / (60 * 60));
-        min = (int) ((second - hour * 3600) / 60);
-        sec = (int) (second - hour * 3600 - min * 60);
-        System.out.println();
+        hour = second / (60 * 60);
+        min = (second - hour * 3600) / 60;
+        sec = second - hour * 3600 - min * 60;
         //计算HH：MM：SS 6个位置的值
         int mHour1Value = hour / 10 % 10;
         int mHour2Value = hour % 10;
@@ -229,14 +211,7 @@ public class AnimNumberView extends LinearLayout {
             mMinute1View.setVisibility(GONE);
         }
 
-        mColon1View.setTextSize(numberTextSize);
-        mColon2View.setTextSize(numberTextSize);
-        mHour1View.setLayoutSize(numberWidth, numberHeight, numberTextSize);
-        mHour2View.setLayoutSize(numberWidth, numberHeight, numberTextSize);
-        mMinute1View.setLayoutSize(numberWidth, numberHeight, numberTextSize);
-        mMinute2View.setLayoutSize(numberWidth, numberHeight, numberTextSize);
-        mSecond1View.setLayoutSize(numberWidth, numberHeight, numberTextSize);
-        mSecond2View.setLayoutSize(numberWidth, numberHeight, numberTextSize);
+        setLayoutSize(numberWidth, numberHeight, numberTextSize);
 
         mHour1View.setCurrentValue(NumberView.POSITION_SIX, mHour1Value, mode);
         mHour2View.setCurrentValue(NumberView.POSITION_FIVE, mHour2Value, mode);
@@ -244,6 +219,26 @@ public class AnimNumberView extends LinearLayout {
         mMinute2View.setCurrentValue(NumberView.POSITION_THREE, mMinute2Value, mode);
         mSecond1View.setCurrentValue(NumberView.POSITION_TOW, mSecond1Value, mode);
         mSecond2View.setCurrentValue(NumberView.POSITION_ONE, mSecond2Value, mode);
+    }
+
+
+    /**
+     * 设置字体和文字大小尺寸
+     */
+    private void setLayoutSize(int width, int height, int textSize) {
+        mSingleView.setLayoutSize(width, height, textSize);
+        mTenView.setLayoutSize(width, height, textSize);
+        mHundredView.setLayoutSize(width, height, textSize);
+        mTvCircle.setTextSize(textSize);
+
+        mColon1View.setTextSize(textSize);
+        mColon2View.setTextSize(textSize);
+        mHour1View.setLayoutSize(width, height, textSize);
+        mHour2View.setLayoutSize(width, height, textSize);
+        mMinute1View.setLayoutSize(width, height, textSize);
+        mMinute2View.setLayoutSize(width, height, textSize);
+        mSecond1View.setLayoutSize(width, height, textSize);
+        mSecond2View.setLayoutSize(width, height, textSize);
     }
 
     /**

@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_4:
                 //倒计时
                 mHandler.removeCallbacksAndMessages(null);
-                mProgress.setTimer(3605*25, AnimNumberView.DOWN_TIMER);
+                mProgress.setTimer(3601*10, AnimNumberView.DOWN_TIMER);
                 mProgress.setOnCompleteListener(new ProgressLayout.OnCompleteListener() {
                     @Override
                     public void onComplete() {
