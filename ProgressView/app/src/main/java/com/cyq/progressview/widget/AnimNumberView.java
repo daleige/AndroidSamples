@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+
 import com.cyq.progressview.R;
 
 import java.util.concurrent.TimeUnit;
@@ -61,10 +62,7 @@ public class AnimNumberView extends LinearLayout {
     private int numberHeight = 190;
     private int numberTextSize = 80;
     private TextView mTvCircle;
-    /**
-     * 全局变量
-     */
-    Disposable disposable;
+    private int mCurrentTemperature = 0;
 
     public AnimNumberView(Context context) {
         this(context, null);
@@ -102,15 +100,29 @@ public class AnimNumberView extends LinearLayout {
      * @param temperature
      */
     public void setTemperature(int temperature, int mode) {
+        this.mCurrentTemperature = temperature;
         checkMode(mode);
-        int mSingle = temperature % 10;
-        int mTen = temperature / 10 % 10;
-        int mHundred = temperature / 100 % 10;
         //设置控件的尺寸
         numberWidth = 92;
         numberHeight = 190;
         numberTextSize = 80;
         setLayoutSize(numberWidth, numberHeight, numberTextSize);
+        int mSingle = temperature % 10;
+        int mTen = temperature / 10 % 10;
+        int mHundred = temperature / 100 % 10;
+        if (temperature < 10) {
+            mSingleView.setVisibility(VISIBLE);
+            mTenView.setVisibility(GONE);
+            mHundredView.setVisibility(GONE);
+        } else if (temperature < 100) {
+            mSingleView.setVisibility(VISIBLE);
+            mTenView.setVisibility(VISIBLE);
+            mHundredView.setVisibility(GONE);
+        } else {
+            mSingleView.setVisibility(VISIBLE);
+            mTenView.setVisibility(VISIBLE);
+            mHundredView.setVisibility(VISIBLE);
+        }
         mSingleView.setCurrentValue(NumberView.POSITION_ONE, mSingle, temperature, 0);
         mTenView.setCurrentValue(NumberView.POSITION_TOW, mTen, temperature, 0);
         mHundredView.setCurrentValue(NumberView.POSITION_THREE, mHundred, temperature, 0);
@@ -290,8 +302,14 @@ public class AnimNumberView extends LinearLayout {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if (disposable != null) {
-            disposable.dispose();
-        }
+        disposeTimer();
+    }
+
+    public int getCurrentTemperature() {
+        return mCurrentTemperature;
+    }
+
+    public void cancelProgressAnimation() {
+        disposeTimer();
     }
 }

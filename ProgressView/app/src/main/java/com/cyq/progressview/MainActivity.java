@@ -72,39 +72,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.btn_2:
                 //清洁模式
-                mProgress.setCleanMode(60 * 15, new ProgressLayout.OnCompleteListener() {
-                    @Override
-                    public void onComplete() {
-                        Log.e("test", "清洁完成----------》");
-                        Toast.makeText(MainActivity.this, "清洁完成", Toast.LENGTH_LONG).show();
-                    }
-                });
+
                 break;
 
             case R.id.btn_3:
                 //正计时
-                mHandler.removeCallbacksAndMessages(null);
-                mProgress.setTimer(-1, AnimNumberView.UP_TIMER);
-                mProgress.setOnCompleteListener(new ProgressLayout.OnCompleteListener() {
-                    @Override
-                    public void onComplete() {
-                        Log.e("test", "正计时结束");
-                    }
-                });
+
                 break;
 
             case R.id.btn_4:
-//                //倒计时
-//                mHandler.removeCallbacksAndMessages(null);
-//                mProgress.setTimer(3601*10, AnimNumberView.DOWN_TIMER);
-//                mProgress.setOnCompleteListener(new ProgressLayout.OnCompleteListener() {
-//                    @Override
-//                    public void onComplete() {
-//                        Log.e("test", "倒计时结束");
-//                    }
-//                });
-                mProgress.mMySmartProgressView.setMax(100);
-                mProgress.mMySmartProgressView.setProgressWithNoAnimation(100);
+                //倒计时
+
                 break;
             default:
         }

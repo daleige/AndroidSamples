@@ -1,14 +1,11 @@
 package com.cyq.progressview.widget;
 
-import android.animation.Animator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,14 +18,18 @@ import com.cyq.progressview.R;
  * desc   : 自定义组合布局 底部的扇形粒子动画+数字切换
  */
 public class ProgressLayout extends FrameLayout {
-    public MySmartProgressView mMySmartProgressView;
-    private AnimNumberView mAnimNumberView;
+    public MySmartProgressView mSmartProgressBar;
+    public AnimNumberView mAnimNumberView;
     private OnCompleteListener mCompleteListener;
     private int height;
     private int width;
     private int outerShaderWidth;
     private int circleStrokeWidth;
+    /**
+     * 是否为清洁模式
+     */
     private boolean isCleanMode;
+    private boolean isKeepWareMode;
 
     public ProgressLayout(@NonNull Context context) {
         this(context, null);
@@ -50,6 +51,7 @@ public class ProgressLayout extends FrameLayout {
         circleStrokeWidth = array.getDimensionPixelOffset(R.styleable.ProgressLayout_progressLayout_circle_stroke_width,
                 Utils.dip2px(13, getContext()));
         isCleanMode = array.getBoolean(R.styleable.ProgressLayout_progressLayout_clean_mode, false);
+        isKeepWareMode = array.getBoolean(R.styleable.ProgressLayout_progressLayout_keep_ware_mode, false);
         array.recycle();
         setMeasuredDimension(width, height);
         init();
@@ -62,31 +64,25 @@ public class ProgressLayout extends FrameLayout {
     }
 
     private void init() {
-        mMySmartProgressView = new MySmartProgressView(getContext(), width, height, outerShaderWidth, circleStrokeWidth, isCleanMode);
-        mMySmartProgressView.setDimension(width, height);
+        mSmartProgressBar = new MySmartProgressView(getContext(),
+                width,
+                height,
+                outerShaderWidth,
+                circleStrokeWidth,
+                isCleanMode,
+                isKeepWareMode);
+        mSmartProgressBar.setDimension(width, height);
         LayoutParams mySmartProgressViewLp = new LayoutParams(width, height);
         mySmartProgressViewLp.gravity = Gravity.CENTER;
-        mMySmartProgressView.setLayoutParams(mySmartProgressViewLp);
+        mSmartProgressBar.setLayoutParams(mySmartProgressViewLp);
 
         mAnimNumberView = new AnimNumberView(getContext());
         LayoutParams animNumberViewLp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         animNumberViewLp.gravity = Gravity.CENTER;
         mAnimNumberView.setLayoutParams(animNumberViewLp);
-        addView(mMySmartProgressView);
-        addView(mAnimNumberView);
-    }
 
-    /**
-     * 设置当前显示温度
-     *
-     * @param temperature       当前温度
-     * @param targetTemperature 目标温度
-     */
-    public void setTemperature(float temperature, float targetTemperature) {
-        //温度设置
-        mMySmartProgressView.setCurrentTemperature(temperature, targetTemperature);
-        //动画数字控件设置温度模式
-        mAnimNumberView.setTemperature((int) temperature, AnimNumberView.TEMPERATURE_MODE);
+        addView(mSmartProgressBar);
+        addView(mAnimNumberView);
     }
 
     /**
@@ -98,7 +94,7 @@ public class ProgressLayout extends FrameLayout {
      * @param timerMode
      */
     public void setTimer(int second, int timerMode) {
-        mMySmartProgressView.setKeepWareMode();
+        mSmartProgressBar.setKeepWareMode();
         mAnimNumberView.setTimer(second, timerMode);
         mAnimNumberView.setOnTimerCompleteListener(() -> {
             if (mCompleteListener != null) {
@@ -126,14 +122,11 @@ public class ProgressLayout extends FrameLayout {
     public void setCleanMode(int second, OnCompleteListener completeListener) {
         isCleanMode = true;
         mCompleteListener = completeListener;
-        mMySmartProgressView.setCleanMode(second, true);
+        mSmartProgressBar.setCleanMode(second);
         mAnimNumberView.setTimer(second, AnimNumberView.DOWN_TIMER);
-        mAnimNumberView.setOnTimerCompleteListener(new AnimNumberView.OnTimerComplete() {
-            @Override
-            public void onComplete() {
-                if (mCompleteListener != null) {
-                    mCompleteListener.onComplete();
-                }
+        mAnimNumberView.setOnTimerCompleteListener(() -> {
+            if (mCompleteListener != null) {
+                mCompleteListener.onComplete();
             }
         });
     }
@@ -147,5 +140,60 @@ public class ProgressLayout extends FrameLayout {
          * 计时完成的回调
          */
         void onComplete();
+    }
+
+    /**
+     * 设置当前温度
+     *
+     * @param temperature                    当前温度
+     */
+    public void setTemperature(float temperature,
+                               float targetTemperature) {
+        //变色环设置温度
+        mSmartProgressBar.setCurrentTemperature(
+                temperature,
+                targetTemperature);
+        //动画数字控件设置温度模式
+        mAnimNumberView.setTemperature((int) temperature, AnimNumberView.TEMPERATURE_MODE);
+    }
+
+    public int getCurrentShowTemperatureValue() {
+        if (mAnimNumberView != null) {
+            return mAnimNumberView.getCurrentTemperature();
+        }
+        return 0;
+    }
+
+    /**
+     * 设置时间
+     *
+     * @param secondTotalTime 总时间 单位：秒
+     * @param timeNow         当前已执行时间
+     * @param isFullReduction 是否是满环
+     */
+    public void setTimeText(long secondTotalTime, long timeNow, boolean isFullReduction) {
+        if (isCleanMode) {
+            //清洁模式
+            mSmartProgressBar.setCleanMode((int) secondTotalTime);
+            mAnimNumberView.setTimer((int) secondTotalTime, AnimNumberView.DOWN_TIMER);
+        } else if (isFullReduction && secondTotalTime <= 0) {
+            //保温
+            mSmartProgressBar.setKeepWareMode();
+            mAnimNumberView.setTimer((int) secondTotalTime, AnimNumberView.DOWN_TIMER);
+        } else {
+            //烹饪
+            mSmartProgressBar.setCookingMode((int) secondTotalTime, timeNow, isFullReduction);
+            mAnimNumberView.setTimer((int) secondTotalTime, AnimNumberView.DOWN_TIMER);
+        }
+    }
+
+    /**
+     * 设置为保温模式
+     */
+    public void setKeepWare() {
+        mSmartProgressBar.setVisibility(VISIBLE);
+        mAnimNumberView.setVisibility(VISIBLE);
+        mSmartProgressBar.setKeepWareMode();
+        mAnimNumberView.setTimer(-1, AnimNumberView.UP_TIMER);
     }
 }

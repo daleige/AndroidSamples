@@ -31,5 +31,9 @@
         <attr name="progressLayout_circle_stroke_width" format="dimension" />
         <!--        是否是清洁模式-->
         <attr name="progressLayout_clean_mode" format="boolean" />
+        <!--        是否执行指针上浮的初始化动画 -->
+        <attr name="progressLayout_init_anim" format="boolean" />
+        <!--        是否是保温模式-->
+        <attr name="progressLayout_keep_ware_mode" format="boolean" />
     </declare-styleable>
 </resources>

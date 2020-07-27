@@ -30,12 +30,8 @@ import com.cyq.progressview.R;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Flowable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author : ChenYangQi
@@ -202,7 +198,11 @@ public class MySmartProgressView extends View {
     /**
      * 是否为清洁模式
      */
-    private boolean isCleanMode;
+    private boolean isCleanMode = false;
+    /**
+     * 时候在烹饪中
+     */
+    private boolean isCookingMode;
     /**
      * 标记指针此时是否可见
      */
@@ -211,6 +211,23 @@ public class MySmartProgressView extends View {
      * 清洁模式计时器
      */
     private Disposable mTimerDisposable;
+    /**
+     * 更新一次温度进度的动画时间
+     */
+    private int mAnimDuration = 1500;
+    /**
+     * 预热减温
+     */
+    private boolean isDownTemperature = false;
+    private ArrayList<ValueAnimator.AnimatorUpdateListener> mProgressAnimatorUpdateListener = new ArrayList<>();
+    /**
+     * 最大温度
+     */
+    private float maxProgress = 0;
+    /**
+     * 倒计时动画
+     */
+    private ValueAnimator downTimerAnim;
 
     /**
      * 构造方法
@@ -226,8 +243,9 @@ public class MySmartProgressView extends View {
                                int parentHeight,
                                int outerShaderWidth,
                                int circleStrokeWidth,
-                               boolean isCleanMode) {
-        this(context, parentWidth, outerShaderWidth, circleStrokeWidth, isCleanMode);
+                               boolean isCleanMode,
+                               boolean isKeepWare) {
+        this(context, parentWidth, outerShaderWidth, circleStrokeWidth, isCleanMode, isKeepWare);
     }
 
 
@@ -235,8 +253,9 @@ public class MySmartProgressView extends View {
                                int parentWidth,
                                int outerShaderWidth,
                                int circleStrokeWidth,
-                               boolean isCleanMode) {
-        this(context, null, parentWidth, outerShaderWidth, circleStrokeWidth, isCleanMode);
+                               boolean isCleanMode,
+                               boolean isKeepWare) {
+        this(context, null, parentWidth, outerShaderWidth, circleStrokeWidth, isCleanMode, isKeepWare);
     }
 
     public MySmartProgressView(Context context,
@@ -244,8 +263,9 @@ public class MySmartProgressView extends View {
                                int parentWidth,
                                int outerShaderWidth,
                                int circleStrokeWidth,
-                               boolean isCleanMode) {
-        this(context, attrs, 0, parentWidth, outerShaderWidth, circleStrokeWidth, isCleanMode);
+                               boolean isCleanMode,
+                               boolean isKeepWare) {
+        this(context, attrs, 0, parentWidth, outerShaderWidth, circleStrokeWidth, isCleanMode, isKeepWare);
     }
 
     public MySmartProgressView(Context context,
@@ -254,12 +274,14 @@ public class MySmartProgressView extends View {
                                int parentWidth,
                                int outerShaderWidth,
                                int circleStrokeWidth,
-                               boolean isCleanMode) {
+                               boolean isCleanMode,
+                               boolean isKeepWare) {
         super(context, attrs, defStyleAttr);
         this.height = this.width = parentWidth;
         this.mOutCircleStrokeWidth = circleStrokeWidth;
         this.outerShaderWidth = outerShaderWidth;
         this.isCleanMode = isCleanMode;
+        this.isKeepWare = isKeepWare;
         init();
     }
 
@@ -268,15 +290,23 @@ public class MySmartProgressView extends View {
         initView();
         //初始化画笔
         initPaint();
+        if (isKeepWare) {
+            //初始化各类画笔的颜色为保温模式的颜色
+            Log.e("test", "---------------isKeepWare:" + true);
+            initPaintColor();
+        }
         //初始化指针Bitmap画布
         initBitmap();
         //初始化动画
         initAnim();
     }
 
+
     @Override
     protected void onDraw(final Canvas canvas) {
         super.onDraw(canvas);
+        //画底色圆
+        canvas.drawCircle(mCenterX, mCenterY, mRadius, mBackCirclePaint);
         //画扇形区域的运动粒子
         canvas.save();
         canvas.translate(mCenterX, mCenterY);
@@ -292,19 +322,15 @@ public class MySmartProgressView extends View {
         }
         //画渐变色圆饼
         canvas.drawCircle(0, 0, mCenterX, mSweptPaint);
-        canvas.restore();
-        //step 2:画底色圆
-        canvas.drawCircle(mCenterX, mCenterY, mRadius, mBackCirclePaint);
-        //画进度圆环
-        canvas.save();
-        canvas.translate(mCenterX, mCenterY);
-        if (!isKeepWare) {
-            canvas.clipPath(mArcPath);
-        }
+        //画外层圆环
         if (isKeepWare) {
+            canvas.save();
             canvas.rotate(mOutCircleAnger);
+            canvas.drawCircle(0, 0, mRadius, mOutCirclePaint);
+            canvas.restore();
+        } else {
+            canvas.drawCircle(0, 0, mRadius, mOutCirclePaint);
         }
-        canvas.drawCircle(0, 0, mRadius, mOutCirclePaint);
         canvas.restore();
         //画指针
         if (!isKeepWare) {
@@ -323,13 +349,15 @@ public class MySmartProgressView extends View {
         }
     }
 
+
     /**
      * 设置当前的温度
      *
-     * @param temperature       当前真实温度
-     * @param targetTemperature 目标真实温度
+     * @param temperature       当前温度
+     * @param targetTemperature 目标温度
      */
-    public void setCurrentTemperature(float temperature, float targetTemperature) {
+    public void setCurrentTemperature(float temperature,
+                                      float targetTemperature) {
         isKeepWare = false;
         //清除进度圆环的变色SweepGradient
         mOutCirclePaint.setShader(null);
@@ -340,17 +368,33 @@ public class MySmartProgressView extends View {
         if (temperature < targetTemperature) {
             mPointerVisible = VISIBLE;
         }
+        if (isCleanMode) {
+            if (lastTimeProgress == 0) {
+                lastTimeProgress = 3600;
+                mPointerVisible = GONE;
+            } else {
+                mPointerVisible = VISIBLE;
+            }
+        }
         //把当前温度和最大温度等比转换为0~3600表示
         currentProgress = temperature / targetTemperature * 3600;
-        //自定义包含各个进度对应的颜色值和进度值的属性动画，
+        Log.e("test", "currentProgress--------->:" + currentProgress+"---lastTimeProgress--->:"+lastTimeProgress);
+        //自定义包含各个进度对应的颜色值和进度值的属性动画
         progressAnim = ValueAnimator.ofFloat(lastTimeProgress, currentProgress);
-        progressAnim.setDuration(1000);
+        progressAnim.setDuration(mAnimDuration);
         progressAnim.addUpdateListener(animation -> {
             float value = (float) animation.getAnimatedValue();
-            mCurrentAngle = value;
+            mCurrentAngle = value % 3600;
             //根据当前的进度值获取圆环的颜色属性
             ProgressParameter parameter = new ProgressParameter();
-            if (isCleanMode) {
+            if (isCookingMode) {
+                parameter.setBgCircleColor(bgCircleColor5);
+                parameter.setInsideColor(insideColor5);
+                parameter.setOutsizeColor(outsizeColor5);
+                parameter.setPointColor(pointColor5);
+                parameter.setProgressColor(progressColor5);
+                parameter.setIndicatorColor(indicatorColor5);
+            } else if (isCleanMode) {
                 parameter.setBgCircleColor(bgCircleColorClean);
                 parameter.setInsideColor(insideColorClean);
                 parameter.setOutsizeColor(outsizeColorClean);
@@ -404,7 +448,88 @@ public class MySmartProgressView extends View {
 
             }
         });
+        for (ValueAnimator.AnimatorUpdateListener updateListener : mProgressAnimatorUpdateListener) {
+            progressAnim.addUpdateListener(updateListener);
+        }
         progressAnim.start();
+    }
+
+    /**
+     * 设置预热降温模式
+     */
+    public void setDownTemperature() {
+        //降温环只做最开始的一次扫环动画，之后的温度变化不做动画响应
+        if (isDownTemperature) {
+            return;
+        }
+        progressAnim = ValueAnimator.ofFloat(0, 3600);
+        progressAnim.setDuration(mAnimDuration);
+        progressAnim.setInterpolator(new LinearInterpolator());
+        progressAnim.addUpdateListener(animation -> {
+            float value = (float) animation.getAnimatedValue();
+            mCurrentAngle = value % 3600;
+            //根据当前的进度值获取圆环的颜色属性
+            ProgressParameter parameter = new ProgressParameter();
+            parameter.setBgCircleColor(bgCircleColor5);
+            parameter.setInsideColor(insideColor5);
+            parameter.setOutsizeColor(outsizeColor5);
+            parameter.setPointColor(pointColor5);
+            parameter.setProgressColor(progressColor5);
+            parameter.setIndicatorColor(indicatorColor5);
+            //变更进度条的颜色值
+            mPointPaint.setColor(parameter.getPointColor());
+            mOutCirclePaint.setColor(parameter.getProgressColor());
+            mBackCirclePaint.setColor(parameter.getBgCircleColor());
+            //更改指针颜色
+            mIndicatorColor = parameter.getIndicatorColor();
+            //设置内圈变色圆的shader
+            mRadialGradientColors[2] = parameter.getInsideColor();
+            mRadialGradientColors[3] = parameter.getOutsizeColor();
+            mRadialGradient = new RadialGradient(
+                    0,
+                    0,
+                    mCenterX,
+                    mRadialGradientColors,
+                    mRadialGradientStops,
+                    Shader.TileMode.CLAMP);
+            mSweptPaint.setShader(mRadialGradient);
+            //获取此时的扇形区域path，用于裁剪动画粒子的canvas
+            getSectorClip(width / 2F, -90, value / 10F);
+        });
+        progressAnim.start();
+        progressAnim.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                isDownTemperature = true;
+                mPointerVisible = GONE;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                isDownTemperature = true;
+                mPointerVisible = GONE;
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+    }
+
+    public void addProgressAnimatorUpdateListener(ValueAnimator.AnimatorUpdateListener mProgressAnimatorUpdateListener) {
+        if (mProgressAnimatorUpdateListener != null) {
+            this.mProgressAnimatorUpdateListener.add(mProgressAnimatorUpdateListener);
+        }
+    }
+
+    public void removeAllProgressListenersAndUpdateListeners() {
+        mProgressAnimatorUpdateListener.clear();
     }
 
     /**
@@ -437,23 +562,53 @@ public class MySmartProgressView extends View {
     /**
      * 设置清洁模式
      *
-     * @param second    倒计时时间
-     * @param cleanMode 清洁模式tag
+     * @param second 倒计时时间
      */
-    public void setCleanMode(int second, boolean cleanMode) {
+    public void setCleanMode(int second) {
+        lastTimeProgress = 0;
+        currentProgress = 0;
+        mAnimDuration = 1000;
         disposeTimer();
-        isCleanMode = cleanMode;
-        //精度环这里不做结果回调处理
-        mTimerDisposable = Flowable.intervalRange(0,
-                second + 1,
-                0,
-                1,
-                TimeUnit.SECONDS)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(aLong -> setCurrentTemperature(second - aLong.intValue(), second))
-                .doOnComplete(this::disposeTimer)
-                .subscribe();
+        isCookingMode = false;
+        isCleanMode = true;
+        if (downTimerAnim != null) {
+            downTimerAnim.cancel();
+            downTimerAnim.removeAllListeners();
+        }
+        downTimerAnim = ValueAnimator.ofFloat(1, 0F);
+        downTimerAnim.setDuration((second - 1) * 1000);
+        downTimerAnim.setInterpolator(new LinearInterpolator());
+        downTimerAnim.addUpdateListener(animation -> setCurrentTemperature(
+                second * (float) animation.getAnimatedValue(),
+                second));
+        downTimerAnim.start();
+    }
+
+    /**
+     * 设置烹饪中模式
+     *
+     * @param secondTotalTime 倒计时总时长
+     * @param timeNow         当前时长
+     * @param isFullReduction 是否是满环
+     */
+    public void setCookingMode(long secondTotalTime, long timeNow, boolean isFullReduction) {
+        lastTimeProgress = 0;
+        currentProgress = 0;
+        mAnimDuration = 1000;
+        disposeTimer();
+        isCleanMode = false;
+        isCookingMode = true;
+        if (downTimerAnim != null) {
+            downTimerAnim.cancel();
+            downTimerAnim.removeAllListeners();
+        }
+        downTimerAnim = ValueAnimator.ofFloat(1, 0F);
+        downTimerAnim.setDuration((secondTotalTime - 1) * 1000);
+        downTimerAnim.setInterpolator(new LinearInterpolator());
+        downTimerAnim.addUpdateListener(animation -> setCurrentTemperature(
+                secondTotalTime * (float) animation.getAnimatedValue(),
+                secondTotalTime));
+        downTimerAnim.start();
     }
 
     /**
@@ -505,6 +660,7 @@ public class MySmartProgressView extends View {
         mOutCirclePaint.setStyle(Paint.Style.STROKE);
         mOutCirclePaint.setAntiAlias(true);
         mOutCirclePaint.setStrokeWidth(mOutCircleStrokeWidth);
+
         int[] mLinearGradientColors = {
                 mLinearGradientColor2,
                 mLinearGradientColor2,
@@ -534,6 +690,28 @@ public class MySmartProgressView extends View {
         mBackShadePaint.setColor(bgCircleColor1);
         //指针画笔颜色
         mBmpPaint = new Paint();
+    }
+
+    /**
+     * 保温模式下初始化画笔的颜色
+     */
+    private void initPaintColor() {
+        mRadialGradientColors[2] = insideColor5;
+        mRadialGradientColors[3] = outsizeColor5;
+        mRadialGradient = new RadialGradient(
+                0,
+                0,
+                mCenterX,
+                mRadialGradientColors,
+                mRadialGradientStops,
+                Shader.TileMode.CLAMP);
+        mSweptPaint.setShader(mRadialGradient);
+
+        mOutCirclePaint.setColor(progressColor5);
+
+        mPointPaint.setColor(pointColor5);
+
+        mBackShadePaint.setColor(bgCircleColor1);
     }
 
     /**
@@ -734,8 +912,26 @@ public class MySmartProgressView extends View {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        cancelProgressAnimation();
+        if (downTimerAnim != null) {
+            downTimerAnim.cancel();
+            downTimerAnim.removeAllListeners();
+        }
+    }
+
+    public void cancelProgressAnimation() {
         mPointsAnimator.cancel();
         mOutCircleAnim.cancel();
+    }
+
+    /**
+     * 设置是否开始的时候有扫环动画
+     *
+     * @param mIsAnimated
+     */
+    public void setIsAnimated(boolean mIsAnimated) {
+        //TODO 看时候有这个动效需求
+
     }
 
     /**
@@ -745,9 +941,11 @@ public class MySmartProgressView extends View {
      */
     public void setProgressWithNoAnimation(float progress) {
         float value = progress / maxProgress;
-        Log.e("test","预热完成页面-------"+progress+"==="+maxProgress+"___"+value);
-        getSectorClip(width / 2F, -90, value*360);
-        ProgressParameter parameter = getProgressParameter(value*3600);
+        if (Math.abs(progress - maxProgress) == 0 || progress == 100) {
+            mPointerVisible = GONE;
+        }
+        getSectorClip(width / 2F, -90, value * 360);
+        ProgressParameter parameter = getProgressParameter(value * 3600);
         mPointPaint.setColor(parameter.getPointColor());
         mOutCirclePaint.setColor(parameter.getProgressColor());
         mBackCirclePaint.setColor(parameter.getBgCircleColor());
@@ -766,8 +964,6 @@ public class MySmartProgressView extends View {
         mSweptPaint.setShader(mRadialGradient);
         invalidate();
     }
-
-    private float maxProgress = 0;
 
     /**
      * 设置最大温度

@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 
 import com.cyq.progressview.R;
 
+
 /**
  * @author : ChenYangQi
  * date   : 2020/5/23 14:22
@@ -70,17 +71,14 @@ public class NumberView extends FrameLayout {
         mNumberAnim.setInterpolator(new OvershootInterpolator());
         mNumberAnim.setRepeatCount(0);
         mNumberAnim.setRepeatMode(ValueAnimator.RESTART);
-        mNumberAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float value = (float) animation.getAnimatedValue();
-                if (UP_OR_DOWN_MODE == UP_ANIMATOR_MODE) {
-                    mTvFirst.setTranslationY(-mHeight * value);
-                    mTvSecond.setTranslationY(-mHeight * value);
-                } else {
-                    mTvFirst.setTranslationY(mHeight * value);
-                    mTvSecond.setTranslationY(-2 * mHeight + mHeight * value);
-                }
+        mNumberAnim.addUpdateListener(animation -> {
+            float value = (float) animation.getAnimatedValue();
+            if (UP_OR_DOWN_MODE == UP_ANIMATOR_MODE) {
+                mTvFirst.setTranslationY(-mHeight * value);
+                mTvSecond.setTranslationY(-mHeight * value);
+            } else {
+                mTvFirst.setTranslationY(mHeight * value);
+                mTvSecond.setTranslationY(-2 * mHeight + mHeight * value);
             }
         });
     }
@@ -99,7 +97,6 @@ public class NumberView extends FrameLayout {
             UP_OR_DOWN_MODE = DOWN_ANIMATOR_MODE;
         }
         mTrueValue = trueValue;
-        //setStartDelay(position);
         setCurrentValue(position, value, UP_OR_DOWN_MODE);
     }
 
@@ -121,7 +118,8 @@ public class NumberView extends FrameLayout {
             mNumberAnim.cancel();
         }
         mNumberAnim.setDuration(400 + startDelay);
-        //mNumberAnim.setStartDelay(startDelay);
+        mTvFirst.setTranslationY(0);
+        mTvSecond.setTranslationY(0);
         mNumberAnim.start();
         mCurrentValue = value;
     }
