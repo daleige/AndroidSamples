@@ -100,6 +100,7 @@ public class AnimNumberView extends LinearLayout {
      * @param temperature
      */
     public void setTemperature(int temperature, int mode) {
+        disposeTimer();
         this.mCurrentTemperature = temperature;
         checkMode(mode);
         //设置控件的尺寸

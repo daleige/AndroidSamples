@@ -104,17 +104,6 @@ public class ProgressLayout extends FrameLayout {
     }
 
     /**
-     * 正计时，无最终到达时间限制
-     *
-     * @param mode
-     */
-    public void setTimer(int mode) {
-        if (mode == AnimNumberView.UP_TIMER) {
-            setTimer(-1, mode);
-        }
-    }
-
-    /**
      * 设置清洁模式
      *
      * @param second
@@ -145,11 +134,12 @@ public class ProgressLayout extends FrameLayout {
     /**
      * 设置当前温度
      *
-     * @param temperature                    当前温度
+     * @param temperature 当前温度
      */
     public void setTemperature(float temperature,
                                float targetTemperature) {
         //变色环设置温度
+        mSmartProgressBar.isCleanMode = false;
         mSmartProgressBar.setCurrentTemperature(
                 temperature,
                 targetTemperature);
@@ -162,38 +152,5 @@ public class ProgressLayout extends FrameLayout {
             return mAnimNumberView.getCurrentTemperature();
         }
         return 0;
-    }
-
-    /**
-     * 设置时间
-     *
-     * @param secondTotalTime 总时间 单位：秒
-     * @param timeNow         当前已执行时间
-     * @param isFullReduction 是否是满环
-     */
-    public void setTimeText(long secondTotalTime, long timeNow, boolean isFullReduction) {
-        if (isCleanMode) {
-            //清洁模式
-            mSmartProgressBar.setCleanMode((int) secondTotalTime);
-            mAnimNumberView.setTimer((int) secondTotalTime, AnimNumberView.DOWN_TIMER);
-        } else if (isFullReduction && secondTotalTime <= 0) {
-            //保温
-            mSmartProgressBar.setKeepWareMode();
-            mAnimNumberView.setTimer((int) secondTotalTime, AnimNumberView.DOWN_TIMER);
-        } else {
-            //烹饪
-            mSmartProgressBar.setCookingMode((int) secondTotalTime, timeNow, isFullReduction);
-            mAnimNumberView.setTimer((int) secondTotalTime, AnimNumberView.DOWN_TIMER);
-        }
-    }
-
-    /**
-     * 设置为保温模式
-     */
-    public void setKeepWare() {
-        mSmartProgressBar.setVisibility(VISIBLE);
-        mAnimNumberView.setVisibility(VISIBLE);
-        mSmartProgressBar.setKeepWareMode();
-        mAnimNumberView.setTimer(-1, AnimNumberView.UP_TIMER);
     }
 }

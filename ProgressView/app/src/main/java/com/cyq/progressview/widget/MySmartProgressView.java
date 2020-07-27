@@ -199,7 +199,7 @@ public class MySmartProgressView extends View {
     /**
      * 是否为清洁模式
      */
-    private boolean isCleanMode;
+    public boolean isCleanMode;
     /**
      * 时候在烹饪中
      */
@@ -216,11 +216,7 @@ public class MySmartProgressView extends View {
      * 更新一次温度进度的动画时间
      */
     private int mAnimDuration = 1500;
-    /**
-     * 预热减温
-     */
-    private boolean isDownTemperature = false;
-    private ArrayList<ValueAnimator.AnimatorUpdateListener> mProgressAnimatorUpdateListener = new ArrayList<>();
+
     /**
      * 最大温度
      */
@@ -354,6 +350,9 @@ public class MySmartProgressView extends View {
      */
     public void setCurrentTemperature(float temperature,
                                       float targetTemperature) {
+        if (downTimerAnim != null && downTimerAnim.isRunning() && !isCleanMode) {
+            downTimerAnim.cancel();
+        }
         isKeepWare = false;
         //清除进度圆环的变色SweepGradient
         mOutCirclePaint.setShader(null);
@@ -364,17 +363,16 @@ public class MySmartProgressView extends View {
         if (temperature < targetTemperature) {
             mPointerVisible = VISIBLE;
         }
-        if (isCleanMode) {
-            if (lastTimeProgress == 0) {
-                lastTimeProgress = 3600;
-                mPointerVisible = GONE;
-            } else {
-                mPointerVisible = VISIBLE;
-            }
-        }
+//        if (isCleanMode) {
+//            if (lastTimeProgress == 0) {
+//                lastTimeProgress = 3600;
+//                mPointerVisible = GONE;
+//            } else {
+//                mPointerVisible = VISIBLE;
+//            }
+//        }
         //把当前温度和最大温度等比转换为0~3600表示
         currentProgress = temperature / targetTemperature * 3600;
-        Log.e("test", "currentProgress--------->:" + currentProgress+"---lastTimeProgress--->:"+lastTimeProgress);
         //自定义包含各个进度对应的颜色值和进度值的属性动画
         progressAnim = ValueAnimator.ofFloat(lastTimeProgress, currentProgress);
         progressAnim.setDuration(mAnimDuration);
@@ -444,88 +442,7 @@ public class MySmartProgressView extends View {
 
             }
         });
-        for (ValueAnimator.AnimatorUpdateListener updateListener : mProgressAnimatorUpdateListener) {
-            progressAnim.addUpdateListener(updateListener);
-        }
         progressAnim.start();
-    }
-
-    /**
-     * 设置预热降温模式
-     */
-    public void setDownTemperature() {
-        //降温环只做最开始的一次扫环动画，之后的温度变化不做动画响应
-        if (isDownTemperature) {
-            return;
-        }
-        progressAnim = ValueAnimator.ofFloat(0, 3600);
-        progressAnim.setDuration(mAnimDuration);
-        progressAnim.setInterpolator(new LinearInterpolator());
-        progressAnim.addUpdateListener(animation -> {
-            float value = (float) animation.getAnimatedValue();
-            mCurrentAngle = value % 3600;
-            //根据当前的进度值获取圆环的颜色属性
-            ProgressParameter parameter = new ProgressParameter();
-            parameter.setBgCircleColor(bgCircleColor5);
-            parameter.setInsideColor(insideColor5);
-            parameter.setOutsizeColor(outsizeColor5);
-            parameter.setPointColor(pointColor5);
-            parameter.setProgressColor(progressColor5);
-            parameter.setIndicatorColor(indicatorColor5);
-            //变更进度条的颜色值
-            mPointPaint.setColor(parameter.getPointColor());
-            mOutCirclePaint.setColor(parameter.getProgressColor());
-            mBackCirclePaint.setColor(parameter.getBgCircleColor());
-            //更改指针颜色
-            mIndicatorColor = parameter.getIndicatorColor();
-            //设置内圈变色圆的shader
-            mRadialGradientColors[2] = parameter.getInsideColor();
-            mRadialGradientColors[3] = parameter.getOutsizeColor();
-            mRadialGradient = new RadialGradient(
-                    0,
-                    0,
-                    mCenterX,
-                    mRadialGradientColors,
-                    mRadialGradientStops,
-                    Shader.TileMode.CLAMP);
-            mSweptPaint.setShader(mRadialGradient);
-            //获取此时的扇形区域path，用于裁剪动画粒子的canvas
-            getSectorClip(width / 2F, -90, value / 10F);
-        });
-        progressAnim.start();
-        progressAnim.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                isDownTemperature = true;
-                mPointerVisible = GONE;
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-                isDownTemperature = true;
-                mPointerVisible = GONE;
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-    }
-
-    public void addProgressAnimatorUpdateListener(ValueAnimator.AnimatorUpdateListener mProgressAnimatorUpdateListener) {
-        if (mProgressAnimatorUpdateListener != null) {
-            this.mProgressAnimatorUpdateListener.add(mProgressAnimatorUpdateListener);
-        }
-    }
-
-    public void removeAllProgressListenersAndUpdateListeners() {
-        mProgressAnimatorUpdateListener.clear();
     }
 
     /**
@@ -577,33 +494,6 @@ public class MySmartProgressView extends View {
         downTimerAnim.addUpdateListener(animation -> setCurrentTemperature(
                 second * (float) animation.getAnimatedValue(),
                 second));
-        downTimerAnim.start();
-    }
-
-    /**
-     * 设置烹饪中模式
-     *
-     * @param secondTotalTime 倒计时总时长
-     * @param timeNow         当前时长
-     * @param isFullReduction 是否是满环
-     */
-    public void setCookingMode(long secondTotalTime, long timeNow, boolean isFullReduction) {
-        lastTimeProgress = 0;
-        currentProgress = 0;
-        mAnimDuration = 1000;
-        disposeTimer();
-        isCleanMode = false;
-        isCookingMode = true;
-        if (downTimerAnim != null) {
-            downTimerAnim.cancel();
-            downTimerAnim.removeAllListeners();
-        }
-        downTimerAnim = ValueAnimator.ofFloat(1, 0F);
-        downTimerAnim.setDuration((secondTotalTime - 1) * 1000);
-        downTimerAnim.setInterpolator(new LinearInterpolator());
-        downTimerAnim.addUpdateListener(animation -> setCurrentTemperature(
-                secondTotalTime * (float) animation.getAnimatedValue(),
-                secondTotalTime));
         downTimerAnim.start();
     }
 
