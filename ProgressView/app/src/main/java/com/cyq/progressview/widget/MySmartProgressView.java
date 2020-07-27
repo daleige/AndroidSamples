@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -83,7 +84,7 @@ public class MySmartProgressView extends View {
      * 内环到外环的颜色变化数字
      */
     private int[] mRadialGradientColors = new int[6];
-    private float[] mRadialGradientStops = {0F, 0.62F, 0.86F, 0.94F, 0.98F, 1F};
+    private float[] mRadialGradientStops = {0F, 0.69F, 0.86F, 0.94F, 0.98F, 1F};
     private Paint mSweptPaint;
     private RadialGradient mRadialGradient;
     private Random mRandom = new Random();
@@ -128,7 +129,7 @@ public class MySmartProgressView extends View {
     /**
      * 是否是保温
      */
-    private boolean isKeepWare = false;
+    private boolean isKeepWare;
     /**
      * 温度环的颜色属性
      */
@@ -198,7 +199,7 @@ public class MySmartProgressView extends View {
     /**
      * 是否为清洁模式
      */
-    private boolean isCleanMode = false;
+    private boolean isCleanMode;
     /**
      * 时候在烹饪中
      */
@@ -290,11 +291,6 @@ public class MySmartProgressView extends View {
         initView();
         //初始化画笔
         initPaint();
-        if (isKeepWare) {
-            //初始化各类画笔的颜色为保温模式的颜色
-            Log.e("test", "---------------isKeepWare:" + true);
-            initPaintColor();
-        }
         //初始化指针Bitmap画布
         initBitmap();
         //初始化动画
@@ -677,8 +673,8 @@ public class MySmartProgressView extends View {
 
         //step2：初始化运动粒子的画笔
         mPointPaint = new Paint();
-        //TODO 设备端羽化效果GPU硬件不支持，暂不设置
-        //mPointPaint.setMaskFilter(new BlurMaskFilter(4, BlurMaskFilter.Blur.NORMAL));
+        //粒子羽化效果
+        //mPointPaint.setMaskFilter(new BlurMaskFilter(1, BlurMaskFilter.Blur.NORMAL));
         //初始化底色圆画笔
         mBackCirclePaint = new Paint();
         mBackCirclePaint.setAntiAlias(true);
@@ -690,28 +686,6 @@ public class MySmartProgressView extends View {
         mBackShadePaint.setColor(bgCircleColor1);
         //指针画笔颜色
         mBmpPaint = new Paint();
-    }
-
-    /**
-     * 保温模式下初始化画笔的颜色
-     */
-    private void initPaintColor() {
-        mRadialGradientColors[2] = insideColor5;
-        mRadialGradientColors[3] = outsizeColor5;
-        mRadialGradient = new RadialGradient(
-                0,
-                0,
-                mCenterX,
-                mRadialGradientColors,
-                mRadialGradientStops,
-                Shader.TileMode.CLAMP);
-        mSweptPaint.setShader(mRadialGradient);
-
-        mOutCirclePaint.setColor(progressColor5);
-
-        mPointPaint.setColor(pointColor5);
-
-        mBackShadePaint.setColor(bgCircleColor1);
     }
 
     /**
@@ -922,55 +896,5 @@ public class MySmartProgressView extends View {
     public void cancelProgressAnimation() {
         mPointsAnimator.cancel();
         mOutCircleAnim.cancel();
-    }
-
-    /**
-     * 设置是否开始的时候有扫环动画
-     *
-     * @param mIsAnimated
-     */
-    public void setIsAnimated(boolean mIsAnimated) {
-        //TODO 看时候有这个动效需求
-
-    }
-
-    /**
-     * 设置当前进度 没有动画
-     *
-     * @param progress
-     */
-    public void setProgressWithNoAnimation(float progress) {
-        float value = progress / maxProgress;
-        if (Math.abs(progress - maxProgress) == 0 || progress == 100) {
-            mPointerVisible = GONE;
-        }
-        getSectorClip(width / 2F, -90, value * 360);
-        ProgressParameter parameter = getProgressParameter(value * 3600);
-        mPointPaint.setColor(parameter.getPointColor());
-        mOutCirclePaint.setColor(parameter.getProgressColor());
-        mBackCirclePaint.setColor(parameter.getBgCircleColor());
-        //更改指针颜色
-        mIndicatorColor = parameter.getIndicatorColor();
-        //设置内圈变色圆的shader
-        mRadialGradientColors[2] = parameter.getInsideColor();
-        mRadialGradientColors[3] = parameter.getOutsizeColor();
-        mRadialGradient = new RadialGradient(
-                0,
-                0,
-                mCenterX,
-                mRadialGradientColors,
-                mRadialGradientStops,
-                Shader.TileMode.CLAMP);
-        mSweptPaint.setShader(mRadialGradient);
-        invalidate();
-    }
-
-    /**
-     * 设置最大温度
-     *
-     * @param progress
-     */
-    public void setMax(float progress) {
-        this.maxProgress = progress;
     }
 }

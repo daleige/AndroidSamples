@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (mHandler == null) {
                         break;
                     }
-                    temperature = temperature + 1 + mRandom.nextInt(8);
+                    temperature = temperature + 1 + mRandom.nextInt(30);
                     //temperature++;
                     if (temperature >= targetTemperature) {
                         temperature = targetTemperature;

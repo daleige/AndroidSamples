@@ -51,8 +51,8 @@ public class AnimPoint implements Cloneable {
      */
     public void init(Random random, float viewRadius) {
         anger = Math.toRadians(random.nextInt(360));
-        velocity = random.nextFloat() * 1.6F;
-        radius = random.nextInt(4) + 4;
+        velocity = random.nextFloat() * 2F;
+        radius = random.nextInt(6) + 5;
         mX = (float) (viewRadius * Math.cos(anger));
         mY = (float) (viewRadius * Math.sin(anger));
         //随机偏移角度-30°~30°
@@ -76,8 +76,8 @@ public class AnimPoint implements Cloneable {
         radius = radius - 0.02F * velocity;
         num++;
         //如果到了最大值 则重新给运动粒子一个轨迹属性
-        int maxDistance = 120;
-        int maxNum = 700;
+        int maxDistance = 180;
+        int maxNum = 400;
         if (velocity * num > maxDistance || num > maxNum) {
             num = 0;
             init(random, viewRadius);
