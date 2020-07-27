@@ -1,10 +1,11 @@
 package com.cyq.progressview;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cyq.progressview.button.MyButton;
+import com.cyq.progressview.test.TestActivity;
 import com.cyq.progressview.widget.AnimNumberView;
 import com.cyq.progressview.widget.ProgressLayout;
 
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private MyButton mBtnDownTemp;
     private MyButton mBtnUpTimer;
     private MyButton mBtnDownTimer;
+    private Button mBtnTest;
     private final int targetTemperature = 240;
     private Random mRandom = new Random();
     /**
@@ -50,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBtnUpTimer = findViewById(R.id.btn_3);
         mBtnDownTimer = findViewById(R.id.btn_4);
         mBtnContainer = findViewById(R.id.mBtnContainer);
+        mBtnTest = findViewById(R.id.mBtnTest);
         layoutAnim();
         mContainer.setOnClickListener(v -> {
             layoutAnim();
@@ -58,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBtnDownTemp.setOnClickListener(this);
         mBtnUpTimer.setOnClickListener(this);
         mBtnDownTimer.setOnClickListener(this);
+        mBtnTest.setOnClickListener(this);
     }
 
     @Override
@@ -83,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.btn_3:
                 //正计时
-                mProgress.setTimer(20,AnimNumberView.UP_TIMER);
+                mProgress.setTimer(20, AnimNumberView.UP_TIMER);
                 mProgress.setOnCompleteListener(new ProgressLayout.OnCompleteListener() {
                     @Override
                     public void onComplete() {
@@ -94,13 +99,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.btn_4:
                 //倒计时
-                mProgress.setTimer(20,AnimNumberView.DOWN_TIMER);
+                mProgress.setTimer(20, AnimNumberView.DOWN_TIMER);
                 mProgress.setOnCompleteListener(new ProgressLayout.OnCompleteListener() {
                     @Override
                     public void onComplete() {
                         Toast.makeText(MainActivity.this, "倒计时结束", Toast.LENGTH_SHORT).show();
                     }
                 });
+                break;
+            case R.id.mBtnTest:
+                startActivity(new Intent(MainActivity.this, TestActivity.class));
                 break;
             default:
         }
