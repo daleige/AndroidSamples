@@ -1,4 +1,4 @@
-package com.cyq.progressview.utils;
+package com.cyq.progressview.widget;
 
 import android.content.Context;
 

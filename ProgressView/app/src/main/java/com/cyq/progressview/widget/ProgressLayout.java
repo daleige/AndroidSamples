@@ -14,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.cyq.progressview.R;
-import com.cyq.progressview.utils.Utils;
 
 /**
  * @author : ChenYangQi
@@ -22,25 +21,14 @@ import com.cyq.progressview.utils.Utils;
  * desc   : 自定义组合布局 底部的扇形粒子动画+数字切换
  */
 public class ProgressLayout extends FrameLayout {
-    private MySmartProgressView mMySmartProgressView;
+    public MySmartProgressView mMySmartProgressView;
     private AnimNumberView mAnimNumberView;
     private OnCompleteListener mCompleteListener;
     private int height;
     private int width;
     private int outerShaderWidth;
     private int circleStrokeWidth;
-    /**
-     * 用于标记是预热还是保温模式
-     */
-    private boolean isKeepWare = false;
-    private LayoutParams frameAnimationViewLp;
-    private LayoutParams animNumberViewLp;
-    private LayoutParams mySmartProgressViewLp;
-    /**
-     * 是否为清洁模式
-     */
-    private boolean isCleanMode = false;
-    private LayoutParams params;
+    private boolean isCleanMode;
 
     public ProgressLayout(@NonNull Context context) {
         this(context, null);
@@ -76,63 +64,16 @@ public class ProgressLayout extends FrameLayout {
     private void init() {
         mMySmartProgressView = new MySmartProgressView(getContext(), width, height, outerShaderWidth, circleStrokeWidth, isCleanMode);
         mMySmartProgressView.setDimension(width, height);
-        mySmartProgressViewLp = new LayoutParams(width, height);
+        LayoutParams mySmartProgressViewLp = new LayoutParams(width, height);
         mySmartProgressViewLp.gravity = Gravity.CENTER;
         mMySmartProgressView.setLayoutParams(mySmartProgressViewLp);
 
         mAnimNumberView = new AnimNumberView(getContext());
-        animNumberViewLp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LayoutParams animNumberViewLp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         animNumberViewLp.gravity = Gravity.CENTER;
         mAnimNumberView.setLayoutParams(animNumberViewLp);
-
         addView(mMySmartProgressView);
         addView(mAnimNumberView);
-        mMySmartProgressView.setVisibility(GONE);
-        mAnimNumberView.setVisibility(GONE);
-
-        ImageView imageView = new ImageView(getContext());
-        params = new LayoutParams(6, 6);
-        params.gravity = Gravity.CENTER;
-        imageView.setLayoutParams(params);
-        imageView.setBackground(getResources().getDrawable(R.drawable.indicator_blue));
-        addView(imageView);
-
-        ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1);
-        valueAnimator.setDuration(340);
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float value = (float) animation.getAnimatedValue();
-                params.height = (int) (126 * value);
-                params.width = (int) (22 * value);
-                imageView.setLayoutParams(params);
-                imageView.setTranslationY(-250 * value);
-            }
-        });
-        valueAnimator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mMySmartProgressView.setVisibility(VISIBLE);
-                mAnimNumberView.setVisibility(VISIBLE);
-                imageView.setVisibility(GONE);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-        valueAnimator.start();
     }
 
     /**

@@ -10,17 +10,6 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <View
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="@color/progress_progress_color5"
-        android:visibility="gone" />
-
-    <com.cyq.progressview.test.TestView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
-
     <com.cyq.progressview.widget.ProgressLayout
         android:id="@+id/mProgress"
         android:layout_width="wrap_content"
@@ -28,9 +17,9 @@
         android:layout_gravity="center"
         app:progressLayout_circle_stroke_width="13dp"
         app:progressLayout_clean_mode="false"
-        app:progressLayout_height="318dp"
+        app:progressLayout_height="320dp"
         app:progressLayout_outer_shader_width="10dp"
-        app:progressLayout_width="318dp" />
+        app:progressLayout_width="320dp" />
 
     <LinearLayout
         android:id="@+id/mBtnContainer"
@@ -45,14 +34,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:a6btn_color="blue"
-            app:a6btn_text="预热到240°C"
+            app:a6btn_text="升温到240°C"
             app:a6btn_type="light" />
 
         <com.cyq.progressview.button.MyButton
             android:id="@+id/btn_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:a6btn_text="清洁模式°C"
+            app:a6btn_text="绿色环"
             app:a6btn_type="normal" />
 
         <com.cyq.progressview.button.MyButton

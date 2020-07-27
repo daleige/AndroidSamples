@@ -737,4 +737,44 @@ public class MySmartProgressView extends View {
         mPointsAnimator.cancel();
         mOutCircleAnim.cancel();
     }
+
+    /**
+     * 设置当前进度 没有动画
+     *
+     * @param progress
+     */
+    public void setProgressWithNoAnimation(float progress) {
+        float value = progress / maxProgress;
+        Log.e("test","预热完成页面-------"+progress+"==="+maxProgress+"___"+value);
+        getSectorClip(width / 2F, -90, value*360);
+        ProgressParameter parameter = getProgressParameter(value*3600);
+        mPointPaint.setColor(parameter.getPointColor());
+        mOutCirclePaint.setColor(parameter.getProgressColor());
+        mBackCirclePaint.setColor(parameter.getBgCircleColor());
+        //更改指针颜色
+        mIndicatorColor = parameter.getIndicatorColor();
+        //设置内圈变色圆的shader
+        mRadialGradientColors[2] = parameter.getInsideColor();
+        mRadialGradientColors[3] = parameter.getOutsizeColor();
+        mRadialGradient = new RadialGradient(
+                0,
+                0,
+                mCenterX,
+                mRadialGradientColors,
+                mRadialGradientStops,
+                Shader.TileMode.CLAMP);
+        mSweptPaint.setShader(mRadialGradient);
+        invalidate();
+    }
+
+    private float maxProgress = 0;
+
+    /**
+     * 设置最大温度
+     *
+     * @param progress
+     */
+    public void setMax(float progress) {
+        this.maxProgress = progress;
+    }
 }

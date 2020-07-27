@@ -94,15 +94,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.btn_4:
-                //倒计时
-                mHandler.removeCallbacksAndMessages(null);
-                mProgress.setTimer(3601*10, AnimNumberView.DOWN_TIMER);
-                mProgress.setOnCompleteListener(new ProgressLayout.OnCompleteListener() {
-                    @Override
-                    public void onComplete() {
-                        Log.e("test", "倒计时结束");
-                    }
-                });
+//                //倒计时
+//                mHandler.removeCallbacksAndMessages(null);
+//                mProgress.setTimer(3601*10, AnimNumberView.DOWN_TIMER);
+//                mProgress.setOnCompleteListener(new ProgressLayout.OnCompleteListener() {
+//                    @Override
+//                    public void onComplete() {
+//                        Log.e("test", "倒计时结束");
+//                    }
+//                });
+                mProgress.mMySmartProgressView.setMax(100);
+                mProgress.mMySmartProgressView.setProgressWithNoAnimation(100);
                 break;
             default:
         }
