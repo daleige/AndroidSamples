@@ -449,6 +449,7 @@ public class MySmartProgressView extends View {
      * 设置保温模式
      */
     public void setKeepWareMode() {
+        isCleanMode = false;
         isKeepWare = true;
         //设置外环颜色渐变
         mOutCirclePaint.setShader(mSweepGradient);
@@ -491,9 +492,10 @@ public class MySmartProgressView extends View {
         downTimerAnim = ValueAnimator.ofFloat(1, 0F);
         downTimerAnim.setDuration((second - 1) * 1000);
         downTimerAnim.setInterpolator(new LinearInterpolator());
-        downTimerAnim.addUpdateListener(animation -> setCurrentTemperature(
-                second * (float) animation.getAnimatedValue(),
-                second));
+        downTimerAnim.addUpdateListener(animation ->
+                setCurrentTemperature(
+                        second * (float) animation.getAnimatedValue(),
+                        second));
         downTimerAnim.start();
     }
 
