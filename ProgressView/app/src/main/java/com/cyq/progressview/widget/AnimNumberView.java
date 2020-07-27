@@ -58,8 +58,8 @@ public class AnimNumberView extends LinearLayout {
     private LinearLayout mTempContainer, mClockContainer;
     private Disposable mTimerDisposable;
     private OnTimerComplete mTimerListener;
-    private int numberWidth = 92;
-    private int numberHeight = 190;
+    private int numberWidth = Utils.dip2px(46, getContext());
+    private int numberHeight = Utils.dip2px(95, getContext());
     private int numberTextSize = 80;
     private TextView mTvCircle;
     private int mCurrentTemperature = 0;
@@ -103,8 +103,8 @@ public class AnimNumberView extends LinearLayout {
         this.mCurrentTemperature = temperature;
         checkMode(mode);
         //设置控件的尺寸
-        numberWidth = 92;
-        numberHeight = 190;
+        numberWidth = Utils.dip2px(46,getContext());
+        numberHeight = Utils.dip2px(95,getContext());
         numberTextSize = 80;
         setLayoutSize(numberWidth, numberHeight, numberTextSize);
         int mSingle = temperature % 10;
@@ -196,27 +196,27 @@ public class AnimNumberView extends LinearLayout {
             mMinute1View.setVisibility(VISIBLE);
         } else if (mHour2Value > 0) {
             //展示五位数字
-            numberWidth = 82;
-            numberHeight = 171;
-            numberTextSize = 72;
+            numberWidth = Utils.dip2px(41,getContext());
+            numberHeight = Utils.dip2px(85,getContext());
+            numberTextSize =72;
             mHour1View.setVisibility(GONE);
             mHour2View.setVisibility(VISIBLE);
             mColon1View.setVisibility(VISIBLE);
             mMinute1View.setVisibility(VISIBLE);
         } else if (mMinute1Value > 0) {
             //展示四位数字
-            numberWidth = 92;
-            numberHeight = 190;
-            numberTextSize = 80;
+            numberWidth = Utils.dip2px(46,getContext());
+            numberHeight = Utils.dip2px(95,getContext());
+            numberTextSize = 40;
             mHour1View.setVisibility(GONE);
             mHour2View.setVisibility(GONE);
             mColon1View.setVisibility(GONE);
             mMinute1View.setVisibility(VISIBLE);
         } else {
             //展示三位数字
-            numberWidth = 112;
-            numberHeight = 228;
-            numberTextSize = 96;
+            numberWidth = Utils.dip2px(56,getContext());
+            numberHeight = Utils.dip2px(114,getContext());
+            numberTextSize = 92;
             mHour1View.setVisibility(GONE);
             mHour2View.setVisibility(GONE);
             mColon1View.setVisibility(GONE);
