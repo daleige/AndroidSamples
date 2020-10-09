@@ -10,6 +10,12 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <Button
+        android:id="@+id/mBtnTest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="测试"/>
+
     <com.cyq.progressview.widget.ProgressLayout
         android:id="@+id/mProgress"
         android:layout_width="wrap_content"
