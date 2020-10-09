@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
     private val scope = MainScope()
     private val ioScope = IoScheduler()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override  fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         println("Coroutines Camp ${Thread.currentThread().name}")
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
             mainFun4()
         }
 
-        GlobalScope.launch(Dispatchers.Main) {
+      val job=  GlobalScope.launch(Dispatchers.Main) {
             val one = async { ioFun1() }
             val tow = async { mainFun2() }
             val same = one.await() == tow.await()
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         /**
          * ioFun1和 mainFun2并行执行完，才执行ioFun3
          */
-        lifecycleScope.launch {
+      lifecycleScope.launch {
             coroutineScope {
                 launch { ioFun1() }
                 launch { mainFun2() }
