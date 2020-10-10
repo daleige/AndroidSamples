@@ -8,10 +8,8 @@ import com.cyq.jetpack.databinding.ActivityDataBindingBinding
 import com.cyq.jetpack.event.EventHandleListener
 
 class DataBindingActivity : AppCompatActivity() {
-    val book: Book by lazy {
-        val book = Book("张三", 5, "设计模式之禅")
-        book
-    }
+    private val book = Book("张三", 5, "设计模式之禅")
+    private val imgUrl = "http://p4.music.126.net/SFXsIYI3hCCedvbqrvVytA==/109951165335411992.jpg"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,5 +21,7 @@ class DataBindingActivity : AppCompatActivity() {
         activityDataBinding.book = book
         //设置响应事件
         activityDataBinding.eventHandler = EventHandleListener(this)
+        //自定义加载图片的BindingAdapter
+        activityDataBinding.networkImage = imgUrl
     }
 }
