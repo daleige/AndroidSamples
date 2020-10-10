@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btnDataBinding"
+            style="@style/ButtonStyle"
+            android:text="DataBinding使用" />
+
+        <Button
+            android:id="@+id/btnPaging"
+            style="@style/ButtonStyle"
+            android:text="Paging使用" />
+    </LinearLayout>
+
+</ScrollView>
