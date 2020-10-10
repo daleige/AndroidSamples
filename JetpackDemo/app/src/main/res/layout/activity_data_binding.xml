@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -9,6 +10,10 @@
         <variable
             name="book"
             type="com.cyq.jetpack.bean.Book" />
+
+        <variable
+            name="EventHandler"
+            type="com.cyq.jetpack.event.EventHandleListener" />
     </data>
 
     <LinearLayout
@@ -38,5 +43,15 @@
             android:layout_height="wrap_content"
             android:text="@{RatingUtil.getRating(book.rating)}"
             android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/btnClick"
+            style="@style/ButtonStyle"
+            android:onClick="@{EventHandler.onButtonClicked}"
+            android:text="点击事件" />
+
+        <include layout="@layout/layout_content"
+            app:book="@{book}"/>
     </LinearLayout>
+
 </layout>
