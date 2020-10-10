@@ -23,5 +23,8 @@ class DataBindingActivity : AppCompatActivity() {
         activityDataBinding.eventHandler = EventHandleListener(this)
         //自定义加载图片的BindingAdapter
         activityDataBinding.networkImage = imgUrl
+        //多参数重载的BindingAdapter
+        activityDataBinding.imageUrl=""
+        activityDataBinding.defaultImage=R.mipmap.ic_launcher
     }
 }

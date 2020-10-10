@@ -18,51 +18,70 @@
         <variable
             name="networkImage"
             type="String" />
+
+        <variable
+            name="defaultImage"
+            type="Integer" />
+
+        <variable
+            name="imageUrl"
+            type="String" />
     </data>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        tools:context=".DataBindingActivity">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{book.title}"
-            android:textSize="18sp" />
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:context=".DataBindingActivity">
 
-        <TextView
-            android:id="@+id/tvAuthor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{book.author}"
-            android:textSize="18sp" />
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{book.title}"
+                android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/tvRating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{RatingUtil.getRating(book.rating)}"
-            android:textSize="18sp" />
+            <TextView
+                android:id="@+id/tvAuthor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{book.author}"
+                android:textSize="18sp" />
 
-        <Button
-            android:id="@+id/btnClick"
-            style="@style/ButtonStyle"
-            android:onClick="@{EventHandler.onButtonClicked}"
-            android:text="点击事件" />
+            <TextView
+                android:id="@+id/tvRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{RatingUtil.getRating(book.rating)}"
+                android:textSize="18sp" />
 
-        <include
-            layout="@layout/layout_content"
-            app:book="@{book}" />
+            <Button
+                android:id="@+id/btnClick"
+                style="@style/ButtonStyle"
+                android:onClick="@{EventHandler.onButtonClicked}"
+                android:text="点击事件" />
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            app:image="@{networkImage}" />
-    </LinearLayout>
+            <include
+                layout="@layout/layout_content"
+                app:book="@{book}" />
 
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                app:image="@{networkImage}" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:defaultImageResource="@{defaultImage}"
+                app:image="@{imageUrl}" />
+        </LinearLayout>
+    </ScrollView>
 </layout>
