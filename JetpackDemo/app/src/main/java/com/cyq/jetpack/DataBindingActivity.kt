@@ -1,9 +1,9 @@
 package com.cyq.jetpack
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import com.cyq.jetpack.bean.Book
+import com.cyq.jetpack.model.Book
 import com.cyq.jetpack.databinding.ActivityDataBindingBinding
 import com.cyq.jetpack.event.EventHandleListener
 
@@ -24,7 +24,7 @@ class DataBindingActivity : AppCompatActivity() {
         //自定义加载图片的BindingAdapter
         activityDataBinding.networkImage = imgUrl
         //多参数重载的BindingAdapter
-        activityDataBinding.imageUrl=""
+        activityDataBinding.imageUrl = ""
         activityDataBinding.defaultImage=R.mipmap.ic_launcher
     }
 }

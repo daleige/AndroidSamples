@@ -33,7 +33,7 @@ object ImageViewBindingAdapter {
      * 多重参数重载
      */
     @JvmStatic
-    @BindingAdapter(value = ["image", "defaultImageResource"], requireAll = true)
+    @BindingAdapter(value = ["image2", "defaultImageResource"], requireAll = false)
     fun setDefaultImage(imageView: ImageView, imageUrl: String, imageResource: Int) {
         Log.i("test","imageResource:$imageResource")
         if (!TextUtils.isEmpty(imageUrl)) {

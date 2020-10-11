@@ -3,7 +3,7 @@
     <data>
         <variable
             name="book"
-            type="com.cyq.jetpack.bean.Book" />
+            type="com.cyq.jetpack.model.Book" />
     </data>
 
     <LinearLayout

@@ -1,11 +1,11 @@
 package com.cyq.jetpack.event
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
+import com.cyq.jetpack.BothBindingActivity
 
 /**
  *    @author : ChenYangQi
@@ -17,8 +17,8 @@ class EventHandleListener(private var context: Context) {
         Toast.makeText(context, "click:" + (view as Button).text, Toast.LENGTH_SHORT).show()
     }
 
-    fun openActivity(view: View, activity: Class<Activity>) {
-        context.startActivity(Intent(context, activity))
+    fun openActivity(view: View) {
+        context.startActivity(Intent(context, BothBindingActivity::class.java))
     }
 }
 

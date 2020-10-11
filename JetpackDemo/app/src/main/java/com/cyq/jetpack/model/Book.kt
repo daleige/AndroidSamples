@@ -1,4 +1,4 @@
-package com.cyq.jetpack.bean
+package com.cyq.jetpack.model
 
 /**
  *    @author : ChenYangQi
