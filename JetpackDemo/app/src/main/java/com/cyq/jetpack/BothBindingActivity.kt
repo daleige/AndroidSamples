@@ -26,8 +26,8 @@ class BothBindingActivity : AppCompatActivity() {
             towWayBindingViewModel.setUserName("张三丰")
             towWayBindingViewModel.setPassword("888888")
 
-            towWayBindingViewModel2.setUserName("李四狗")
-            towWayBindingViewModel2.setPassword("aaaaaa")
+            towWayBindingViewModel2.setUserName("利斯够")
+            towWayBindingViewModel2.setPassword("7787787")
         }
     }
 }

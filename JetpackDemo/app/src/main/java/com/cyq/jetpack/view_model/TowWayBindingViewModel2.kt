@@ -1,5 +1,6 @@
 package com.cyq.jetpack.view_model
 
+import androidx.databinding.Observable
 import androidx.databinding.ObservableField
 import com.cyq.jetpack.model.LoginModel
 
@@ -9,7 +10,7 @@ import com.cyq.jetpack.model.LoginModel
  * desc   :ObservableFieId实现双向绑定
  */
 class TowWayBindingViewModel2() {
-    private val loginModelObservableField:ObservableField<LoginModel> = ObservableField()
+    private val loginModelObservableField = ObservableField<LoginModel>()
     private val loginModel = LoginModel("李四", "666666")
 
     init {
@@ -25,7 +26,7 @@ class TowWayBindingViewModel2() {
     }
 
     fun setUserName(userName: String) {
-        loginModelObservableField.get()?.userName = userName
+        loginModelObservableField.get()?.userName=userName
     }
 
     fun setPassword(password: String) {
