@@ -1,6 +1,7 @@
 package com.cyq.jetpack.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -29,6 +30,11 @@ class RecyclerViewAdapter(books: List<BookBean>) :
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.recyclerviewListBinding.bookBean = bookBeans[position]
+//        if (position % 2 == 0) {
+//            holder.recyclerviewListBinding.tvAuthor.visibility = View.GONE
+//        }else{
+//            holder.recyclerviewListBinding.tvAuthor.visibility = View.VISIBLE
+//        }
     }
 
     override fun getItemCount(): Int {
