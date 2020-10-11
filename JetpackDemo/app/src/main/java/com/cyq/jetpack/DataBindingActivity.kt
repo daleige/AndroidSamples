@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil
 import com.cyq.jetpack.model.Book
 import com.cyq.jetpack.databinding.ActivityDataBindingBinding
 import com.cyq.jetpack.event.EventHandleListener
+import kotlinx.android.synthetic.main.activity_data_binding.*
 
 class DataBindingActivity : AppCompatActivity() {
     private val book = Book("张三", 5, "设计模式之禅")

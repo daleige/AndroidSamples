@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import com.cyq.jetpack.BothBindingActivity
+import com.cyq.jetpack.RecyclerViewActivity
 
 /**
  *    @author : ChenYangQi
@@ -19,6 +20,10 @@ class EventHandleListener(private var context: Context) {
 
     fun openActivity(view: View) {
         context.startActivity(Intent(context, BothBindingActivity::class.java))
+    }
+
+    fun toRecyclerViewActivity(view: View) {
+        context.startActivity(Intent(context, RecyclerViewActivity::class.java))
     }
 }
 

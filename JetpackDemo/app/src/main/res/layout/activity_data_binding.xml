@@ -84,14 +84,20 @@
                 android:id="@+id/imageView2"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                app:image2="@{imageUrl}"
-                app:defaultImageResource="@{defaultImage}" />
+                app:defaultImageResource="@{defaultImage}"
+                app:image2="@{imageUrl}" />
 
             <Button
                 android:id="@+id/toBoth"
                 style="@style/ButtonStyle"
-                android:text="跳转双向绑定"
-                android:onClick="@{EventHandler.openActivity}"/>
+                android:onClick="@{EventHandler.openActivity}"
+                android:text="跳转双向绑定" />
+
+            <Button
+                android:id="@+id/toRecyclerView"
+                style="@style/ButtonStyle"
+                android:onClick="@{EventHandler.toRecyclerViewActivity}"
+                android:text="RecyclerView绑定机制" />
         </LinearLayout>
     </ScrollView>
 </layout>

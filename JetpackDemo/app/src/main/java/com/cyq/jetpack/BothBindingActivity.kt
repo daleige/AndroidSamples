@@ -12,8 +12,8 @@ import kotlinx.android.synthetic.main.activity_both_binding.*
  * 双向绑定
  */
 class BothBindingActivity : AppCompatActivity() {
-    val towWayBindingViewModel = TowWayBindingViewModel()
-    val towWayBindingViewModel2 = TowWayBindingViewModel2()
+    private val towWayBindingViewModel = TowWayBindingViewModel()
+    private val towWayBindingViewModel2 = TowWayBindingViewModel2()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
