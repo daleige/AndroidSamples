@@ -3,7 +3,6 @@ package com.cyq.jetpack.paging.paging
 import androidx.paging.PageKeyedDataSource
 import com.cyq.jetpack.paging.api.RetrofitClient
 import com.cyq.jetpack.paging.model.Item
-import com.cyq.jetpack.paging.model.User
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

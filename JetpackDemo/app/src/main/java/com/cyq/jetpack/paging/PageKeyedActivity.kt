@@ -1,7 +1,7 @@
 package com.cyq.jetpack.paging
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -9,14 +9,10 @@ import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cyq.jetpack.R
 import com.cyq.jetpack.databinding.ActivityPageKeyedBinding
-import com.cyq.jetpack.paging.api.RetrofitClient
 import com.cyq.jetpack.paging.model.Item
 import com.cyq.jetpack.paging.paging.UserPageListAdapter
 import com.cyq.jetpack.paging.paging.UserViewModel
 import kotlinx.android.synthetic.main.activity_page_keyed.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 /**
  * PagekeyedDataSource实现Paging分页
@@ -34,10 +30,5 @@ class PageKeyedActivity : AppCompatActivity() {
             }
         })
         recyclerView.adapter = userPageListAdapter
-
-//        CoroutineScope(Dispatchers.Main).launch {
-//            RetrofitClient.getUserInfoApi()
-//        }
-//        }
     }
 }
