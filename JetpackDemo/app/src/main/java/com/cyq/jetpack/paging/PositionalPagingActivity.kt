@@ -1,5 +1,6 @@
 package com.cyq.jetpack.paging
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -14,7 +15,10 @@ import com.cyq.jetpack.paging.paging.MoviePagedListAdapter
 import com.cyq.jetpack.paging.paging.MovieViewModel
 import kotlinx.android.synthetic.main.activity_paging.*
 
-class PagingActivity : AppCompatActivity() {
+/**
+ * PositionalDataSource实现paging分页
+ */
+class PositionalPagingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DataBindingUtil.setContentView<ActivityPagingBinding>(this, R.layout.activity_paging)

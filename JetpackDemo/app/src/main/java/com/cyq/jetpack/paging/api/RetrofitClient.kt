@@ -11,11 +11,25 @@ import retrofit2.converter.gson.GsonConverterFactory
  */
 object RetrofitClient {
     private const val BASE_URL = "http://t.yushu.im/v2/"
+    private const val USER_BASE_URL = "https://api.stackexchange.com/"
     private var retrofit: Retrofit
+    private var retrofit2: Retrofit
 
     init {
+        /**
+         * 请求豆瓣的
+         */
         retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(OkHttpClient.Builder().build())
+            .build()
+
+        /**
+         * 请求Stack Overflow用户列表
+         */
+        retrofit2 = Retrofit.Builder()
+            .baseUrl(USER_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(OkHttpClient.Builder().build())
             .build()
