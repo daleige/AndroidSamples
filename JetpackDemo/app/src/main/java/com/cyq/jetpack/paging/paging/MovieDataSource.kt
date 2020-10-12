@@ -3,6 +3,7 @@ package com.cyq.jetpack.paging.paging
 import androidx.paging.PositionalDataSource
 import com.cyq.jetpack.paging.api.RetrofitClient
 import com.cyq.jetpack.paging.model.Subject
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,6 +31,7 @@ class MovieDataSource : PositionalDataSource<Subject>() {
 
     override fun loadRange(params: LoadRangeParams, callback: LoadRangeCallback<Subject>) {
         CoroutineScope(Dispatchers.IO).launch {
+            println("数据范围：${Gson().toJson(params)}")
             val movies = RetrofitClient.getInstance()
                 .getApi()
                 .getMovies(params.startPosition, PER_PAGE)

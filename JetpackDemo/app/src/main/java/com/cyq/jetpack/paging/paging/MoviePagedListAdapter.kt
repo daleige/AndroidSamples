@@ -1,8 +1,8 @@
 package com.cyq.jetpack.paging.paging
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -16,7 +16,7 @@ import com.cyq.jetpack.paging.model.Subject
  *    date   : 2020/10/12 11:31
  *    desc   :
  */
-class MoviePagedListAdapter:
+class MoviePagedListAdapter :
     PagedListAdapter<Subject, MoviePagedListAdapter.MovieViewHolder>(DIFF_CALLBACK) {
 
     companion object {
@@ -55,7 +55,15 @@ class MoviePagedListAdapter:
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        holder.movieItemBinding.subject=getItem(position)
+        holder.movieItemBinding.subject = getItem(position)
+        holder.movieItemBinding.root.setOnClickListener {
+            Toast.makeText(
+                holder.movieItemBinding.root.context,
+                "点击Id:${getItem(position)?.id}",
+                Toast.LENGTH_SHORT
+            )
+                .show()
+        }
     }
 
     class MovieViewHolder(itemView: MovieItemBinding) : RecyclerView.ViewHolder(itemView.root) {

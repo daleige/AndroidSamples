@@ -17,8 +17,7 @@ import kotlinx.android.synthetic.main.activity_paging.*
 class PagingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val pagingBinding: ActivityPagingBinding =
-            DataBindingUtil.setContentView(this, R.layout.activity_paging)
+        DataBindingUtil.setContentView<ActivityPagingBinding>(this, R.layout.activity_paging)
 
         val moviePagedListAdapter = MoviePagedListAdapter()
         recyclerView.layoutManager = LinearLayoutManager(this)
