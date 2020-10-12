@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import com.cyq.jetpack.paging.PageKeyedActivity
 import com.cyq.jetpack.paging.PositionalPagingActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -14,6 +15,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         btnDataBinding.setOnClickListener(this)
         btnPaging.setOnClickListener(this)
+        btnPaging2.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -22,6 +24,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 startActivity(Intent(this, DataBindingActivity::class.java))
             R.id.btnPaging ->
                 startActivity(Intent(this, PositionalPagingActivity::class.java))
+            R.id.btnPaging2 ->
+                startActivity(Intent(this, PageKeyedActivity::class.java))
         }
     }
 }

@@ -25,7 +25,7 @@ class UserDataSource : PageKeyedDataSource<Int, Item>() {
         callback: LoadInitialCallback<Int, Item>
     ) {
         CoroutineScope(Dispatchers.IO).launch {
-            val user = RetrofitClient.getApi()
+            val user = RetrofitClient.getUserInfoApi()
                 .getUsers(FIRST_PAGE, PER_PAGE, SITE)
             //第一个参数是得到的数据，把他交给数据列表
             //第二个参数是上一页的key,这里是初次加载所以直接设置为null
@@ -39,7 +39,7 @@ class UserDataSource : PageKeyedDataSource<Int, Item>() {
      */
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Item>) {
         CoroutineScope(Dispatchers.IO).launch {
-            val user = RetrofitClient.getApi()
+            val user = RetrofitClient.getUserInfoApi()
                 .getUsers(params.key, PER_PAGE, SITE)
             val nextKey: Int? = if (user.has_more) params.key + 1 else null
             callback.onResult(user.items, nextKey)

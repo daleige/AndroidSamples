@@ -42,4 +42,8 @@ object RetrofitClient {
     fun getApi(): Api {
         return retrofit.create(Api::class.java)
     }
+
+    fun getUserInfoApi():Api{
+        return retrofit2.create(Api::class.java)
+    }
 }
