@@ -13,8 +13,7 @@ import com.cyq.jetpack.model.BookBean
  * date   : 2020/10/11 18:26
  * desc   : RecyclerView适配器
  */
-class RecyclerViewAdapter(books: List<BookBean>) :
-    RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder>() {
+class RecyclerViewAdapter(books: List<BookBean>) : RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder>() {
     private val bookBeans: List<BookBean> = books
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {

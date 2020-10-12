@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.cyq.jetpack.R
 
 /**
  *    @author : ChenYangQi
@@ -23,6 +24,7 @@ object ImageViewBindingAdapter {
         if (!TextUtils.isEmpty(imgUri)) {
             Glide.with(imageView.context)
                 .load(imgUri)
+                .placeholder(R.mipmap.ic_launcher)
                 .into(imageView)
         } else {
             imageView.setBackgroundColor(Color.GRAY)
@@ -35,7 +37,7 @@ object ImageViewBindingAdapter {
     @JvmStatic
     @BindingAdapter(value = ["image2", "defaultImageResource"], requireAll = false)
     fun setDefaultImage(imageView: ImageView, imageUrl: String, imageResource: Int) {
-        Log.i("test","imageResource:$imageResource")
+        Log.i("test", "imageResource:$imageResource")
         if (!TextUtils.isEmpty(imageUrl)) {
             Glide.with(imageView.context)
                 .load(imageUrl)

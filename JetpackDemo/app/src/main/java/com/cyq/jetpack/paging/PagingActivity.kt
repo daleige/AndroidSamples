@@ -1,38 +1,33 @@
 package com.cyq.jetpack.paging
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.paging.PagedList
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.cyq.jetpack.R
-import com.cyq.jetpack.paging.api.RetrofitClient
-import com.cyq.jetpack.paging.model.Movies
-import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.cyq.jetpack.databinding.ActivityPagingBinding
+import com.cyq.jetpack.paging.model.Subject
+import com.cyq.jetpack.paging.paging.MoviePagedListAdapter
+import com.cyq.jetpack.paging.paging.MovieViewModel
+import kotlinx.android.synthetic.main.activity_paging.*
 
 class PagingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_paging)
+        val pagingBinding: ActivityPagingBinding =
+            DataBindingUtil.setContentView(this, R.layout.activity_paging)
 
-        CoroutineScope(Dispatchers.Main).launch {
-            val call = RetrofitClient.getInstance()
-                .getApi()
-                .getMovies(0, 8)
-//                .enqueue(object : Callback<Movies> {
-//                    override fun onFailure(call: Call<Movies>, t: Throwable) {
-//                        println("http请求失败")
-//                        t.printStackTrace()
-//                    }
-//
-//                    override fun onResponse(call: Call<Movies>, response: Response<Movies>) {
-//                        println("http请求成功：${response.code()} \t ${response.body()}")
-//                    }
-//                })
-            println("请求结果：" + Gson().toJson(call))
-        }
+        val moviePagedListAdapter = MoviePagedListAdapter()
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        val movieViewModel: MovieViewModel = ViewModelProvider(this).get(MovieViewModel::class.java)
+        movieViewModel.moviePageList.observe(this, object : Observer<PagedList<Subject>> {
+            override fun onChanged(t: PagedList<Subject>?) {
+                moviePagedListAdapter.submitList(t)
+            }
+        })
+        recyclerView.adapter = moviePagedListAdapter
     }
 }
