@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
  * desc   : 网络请求
  */
 object RetrofitClient {
-    private const val BASE_URL = "http://t.yushu.im/v2/"
+    private const val MOVIE_BASE_URL = "http://t.yushu.im/v2/"
     private const val USER_BASE_URL = "https://api.stackexchange.com/"
     private var retrofit: Retrofit
     private var retrofit2: Retrofit
@@ -20,7 +20,7 @@ object RetrofitClient {
          * 请求豆瓣的
          */
         retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(MOVIE_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(OkHttpClient.Builder().build())
             .build()
@@ -43,7 +43,7 @@ object RetrofitClient {
         return retrofit.create(Api::class.java)
     }
 
-    fun getUserInfoApi():Api{
+    fun getUserInfoApi(): Api {
         return retrofit2.create(Api::class.java)
     }
 }
