@@ -3,6 +3,8 @@ ext {
 
     //生产/测试环境
     isRelease = true
+
+    //生成测试环境的Url
     url = [
             "debug"  : "http://11.22.33.44/debug",
             "release": "http://11.22.33.44/release"
@@ -11,7 +13,7 @@ ext {
     androidId = [
             compileSdkVersion: 29,
             buildToolsVersion: "30.0.1",
-            applicationId    : "com.cyq.moduleapp",
+            applicationId    : "com.cyq.module.app",
             minSdkVersion    : 21,
             targetSdkVersion : 29,
             versionCode      : 1,

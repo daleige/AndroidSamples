@@ -22,8 +22,13 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "debug", "\"${url.debug}\"")
+        }
+
         release {
             minifyEnabled false
+            buildConfigField("String", "debug", "\"${url.release}\"")
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -35,10 +40,10 @@ dependencies {
 
     implementation support.kotlin
     implementation support.core_ktx
-    implementation  support.appcompat
-    implementation  support.constraintlayout
-    implementation  support.recyclerview
-    implementation  support.cardview
+    implementation support.appcompat
+    implementation support.constraintlayout
+    implementation support.recyclerview
+    implementation support.cardview
 
     //遍历依赖的写法
     //support.each { k, v -> implementation v }
