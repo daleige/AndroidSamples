@@ -1,8 +1,7 @@
-package com.cyq.order
+package com.cyq.common
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.cyq.order.debug.TestOrder
 
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -16,10 +15,10 @@ import org.junit.Assert.*
  */
 @RunWith(AndroidJUnit4::class)
 class ExampleInstrumentedTest {
-    @TestOrder
+    @Test
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.cyq.order", appContext.packageName)
+        assertEquals("com.cyq.common.test", appContext.packageName)
     }
 }

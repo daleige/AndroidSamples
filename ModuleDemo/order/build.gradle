@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         if (!isRelease) {
-            applicationId appId.app
+            applicationId appId.order
         }
         minSdkVersion androidId.minSdkVersion
         targetSdkVersion androidId.targetSdkVersion
@@ -38,10 +38,30 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    // 配置资源路径，方便测试环境，打包不集成到正式环境
+    sourceSets {
+        main {
+            if (!isRelease) {
+                // 如果是组件化模式，需要单独运行时
+                manifest.srcFile 'src/main/debug/AndroidManifest.xml'
+            } else {
+                // 集成化模式，整个项目打包apk
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+                java {
+                    // release 时 debug 目录下文件不需要合并到主工程
+                    exclude '/debug/**'
+                }
+            }
+        }
+    }
+
 }
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation project(":common")
+
     implementation support.kotlin
     implementation support.core_ktx
     implementation support.appcompat

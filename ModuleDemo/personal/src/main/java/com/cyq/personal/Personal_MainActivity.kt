@@ -1,9 +1,9 @@
 package com.cyq.personal
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.cyq.common.base.BaseActivity
 
-class Personal_MainActivity : AppCompatActivity() {
+class Personal_MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

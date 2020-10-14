@@ -1,7 +1,5 @@
 ext {
-    username = "jone"
-
-    //生产/测试环境
+    //继成化配置和组件化配置切换
     isRelease = false
 
     //生成测试环境的Url

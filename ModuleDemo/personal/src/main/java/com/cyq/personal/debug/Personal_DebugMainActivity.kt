@@ -1,14 +1,13 @@
-package com.cyq.order
+package com.cyq.personal.debug
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.cyq.common.base.BaseActivity
-import com.cyq.order.R
+import com.cyq.personal.R
 
-class Order_MainActivity : BaseActivity() {
-
+class Personal_DebugMainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.order_activity_main)
+        setContentView(R.layout.personal_activity_debug_main)
     }
 }
