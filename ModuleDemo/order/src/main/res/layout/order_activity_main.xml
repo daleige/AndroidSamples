@@ -6,11 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".Order_MainActivity">
 
+    <Button
+        android:id="@+id/btnToPersonal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="跳转Personal"
+        android:textAllCaps="true"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="Order模块正式环境"
-        android:textSize="20sp"/>
+        android:textSize="20sp" />
 
 </FrameLayout>
