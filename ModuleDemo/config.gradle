@@ -1,6 +1,6 @@
 ext {
     //继成化配置和组件化配置切换
-    isRelease = false
+    isRelease = true
 
     //生成测试环境的Url
     url = [
