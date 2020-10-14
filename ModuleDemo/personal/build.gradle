@@ -1,4 +1,8 @@
-apply plugin: 'com.android.application'
+if (isRelease) {
+    apply plugin: 'com.android.library'
+} else {
+    apply plugin: 'com.android.application'
+}
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
@@ -11,7 +15,9 @@ android {
     buildToolsVersion androidId.buildToolsVersion
 
     defaultConfig {
-        applicationId appId.app
+        if (!isRelease) {
+            applicationId appId.app
+        }
         minSdkVersion androidId.minSdkVersion
         targetSdkVersion androidId.targetSdkVersion
         versionCode androidId.versionCode
@@ -36,18 +42,10 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    if (isRelease) {
-        implementation project(":order")
-        implementation project(":personal")
-    }
-
     implementation support.kotlin
     implementation support.core_ktx
     implementation support.appcompat
     implementation support.constraintlayout
     implementation support.recyclerview
     implementation support.cardview
-
-    //遍历依赖的写法
-    //support.each { k, v -> implementation v }
 }

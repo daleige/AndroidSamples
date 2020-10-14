@@ -2,7 +2,7 @@ ext {
     username = "jone"
 
     //生产/测试环境
-    isRelease = true
+    isRelease = false
 
     //生成测试环境的Url
     url = [
@@ -22,7 +22,9 @@ ext {
 
     appId = [
             app    : "com.cyq.module.app",
-            library: "com.cyq.module.library"
+            library: "com.cyq.module.library",
+            order:"com.cyq.module.order",
+            personal:"com.cyq.module.personal"
     ]
 
     //各个三方库版本号

@@ -1,3 +1,5 @@
+include ':personal'
+include ':order'
 include ':library'
 include ':app'
 rootProject.name = "ModuleDemo"
