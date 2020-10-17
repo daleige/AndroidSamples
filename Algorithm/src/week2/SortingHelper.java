@@ -28,17 +28,21 @@ public class SortingHelper {
      * @param arr
      * @param <E>
      */
-    public static <E extends Comparable<E>> void sortTest(Sort sort, E[] arr) {
+    synchronized public static <E extends Comparable<E>> void sortTest(Sort sort, E[] arr) {
         long startTime = System.nanoTime();
         switch (sort) {
             case 选择排序:
                 SelectionSort.sort2(arr);
                 break;
             case 插入排序:
-
+                InsertionSort.sort(arr);
+                break;
+            case 插入排序优化:
+                InsertionSort.sort2(arr);
                 break;
         }
         long endTime = System.nanoTime();
+        //判断是否是有序的数组
         if (!SortingHelper.isSorted(arr)) {
             throw new RuntimeException("selectionSort fail");
         }
@@ -51,6 +55,7 @@ public class SortingHelper {
      */
     public enum Sort {
         选择排序,
-        插入排序
+        插入排序,
+        插入排序优化
     }
 }
