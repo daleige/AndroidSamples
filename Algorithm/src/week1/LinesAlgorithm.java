@@ -22,6 +22,13 @@ public class LinesAlgorithm {
         return -1;
     }
 
+    /**
+     * 定义fangxing
+     * @param data
+     * @param target
+     * @param <T>
+     * @return
+     */
     public static <T> int getDataIndex2(T[] data, T target) {
         for (int i = 0; i < data.length; i++) {
             if (data[i].equals(target)) {
