@@ -35,6 +35,12 @@ public class SelectionSort {
         for (Student student : students) {
             System.out.print(student.toString() + "\t");
         }
+        System.out.println("");
+        int[] nn = {10000, 100000};
+        Integer[] testArr1 = ArrayGenerator.generateRandomArray(nn[0], nn[0]);
+        Integer[] testArr2 = ArrayGenerator.generateRandomArray(nn[1], nn[1]);
+        SortingHelper.sortTest(SortingHelper.Sort.选择排序, testArr1);
+        SortingHelper.sortTest(SortingHelper.Sort.选择排序, testArr2);
     }
 
     /**
