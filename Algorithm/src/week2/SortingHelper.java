@@ -35,7 +35,7 @@ public class SortingHelper {
                 SelectionSort.sort2(arr);
                 break;
             case 插入排序:
-                InsertionSort.sort(arr);
+                InsertionSort.sort3(arr);
                 break;
             case 插入排序优化:
                 InsertionSort.sort2(arr);
