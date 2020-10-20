@@ -1,12 +1,14 @@
 package week3;
 
 
-public class Array {
-    private int[] data;
+import java.util.Objects;
+
+public class Array<E> {
+    private E[] data;
     private int size;
 
     public Array(int capacity) {
-        data = new int[capacity];
+        data = (E[]) new Object[capacity];
         size = 0;
     }
 
@@ -46,7 +48,7 @@ public class Array {
      *
      * @param e
      */
-    public void addLast(int e) {
+    public void addLast(E e) {
         add(size, e);
     }
 
@@ -55,7 +57,7 @@ public class Array {
      *
      * @param e
      */
-    public void addFirst(int e) {
+    public void addFirst(E e) {
         add(0, e);
     }
 
@@ -65,12 +67,12 @@ public class Array {
      * @param index
      * @param e
      */
-    public void add(int index, int e) {
-        if (size == data.length) {
-            throw new IllegalArgumentException("Add Last fail,Array is full.");
-        }
+    public void add(int index, E e) {
         if (index < 0 || index > size) {
             throw new IllegalArgumentException("Add Last fail,index index >= 0 && index < size");
+        }
+        if (size == data.length) {
+            resize(2 * data.length);
         }
         for (int i = size - 1; i >= index; i--) {
             data[i + 1] = data[i];
@@ -80,12 +82,25 @@ public class Array {
     }
 
     /**
+     * 数组扩容
+     *
+     * @param reSize
+     */
+    private void resize(int reSize) {
+        E[] newData = (E[]) new Object[reSize];
+        for (int i = 0; i < size; i++) {
+            newData[i] = data[i];
+        }
+        data = newData;
+    }
+
+    /**
      * 获取index索引位置的元素
      *
      * @param index
      * @return
      */
-    private int get(int index) {
+    private E get(int index) {
         if (index < 0 || index >= size) {
             throw new IllegalArgumentException("Get Fail, Index is illegal");
         }
@@ -98,7 +113,7 @@ public class Array {
      * @param index
      * @param e
      */
-    public void set(int index, int e) {
+    public void set(int index, E e) {
         if (index < 0 || index >= size) {
             throw new IllegalArgumentException("Set Fail, Index is illegal");
         }
@@ -111,7 +126,7 @@ public class Array {
      * @param e
      * @return
      */
-    public boolean container(int e) {
+    public boolean container(E e) {
         for (int i = 0; i < size; i++) {
             if (data[i] == e) {
                 return true;
@@ -126,7 +141,7 @@ public class Array {
      * @param e
      * @return
      */
-    public int find(int e) {
+    public int find(E e) {
         for (int i = 0; i < size; i++) {
             if (data[i] == e) {
                 return i;
@@ -141,31 +156,37 @@ public class Array {
      * @param index
      * @return
      */
-    public int remove(int index) {
+    public E remove(int index) {
         if (index < 0 || index >= size) {
             throw new IllegalArgumentException("Set Fail, Index is illegal");
         }
-        int ret = data[index];
-        for (int i = index; i < size; i++) {
+        E ret = data[index];
+        for (int i = index; i < size - 1; i++) {
             data[i] = data[i + 1];
         }
         size--;
+        data[size] = null;
+        if (size == data.length / 4 && data.length / 2 != 0) {
+            resize(data.length / 2);
+        }
         return ret;
     }
 
     /**
      * 删除第一个元素
+     *
      * @return
      */
-    public int removeFirst() {
+    public E removeFirst() {
         return remove(0);
     }
 
     /**
      * 删除最后一个元素
+     *
      * @return
      */
-    public int removeLast() {
+    public E removeLast() {
         return remove(size - 1);
     }
 
