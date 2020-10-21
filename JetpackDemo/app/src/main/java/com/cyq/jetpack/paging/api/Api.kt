@@ -17,8 +17,14 @@ interface Api {
      * 获取影院当前上映的电影
      */
     @GET("movie/in_theaters")
-    suspend fun getMovies(@Query("start") since: Int, @Query("count") perPage: Int): Movies
+    suspend fun getMovies(
+        @Query("start") since: Int,
+        @Query("count") perPage: Int
+    ): Movies
 
+    /**
+     * stack overflow的用户分页接口
+     */
     @GET("2.2/users")
     suspend fun getUsers(
         @Query("page") page: Int,

@@ -1,5 +1,7 @@
 package week3;
 
+import java.util.Stack;
+
 public class Main {
     public static void main(String[] args) {
         Array<Integer> arr = new Array<>(10);
