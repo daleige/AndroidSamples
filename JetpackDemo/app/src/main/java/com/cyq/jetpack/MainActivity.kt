@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         btnDataBinding.setOnClickListener(this)
         btnPaging.setOnClickListener(this)
         btnPaging2.setOnClickListener(this)
+        btnThread.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -26,6 +27,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 startActivity(Intent(this, PositionalPagingActivity::class.java))
             R.id.btnPaging2 ->
                 startActivity(Intent(this, PageKeyedActivity::class.java))
+            R.id.btnThread ->
+                startActivity(Intent(this, ThreadActivity::class.java))
         }
     }
 }

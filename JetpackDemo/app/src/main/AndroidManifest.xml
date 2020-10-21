@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".paging.PageKeyedActivity"></activity>
+        <activity android:name=".paging.PageKeyedActivity" />
         <activity android:name=".RecyclerViewActivity" />
         <activity android:name=".BothBindingActivity" />
         <activity android:name=".paging.PositionalPagingActivity" />

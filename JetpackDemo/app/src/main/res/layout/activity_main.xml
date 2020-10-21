@@ -22,6 +22,11 @@
             android:id="@+id/btnPaging2"
             style="@style/ButtonStyle"
             android:text="PageKeyedDataSource实现Paging分页" />
+
+        <Button
+            android:id="@+id/btnThread"
+            style="@style/ButtonStyle"
+            android:text="多线程" />
     </LinearLayout>
 
 </ScrollView>
