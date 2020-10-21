@@ -119,6 +119,32 @@ public class LinkedList<E> {
         return false;
     }
 
+    /**
+     * 删除
+     */
+    public E remove(int index) {
+        if (index < 0 || index > size) {
+            throw new IllegalArgumentException("index out of bundle");
+        }
+        Node prev = dummyHead;
+        for (int i = 0; i < index; i++) {
+            prev = prev.next;
+        }
+        Node retNode = prev.next;
+        prev.next = retNode.next;
+        retNode.next = null;
+        size--;
+        return retNode.e;
+    }
+
+    public void removeFirst() {
+        remove(0);
+    }
+
+    public void removeLast() {
+        remove(size - 1);
+    }
+
     @Override
     public String toString() {
         StringBuilder res = new StringBuilder();

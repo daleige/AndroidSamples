@@ -16,5 +16,11 @@ public class TestLink {
         System.out.println("尾部插入666:" + linkedList);
         linkedList.set(4, 555);
         System.out.println("修改下标4的值为555:" + linkedList);
+        linkedList.remove(4);
+        System.out.println("移除下标4的值为555:" + linkedList);
+        linkedList.removeFirst();
+        System.out.println("移除前面一个:" + linkedList);
+        linkedList.removeLast();
+        System.out.println("移除最后面一个:" + linkedList);
     }
 }
