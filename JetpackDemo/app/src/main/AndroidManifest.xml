@@ -17,6 +17,7 @@
         <activity android:name=".BothBindingActivity" />
         <activity android:name=".paging.PositionalPagingActivity" />
         <activity android:name=".DataBindingActivity" />
+        <activity android:name=".ThreadActivity"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
