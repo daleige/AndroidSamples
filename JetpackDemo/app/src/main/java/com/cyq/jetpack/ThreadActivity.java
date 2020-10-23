@@ -113,7 +113,7 @@ class ThreadActivity extends AppCompatActivity {
         }
         executor2.shudown();
 
-        //4. newScheduledThreadPool
+        //4. newScheduledThreadPool 延时调度周期性执行的线程池
         Executor executor3 = Executors.newScheduledThreadPool(10);
 
         BlockingDeque<Runnable> queue = new LinkedBlockingDeque<>(10000);
