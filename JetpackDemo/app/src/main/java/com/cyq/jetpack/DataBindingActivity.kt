@@ -27,5 +27,6 @@ class DataBindingActivity : AppCompatActivity() {
         //多参数重载的BindingAdapter
         activityDataBinding.imageUrl = ""
         activityDataBinding.defaultImage=R.mipmap.ic_launcher
+
     }
 }

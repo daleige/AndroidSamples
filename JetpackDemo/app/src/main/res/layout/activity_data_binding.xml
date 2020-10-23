@@ -98,6 +98,12 @@
                 style="@style/ButtonStyle"
                 android:onClick="@{EventHandler.toRecyclerViewActivity}"
                 android:text="RecyclerView绑定机制" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="@color/colorAccent"
+                app:padingLeft="@{}" />
         </LinearLayout>
     </ScrollView>
 </layout>

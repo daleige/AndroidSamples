@@ -3,6 +3,7 @@ package com.cyq.jetpack.binding_adapter
 import android.graphics.Color
 import android.text.TextUtils
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
@@ -47,5 +48,11 @@ object ImageViewBindingAdapter {
                 .load(imageResource)
                 .into(imageView)
         }
+    }
+
+    @JvmStatic
+    @BindingAdapter("padingLeft")
+    fun setPaddingLeft(view: View, paddingLeft: Int) {
+        view.setPadding(paddingLeft, 0, 0, 0)
     }
 }
