@@ -10,4 +10,14 @@ public enum Singleton6 {
     public void doSomething() {
         System.out.println("枚举创建");
     }
+
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
