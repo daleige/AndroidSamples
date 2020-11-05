@@ -1,4 +1,4 @@
-package src.com.company.多态;
+package com.cyq.design.多态;
 
 public class Dog extends Anima {
 

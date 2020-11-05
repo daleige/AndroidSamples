@@ -1,4 +1,4 @@
-package src.com.company.单例;
+package com.cyq.design.线程同步;
 
 public class Test2 {
     public static void sleep1() throws InterruptedException {
