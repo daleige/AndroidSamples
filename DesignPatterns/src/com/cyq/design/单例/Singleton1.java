@@ -31,7 +31,7 @@ public class Singleton1 {
         return INSTANCE;
     }
 
-    public static void doSomething() {
+    public void doSomething() {
 
     }
 }

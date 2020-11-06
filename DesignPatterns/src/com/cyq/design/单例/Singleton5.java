@@ -4,7 +4,6 @@ package com.cyq.design.单例;
  * 静态内部类 单例
  */
 public class Singleton5 {
-
     private Singleton5() {
     }
 

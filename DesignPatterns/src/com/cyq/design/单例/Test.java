@@ -18,9 +18,9 @@ public class Test {
 //                    System.out.println(singleton1.hashCode() + "\t-----\t" + singleton2.hashCode());
 
                     //懒汉式 线程不安全
-//                    SingLeton2 singLeton21=SingLeton2.getInstance();
-//                    SingLeton2 singLeton22=SingLeton2.getInstance();
-//                    System.out.println(singLeton21.hashCode() + "\t-----\t" + singLeton22.hashCode());
+                    SingLeton2 singLeton21=SingLeton2.getInstance();
+                    SingLeton2 singLeton22=SingLeton2.getInstance();
+                    System.out.println(singLeton21.hashCode() + "\t-----\t" + singLeton22.hashCode());
 
                     //懒汉式，线程安全写法
 //                    Singleton3 singleton31 = Singleton3.getINSTANCE();
@@ -31,9 +31,9 @@ public class Test {
 //                    Singleton4 singleton42 = Singleton4.getInstance();
 //                    System.out.println(singleton41.hashCode() + "\t-----\t" + singleton42.hashCode());
 
-                    Singleton6 singleton61 = Singleton6.INSTANCE;
-                    Singleton6 singleton62 = Singleton6.INSTANCE;
-                    System.out.println(singleton61.hashCode() + "\t-----\t" + singleton62.hashCode());
+//                    Singleton6 singleton61 = Singleton6.INSTANCE;
+//                    Singleton6 singleton62 = Singleton6.INSTANCE;
+//                    System.out.println(singleton61.hashCode() + "\t-----\t" + singleton62.hashCode());
                 }
             });
         }
