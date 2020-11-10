@@ -3,8 +3,14 @@ package com.cyq.httpdemo;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DiffUtil;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.RequestManager;
 
 import java.io.IOException;
 import java.io.InterruptedIOException;
@@ -46,5 +52,16 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("test", "success-->" + response.body());
             }
         });
+
+        initGlide();
+    }
+
+    private void initGlide() {
+        ImageView imageView = new ImageView(this);
+        Glide.with(this).load("").into(imageView);
+
+        RequestManager with = Glide.with(this);
+        RequestBuilder<Drawable> load = with.load("");
+        load.into(imageView);
     }
 }
