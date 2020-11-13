@@ -42,9 +42,6 @@ public class ThreadActivity extends AppCompatActivity {
         setContentView(R.layout.activity_thread);
         //thread();
         callable();
-
-
-
     }
 
     private void reset(String str) {

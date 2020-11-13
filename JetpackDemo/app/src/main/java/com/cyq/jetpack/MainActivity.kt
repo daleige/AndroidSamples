@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Message
 import android.util.Log
 import android.view.View
+import com.cyq.jetpack.navigation.NavigationActivity
 import com.cyq.jetpack.paging.PageKeyedActivity
 import com.cyq.jetpack.paging.PositionalPagingActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         btnDataBinding.setOnClickListener(this)
         btnPaging.setOnClickListener(this)
         btnPaging2.setOnClickListener(this)
+        btnNavigation.setOnClickListener(this)
 
         val msg = Message()
         msg.what = 101
@@ -50,6 +52,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 startActivity(Intent(this, PageKeyedActivity::class.java))
             R.id.btnThread ->
                 startActivity(Intent(this, ThreadActivity::class.java))
+            R.id.btnNavigation ->
+                startActivity(Intent(this,NavigationActivity::class.java))
         }
     }
 }

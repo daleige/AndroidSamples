@@ -12,12 +12,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".navigation.NavigationActivity"></activity>
         <activity android:name=".paging.PageKeyedActivity" />
         <activity android:name=".RecyclerViewActivity" />
         <activity android:name=".BothBindingActivity" />
         <activity android:name=".paging.PositionalPagingActivity" />
         <activity android:name=".DataBindingActivity" />
-        <activity android:name=".ThreadActivity"/>
+        <activity android:name=".ThreadActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

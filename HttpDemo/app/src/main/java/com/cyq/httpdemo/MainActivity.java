@@ -3,6 +3,7 @@ package com.cyq.httpdemo;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DiffUtil;
 
+import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,7 +28,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +47,16 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call call, IOException e) {
                 Log.e("test", "fail ---");
             }
+        }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                Log.e("test", "success-->" + response.body());
-            }
-        });
+        @Override
+        public void onResponse (Call call, Response response) throws IOException {
+            Log.e("test", "success-->" + response.body());
+        }
+    });
 
-        initGlide();
-    }
+    initGlide();
+}
 
     private void initGlide() {
         ImageView imageView = new ImageView(this);

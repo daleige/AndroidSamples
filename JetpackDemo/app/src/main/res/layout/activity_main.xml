@@ -27,6 +27,11 @@
             android:id="@+id/btnThread"
             style="@style/ButtonStyle"
             android:text="多线程" />
+
+        <Button
+            android:id="@+id/btnNavigation"
+            style="@style/ButtonStyle"
+            android:text="Navigation" />
     </LinearLayout>
 
 </ScrollView>
