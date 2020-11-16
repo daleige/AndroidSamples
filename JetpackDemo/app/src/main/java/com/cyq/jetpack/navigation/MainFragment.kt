@@ -18,8 +18,12 @@ class MainFragment : Fragment() {
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_main, container, false)
         rootView.btnSkip.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putString("username", "张三")
+            bundle.putInt("age", 23)
+
             val navController = Navigation.findNavController(it)
-            navController.navigate(R.id.action_mainFragment_to_secondFragment)
+            navController.navigate(R.id.action_mainFragment_to_secondFragment, bundle)
         }
         return rootView
     }

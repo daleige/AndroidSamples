@@ -10,9 +10,18 @@
         android:name="com.cyq.jetpack.navigation.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main">
+
+        <!--enterAnim：fragment1跳转fragment2，fragment2入场动画
+            exitAnim：fragment1跳转fragment2，fragment1的出场动画
+            popEnterAnim：按下返回键，fragment1的进场动画
+            popExitAnim：按下返回键，fragment2的出场动画 -->
         <action
             android:id="@+id/action_mainFragment_to_secondFragment"
-            app:destination="@id/secondFragment" />
+            app:destination="@id/secondFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
