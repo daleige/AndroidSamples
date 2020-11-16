@@ -22,6 +22,16 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+
+        <argument
+            android:name="username"
+            android:defaultValue="unKnow"
+            app:argType="string" />
+
+        <argument
+            android:name="age"
+            android:defaultValue="-1"
+            app:argType="integer" />
     </fragment>
 
     <fragment
