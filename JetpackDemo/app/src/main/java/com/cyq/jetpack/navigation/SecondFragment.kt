@@ -17,6 +17,7 @@ class SecondFragment : Fragment() {
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_second, container, false)
 
+        //接收参数方式1
         val bundle = arguments
         if (bundle != null) {
             val username = bundle.getString("username")
@@ -24,6 +25,11 @@ class SecondFragment : Fragment() {
             rootView.tvArguments.text =
                 "姓名：$username+ 年龄：$age"
         }
+
+        //接收参数方式二
+        val username = arguments?.let { MainFragmentArgs.fromBundle(it).username }
+        val age = arguments?.let { MainFragmentArgs.fromBundle(it).age }
+        rootView.tvArguments.text = "姓名：$username+ 年龄：$age"
         return rootView
     }
 

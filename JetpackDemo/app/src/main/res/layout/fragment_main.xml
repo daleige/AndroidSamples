@@ -6,12 +6,25 @@
     android:background="@color/colorAccent"
     tools:context=".navigation.MainFragment">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnSkip"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="20dp"
-        android:text="跳转到SecondFragment" />
+        android:layout_gravity="center">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnSkip"
+            style="@style/ButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="普通方式带参数跳转" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnSkip2"
+            style="@style/ButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="safe args带参数跳转" />
+    </LinearLayout>
 
 </FrameLayout>
