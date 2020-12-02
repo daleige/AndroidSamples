@@ -11,7 +11,7 @@ import com.cyq.jetpack.model.BookBean
 /**
  * @author : ChenYangQi
  * date   : 2020/10/11 18:26
- * desc   : RecyclerView适配器
+ * desc   : RecyclerView适配器11111111111111111
  */
 class RecyclerViewAdapter(books: List<BookBean>) : RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder>() {
     private val bookBeans: List<BookBean> = books
