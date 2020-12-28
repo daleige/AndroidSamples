@@ -1,4 +1,4 @@
-package com.cyq.design.线程同步;
+package src.com.cyq.design.线程同步;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;

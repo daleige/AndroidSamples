@@ -1,4 +1,4 @@
-package com.cyq.design.多线程;
+package src.com.cyq.design.多线程;
 
 public class Test {
     //https://www.cnblogs.com/onlywujun/p/3565082.html

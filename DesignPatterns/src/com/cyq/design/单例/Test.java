@@ -1,4 +1,4 @@
-package com.cyq.design.单例;
+package src.com.cyq.design.单例;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;

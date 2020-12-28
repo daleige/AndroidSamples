@@ -1,4 +1,4 @@
-package com.cyq.design.单例;
+package src.com.cyq.design.单例;
 
 /**
  * 饿汉式方式实实现单例

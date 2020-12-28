@@ -1,4 +1,4 @@
-package com.cyq.design.线程同步;
+package src.com.cyq.design.线程同步;
 
 public class WaitTest {
     public static void main(String[] args) throws InterruptedException {

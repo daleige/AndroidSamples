@@ -1,4 +1,4 @@
-package com.cyq.design.单例;
+package src.com.cyq.design.单例;
 
 /**
  * 懒汉式-线程不安全 单例模式
