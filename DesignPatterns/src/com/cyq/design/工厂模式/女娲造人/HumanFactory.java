@@ -1,6 +1,6 @@
-package src.com.cyq.design.工厂模式;
+package src.com.cyq.design.工厂模式.女娲造人;
 
-import src.com.cyq.design.工厂模式.human.Human;
+import src.com.cyq.design.工厂模式.女娲造人.human.Human;
 
 public class HumanFactory extends AbstractHumanFactory {
 

@@ -1,9 +1,9 @@
-package src.com.cyq.design.工厂模式;
+package src.com.cyq.design.工厂模式.女娲造人;
 
-import src.com.cyq.design.工厂模式.human.BlackHuman;
-import src.com.cyq.design.工厂模式.human.Human;
-import src.com.cyq.design.工厂模式.human.WhiteHuman;
-import src.com.cyq.design.工厂模式.human.YellowHuman;
+import src.com.cyq.design.工厂模式.女娲造人.human.BlackHuman;
+import src.com.cyq.design.工厂模式.女娲造人.human.Human;
+import src.com.cyq.design.工厂模式.女娲造人.human.WhiteHuman;
+import src.com.cyq.design.工厂模式.女娲造人.human.YellowHuman;
 
 public class NvWa {
 
