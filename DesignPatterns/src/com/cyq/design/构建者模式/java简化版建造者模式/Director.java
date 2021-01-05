@@ -1,4 +1,4 @@
-package src.com.cyq.design.构建者模式;
+package src.com.cyq.design.构建者模式.java简化版建造者模式;
 
 public class Director {
     public static void main(String[] args) {

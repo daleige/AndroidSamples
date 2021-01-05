@@ -1,10 +1,13 @@
-package src.com.cyq.design.构建者模式;
+package src.com.cyq.design.构建者模式.java简化版建造者模式;
 
 public class Computer {
     /**
      * 设备名称，必选
      */
     private final String deviceName;
+    /**
+     * 可选参数
+     */
     private final String cpu;
     private final String ram;
     private final String deviceId;
