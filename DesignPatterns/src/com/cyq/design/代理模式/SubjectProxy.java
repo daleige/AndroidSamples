@@ -1,13 +1,13 @@
 package src.com.cyq.design.代理模式;
 
-public class Proxy implements Subject {
+public class SubjectProxy implements Subject {
     private Subject subject;
 
-    public Proxy() {
+    public SubjectProxy() {
         subject = new RealSubject();
     }
 
-    public Proxy(Subject subject) {
+    public SubjectProxy(Subject subject) {
         this.subject = subject;
     }
 

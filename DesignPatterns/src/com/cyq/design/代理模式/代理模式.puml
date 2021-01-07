@@ -5,8 +5,8 @@ interface Subject{
 }
 
 class RealSubject
-class Proxy
+class SubjectProxy
 RealSubject .up.|> Subject
-Proxy .up.|> Subject
-Proxy -left-> RealSubject
+SubjectProxy .up.|> Subject
+SubjectProxy -right-> RealSubject
 @enduml
