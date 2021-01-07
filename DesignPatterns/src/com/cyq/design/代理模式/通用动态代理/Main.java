@@ -24,7 +24,11 @@ public class Main {
 
         //通用方式实现
         Subject subject = new RealSubject();
-        Subject proxy = SubjectDynamicProxy.newProxyInstance(subject);
+        Subject proxy = SubjectDynamicProxy.newProxyInstance(subject, Subject.class);
         proxy.doSomething();
+
+        Subject subject2=new Real2Subject();
+        Subject proxy2=SubjectDynamicProxy.newProxyInstance(subject2,Subject.class);
+        proxy2.doSomething();
     }
 }

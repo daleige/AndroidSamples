@@ -4,9 +4,9 @@ import java.lang.reflect.InvocationHandler;
 
 public class SubjectDynamicProxy extends DynamicProxy {
 
-    public static <T> T newProxyInstance(T t) {
+    public static <T> T newProxyInstance(T t,Class cls) {
         ClassLoader classLoader = t.getClass().getClassLoader();
-        Class[] classes = {Subject.class};
+        Class[] classes = {cls};
         InvocationHandler invocationHandler = new MyInvocationHandler(t);
         return (T) newProxyInstance(classLoader, classes, invocationHandler);
     }
