@@ -13,6 +13,7 @@ public class Main {
         proxy2.fun1();
         proxy2.fun2();
 
+        //只有通过getProxy获得的代理对象能执行操作
         System.out.println("------------------------");
         Subject subject3 = new RealSubject("王五");
         Proxy proxy3 = subject3.getProxy();
