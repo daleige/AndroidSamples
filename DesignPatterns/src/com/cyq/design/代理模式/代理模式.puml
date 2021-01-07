@@ -1,0 +1,12 @@
+@startuml
+interface Subject{
+    + fun1():void
+    + fun2():void
+}
+
+class RealSubject
+class Proxy
+RealSubject .up.|> Subject
+Proxy .up.|> Subject
+Proxy -left-> RealSubject
+@enduml
