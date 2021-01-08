@@ -1,3 +1,0 @@
-include ':custom_okhttp'
-include ':app'
-rootProject.name = "HttpDemo"
