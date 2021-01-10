@@ -7,6 +7,7 @@ import com.example.token_demo.service.AuthorizationService;
 import com.google.gson.Gson;
 import org.jose4j.json.internal.json_simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -112,7 +113,7 @@ public class AccountController {
      * @return
      */
     @PostMapping("/accessToken/refresh")
-    public String accessTokenRefresh(@RequestParam(name = "refreshToken") String refreshToken) {
+    public ResponseEntity<String> accessTokenRefresh(@RequestParam(name = "refreshToken") String refreshToken) {
         //刷新accessToken:生成新的accessToken
         Result<JSONObject> result = new Result<>();
         String account = authorizationService.verifyToken(refreshToken);
@@ -121,7 +122,7 @@ public class AccountController {
             //通过返回码 告诉客户端 refreshToken过期了，需要客户端就得跳转登录界面
             result.setCode(401);
             result.setDescription("token过期");
-            return new Gson().toJson(result);
+            return ResponseEntity.status(401).body(new Gson().toJson(result));
         }
         //创建新的accessToken
         String accessToken = authorizationService.createAccessIdToken(account);
@@ -143,7 +144,7 @@ public class AccountController {
         jsonObject.put("accessToken", accessToken);
         jsonObject.put("refreshToken", refreshToken);
         result.setData(jsonObject);
-        return new Gson().toJson(result);
+        return ResponseEntity.status(200).body(new Gson().toJson(result));
     }
 
     /**
@@ -153,7 +154,7 @@ public class AccountController {
      * @return
      */
     @PostMapping("/userinfo")
-    public String userInfo(@RequestParam(name = "accessToken") String accessToken) {
+    public ResponseEntity<String> userInfo(@RequestParam(name = "accessToken") String accessToken) {
         System.out.println("调用获取用户信息接口");
         Result<User> result = new Result<>();
         String account = authorizationService.verifyToken(accessToken);
@@ -162,7 +163,7 @@ public class AccountController {
             //通过返回码 告诉客户端 accessToken过期了，需要调用刷新accessToken的接口
             result.setCode(401);
             result.setDescription("accessToken expire");
-            return new Gson().toJson(result);
+            return ResponseEntity.status(401).body(new Gson().toJson(result));
         }
 
         User user = cache.get("user" + account);
@@ -173,6 +174,6 @@ public class AccountController {
         result.setCode(200);
         result.setDescription("success");
         result.setData(user);
-        return new Gson().toJson(result);
+        return ResponseEntity.status(200).body(new Gson().toJson(result));
     }
 }

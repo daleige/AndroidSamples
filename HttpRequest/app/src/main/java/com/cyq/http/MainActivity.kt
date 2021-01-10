@@ -60,6 +60,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             override fun onResponse(call: Call, response: Response) {
                 Log.d(TAG, "注册成功----用户：$username")
+                showToast("注册成功")
             }
         })
     }
@@ -87,6 +88,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             override fun onResponse(call: Call, response: Response) {
                 val result = response.body()?.string()
                 Log.d(TAG, "登录成功----用户：$username")
+                showToast("登录成功")
                 val tokenBean: TokenBean = Gson().fromJson(result, TokenBean::class.java)
                 if (tokenBean.code == 200) {
                     TokenManager.getInstance().accessToken = tokenBean.data.accessToken
@@ -120,12 +122,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             override fun onResponse(call: Call, response: Response) {
                 val result = response.body()?.string()
-                Log.d(TAG, "Token刷新成功----")
+                Log.d(TAG, "Token刷新成功----********-------*******")
                 val tokenBean: TokenBean = Gson().fromJson(result, TokenBean::class.java)
                 if (tokenBean.code == 200) {
                     TokenManager.getInstance().accessToken = tokenBean.data.accessToken
                     TokenManager.getInstance().refreshToken = tokenBean.data.refreshToken
                 } else if (tokenBean.code == 401) {
+                    Log.e(TAG, "Token过期需要自动登录！")
                     showToast("refreshToken过期，需要重新登录！")
                 }
             }
@@ -159,7 +162,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 val result = response.body()?.string()
                 val userInfo: UserInfo = Gson().fromJson(result, UserInfo::class.java)
                 if (userInfo.code == 401) {
-                    Log.d(TAG, "token过期----")
+                    Log.e(TAG, "token过期----${response.code()},自动刷新token")
                 } else {
                     Log.d(TAG, "成功获取用户信息：${Gson().toJson(userInfo.data)}")
                 }
