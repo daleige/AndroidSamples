@@ -11,7 +11,7 @@ import okhttp3.*
  * date   : 2021/1/10 23:50
  * desc   : 判断token过期并自动刷新,刷新成功后重试请求
  */
-internal class RefreshTokenInterceptor : Interceptor {
+class RefreshTokenInterceptor : Interceptor {
     companion object {
         private const val TAG = "Token"
     }

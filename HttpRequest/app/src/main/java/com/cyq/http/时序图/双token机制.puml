@@ -1,0 +1,11 @@
+@startuml
+APP -> Token认证:Request A、B、C等 \nheader=(accessToken)
+Token认证 --> Token认证:检查accessToken是否过期
+Token认证 --> APP:accessToken过期
+APP -> Token认证:刷新token\nheader=(refreshToken)
+Token认证 --> APP:同步新的refreshToken，AccessToken
+APP -> Token认证:Request A、B、C等继续请求
+Token认证 --> Token认证:检查accessToken是否过期
+Token认证 -> 业务处理:accessToken有效
+业务处理-->APP:Request A、B、C等请求成功，返回请求结果
+@enduml
