@@ -24,12 +24,12 @@ internal class RefreshTokenInterceptor : Interceptor {
         //判断Token是否过期
         if (response.code() == 401) {
             //通过同步锁和双重校验限制多个请求同时返回401时，只有第一个请求能执行刷新token的操作
-            if ((!TextUtils.isEmpty(TokenManager.getInstance().accessToken)) &&
-                TokenManager.getInstance().accessToken == request.header("accessToken")
+            if ((!TextUtils.isEmpty(TokenSingleton.instance.accessToken)) &&
+                TokenSingleton.instance.accessToken == request.header("accessToken")
             ) {
                 synchronized(lock) {
-                    if (!TextUtils.isEmpty(TokenManager.getInstance().accessToken) && TokenManager
-                            .getInstance().accessToken == request.header("accessToken")
+                    if (!TextUtils.isEmpty(TokenSingleton.instance.accessToken) && TokenSingleton
+                            .instance.accessToken == request.header("accessToken")
                     ) {
                         refreshToken(object : RefreshTokenCallBack {
                             override fun onFail(response: Response): Response {
@@ -47,12 +47,12 @@ internal class RefreshTokenInterceptor : Interceptor {
             }
 
             //使用新的AccessToken继续业务请求
-            if (!TextUtils.isEmpty(TokenManager.getInstance().accessToken) &&
-                TokenManager.getInstance().accessToken != request.header("accessToken")
+            if (!TextUtils.isEmpty(TokenSingleton.instance.accessToken) &&
+                TokenSingleton.instance.accessToken != request.header("accessToken")
             ) {
                 Log.e(TAG, "获得新Token后重试")
                 val newRequest = request.newBuilder()
-                    .header("accessToken", TokenManager.getInstance().accessToken)
+                    .header("accessToken", TokenSingleton.instance.accessToken)
                     .build()
                 //继续业务请求
                 return chain.proceed(newRequest)
@@ -68,7 +68,7 @@ internal class RefreshTokenInterceptor : Interceptor {
      */
     private fun refreshToken(callback: RefreshTokenCallBack) {
         Log.d(TAG, "进入刷新Token。。。。。")
-        val refreshToken = TokenManager.getInstance().refreshToken
+        val refreshToken = TokenSingleton.instance.refreshToken
         if (TextUtils.isEmpty(refreshToken)) {
             Log.d(TAG, "刷新Token失败！")
             throw RefreshTokenFailException("refreshToken is empty,please first login")
@@ -88,8 +88,8 @@ internal class RefreshTokenInterceptor : Interceptor {
             response.code() == 200 -> {
                 Log.d(TAG, "Token刷新成功")
                 //刷新token成功，更新token
-                TokenManager.getInstance().accessToken = tokenBean.data.accessToken
-                TokenManager.getInstance().refreshToken = tokenBean.data.refreshToken
+                TokenSingleton.instance.accessToken = tokenBean.data.accessToken
+                TokenSingleton.instance.refreshToken = tokenBean.data.refreshToken
                 callback.onSuccess()
             }
             response.code() == 401 -> {

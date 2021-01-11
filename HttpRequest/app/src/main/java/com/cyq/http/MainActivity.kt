@@ -101,8 +101,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 showToast("登录成功")
                 val tokenBean: TokenBean = Gson().fromJson(result, TokenBean::class.java)
                 if (tokenBean.code == 200) {
-                    TokenManager.getInstance().accessToken = tokenBean.data.accessToken
-                    TokenManager.getInstance().refreshToken = tokenBean.data.refreshToken
+                    TokenSingleton.instance.accessToken = tokenBean.data.accessToken
+                    TokenSingleton.instance.refreshToken = tokenBean.data.refreshToken
                     tokenEffective = true
                 }
             }
@@ -113,7 +113,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
      * 刷新token
      */
     private fun refreshToken() {
-        val refreshToken = TokenManager.getInstance().refreshToken
+        val refreshToken = TokenSingleton.instance.refreshToken
         if (TextUtils.isEmpty(refreshToken)) {
             Toast.makeText(this, "请先登录！", Toast.LENGTH_SHORT).show()
             return
@@ -137,8 +137,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 Log.d(TAG, "Token刷新成功----********-------*******")
                 val tokenBean: TokenBean = Gson().fromJson(result, TokenBean::class.java)
                 if (tokenBean.code == 200) {
-                    TokenManager.getInstance().accessToken = tokenBean.data.accessToken
-                    TokenManager.getInstance().refreshToken = tokenBean.data.refreshToken
+                    TokenSingleton.instance.accessToken = tokenBean.data.accessToken
+                    TokenSingleton.instance.refreshToken = tokenBean.data.refreshToken
                     tokenEffective = true
                 } else if (tokenBean.code == 401) {
                     Log.e(TAG, "Token过期需要自动登录！")
@@ -153,7 +153,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
      * 获取用户信息
      */
     private fun getUserInfo() {
-        val accessToken = TokenManager.getInstance().accessToken
+        val accessToken = TokenSingleton.instance.accessToken
         if (TextUtils.isEmpty(accessToken)) {
             showToast("accessToken为空，请先登录！")
             return
@@ -187,7 +187,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun sum() {
-        val accessToken = TokenManager.getInstance().accessToken
+        val accessToken = TokenSingleton.instance.accessToken
         if (TextUtils.isEmpty(accessToken)) {
             showToast("accessToken为空，请先登录！")
             return
@@ -223,7 +223,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun multiply() {
-        val accessToken = TokenManager.getInstance().accessToken
+        val accessToken = TokenSingleton.instance.accessToken
         if (TextUtils.isEmpty(accessToken)) {
             showToast("accessToken为空，请先登录！")
             return
