@@ -16,6 +16,10 @@ import org.springframework.stereotype.Service;
 import java.security.PrivateKey;
 import java.util.UUID;
 
+/**
+ * @author:
+ * @create: 2019-10-16 09:36
+ **/
 @Service
 public class AuthorizationService {
     /**

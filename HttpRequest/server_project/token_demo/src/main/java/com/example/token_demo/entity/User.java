@@ -1,5 +1,9 @@
 package com.example.token_demo.entity;
 
+/**
+ * @author:
+ * @create: 2019-10-16 09:59
+ **/
 public class User {
     public String account;
     public String password;

@@ -1,15 +1,21 @@
 package com.example.token_demo.controller;
 
+import com.example.token_demo.entity.Result;
 import com.example.token_demo.entity.User;
 import com.example.token_demo.redis.RedisUtil;
 import com.example.token_demo.service.AuthorizationService;
+import com.google.gson.Gson;
 import org.jose4j.json.internal.json_simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
-import java.util.Map;
 
+/**
+ * @author:
+ * @create: 2019-10-16 10:02
+ **/
 @RestController
 public class AccountController {
 
@@ -18,6 +24,8 @@ public class AccountController {
 
     @Autowired
     RedisUtil cache;
+
+    private final String jsonStr = "{\"code\":200,\"desc\":\"success\",\"data\":{}}";
 
     /**
      * 注册
@@ -29,12 +37,12 @@ public class AccountController {
     @PostMapping("/register")
     public String register(@RequestParam(name = "account") String account,
                            @RequestParam(name = "password") String password) {
-        JSONObject ret = new JSONObject();
+        Result<String> result = new Result<>();
         //简单校验下非空
         if (account == null || account.equals("") || password == null || password.equals("")) {
-            ret.put("code", "1");
-            ret.put("desc", "account | password can not empty");
-            return formatData(200, "account | password can not empty", null);
+            result.setCode(201);
+            result.setDescription("账号或者密码为空");
+            return new Gson().toJson(result);
         }
 
         //注册成功，这里没有判断要注册的用户是否存在
@@ -44,21 +52,10 @@ public class AccountController {
         cache.set("user" + account, new User(account, password));
 
         //response
-        return formatData(200, "success", null);
-    }
-
-    private String formatData(int code, String msg, JSONObject data) {
-        JSONObject obj = new JSONObject();
-        if (code > 0) {
-            obj.put("code", code);
-        }
-        if (msg != null || msg.equals("")) {
-            obj.put("message", msg);
-        }
-        if (data != null) {
-            obj.put("data", data);
-        }
-        return obj.toString();
+        result.setCode(200);
+        result.setDescription("success");
+        result.setData("注册成功！");
+        return new Gson().toJson(result);
     }
 
     /**
@@ -75,16 +72,16 @@ public class AccountController {
         User user = cache.get("user" + account);
         //如果缓存account获取user为null,从数据库获取user
         //...
-
+        Result<JSONObject> result = new Result<>();
         if (user != null && password != null && password.equals(user.getPassword())) {
             //登录成功
             //创建token
             String accessToken = authorizationService.createAccessIdToken(account);
             String refreshToken = authorizationService.createRefreshIdToken(account);
             if (accessToken == null || refreshToken == null) {
-                ret.put("code", "1");
-                ret.put("desc", "failed");
-                return ret.toString();
+                result.setCode(201);
+                result.setDescription("账号或者密码为空");
+                return new Gson().toJson(result);
             }
 
             //缓存当前登录用户 refreshToken 创建的起始时间，这个会在刷新accessToken方法中 判断是否要重新生成(刷新)refreshToken时用到
@@ -96,15 +93,17 @@ public class AccountController {
             cache.set("user" + account, user);
 
             //response
-            ret.put("code", "0");
-            ret.put("desc", "ok");
-            ret.put("accessToken", accessToken);
-            ret.put("refreshToken", refreshToken);
-            return ret.toString();
+            result.setCode(200);
+            result.setDescription("success");
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("accessToken", accessToken);
+            jsonObject.put("refreshToken", refreshToken);
+            result.setData(jsonObject);
+            return new Gson().toJson(result);
         }
-        ret.put("code", "1");
-        ret.put("desc", "failed");
-        return ret.toString();
+        result.setCode(202);
+        result.setDescription("执行失败！");
+        return new Gson().toJson(result);
     }
 
     /**
@@ -113,16 +112,17 @@ public class AccountController {
      * @param refreshToken refreshToken
      * @return
      */
-    @PostMapping("/accessToken/refresh/{refreshToken}")
-    public String accessTokenRefresh(@PathVariable("refreshToken") String refreshToken) {
+    @PostMapping("/accessToken/refresh")
+    public ResponseEntity<String> accessTokenRefresh(@RequestParam(name = "refreshToken") String refreshToken) {
         //刷新accessToken:生成新的accessToken
+        Result<JSONObject> result = new Result<>();
         String account = authorizationService.verifyToken(refreshToken);
         JSONObject ret = new JSONObject();
         if (account == null) {
             //通过返回码 告诉客户端 refreshToken过期了，需要客户端就得跳转登录界面
-            ret.put("code", "3");//我这里只是演示，返回3表示 refreshToken过期
-            ret.put("desc", "failed");
-            return ret.toString();
+            result.setCode(401);
+            result.setDescription("token过期");
+            return ResponseEntity.status(401).body(new Gson().toJson(result));
         }
         //创建新的accessToken
         String accessToken = authorizationService.createAccessIdToken(account);
@@ -138,11 +138,13 @@ public class AccountController {
         }
 
         //response
-        ret.put("code", "0");
-        ret.put("desc", "ok");
-        ret.put("accessToken", accessToken);
-        ret.put("refreshToken", refreshToken);
-        return ret.toString();
+        result.setCode(200);
+        result.setDescription("success");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("accessToken", accessToken);
+        jsonObject.put("refreshToken", refreshToken);
+        result.setData(jsonObject);
+        return ResponseEntity.status(200).body(new Gson().toJson(result));
     }
 
     /**
@@ -151,16 +153,17 @@ public class AccountController {
      * @param accessToken accessToken
      * @return
      */
-    @PostMapping("/user/{accessToken}")
-    public String userInfo(@PathVariable("accessToken") String accessToken) {
+    @PostMapping("/userinfo")
+    public ResponseEntity<String> userInfo(@RequestParam(name = "accessToken") String accessToken) {
+        System.out.println("调用获取用户信息接口");
+        Result<User> result = new Result<>();
         String account = authorizationService.verifyToken(accessToken);
         System.out.println("account=" + account);
-        JSONObject ret = new JSONObject();
         if (account == null) {
             //通过返回码 告诉客户端 accessToken过期了，需要调用刷新accessToken的接口
-            ret.put("code", "2");//我这里只是演示，返回2表示 accessToken过期
-            ret.put("desc", "accessToken expire");
-            return ret.toString();
+            result.setCode(401);
+            result.setDescription("accessToken expire");
+            return ResponseEntity.status(401).body(new Gson().toJson(result));
         }
 
         User user = cache.get("user" + account);
@@ -168,9 +171,9 @@ public class AccountController {
         //...
 
         //response
-        ret.put("code", "0");
-        ret.put("desc", "ok");
-        ret.put("user", user);
-        return ret.toJSONString();
+        result.setCode(200);
+        result.setDescription("success");
+        result.setData(user);
+        return ResponseEntity.status(200).body(new Gson().toJson(result));
     }
 }
