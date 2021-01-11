@@ -15,8 +15,10 @@ import java.io.IOException
 
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
+    companion object {
+        private const val TAG = "MainActivity"
+    }
 
-    private val TAG = "MainActivity"
     private lateinit var okHttpClient: OkHttpClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,15 +29,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         btnInfo.setOnClickListener(this)
         btnRegister.setOnClickListener(this)
         btnRefreshToken.setOnClickListener(this)
+        btnTest.setOnClickListener(this)
     }
 
     override fun onClick(view: View?) {
-        okHttpClient = OkHttpClient.Builder().build()
+        okHttpClient = OkHttpClient.Builder()
+            //添加监听Token过期自动刷新的拦截器
+            .addInterceptor(RefreshTokenInterceptor())
+            .build()
+
         when (view?.id) {
             R.id.btnRegister -> register("zhangsan", "123456")
             R.id.btnLogin -> login("zhangsan", "123456")
             R.id.btnRefreshToken -> refreshToken()
-            R.id.btnInfo -> getUserInfo("zhangsan")
+            R.id.btnInfo -> getUserInfo()
+            R.id.btnTest -> testRefreshToken()
         }
     }
 
@@ -48,7 +56,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             .add("password", password)
             .build()
         val request = Request.Builder()
-            .url("http://192.168.3.9:8083/register")
+            .url("http://192.168.3.8:8083/register")
             .post(formBody)
             .build()
         val call = okHttpClient.newCall(request)
@@ -74,7 +82,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             .add("password", password)
             .build()
         val request = Request.Builder()
-            .url("http://192.168.3.9:8083/login")
+            .url("http://192.168.3.8:8083/login")
             .post(formBody)
             .build()
 
@@ -107,9 +115,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             Toast.makeText(this, "请先登录！", Toast.LENGTH_SHORT).show()
             return
         }
-        val formBody = FormBody.Builder().add("refreshToken", refreshToken).build()
+        val formBody = FormBody.Builder().build()
         val request = Request.Builder()
-            .url("http://192.168.3.9:8083/accessToken/refresh")
+            .url("http://192.168.3.8:8083/accessToken/refresh")
+            .addHeader("refreshToken", refreshToken)
             .post(formBody)
             .build()
 
@@ -133,21 +142,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
         })
-
     }
 
     /**
      * 获取用户信息
      */
-    private fun getUserInfo(accessToken: String) {
+    private fun getUserInfo() {
         val accessToken = TokenManager.getInstance().accessToken
         if (TextUtils.isEmpty(accessToken)) {
             showToast("accessToken为空，请先登录！")
             return
         }
-        val formBody = FormBody.Builder().add("accessToken", accessToken).build()
+        val formBody = FormBody.Builder().build()
         val request = Request.Builder()
-            .url("http://192.168.3.9:8083/userinfo")
+            .url("http://192.168.3.8:8083/userinfo")
+            .addHeader("accessToken", accessToken)
             .post(formBody)
             .build()
 
@@ -168,7 +177,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
         })
+    }
 
+
+    /**
+     * 轮训接口，测试
+     */
+    private fun testRefreshToken() {
+        Thread {
+            while (true) {
+                Thread.sleep(3_000)
+                getUserInfo()
+            }
+        }.start()
     }
 
     private fun showToast(text: String) {

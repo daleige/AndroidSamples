@@ -113,7 +113,7 @@ public class AccountController {
      * @return
      */
     @PostMapping("/accessToken/refresh")
-    public ResponseEntity<String> accessTokenRefresh(@RequestParam(name = "refreshToken") String refreshToken) {
+    public ResponseEntity<String> accessTokenRefresh(@RequestHeader(name = "refreshToken") String refreshToken) {
         //刷新accessToken:生成新的accessToken
         Result<JSONObject> result = new Result<>();
         String account = authorizationService.verifyToken(refreshToken);
@@ -154,7 +154,7 @@ public class AccountController {
      * @return
      */
     @PostMapping("/userinfo")
-    public ResponseEntity<String> userInfo(@RequestParam(name = "accessToken") String accessToken) {
+    public ResponseEntity<String> userInfo(@RequestHeader(name = "accessToken") String accessToken) {
         System.out.println("调用获取用户信息接口");
         Result<User> result = new Result<>();
         String account = authorizationService.verifyToken(accessToken);
