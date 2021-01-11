@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.cyq.http.bean.BaseBean
 import com.cyq.http.bean.TokenBean
 import com.cyq.http.bean.UserInfo
 import com.google.gson.Gson
@@ -16,9 +17,10 @@ import java.io.IOException
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     companion object {
-        private const val TAG = "MainActivity"
+        private const val TAG = "Token"
     }
 
+    private var tokenEffective = false;
     private lateinit var okHttpClient: OkHttpClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,6 +103,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 if (tokenBean.code == 200) {
                     TokenManager.getInstance().accessToken = tokenBean.data.accessToken
                     TokenManager.getInstance().refreshToken = tokenBean.data.refreshToken
+                    tokenEffective = true
                 }
             }
         })
@@ -136,9 +139,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 if (tokenBean.code == 200) {
                     TokenManager.getInstance().accessToken = tokenBean.data.accessToken
                     TokenManager.getInstance().refreshToken = tokenBean.data.refreshToken
+                    tokenEffective = true
                 } else if (tokenBean.code == 401) {
                     Log.e(TAG, "Token过期需要自动登录！")
                     showToast("refreshToken过期，需要重新登录！")
+                    tokenEffective = false
                 }
             }
         })
@@ -164,6 +169,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         call.enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 Log.d(TAG, "获取用户信息失败")
+                tokenEffective = false
                 e.printStackTrace()
             }
 
@@ -171,9 +177,82 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 val result = response.body()?.string()
                 val userInfo: UserInfo = Gson().fromJson(result, UserInfo::class.java)
                 if (userInfo.code == 401) {
+                    tokenEffective=false
                     Log.e(TAG, "token过期----${response.code()},自动刷新token")
                 } else {
                     Log.d(TAG, "成功获取用户信息：${Gson().toJson(userInfo.data)}")
+                }
+            }
+        })
+    }
+
+    private fun sum() {
+        val accessToken = TokenManager.getInstance().accessToken
+        if (TextUtils.isEmpty(accessToken)) {
+            showToast("accessToken为空，请先登录！")
+            return
+        }
+        val formBody = FormBody.Builder()
+            .add("data1", 12.toString())
+            .add("data2", 43.toString())
+            .build()
+        val request = Request.Builder()
+            .url("http://192.168.3.8:8083/sum")
+            .addHeader("accessToken", accessToken)
+            .post(formBody)
+            .build()
+        val call = okHttpClient.newCall(request)
+        call.enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.d(TAG, "sum请求失败！")
+                tokenEffective = false
+                e.printStackTrace()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val result = response.body()?.string()
+                val bean: BaseBean = Gson().fromJson(result, BaseBean::class.java)
+                if (bean.code == 401) {
+                    tokenEffective=false
+                    Log.e(TAG, "sum：token过期----${response.code()},自动刷新token")
+                } else {
+                    Log.d(TAG, "sum成功：$result")
+                }
+            }
+        })
+    }
+
+    private fun multiply() {
+        val accessToken = TokenManager.getInstance().accessToken
+        if (TextUtils.isEmpty(accessToken)) {
+            showToast("accessToken为空，请先登录！")
+            return
+        }
+        val formBody = FormBody.Builder()
+            .add("data1", 12.toString())
+            .add("data2", 43.toString())
+            .build()
+        val request = Request.Builder()
+            .url("http://192.168.3.8:8083/multiply")
+            .addHeader("accessToken", accessToken)
+            .post(formBody)
+            .build()
+        val call = okHttpClient.newCall(request)
+        call.enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.d(TAG, "multiply请求失败！")
+                tokenEffective = false
+                e.printStackTrace()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val result = response.body()?.string()
+                val bean: BaseBean = Gson().fromJson(result, BaseBean::class.java)
+                if (bean.code == 401) {
+                    tokenEffective=false
+                    Log.e(TAG, "multiply：token过期----${response.code()},自动刷新token")
+                } else {
+                    Log.d(TAG, "multiply成功：$result")
                 }
             }
         })
@@ -185,9 +264,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
      */
     private fun testRefreshToken() {
         Thread {
-            while (true) {
-                Thread.sleep(3_000)
+            while (tokenEffective) {
+                Thread.sleep(10_000)
                 getUserInfo()
+                sum()
+                multiply()
             }
         }.start()
     }

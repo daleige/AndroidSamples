@@ -9,11 +9,11 @@ import okhttp3.*
 /**
  * @author : ChenYangQi
  * date   : 2021/1/10 23:50
- * desc   : 判断token过期并自动刷新后再重试请求
+ * desc   : 判断token过期并自动刷新,刷新成功后重试请求
  */
 internal class RefreshTokenInterceptor : Interceptor {
     companion object {
-        private const val TAG = "MainActivity"
+        private const val TAG = "Token"
     }
 
     private val lock = Any()
@@ -28,8 +28,8 @@ internal class RefreshTokenInterceptor : Interceptor {
                 TokenManager.getInstance().accessToken == request.header("accessToken")
             ) {
                 synchronized(lock) {
-                    if (!TextUtils.isEmpty(TokenManager.getInstance().accessToken) &&
-                        TokenManager.getInstance().accessToken == request.header("accessToken")
+                    if (!TextUtils.isEmpty(TokenManager.getInstance().accessToken) && TokenManager
+                            .getInstance().accessToken == request.header("accessToken")
                     ) {
                         refreshToken(object : RefreshTokenCallBack {
                             override fun onFail(response: Response): Response {
@@ -40,27 +40,22 @@ internal class RefreshTokenInterceptor : Interceptor {
 
                             override fun onSuccess() {
                                 Log.d(TAG, "token刷新成功----重试业务请求---")
-                                //使用新的accessToken构建一个新的request
-                                val newRequest = request.newBuilder()
-                                    .header("accessToken", TokenManager.getInstance().accessToken)
-                                    .build()
-                                //继续业务请求
-                                chain.proceed(newRequest)
                             }
                         })
                     }
                 }
             }
 
-            //同时有多个请求401，其中一个请求刷新Token成功，其他请求使用新的AccessToken继续业务请求
+            //使用新的AccessToken继续业务请求
             if (!TextUtils.isEmpty(TokenManager.getInstance().accessToken) &&
                 TokenManager.getInstance().accessToken != request.header("accessToken")
             ) {
+                Log.e(TAG, "获得新Token后重试")
                 val newRequest = request.newBuilder()
                     .header("accessToken", TokenManager.getInstance().accessToken)
                     .build()
                 //继续业务请求
-                chain.proceed(newRequest)
+                return chain.proceed(newRequest)
             } else {
                 throw RefreshTokenFailException("refresh token fail")
             }

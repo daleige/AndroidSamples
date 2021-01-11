@@ -176,4 +176,42 @@ public class AccountController {
         result.setData(user);
         return ResponseEntity.status(200).body(new Gson().toJson(result));
     }
+
+    @PostMapping("/sum")
+    public ResponseEntity<String> test1(@RequestHeader(name = "accessToken") String accessToken,
+                                        @RequestParam(name = "data1") int data1,
+                                        @RequestParam(name = "data2") int data2) {
+        Result<String> result = new Result<>();
+        String account = authorizationService.verifyToken(accessToken);
+        if (account == null) {
+            //通过返回码 告诉客户端 accessToken过期了，需要调用刷新accessToken的接口
+            result.setCode(401);
+            result.setDescription("accessToken expire");
+            return ResponseEntity.status(401).body(new Gson().toJson(result));
+        }
+
+        result.setCode(200);
+        result.setDescription("success");
+        result.setData(data1 + "+" + data2 + "=" + (data1 + data2));
+        return ResponseEntity.status(200).body(new Gson().toJson(result));
+    }
+
+    @PostMapping("/multiply")
+    public ResponseEntity<String> multiply(@RequestHeader(name = "accessToken") String accessToken,
+                                        @RequestParam(name = "data1") int data1,
+                                        @RequestParam(name = "data2") int data2) {
+        Result<String> result = new Result<>();
+        String account = authorizationService.verifyToken(accessToken);
+        if (account == null) {
+            //通过返回码 告诉客户端 accessToken过期了，需要调用刷新accessToken的接口
+            result.setCode(401);
+            result.setDescription("accessToken expire");
+            return ResponseEntity.status(401).body(new Gson().toJson(result));
+        }
+
+        result.setCode(200);
+        result.setDescription("success");
+        result.setData(data1 + "*" + data2 + "=" + (data1 + data2));
+        return ResponseEntity.status(200).body(new Gson().toJson(result));
+    }
 }

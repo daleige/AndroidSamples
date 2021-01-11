@@ -3,7 +3,7 @@ package com.cyq.http;
 /**
  * @author : ChenYangQi
  * date   : 2021/1/10 17:58
- * desc   : 单例用于存储accessToken和refreshToken
+ * desc   : 单例 用于存储accessToken和refreshToken
  */
 public class TokenManager {
     private static volatile TokenManager instance;
