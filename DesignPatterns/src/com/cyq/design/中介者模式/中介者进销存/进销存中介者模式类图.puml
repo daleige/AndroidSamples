@@ -1,0 +1,39 @@
+@startuml
+skinparam classAttributeIconSize 0
+Abstract AbstractMediator{
+    # Purchase
+    # Sale
+    # Stock
+    + AbstractMediator()
+    + void execute(String str,Object ...objects)
+}
+class Mediator{
+    + void execute(String str,Object ...objects)
+}
+class Purchase{
+    + void buyIBMComputer(int number)
+    + void refuseBuyIBM()
+}
+class Sale{
+    + void sellIBMComputer(int number)
+    + void getSaleStatus()
+    + void offSale()
+}
+class Stock{
+    + void increase(int number)
+    + void decrease(int number)
+    + void getStockNumber()
+    + void clearStock()
+}
+Abstract class AbstractColleague{
+    # AbstractMediator mediator
+    + AbstractColleague(AbstractColleague _mediator)
+}
+Mediator -up-|> AbstractMediator
+Stock  -up-> Mediator
+Purchase -up-> Mediator
+Sale -up-> Mediator
+Sale -down-|> AbstractColleague
+Purchase -down-|> AbstractColleague
+Stock -down-|> AbstractColleague
+@enduml
