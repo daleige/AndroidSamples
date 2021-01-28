@@ -1,7 +1,5 @@
 package com.cyq.lib_network
 
-import com.google.gson.Gson
-import com.google.gson.JsonObject
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -20,12 +18,12 @@ import java.util.concurrent.TimeUnit
 object RetrofitManager {
     private lateinit var mRetrofit: Retrofit
 
-    fun initRetrofit() {
+    fun initRetrofit(): RetrofitManager {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         val okHttpClient = OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
-            .addInterceptor(RspCheckInterceptor())
+            //.addInterceptor(RspCheckInterceptor())
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(15, TimeUnit.SECONDS)
             .writeTimeout(15, TimeUnit.SECONDS)
@@ -39,6 +37,7 @@ object RetrofitManager {
             //.addCallAdapterFactory()
             .client(okHttpClient)
             .build()
+        return this
     }
 
     fun <T> createReq(reqServer: Class<T>): T {
@@ -52,7 +51,7 @@ object RetrofitManager {
     class RspCheckInterceptor : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
             val response = chain.proceed(chain.request())
-            val jsonObject: JSONObject = JSONObject(response.body().toString())
+            val jsonObject = JSONObject(response.body().toString())
             if (jsonObject.getInt("code") < 200 || jsonObject.getInt("code") > 300) {
                 throw IOException(
                     jsonObject.getString("description")

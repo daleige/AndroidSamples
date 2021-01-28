@@ -18,7 +18,7 @@ interface RequestAPI {
      * 获取个人信息
      */
     @FormUrlEncoded
-    @POST("getPersonInf")
+    @POST("/getPersonInfo")
     fun getPersonInfo(@Field("id") id: Int, @Field("name") name: String): Call<RspEntity<Person>>
 
 }
