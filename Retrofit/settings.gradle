@@ -1,2 +1,3 @@
+include ':lib_network'
 include ':app'
 rootProject.name = "Retrofit"
