@@ -1,31 +1,42 @@
 package com.cyq.retrofit
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageInfo
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.cyq.lib_network.RetrofitManager
 import com.cyq.lib_network.RspEntity
-import com.google.gson.Gson
+import dalvik.system.DexClassLoader
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
+import java.lang.reflect.InvocationTargetException
+import java.lang.reflect.Method
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         btnPostFormat.setOnClickListener(this)
+        btnReflex.setOnClickListener(this)
+        startActivity(Intent(this,TestActivity::class.java))
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.btnPostFormat ->
-                postFormat()
+            R.id.btnPostFormat -> postFormat()
+            R.id.btnReflex -> get()
         }
     }
+
 
     private fun postFormat() {
         RetrofitManager.initRetrofit()
@@ -46,5 +57,26 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     t.printStackTrace()
                 }
             })
+    }
+
+
+    private fun get() {
+        val path =
+            getExternalFilesDir(null)?.absolutePath + File.separator + "ColorOS" + File.separator + "IoT" + File.separator + "testsdk" + File.separator + "sdk.ov.midea.com.mideaovsdk_2_85.apk"
+        Log.d(
+            "test",
+            "地址：$path"
+        )
+        val oDexFile = File(getDir("odex", MODE_PRIVATE).absolutePath)
+        Log.d("test", "oDexFile:$oDexFile")
+        val dexClassLoader: ClassLoader = DexClassLoader(
+            path,
+            oDexFile.absolutePath,
+            null,
+            classLoader
+        )
+        val c = dexClassLoader.loadClass("sdk.ov.midea.com.mideaovsdk.IotPluginImp")
+        val method: Method = c.getDeclaredMethod("onCreate")
+        method.invoke(null, null, null)
     }
 }

@@ -6,11 +6,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity">
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="发送POST表单请求"
         android:id="@+id/btnPostFormat"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="反射IotPluginImp"
+        android:id="@+id/btnReflex"/>
 
 </LinearLayout>
