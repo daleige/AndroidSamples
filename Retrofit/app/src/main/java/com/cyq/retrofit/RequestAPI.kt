@@ -25,4 +25,8 @@ interface RequestAPI {
     @FormUrlEncoded
     @POST("/getPersonInfo")
     fun getPersonInfo2(@Field("id") id: Int, @Field("name") name: String): Call<BaseResult<Person>>
+
+    @FormUrlEncoded
+    @POST("/getPersonInfo")
+    fun getPersonInfo3(@Field("id") id: Int, @Field("name") name: String): Call<String>
 }

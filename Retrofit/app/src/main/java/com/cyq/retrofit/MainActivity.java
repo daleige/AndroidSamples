@@ -13,6 +13,7 @@ import com.cyq.lib_network.HttpError;
 import com.cyq.lib_network.RetrofitManager;
 import com.cyq.lib_network.callback.BaseResultCallback;
 import com.cyq.lib_network.callback.ResultCallback;
+import com.cyq.lib_network.callback.StringCallback;
 import com.cyq.retrofit.bean.Person;
 import com.cyq.retrofit.bean.PersonBean;
 import com.google.gson.Gson;
@@ -117,7 +118,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void postStringCallback() {
+        RetrofitManager.getInstance()
+                .setRequest(RequestAPI.class)
+                .getPersonInfo3(34345, "王思")
+                .enqueue(new StringCallback() {
+                    @Override
+                    protected void onError(Call<String> call, HttpError error) {
+                        Log.i(TAG, "onError().....");
+                    }
 
+                    @Override
+                    protected void onSuccess(Call<String> call, String result) {
+                        Log.i(TAG, "onSuccess().....");
+                        Log.i(TAG, "请求结果：" + result);
+                    }
+
+                    @Override
+                    public void onStart() {
+                        Log.i(TAG, "onStart().....");
+                    }
+
+                    @Override
+                    public void onCompleted(Call<String> call) {
+                        Log.i(TAG, "onCompleted().....");
+                    }
+                });
     }
 
 
