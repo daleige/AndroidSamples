@@ -1,4 +1,4 @@
-package com.cyq.retrofit;
+package com.cyq.retrofit.bean;
 
 /**
  * @author : ChenYangQi

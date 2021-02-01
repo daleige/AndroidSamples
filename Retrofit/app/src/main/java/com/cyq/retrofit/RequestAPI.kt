@@ -1,6 +1,8 @@
 package com.cyq.retrofit
 
 import com.cyq.lib_network.BaseBody
+import com.cyq.retrofit.bean.Person
+import com.cyq.retrofit.bean.PersonBean
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -18,6 +20,6 @@ interface RequestAPI {
      */
     @FormUrlEncoded
     @POST("/getPersonInfo")
-    fun getPersonInfo(@Field("id") id: Int, @Field("name") name: String): Call<BaseBody<Person>>
+    fun getPersonInfo(@Field("id") id: Int, @Field("name") name: String): Call<PersonBean>
 
 }

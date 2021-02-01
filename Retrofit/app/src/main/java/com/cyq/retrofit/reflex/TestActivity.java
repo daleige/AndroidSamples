@@ -1,20 +1,19 @@
-package com.cyq.retrofit;
+package com.cyq.retrofit.reflex;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.cyq.retrofit.utils.FileUtil;
-import com.cyq.retrofit.utils.SystemUtils;
+import com.cyq.retrofit.R;
+import com.cyq.retrofit.reflex.utils.SystemUtils;
+import com.cyq.retrofit.reflex.utils.FileUtil;
 import com.smartunion.iot.IBootstrapListener;
 import com.smartunion.iot.entity.VendorInfo;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 

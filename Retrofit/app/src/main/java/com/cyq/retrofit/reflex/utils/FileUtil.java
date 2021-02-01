@@ -1,4 +1,4 @@
-package com.cyq.retrofit.utils;
+package com.cyq.retrofit.reflex.utils;
 
 import android.content.Context;
 
@@ -6,11 +6,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
-/*
- *@Description: 文件操作辅助类
- *@Author: hl
- *@Time: 2019/3/1 14:17
- */
 public class FileUtil {
     public static String copyFilesFromAssets(Context context, String assetsPath, String savePath) {
         try {
