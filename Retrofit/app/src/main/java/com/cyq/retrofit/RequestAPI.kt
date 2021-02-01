@@ -1,11 +1,10 @@
 package com.cyq.retrofit
 
-import com.cyq.lib_network.RspEntity
+import com.cyq.lib_network.BaseBody
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
-import retrofit2.http.Query
 
 /**
  * @describe xxx
@@ -19,6 +18,6 @@ interface RequestAPI {
      */
     @FormUrlEncoded
     @POST("/getPersonInfo")
-    fun getPersonInfo(@Field("id") id: Int, @Field("name") name: String): Call<RspEntity<Person>>
+    fun getPersonInfo(@Field("id") id: Int, @Field("name") name: String): Call<BaseBody<Person>>
 
 }
