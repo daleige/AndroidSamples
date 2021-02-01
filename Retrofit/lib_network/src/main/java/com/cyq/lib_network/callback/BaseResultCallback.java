@@ -11,10 +11,15 @@ import retrofit2.Response;
  * @describe xxx
  * @time 2021/2/1 14:11
  */
-public abstract class BodyCallback<T> implements MyCallback<T> {
+public abstract class BaseResultCallback<T> implements MyCallback<T> {
+
+    public BaseResultCallback() {
+        onStart();
+    }
 
     @Override
     public final void onResponse(Call<T> call, Response<T> response) {
+        onCompleted(call);
         if (response.body() != null) {
             onSuccess(call, response.body());
         } else {
@@ -25,6 +30,7 @@ public abstract class BodyCallback<T> implements MyCallback<T> {
 
     @Override
     public final void onFailure(Call<T> call, Throwable t) {
+        onCompleted(call);
         HttpError httpError = new HttpError(-1, "网络异常！");
         onError(call, httpError);
     }

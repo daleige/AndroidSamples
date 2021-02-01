@@ -8,16 +8,16 @@ import android.widget.Button;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.cyq.lib_network.BaseBody;
+import com.cyq.lib_network.BaseResult;
 import com.cyq.lib_network.HttpError;
 import com.cyq.lib_network.RetrofitManager;
-import com.cyq.lib_network.callback.BodyCallback;
+import com.cyq.lib_network.callback.BaseResultCallback;
+import com.cyq.lib_network.callback.ResultCallback;
+import com.cyq.retrofit.bean.Person;
 import com.cyq.retrofit.bean.PersonBean;
 import com.google.gson.Gson;
 
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static com.cyq.retrofit.R.id.btnPostFormat1;
 import static com.cyq.retrofit.R.id.btnPostFormat2;
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (v.getId() == btnPostFormat1) {
             postBodyCallback();
         } else if (v.getId() == btnPostFormat2) {
-            postDefultCallback();
+            postDefaultCallback();
         } else if (v.getId() == btnPostFormat3) {
             postStringCallback();
         }
@@ -61,10 +61,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         RetrofitManager.getInstance()
                 .setRequest(RequestAPI.class)
                 .getPersonInfo(1189, "周旭旭")
-                .enqueue(new BodyCallback<PersonBean>() {
+                .enqueue(new BaseResultCallback<PersonBean>() {
 
                     @Override
-                    public void onStart(Call<PersonBean> call) {
+                    public void onStart() {
                         Log.i(TAG, "onStart().....");
                     }
 
@@ -88,12 +88,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    private void postDefaultCallback() {
+        RetrofitManager.getInstance()
+                .setRequest(RequestAPI.class)
+                .getPersonInfo2(134, "张三")
+                .enqueue(new ResultCallback<Person>() {
+                    @Override
+                    protected void onError(Call<BaseResult<Person>> call, HttpError error) {
+                        Log.i(TAG, "onError().....");
+                    }
+
+                    @Override
+                    protected void onSuccess(Call<BaseResult<Person>> call, Person person) {
+                        Log.i(TAG, "onSuccess().....");
+                        Log.i("test", "请求结果：" + new Gson().toJson(person));
+                    }
+
+                    @Override
+                    public void onStart() {
+                        Log.i(TAG, "onStart().....");
+                    }
+
+                    @Override
+                    public void onCompleted(Call<BaseResult<Person>> call) {
+                        Log.i(TAG, "onCompleted().....");
+                    }
+                });
+    }
+
     private void postStringCallback() {
 
     }
 
-    private void postDefultCallback() {
-
-    }
 
 }

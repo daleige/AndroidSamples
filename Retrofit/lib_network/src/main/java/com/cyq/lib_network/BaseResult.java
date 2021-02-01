@@ -5,7 +5,7 @@ package com.cyq.lib_network;
  * @describe 请求返回的基础结构
  * @time 2021/1/28 17:30
  */
-public class BaseBody<T> {
+public class BaseResult<T> {
     private int code;
 
     private String description;
