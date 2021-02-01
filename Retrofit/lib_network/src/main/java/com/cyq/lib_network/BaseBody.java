@@ -2,10 +2,10 @@ package com.cyq.lib_network;
 
 /**
  * @author chenyq113@midea.com
- * @describe xxx
+ * @describe 请求返回的基础结构
  * @time 2021/1/28 17:30
  */
-public class RspEntity<T> {
+public class BaseBody<T> {
     private int code;
 
     private String description;
@@ -38,7 +38,7 @@ public class RspEntity<T> {
 
     @Override
     public String toString() {
-        return "RspEntity{" +
+        return "BaseBody{" +
                 "code=" + code +
                 ", description='" + description + '\'' +
                 ", data=" + data +

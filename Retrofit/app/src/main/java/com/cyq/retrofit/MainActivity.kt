@@ -1,24 +1,18 @@
 package com.cyq.retrofit
 
-import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageInfo
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.cyq.lib_network.RetrofitManager
-import com.cyq.lib_network.RspEntity
+import com.cyq.lib_network.BaseBody
 import dalvik.system.DexClassLoader
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
-import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -27,7 +21,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_main)
         btnPostFormat.setOnClickListener(this)
         btnReflex.setOnClickListener(this)
-        startActivity(Intent(this,TestActivity::class.java))
+        //startActivity(Intent(this,TestActivity::class.java))
     }
 
     override fun onClick(v: View?) {
@@ -39,19 +33,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
 
     private fun postFormat() {
-        RetrofitManager.initRetrofit()
-            .createReq(RequestAPI::class.java)
+        RetrofitManager.getInstance()
+            .setRequest(RequestAPI::class.java)
             .getPersonInfo(1231231, "张安")
-            .enqueue(object : Callback<RspEntity<Person>> {
+            .enqueue(object : Callback<BaseBody<Person>> {
                 override fun onResponse(
-                    call: Call<RspEntity<Person>>, response: Response<RspEntity<Person>>
+                    call: Call<BaseBody<Person>>, response: Response<BaseBody<Person>>
                 ) {
                     Toast.makeText(this@MainActivity, "请求成功", Toast.LENGTH_SHORT).show()
                     val person: Person = response.body()?.data ?: Person()
                     Log.d("test", "结果为：$person")
                 }
 
-                override fun onFailure(call: Call<RspEntity<Person>>, t: Throwable) {
+                override fun onFailure(call: Call<BaseBody<Person>>, t: Throwable) {
                     Toast.makeText(this@MainActivity, "请求失败", Toast.LENGTH_SHORT).show()
                     Log.d("test", "请求失败！")
                     t.printStackTrace()

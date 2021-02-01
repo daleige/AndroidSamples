@@ -198,8 +198,8 @@ public class AccountController {
 
     @PostMapping("/multiply")
     public ResponseEntity<String> multiply(@RequestHeader(name = "accessToken") String accessToken,
-                                        @RequestParam(name = "data1") int data1,
-                                        @RequestParam(name = "data2") int data2) {
+                                           @RequestParam(name = "data1") int data1,
+                                           @RequestParam(name = "data2") int data2) {
         Result<String> result = new Result<>();
         String account = authorizationService.verifyToken(accessToken);
         if (account == null) {
@@ -212,6 +212,24 @@ public class AccountController {
         result.setCode(200);
         result.setDescription("success");
         result.setData(data1 + "*" + data2 + "=" + (data1 + data2));
+        return ResponseEntity.status(200).body(new Gson().toJson(result));
+    }
+
+    @PostMapping("/getPersonInfo")
+    public ResponseEntity<String> getPersonInfo(@RequestParam(name = "id") int id,
+                                                @RequestParam(name = "name") String name) {
+        //刷新accessToken:生成新的accessToken
+        Result<JSONObject> result = new Result<>();
+        //response
+        result.setCode(200);
+        result.setDescription("success");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("id", id);
+        jsonObject.put("name", name);
+        jsonObject.put("age", 28);
+        jsonObject.put("phone", "185634523402");
+        jsonObject.put("email", "989765987@qq.com");
+        result.setData(jsonObject);
         return ResponseEntity.status(200).body(new Gson().toJson(result));
     }
 }
