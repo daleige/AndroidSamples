@@ -1,12 +1,13 @@
 package com.cyq.retrofit
 
+import com.cyq.lib_network.AppConfig
 import com.cyq.lib_network.BaseResult
+import com.cyq.retrofit.bean.DeviceInfo
 import com.cyq.retrofit.bean.Person
 import com.cyq.retrofit.bean.PersonBean
+import okhttp3.RequestBody
 import retrofit2.Call
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
+import retrofit2.http.*
 
 /**
  * @describe xxx
@@ -29,4 +30,11 @@ interface RequestAPI {
     @FormUrlEncoded
     @POST("/getPersonInfo")
     fun getPersonInfo3(@Field("id") id: Int, @Field("name") name: String): Call<String>
+
+    @GET("/getDeviceInfo")
+    fun getDeviceInfo(@Query("deviceId") deviceId: String): Call<DeviceInfo>
+
+    @Headers(AppConfig.CONTENT_TYPE_JSON)
+    @POST("/postJson")
+    fun postJson(@Body requestBody: RequestBody): Call<DeviceInfo>
 }

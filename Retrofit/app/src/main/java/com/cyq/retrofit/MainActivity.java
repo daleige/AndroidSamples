@@ -14,15 +14,19 @@ import com.cyq.lib_network.RetrofitManager;
 import com.cyq.lib_network.callback.BaseResultCallback;
 import com.cyq.lib_network.callback.ResultCallback;
 import com.cyq.lib_network.callback.StringCallback;
+import com.cyq.retrofit.bean.DeviceInfo;
 import com.cyq.retrofit.bean.Person;
 import com.cyq.retrofit.bean.PersonBean;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 
 import static com.cyq.retrofit.R.id.btnPostFormat1;
 import static com.cyq.retrofit.R.id.btnPostFormat2;
-import static com.cyq.retrofit.R.id.btnPostFormat3;
+import static com.cyq.retrofit.R.id.btnDownLoad;
 
 /**
  * @author chenyq113@midea.com
@@ -31,7 +35,8 @@ import static com.cyq.retrofit.R.id.btnPostFormat3;
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "MainActivity";
-    private Button button1, button2, button3;
+    private Button button1, button2, btnDownLoad, btnGet, btnPostJson;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,12 +45,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         button1 = findViewById(btnPostFormat1);
         button2 = findViewById(btnPostFormat2);
-        button3 = findViewById(btnPostFormat3);
+        btnDownLoad = findViewById(R.id.btnDownLoad);
+        btnGet = findViewById(R.id.btnGet);
+        btnGet.setOnClickListener(this);
         button1.setOnClickListener(this);
         button2.setOnClickListener(this);
-        button3.setOnClickListener(this);
-    }
+        btnDownLoad.setOnClickListener(this);
 
+        btnPostJson = findViewById(R.id.btnPostJson);
+        btnPostJson.setOnClickListener(this);
+
+    }
 
     @Override
     public void onClick(View v) {
@@ -53,9 +63,72 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             postBodyCallback();
         } else if (v.getId() == btnPostFormat2) {
             postDefaultCallback();
-        } else if (v.getId() == btnPostFormat3) {
-            postStringCallback();
+        } else if (v.getId() == R.id.btnDownLoad) {
+
+        } else if (v.getId() == R.id.btnGet) {
+            getRequest();
+        } else if (v.getId() == R.id.btnPostJson) {
+            postRequestJson();
         }
+    }
+
+    private void postRequestJson() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", "SDFS7656SDF");
+        jsonObject.addProperty("name", "特斯拉 Mode 3");
+        Log.d(TAG, "入参：" + jsonObject.toString());
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
+        RetrofitManager.getInstance()
+                .setRequest(RequestAPI.class)
+                .postJson(requestBody)
+                .enqueue(new BaseResultCallback<DeviceInfo>() {
+                    @Override
+                    protected void onError(Call<DeviceInfo> call, HttpError error) {
+                        Log.d(TAG, "请求出错");
+                    }
+
+                    @Override
+                    protected void onSuccess(Call<DeviceInfo> call, DeviceInfo deviceInfo) {
+                        Log.d(TAG, "请求成功：" + deviceInfo.toString());
+                    }
+
+                    @Override
+                    public void onStart() {
+                        Log.d(TAG, "开始请求");
+                    }
+
+                    @Override
+                    public void onCompleted(Call<DeviceInfo> call) {
+                        Log.d(TAG, "完成请求");
+                    }
+                });
+    }
+
+    private void getRequest() {
+        RetrofitManager.getInstance()
+                .setRequest(RequestAPI.class)
+                .getDeviceInfo("123123123")
+                .enqueue(new BaseResultCallback<DeviceInfo>() {
+                    @Override
+                    protected void onError(Call<DeviceInfo> call, HttpError error) {
+                        Log.d(TAG, "get请求出错");
+                    }
+
+                    @Override
+                    protected void onSuccess(Call<DeviceInfo> call, DeviceInfo deviceInfo) {
+                        Log.d(TAG, "get请求成功：" + deviceInfo.toString());
+                    }
+
+                    @Override
+                    public void onStart() {
+                        Log.d(TAG, "开始get请求");
+                    }
+
+                    @Override
+                    public void onCompleted(Call<DeviceInfo> call) {
+                        Log.d(TAG, "完成get请求");
+                    }
+                });
     }
 
     private void postBodyCallback() {
@@ -86,7 +159,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     }
                 });
-
     }
 
     private void postDefaultCallback() {
@@ -116,34 +188,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
     }
-
-    private void postStringCallback() {
-        RetrofitManager.getInstance()
-                .setRequest(RequestAPI.class)
-                .getPersonInfo3(34345, "王思")
-                .enqueue(new StringCallback() {
-                    @Override
-                    protected void onError(Call<String> call, HttpError error) {
-                        Log.i(TAG, "onError().....");
-                    }
-
-                    @Override
-                    protected void onSuccess(Call<String> call, String result) {
-                        Log.i(TAG, "onSuccess().....");
-                        Log.i(TAG, "请求结果：" + result);
-                    }
-
-                    @Override
-                    public void onStart() {
-                        Log.i(TAG, "onStart().....");
-                    }
-
-                    @Override
-                    public void onCompleted(Call<String> call) {
-                        Log.i(TAG, "onCompleted().....");
-                    }
-                });
-    }
-
 
 }

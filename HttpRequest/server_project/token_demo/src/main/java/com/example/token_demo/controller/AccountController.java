@@ -232,4 +232,36 @@ public class AccountController {
         result.setData(jsonObject);
         return ResponseEntity.status(200).body(new Gson().toJson(result));
     }
+
+    @GetMapping("/getDeviceInfo")
+    public ResponseEntity<String> getPersonInfo(@RequestParam(name = "deviceId") String id) {
+        //刷新accessToken:生成新的accessToken
+        Result<JSONObject> result = new Result<>();
+        //response
+        result.setCode(200);
+        result.setDescription("success");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("deviceId", id);
+        jsonObject.put("name", "美的空调");
+        jsonObject.put("time", "2021年1月1日");
+        result.setData(jsonObject);
+        return ResponseEntity.status(200).body(new Gson().toJson(result));
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/postJson", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public ResponseEntity<String> postJson(@RequestBody JSONObject object) {
+        //刷新accessToken:生成新的accessToke
+        Result<JSONObject> result = new Result<>();
+        //response
+        result.setCode(200);
+        result.setDescription("success");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("deviceId", object.get("id").toString());
+        jsonObject.put("name", object.get("name").toString());
+        jsonObject.put("time", "2021年1月1日");
+        result.setData(jsonObject);
+        return ResponseEntity.status(200).body(new Gson().toJson(result));
+    }
 }

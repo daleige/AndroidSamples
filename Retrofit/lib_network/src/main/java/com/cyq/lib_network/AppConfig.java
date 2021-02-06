@@ -10,4 +10,6 @@ public class AppConfig {
     public static final boolean IS_DEBUG = true;
 
     public static final String BASE_URL = "http://192.168.3.114:8083";
+
+    public static final String CONTENT_TYPE_JSON = "Content-Type: application/json";
 }
