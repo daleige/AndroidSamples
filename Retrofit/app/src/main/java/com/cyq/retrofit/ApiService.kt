@@ -6,6 +6,7 @@ import com.cyq.retrofit.bean.DeviceInfo
 import com.cyq.retrofit.bean.Person
 import com.cyq.retrofit.bean.PersonBean
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -14,7 +15,7 @@ import retrofit2.http.*
  * @author chenyq113@midea.com
  * @time 2021/1/28 17:47
  */
-interface RequestAPI {
+interface ApiService {
 
     /**
      * 获取个人信息
@@ -37,4 +38,11 @@ interface RequestAPI {
     @Headers(AppConfig.CONTENT_TYPE_JSON)
     @POST("/postJson")
     fun postJson(@Body requestBody: RequestBody): Call<DeviceInfo>
+
+    /**
+     * 文件下载
+     */
+    @Streaming
+    @GET
+    fun downloadFile(@Url url: String): Call<ResponseBody>
 }
