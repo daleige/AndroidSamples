@@ -43,6 +43,6 @@ interface ApiService {
      * 文件下载
      */
     @Streaming
-    @GET
-    fun downloadFile(@Url url: String): Call<ResponseBody>
+    @GET("image_search/src=http%3A%2F%2Fa0.att.hudong.com%2F65%2F07%2F01300000204202121839075492554.jpg&refer=http%3A%2F%2Fa0.att.hudong.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1618560729&t=afd484393502d9a32b21b5db67cd5480")
+    fun downloadFile(): Call<ResponseBody>
 }
