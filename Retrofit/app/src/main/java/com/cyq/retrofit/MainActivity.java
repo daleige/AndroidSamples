@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.i(TAG, "开始下载----");
         RetrofitManager.getInstance()
                 .setRequest(ApiService.class)
-                .downloadFile()
+                .downloadFile("https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png")
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -230,32 +230,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Log.i(TAG, "下载失败！");
                     }
                 });
-
-
     }
 
     private void saveInputStreamToDisk(ResponseBody body) {
         InputStream inputStream = null;
         OutputStream outputStream = null;
         try {  //创建要存储的文件
-            File targetFile = new File(getExternalFilesDir(null) + File.separator + System.currentTimeMillis() + ".jpg");
+            File targetFile = new File(getExternalFilesDir(null) +
+                    File.separator + System.currentTimeMillis() + ".png");
             if (!targetFile.exists()) {
                 targetFile.createNewFile();
             }
-            byte[] fileReader = new byte[1024];
             long fileSize = body.contentLength();
-            long fileSizeDownload = 0;
+            long currentLen = 0;
             inputStream = body.byteStream();
             outputStream = new FileOutputStream(targetFile);
-            while (true) {
-                int read = inputStream.read(fileReader);
-                if (read == -1) {
-                    break;
-                }
-                outputStream.write(read);
-                fileSizeDownload += read;
+            int len;
+            byte[] buff = new byte[1024];
+            while ((len = inputStream.read(buff)) != -1) {
+                outputStream.write(buff, 0, len);
+                currentLen += len;
+                Log.i(TAG, "保存文件进度: " + currentLen + " of " + fileSize);
             }
-            Log.i(TAG, "保存文件: " + fileSizeDownload + " of " + fileSize);
+
             Log.i(TAG, "文件地址: " + targetFile.getAbsolutePath());
             outputStream.flush();
 
