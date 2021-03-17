@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.i(TAG, "开始下载----");
         RetrofitManager.getInstance()
                 .setRequest(ApiService.class)
-                .downloadFile("https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png")
+                .downloadFile("https://github.com/bumptech/glide/releases/download/v3.6.0/glide-3.6.0.jar")
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -237,10 +237,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         OutputStream outputStream = null;
         try {  //创建要存储的文件
             File targetFile = new File(getExternalFilesDir(null) +
-                    File.separator + System.currentTimeMillis() + ".png");
+                    File.separator + System.currentTimeMillis() + ".jar");
             if (!targetFile.exists()) {
                 targetFile.createNewFile();
             }
+
+            String type = body.contentType().toString();
+            Log.i(TAG, "文件类型：" + type);
+
             long fileSize = body.contentLength();
             long currentLen = 0;
             inputStream = body.byteStream();
