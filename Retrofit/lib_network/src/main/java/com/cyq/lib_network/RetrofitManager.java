@@ -1,5 +1,7 @@
 package com.cyq.lib_network;
 
+import android.content.Context;
+
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -16,6 +18,7 @@ public class RetrofitManager {
 
     private static volatile RetrofitManager instance;
     private Retrofit mRetrofit;
+    private Context mContext;
 
     private RetrofitManager() {
         mRetrofit = init();
@@ -30,6 +33,10 @@ public class RetrofitManager {
             }
         }
         return instance;
+    }
+
+    public void initClient(Context context) {
+        mContext = context;
     }
 
     private Retrofit init() {
@@ -54,5 +61,9 @@ public class RetrofitManager {
 
     public <T> T setRequest(Class<T> clz) {
         return mRetrofit.create(clz);
+    }
+
+    public Context getContext() {
+        return mContext;
     }
 }

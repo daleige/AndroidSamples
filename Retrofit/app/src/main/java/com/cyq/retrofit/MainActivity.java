@@ -18,6 +18,7 @@ import com.cyq.lib_network.BaseResult;
 import com.cyq.lib_network.HttpError;
 import com.cyq.lib_network.RetrofitManager;
 import com.cyq.lib_network.callback.BaseResultCallback;
+import com.cyq.lib_network.callback.DownloadCallback;
 import com.cyq.lib_network.callback.ResultCallback;
 import com.cyq.retrofit.bean.DeviceInfo;
 import com.cyq.retrofit.bean.Person;
@@ -34,13 +35,14 @@ import java.io.OutputStream;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Response;
 
 import static com.cyq.retrofit.R.id.btnPostFormat1;
 import static com.cyq.retrofit.R.id.btnPostFormat2;
+import static com.cyq.retrofit.R.id.fill;
 import static com.cyq.retrofit.R.id.image;
 
 /**
@@ -215,74 +217,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         RetrofitManager.getInstance()
                 .setRequest(ApiService.class)
                 .downloadFile("https://github.com/bumptech/glide/releases/download/v3.6.0/glide-3.6.0.jar")
-                .enqueue(new Callback<ResponseBody>() {
+                .enqueue(new DownloadCallback<ResponseBody>() {
                     @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if (response.isSuccessful()) {
-                            saveInputStreamToDisk(response.body());
-                        } else {
-                            Log.i(TAG, "下载失败2！");
-                        }
+                    public void onProgress(float progress) {
+                        super.onProgress(progress);
+                        Log.i(TAG, "下载进度：" + progress);
+                        final int currentProgress = (int) (100 * progress);
+                        progressBar.setProgress(currentProgress);
+                        tvProgress.setText(currentProgress + "%");
                     }
 
                     @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Log.i(TAG, "下载失败！");
+                    protected void onSuccess(File file) {
+                        Log.i(TAG, "下载成功：" + file.getAbsolutePath());
+                    }
+
+                    @Override
+                    protected void onError(Call<ResponseBody> call, HttpError error) {
+
                     }
                 });
     }
 
-    private void saveInputStreamToDisk(ResponseBody body) {
-        InputStream inputStream = null;
-        OutputStream outputStream = null;
-        try {  //创建要存储的文件
-            File targetFile = new File(getExternalFilesDir(null) +
-                    File.separator + System.currentTimeMillis() + ".jar");
-            if (!targetFile.exists()) {
-                targetFile.createNewFile();
-            }
 
-            String type = body.contentType().toString();
-            Log.i(TAG, "文件类型：" + type);
-
-            long fileSize = body.contentLength();
-            long currentLen = 0;
-            inputStream = body.byteStream();
-            outputStream = new FileOutputStream(targetFile);
-            int len;
-            byte[] buff = new byte[1024];
-            while ((len = inputStream.read(buff)) != -1) {
-                outputStream.write(buff, 0, len);
-                currentLen += len;
-                Log.i(TAG, "保存文件进度: " + currentLen + " of " + fileSize);
-            }
-
-            Log.i(TAG, "文件地址: " + targetFile.getAbsolutePath());
-            outputStream.flush();
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-
-                    Glide.with(MainActivity.this)
-                            .load(targetFile)
-                            .into(imageView);
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (inputStream != null) {
-                    inputStream.close();
-                }
-                if (outputStream != null) {
-                    outputStream.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-    }
 }

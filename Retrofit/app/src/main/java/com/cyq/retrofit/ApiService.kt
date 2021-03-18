@@ -6,9 +6,11 @@ import com.cyq.retrofit.bean.DeviceInfo
 import com.cyq.retrofit.bean.Person
 import com.cyq.retrofit.bean.PersonBean
 import okhttp3.RequestBody
+import okhttp3.Response
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
+import java.io.File
 
 /**
  * @describe xxx
