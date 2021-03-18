@@ -216,15 +216,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.i(TAG, "开始下载----");
         RetrofitManager.getInstance()
                 .setRequest(ApiService.class)
-                .downloadFile("https://github.com/bumptech/glide/releases/download/v3.6.0/glide-3.6.0.jar")
-                .enqueue(new DownloadCallback<ResponseBody>() {
+                .downloadFile("https://imtt.dd.qq.com/16891/apk/0C597750D60780F490BECEC13A0243BA.apk?fsname=com.tencent.mobileqq_8.5.5_1630.apk")
+                .enqueue(new DownloadCallback<ResponseBody>("com.tencent.mobileqq_8.5.5_1630.apk") {
                     @Override
                     public void onProgress(float progress) {
-                        super.onProgress(progress);
-                        Log.i(TAG, "下载进度：" + progress);
-                        final int currentProgress = (int) (100 * progress);
-                        progressBar.setProgress(currentProgress);
-                        tvProgress.setText(currentProgress + "%");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.i(TAG, "下载进度：" + progress);
+                                final int currentProgress = (int) (100 * progress);
+                                progressBar.setProgress(currentProgress);
+                                tvProgress.setText(currentProgress + "%");
+                            }
+                        });
                     }
 
                     @Override
@@ -234,7 +238,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     @Override
                     protected void onError(Call<ResponseBody> call, HttpError error) {
-
+                        Log.i(TAG, "文件下载失败！");
                     }
                 });
     }

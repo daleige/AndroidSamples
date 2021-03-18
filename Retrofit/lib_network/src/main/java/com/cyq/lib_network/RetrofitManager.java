@@ -2,6 +2,9 @@ package com.cyq.lib_network;
 
 import android.content.Context;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -19,6 +22,7 @@ public class RetrofitManager {
     private static volatile RetrofitManager instance;
     private Retrofit mRetrofit;
     private Context mContext;
+    private Executor mExecutor;
 
     private RetrofitManager() {
         mRetrofit = init();
@@ -40,6 +44,7 @@ public class RetrofitManager {
     }
 
     private Retrofit init() {
+
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -51,9 +56,12 @@ public class RetrofitManager {
                 .retryOnConnectionFailure(true)
                 .build();
 
+        ExecutorService executorService = Executors.newFixedThreadPool(1);
+
         mRetrofit = new Retrofit.Builder()
                 .baseUrl(AppConfig.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .callbackExecutor(executorService)
                 .client(okHttpClient)
                 .build();
         return mRetrofit;

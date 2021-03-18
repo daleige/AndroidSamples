@@ -1,7 +1,6 @@
 package com.cyq.lib_network.callback;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.cyq.lib_network.HttpError;
@@ -12,7 +11,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Objects;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -25,7 +23,11 @@ import retrofit2.Response;
  */
 public abstract class DownloadCallback<T> extends DownloadProgressCallback<ResponseBody> {
 
-    private final String TAG = "DownloadCallback";
+    private String mFileName;
+
+    public DownloadCallback(String fileName) {
+        mFileName = fileName;
+    }
 
     @Override
     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -53,11 +55,11 @@ public abstract class DownloadCallback<T> extends DownloadProgressCallback<Respo
         OutputStream outputStream = null;
         Context context = RetrofitManager.getInstance().getContext();
         if (context == null) {
-            throw new NullPointerException("context is empty,you should do it before RetrofitManager.getInstance().initClient!");
+            throw new NullPointerException("context is empty,you should do it before RetrofitManager.getInstance().initClient()!");
         }
         try {  //创建要存储的文件
             File targetFile = new File(context.getExternalFilesDir(null)
-                    + File.separator + System.currentTimeMillis() + ".jar");
+                    + File.separator + mFileName);
             if (!targetFile.exists()) {
                 targetFile.createNewFile();
             }
@@ -70,12 +72,10 @@ public abstract class DownloadCallback<T> extends DownloadProgressCallback<Respo
             while ((len = inputStream.read(buff)) != -1) {
                 outputStream.write(buff, 0, len);
                 currentLen += len;
-                Log.i(TAG, "保存文件进度: " + currentLen + " of " + fileSize);
                 final float currentProgress = currentLen / fileSize;
                 onProgress(currentProgress);
             }
 
-            Log.i(TAG, "文件地址: " + targetFile.getAbsolutePath());
             outputStream.flush();
             onSuccess(targetFile);
         } catch (IOException e) {
