@@ -2,6 +2,9 @@ package com.cyq.lib_network;
 
 import android.content.Context;
 
+import com.cyq.lib_network.dialog.DefaultHttpDialog;
+import com.cyq.lib_network.dialog.IHttpLoadingDialog;
+
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,6 +26,7 @@ public class RetrofitManager {
     private Retrofit mRetrofit;
     private Context mContext;
     private Executor mExecutor;
+    private IHttpLoadingDialog mDialog;
 
     private RetrofitManager() {
         mRetrofit = init();
@@ -39,12 +43,24 @@ public class RetrofitManager {
         return instance;
     }
 
-    public void initClient(Context context) {
+    public RetrofitManager initClient(Context context) {
         mContext = context;
+        if (mDialog == null) {
+            //setLoadingDialog(new DefaultHttpDialog(mContext));
+        }
+        return this;
+    }
+
+    public RetrofitManager setLoadingDialog(IHttpLoadingDialog iHttpLoadingDialog) {
+        this.mDialog = iHttpLoadingDialog;
+        return this;
+    }
+
+    public IHttpLoadingDialog getLoadingDialog() {
+        return mDialog;
     }
 
     private Retrofit init() {
-
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 

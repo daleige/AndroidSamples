@@ -13,13 +13,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.bumptech.glide.Glide;
 import com.cyq.lib_network.BaseResult;
 import com.cyq.lib_network.HttpError;
 import com.cyq.lib_network.RetrofitManager;
 import com.cyq.lib_network.callback.BaseResultCallback;
 import com.cyq.lib_network.callback.DownloadCallback;
 import com.cyq.lib_network.callback.ResultCallback;
+import com.cyq.lib_network.dialog.DefaultHttpDialog;
 import com.cyq.retrofit.bean.DeviceInfo;
 import com.cyq.retrofit.bean.Person;
 import com.cyq.retrofit.bean.PersonBean;
@@ -27,23 +27,14 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Callback;
 
 import static com.cyq.retrofit.R.id.btnPostFormat1;
 import static com.cyq.retrofit.R.id.btnPostFormat2;
-import static com.cyq.retrofit.R.id.fill;
-import static com.cyq.retrofit.R.id.image;
 
 /**
  * @author chenyq113@midea.com
@@ -96,35 +87,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void postRequestJson() {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("id", "SDFS7656SDF");
-        jsonObject.addProperty("name", "特斯拉 Mode 3");
-        Log.d(TAG, "入参：" + jsonObject.toString());
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
-        RetrofitManager.getInstance()
-                .setRequest(ApiService.class)
-                .postJson(requestBody)
-                .enqueue(new BaseResultCallback<DeviceInfo>() {
-                    @Override
-                    protected void onError(Call<DeviceInfo> call, HttpError error) {
-                        Log.d(TAG, "请求出错");
-                    }
+        DefaultHttpDialog defaultHttpDialog = new DefaultHttpDialog();
+        defaultHttpDialog.showDialog();
 
-                    @Override
-                    protected void onSuccess(Call<DeviceInfo> call, DeviceInfo deviceInfo) {
-                        Log.d(TAG, "请求成功：" + deviceInfo.toString());
-                    }
 
-                    @Override
-                    public void onStart() {
-                        Log.d(TAG, "开始请求");
-                    }
-
-                    @Override
-                    public void onCompleted(Call<DeviceInfo> call) {
-                        Log.d(TAG, "完成请求");
-                    }
-                });
+//
+//        JsonObject jsonObject = new JsonObject();
+//        jsonObject.addProperty("id", "SDFS7656SDF");
+//        jsonObject.addProperty("name", "特斯拉 Mode 3");
+//        Log.d(TAG, "入参：" + jsonObject.toString());
+//        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
+//        RetrofitManager.getInstance()
+//                .setRequest(ApiService.class)
+//                .postJson(requestBody)
+//                .enqueue(new BaseResultCallback<DeviceInfo>() {
+//                    @Override
+//                    protected void onError(Call<DeviceInfo> call, HttpError error) {
+//                        Log.d(TAG, "请求出错");
+//                    }
+//
+//                    @Override
+//                    protected void onSuccess(Call<DeviceInfo> call, DeviceInfo deviceInfo) {
+//                        Log.d(TAG, "请求成功：" + deviceInfo.toString());
+//                    }
+//
+//                    @Override
+//                    public void onStart() {
+//                        Log.d(TAG, "开始请求");
+//                    }
+//
+//                    @Override
+//                    public void onCompleted(Call<DeviceInfo> call) {
+//                        Log.d(TAG, "完成请求");
+//                    }
+//                });
     }
 
     private void getRequest() {
@@ -244,4 +240,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
+    private void uploadFile() {
+//        RetrofitManager.getInstance().setRequest(ApiService.class)
+//                .upload()
+    }
 }

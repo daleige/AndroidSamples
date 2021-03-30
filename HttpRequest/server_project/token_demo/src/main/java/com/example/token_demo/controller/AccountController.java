@@ -261,6 +261,11 @@ public class AccountController {
         jsonObject.put("deviceId", object.get("id").toString());
         jsonObject.put("name", object.get("name").toString());
         jsonObject.put("time", "2021年1月1日");
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         result.setData(jsonObject);
         return ResponseEntity.status(200).body(new Gson().toJson(result));
     }

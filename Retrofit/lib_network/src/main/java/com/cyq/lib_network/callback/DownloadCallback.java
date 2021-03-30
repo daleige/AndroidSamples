@@ -23,7 +23,7 @@ import retrofit2.Response;
  */
 public abstract class DownloadCallback<T> extends DownloadProgressCallback<ResponseBody> {
 
-    private String mFileName;
+    private final String mFileName;
 
     public DownloadCallback(String fileName) {
         mFileName = fileName;
@@ -50,6 +50,10 @@ public abstract class DownloadCallback<T> extends DownloadProgressCallback<Respo
 
     protected abstract void onError(Call<ResponseBody> call, HttpError error);
 
+    /**
+     * 文件输入流转存本地文件
+     * @param body
+     */
     private void saveInputStreamToDisk(ResponseBody body) {
         InputStream inputStream = null;
         OutputStream outputStream = null;
@@ -57,7 +61,8 @@ public abstract class DownloadCallback<T> extends DownloadProgressCallback<Respo
         if (context == null) {
             throw new NullPointerException("context is empty,you should do it before RetrofitManager.getInstance().initClient()!");
         }
-        try {  //创建要存储的文件
+        try {
+            //创建要存储的文件
             File targetFile = new File(context.getExternalFilesDir(null)
                     + File.separator + mFileName);
             if (!targetFile.exists()) {
@@ -92,6 +97,6 @@ public abstract class DownloadCallback<T> extends DownloadProgressCallback<Respo
                 e.printStackTrace();
             }
         }
-
     }
+
 }
