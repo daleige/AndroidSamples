@@ -11,7 +11,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
-import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -126,7 +125,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             mBleAdapter.bluetoothLeScanner.stopScan(mScanCallback)
         }, 30_000)
     }
-
 
     inner class BleReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {

@@ -5,7 +5,6 @@ import android.bluetooth.*
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
-import com.cyq.bluetooth.utils.Test
 import java.util.*
 
 /**
