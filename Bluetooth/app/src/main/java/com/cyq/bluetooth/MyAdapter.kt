@@ -16,6 +16,8 @@ import com.cyq.bluetooth.MyAdapter.MyViewHolder
  */
 class MyAdapter(private val mList: List<BluetoothDevice>) : RecyclerView.Adapter<MyViewHolder>() {
 
+    var itemClickListener: OnItemClickListener? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_ble_device_name, parent, false)
@@ -29,6 +31,9 @@ class MyAdapter(private val mList: List<BluetoothDevice>) : RecyclerView.Adapter
             holder.mDeviceAddress.text = "未知设备名"
         }
         holder.mDeviceAddress.text = mList[position].address
+        holder.itemView.setOnClickListener {
+            itemClickListener?.onItemClick(position, holder.itemView)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -38,5 +43,9 @@ class MyAdapter(private val mList: List<BluetoothDevice>) : RecyclerView.Adapter
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val mDeviceName: TextView = itemView.findViewById(R.id.tvDeviceName)
         val mDeviceAddress: TextView = itemView.findViewById(R.id.tvDeviceAddress)
+    }
+
+    interface OnItemClickListener{
+        fun onItemClick(position: Int, view: View)
     }
 }
