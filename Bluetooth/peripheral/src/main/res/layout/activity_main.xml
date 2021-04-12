@@ -6,6 +6,21 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <Switch
+        android:id="@+id/switchView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="打开/关闭蓝牙"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+    <Button
+        android:layout_margin="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="开启广播"
+        android:id="@+id/btnOpenAdvertise"/>
+
     <com.cyq.peripheral.LampView
         android:id="@+id/lampView"
         android:layout_width="200dp"

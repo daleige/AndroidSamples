@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -42,7 +43,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         override fun onScanResult(callbackType: Int, result: ScanResult) {
             super.onScanResult(callbackType, result)
             val bluetoothDevice = result.device
-            if (!mBluetoothDeviceList.contains(bluetoothDevice)) {
+            if (!TextUtils.isEmpty(bluetoothDevice.name) && !mBluetoothDeviceList.contains(
+                    bluetoothDevice
+                )
+            ) {
                 Log.d(TAG, "搜索到蓝牙设备：${bluetoothDevice.address}")
                 mBluetoothDeviceList.add(bluetoothDevice)
                 mAdapter?.notifyDataSetChanged()
