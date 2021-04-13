@@ -1,8 +1,7 @@
 package com.cyq.bluetooth
 
 import android.Manifest
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothDevice
+import android.bluetooth.*
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
@@ -20,11 +19,28 @@ import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cyq.bluetooth.MyAdapter.OnItemClickListener
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     companion object {
         const val TAG = "BLE"
+
+        //服务标识
+        val UUID_SERVICE: UUID = UUID.fromString("38400000-8cf0-11bd-b23e-111111111111")
+
+        //特征标识（读取数据）
+        val UUID_READ_CHARACTERISTIC: UUID = UUID.fromString("38400000-8cf0-11bd-b23e-222222222222")
+
+        //特征标识的描述（读取数据）
+        val UUID_READ_DESCRIPTOR: UUID = UUID.fromString("38400000-8cf0-11bd-b23e-333333333333")
+
+        //特征标识（写入数据）
+        val UUID_WRITE_CHARACTERISTIC: UUID =
+            UUID.fromString("38400000-8cf0-11bd-b23e-444444444444")
+
+        //特征标识的描述（写入数据）
+        val UUID_WRITE_DESCRIPTOR: UUID = UUID.fromString("38400000-8cf0-11bd-b23e-555555555555")
     }
 
     private val mPermission = arrayOf(
@@ -36,7 +52,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var mBleAdapter: BluetoothAdapter
     private var mBluetoothDeviceList: MutableList<BluetoothDevice> = mutableListOf()
     private var mAdapter: MyAdapter? = null
-    private lateinit var mBleReceiver: BroadcastReceiver
     private var mBleService: BleService? = null
 
     private var mScanCallback: ScanCallback = object : ScanCallback() {
@@ -54,6 +69,61 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    private val mGattCallback = object : BluetoothGattCallback() {
+        override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
+            super.onConnectionStateChange(gatt, status, newState)
+            Log.d(TAG, "回调onConnectionStateChange:" + gatt.toString())
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+                if (newState == BluetoothProfile.STATE_CONNECTED) {
+                    //已连接,执行发现服务，当发现服务成功后回调BluetoothGattCallback.onServicesDiscovered()
+                    Log.d(TAG, "gatt已连接，去发现服务")
+                    mBluetoothGatt.discoverServices()
+                } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                    //断开连接
+                    Log.d(TAG, "gatt链接已断开")
+                }
+            } else {
+                //链接异常
+                Log.d(TAG, "链接gatt服务异常")
+            }
+        }
+
+        override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
+            super.onServicesDiscovered(gatt, status)
+            Log.d(TAG, "回调onServicesDiscovered:" + gatt.toString())
+
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+                val gattService = mBluetoothGatt.getService(UUID_SERVICE)
+                if (gattService != null) {
+                    Log.d(TAG, "发现服务成功：" + gattService.uuid)
+                } else {
+                    Log.d(TAG, "发现服务失败！")
+                }
+            }
+        }
+
+        override fun onCharacteristicWrite(
+            gatt: BluetoothGatt?,
+            characteristic: BluetoothGattCharacteristic?,
+            status: Int
+        ) {
+            super.onCharacteristicWrite(gatt, characteristic, status)
+            Log.d(TAG, "onCharacteristicWrite:" + gatt.toString())
+
+        }
+
+        override fun onDescriptorWrite(
+            gatt: BluetoothGatt?,
+            descriptor: BluetoothGattDescriptor?,
+            status: Int
+        ) {
+            super.onDescriptorWrite(gatt, descriptor, status)
+            Log.d(TAG, "onCharacteristicWrite:" + gatt.toString())
+        }
+    }
+
+    private lateinit var mBluetoothGatt: BluetoothGatt
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -64,15 +134,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             override fun onItemClick(position: Int, view: View) {
                 Toast.makeText(this@MainActivity, "开始连接", Toast.LENGTH_SHORT).show()
                 mBleAdapter.bluetoothLeScanner.stopScan(mScanCallback)
-                mBleService?.connect(mBleAdapter, mBluetoothDeviceList[position].address)
+                val bluetoothDevice = mBluetoothDeviceList[position]
+                connectGatt(bluetoothDevice)
             }
         }
         mRecyclerView.adapter = mAdapter
         initBle()
-        //注册蓝牙信息接收器
-        registerBleReceived()
     }
-
 
     private fun initBle() {
         ActivityCompat.requestPermissions(this, mPermission, 100)
@@ -85,32 +153,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btnSearchBLE -> searchBleDevice()
-        }
-    }
-
-    private fun registerBleReceived() {
-        val intent = Intent(this, BleService::class.java)
-        bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE)
-        startService(intent)
-
-        //注册蓝牙接收器的广播
-        val filter = IntentFilter()
-        filter.addAction(ACTION_GATT_CONNECTED)
-        filter.addAction(ACTION_GATT_DISCONNECTED)
-        filter.addAction(ACTION_GATT_SERVICE_DISCOVER)
-        filter.addAction(ACTION_DATA_AVAILABLE)
-        filter.addAction(ACTION_CONNECTING_FAIL)
-        mBleReceiver = BleReceiver()
-        registerReceiver(mBleReceiver, filter)
-    }
-
-    private val mServiceConnection = object : ServiceConnection {
-        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            mBleService = (service as BleService.LocalBinder).service
-        }
-
-        override fun onServiceDisconnected(name: ComponentName?) {
-            mBleService = null
         }
     }
 
@@ -130,31 +172,22 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }, 30_000)
     }
 
-    inner class BleReceiver : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            when (getIntent().action) {
-                ACTION_GATT_CONNECTED ->
-                    Toast.makeText(this@MainActivity, "蓝牙已连接", Toast.LENGTH_SHORT).show()
-                ACTION_GATT_DISCONNECTED -> {
-                    Toast.makeText(this@MainActivity, "蓝牙已断开", Toast.LENGTH_SHORT).show()
-                    mBleService?.release()
-                }
-                ACTION_CONNECTING_FAIL -> {
-                    Toast.makeText(this@MainActivity, "蓝牙已断开", Toast.LENGTH_SHORT).show()
-                    mBleService?.disconnect()
-                }
-                ACTION_DATA_AVAILABLE -> {
-                    val byteArray = intent?.getByteArrayExtra(ACTION_EXTRA_DATA)
-                    Log.d(TAG, "收到的数据：$byteArray")
-                }
-            }
+    /**
+     * 链接Gatt服务
+     */
+    private fun connectGatt(bluetoothDevice: BluetoothDevice) {
+        //链接可能存在失败的情况，可以在链接失败的回调里面加上3次重连的逻辑
+        Log.d(TAG, "要连接的设备信息:" + bluetoothDevice.name)
+        mBluetoothGatt = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            bluetoothDevice.connectGatt(this, true, mGattCallback, BluetoothDevice.TRANSPORT_LE)
+        } else {
+            bluetoothDevice.connectGatt(this, true, mGattCallback)
         }
     }
 
+
     override fun onDestroy() {
         super.onDestroy()
-        unregisterReceiver(mBleReceiver)
-        unbindService(mServiceConnection)
         mBleService = null
     }
 }
