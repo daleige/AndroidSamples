@@ -9,7 +9,6 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.os.ParcelUuid
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -18,23 +17,26 @@ import androidx.core.app.ActivityCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
+
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     companion object {
         const val TAG = "peripheral"
 
         //服务标识
-        val serviceData: ByteArray = "0000ace000001000800000805f9b34fb".toByteArray()
+        val UUID_SERVICE: UUID = UUID.fromString("38400000-8cf0-11bd-b23e-111111111111")
 
         //特征标识（读取数据）
-        val CHARACTERISTIC_READ_UUID =
-            UUID.fromString("0000ace0-0001-1000-8000-00805f9b34fb")
+        val UUID_READ_CHARACTERISTIC: UUID = UUID.fromString("38400000-8cf0-11bd-b23e-222222222222")
 
-        //特征标识（发送数据）
-        val CHARACTERISTIC_WRITE_UUID =
-            UUID.fromString("0000ace0-0001-1000-8000-00805f9b34f6")
+        //特征标识的描述（读取数据）
+        val UUID_READ_DESCRIPTOR: UUID = UUID.fromString("38400000-8cf0-11bd-b23e-333333333333")
 
-        //描述标识
-        val DESCRIPTOR_UUID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb")
+        //特征标识（写入数据）
+        val UUID_WRITE_CHARACTERISTIC: UUID =
+            UUID.fromString("38400000-8cf0-11bd-b23e-444444444444")
+
+        //特征标识的描述（写入数据）
+        val UUID_WRITE_DESCRIPTOR: UUID = UUID.fromString("38400000-8cf0-11bd-b23e-555555555555")
     }
 
     private val mPermission = arrayOf(
@@ -51,6 +53,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     private lateinit var mBluetoothManager: BluetoothManager
     private lateinit var mBluetoothGattServer: BluetoothGattServer
+    private lateinit var mGattService: BluetoothGattService
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,11 +68,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         ActivityCompat.requestPermissions(this, mPermission, 100)
     }
 
-
     /**
      * 开启广播
      */
     private fun startBluetoothAdvertise() {
+        //设置名称
+        mBluetoothAdapter.name = "peripheral_lamp_${Random().nextInt(9999)}"
         //广播参数设置
         val setting = AdvertiseSettings.Builder()
             .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_POWER)
@@ -87,22 +91,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             .build()
 
         //扫描回应的广播设置
-        val scanResponseData = AdvertiseData.Builder()
-            .setIncludeDeviceName(false)
-            .setIncludeTxPowerLevel(true)
-            //.addServiceData(ParcelUuid(CHARACTERISTIC_WRITE_UUID), serviceData)
-            //设置厂商数据
-            .addManufacturerData(0x11, serviceData)
-            .build()
+//        val scanResponseData = AdvertiseData.Builder()
+//            .setIncludeDeviceName(false)
+//            .setIncludeTxPowerLevel(true)
+//            .addServiceData(ParcelUuid(UUID_WRITE_CHARACTERISTIC), serviceData)
+//            //设置厂商数据
+//            .addManufacturerData(0x11, serviceData)
+//            .build()
 
-        //设置名称
-        //mBluetoothAdapter.name = "peripheral_lamp_0001"
         //开启广播
         val bluetoothLeAdvertiser = mBluetoothAdapter.bluetoothLeAdvertiser
         if (bluetoothLeAdvertiser == null) {
             Log.d(TAG, "该手机不支持BLE广播")
         } else {
-            //bluetoothLeAdvertiser.stopAdvertising(mAdvertiseCallback)
+            bluetoothLeAdvertiser.stopAdvertising(mAdvertiseCallback)
             bluetoothLeAdvertiser.startAdvertising(
                 setting,
                 advertiseData,
@@ -128,8 +130,25 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     /**
      * service事件回调
      */
-    private val mBluetoothGattServerCallback = object : BluetoothGattServerCallback() {
+    private val mGattServerCallback = object : BluetoothGattServerCallback() {
 
+        //设备链接 or 断开链接回调
+        override fun onConnectionStateChange(device: BluetoothDevice?, status: Int, newState: Int) {
+            super.onConnectionStateChange(device, status, newState)
+            Log.d(TAG, device?.name + "链接 or 断开:$newState")
+        }
+
+        //添加本地服务回调
+        override fun onServiceAdded(status: Int, service: BluetoothGattService?) {
+            super.onServiceAdded(status, service)
+            if (status == 0) {
+                Log.d(TAG, "添加本地服务成功：" + service?.uuid)
+            } else {
+                Log.d(TAG, "添加本地服务失败")
+            }
+        }
+
+        //特征值读取回调
         override fun onCharacteristicReadRequest(
             device: BluetoothDevice?,
             requestId: Int,
@@ -137,15 +156,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             characteristic: BluetoothGattCharacteristic?
         ) {
             super.onCharacteristicReadRequest(device, requestId, offset, characteristic)
-            mBluetoothGattServer.sendResponse(
-                device,
-                requestId,
-                BluetoothGatt.GATT_SUCCESS,
-                offset,
-                characteristic?.value
-            )
+            Log.d(TAG, "特征值读取回调")
         }
 
+        //特征值写入回调
         override fun onCharacteristicWriteRequest(
             device: BluetoothDevice?,
             requestId: Int,
@@ -155,30 +169,39 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             offset: Int,
             value: ByteArray?
         ) {
-            mBluetoothGattServer.sendResponse(
+            super.onCharacteristicWriteRequest(
                 device,
                 requestId,
-                BluetoothGatt.GATT_SUCCESS,
+                characteristic,
+                preparedWrite,
+                responseNeeded,
                 offset,
                 value
             )
+            Log.d(
+                TAG, "特征值写入回调:\n" +
+                        "device:${device?.name} \n" +
+                        "requestId:${requestId} \n" +
+                        "characteristic:${characteristic?.value} \n" +
+                        "preparedWrite:${preparedWrite} \n" +
+                        "responseNeeded:${responseNeeded} \n" +
+                        "offset:${offset} \n" +
+                        "value:${value} \n"
+            )
         }
 
+        //描述读取回调
         override fun onDescriptorReadRequest(
             device: BluetoothDevice?,
             requestId: Int,
             offset: Int,
             descriptor: BluetoothGattDescriptor?
         ) {
-            mBluetoothGattServer.sendResponse(
-                device,
-                requestId,
-                BluetoothGatt.GATT_SUCCESS,
-                offset,
-                null
-            )
+            super.onDescriptorReadRequest(device, requestId, offset, descriptor)
+            Log.d(TAG, "描述读取回调")
         }
 
+        //描述写入回调
         override fun onDescriptorWriteRequest(
             device: BluetoothDevice?,
             requestId: Int,
@@ -188,13 +211,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             offset: Int,
             value: ByteArray?
         ) {
-            mBluetoothGattServer.sendResponse(
+            super.onDescriptorWriteRequest(
                 device,
                 requestId,
-                BluetoothGatt.GATT_SUCCESS,
+                descriptor,
+                preparedWrite,
+                responseNeeded,
                 offset,
                 value
-            );
+            )
+            Log.d(TAG, "描述写入回调")
         }
     }
 
@@ -213,19 +239,61 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-
     private fun tagger(isChecked: Boolean) {
         if (isChecked) {
             mBluetoothAdapter.enable()
             Toast.makeText(this@MainActivity, "蓝牙已打开", Toast.LENGTH_SHORT).show()
             Handler(Looper.getMainLooper()).postDelayed({
                 mBluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
-                mBluetoothGattServer =
-                    mBluetoothManager.openGattServer(this, mBluetoothGattServerCallback)
+                initGattService()
             }, 3_000)
         } else {
             mBluetoothAdapter.disable()
             Toast.makeText(this@MainActivity, "蓝牙已关闭", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    /**
+     * 初始化服务
+     */
+    private fun initGattService() {
+        mGattService = BluetoothGattService(
+            UUID_SERVICE,
+            BluetoothGattService.SERVICE_TYPE_PRIMARY
+        )
+
+        val mWriteGattCharacteristic = BluetoothGattCharacteristic(
+            UUID_WRITE_CHARACTERISTIC,
+            BluetoothGattCharacteristic.PROPERTY_WRITE,
+            BluetoothGattCharacteristic.PERMISSION_WRITE
+        )
+
+        val mWriteGattDescriptor =
+            BluetoothGattDescriptor(UUID_WRITE_DESCRIPTOR, BluetoothGattDescriptor.PERMISSION_WRITE)
+
+        val mReadGattCharacteristic = BluetoothGattCharacteristic(
+            UUID_READ_CHARACTERISTIC,
+            BluetoothGattCharacteristic.PROPERTY_READ,
+            BluetoothGattCharacteristic.PERMISSION_READ
+        )
+
+        val mReadGattDescriptor = BluetoothGattDescriptor(
+            UUID_READ_DESCRIPTOR,
+            BluetoothGattDescriptor.PERMISSION_WRITE
+        )
+
+        //添加特征值和特征值描述
+        mWriteGattCharacteristic.addDescriptor(mWriteGattDescriptor)
+        mReadGattCharacteristic.addDescriptor(mReadGattDescriptor)
+        mGattService.addCharacteristic(mWriteGattCharacteristic)
+        mGattService.addCharacteristic(mReadGattCharacteristic)
+
+        mBluetoothGattServer = mBluetoothManager.openGattServer(this, mGattServerCallback)
+        val result = mBluetoothGattServer.addService(mGattService)
+        if (result) {
+            Toast.makeText(this, "添加服务成功", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "添加服务失败", Toast.LENGTH_SHORT).show()
         }
     }
 }
