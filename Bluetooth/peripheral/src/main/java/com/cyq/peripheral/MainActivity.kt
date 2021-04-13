@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import kotlinx.android.synthetic.main.activity_main.*
+import java.lang.StringBuilder
 import java.util.*
 
 
@@ -135,7 +136,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         //设备链接 or 断开链接回调
         override fun onConnectionStateChange(device: BluetoothDevice?, status: Int, newState: Int) {
             super.onConnectionStateChange(device, status, newState)
-            Log.d(TAG, device?.name + "链接 or 断开:$newState")
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+                Log.d(TAG, "设备：${device?.address}链接成功")
+            } else {
+                Log.d(TAG, "device:${device?.name}链接失败：$status")
+            }
         }
 
         //添加本地服务回调
@@ -186,8 +191,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                         "preparedWrite:${preparedWrite} \n" +
                         "responseNeeded:${responseNeeded} \n" +
                         "offset:${offset} \n" +
-                        "value:${value} \n"
+                        "value:${value.contentToString()} \n"
             )
+            Log.d(TAG, "接收到的数据为：${ByteUtil.bytesToHexString(value)}")
         }
 
         //描述读取回调

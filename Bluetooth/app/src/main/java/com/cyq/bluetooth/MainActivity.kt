@@ -8,7 +8,6 @@ import android.bluetooth.le.ScanSettings
 import android.content.*
 import android.os.Bundle
 import android.os.Handler
-import android.os.IBinder
 import android.os.Looper
 import android.text.TextUtils
 import android.util.Log
@@ -18,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cyq.bluetooth.MyAdapter.OnItemClickListener
+import com.cyq.bluetooth.utils.ByteUtil
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private var mBluetoothDeviceList: MutableList<BluetoothDevice> = mutableListOf()
     private var mAdapter: MyAdapter? = null
     private var mBleService: BleService? = null
+    private lateinit var mBluetoothGatt: BluetoothGatt
 
     private var mScanCallback: ScanCallback = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult) {
@@ -88,6 +89,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
 
+        //搜索到服务的回调
         override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
             super.onServicesDiscovered(gatt, status)
             Log.d(TAG, "回调onServicesDiscovered:" + gatt.toString())
@@ -96,22 +98,57 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 val gattService = mBluetoothGatt.getService(UUID_SERVICE)
                 if (gattService != null) {
                     Log.d(TAG, "发现服务成功：" + gattService.uuid)
+                    val writeCharacteristic =
+                        gattService.getCharacteristic(UUID_WRITE_CHARACTERISTIC)
+                    val writeDescriptor = writeCharacteristic.getDescriptor(UUID_WRITE_DESCRIPTOR)
+                    val readCharacteristic = gattService.getCharacteristic(UUID_READ_CHARACTERISTIC)
+                    val readDescriptor = readCharacteristic.getDescriptor(UUID_READ_DESCRIPTOR)
+                    Log.d(
+                        TAG, "\nwriteCharacteristic:${writeCharacteristic.uuid}\n" +
+                                "writeDescriptor:${writeDescriptor.uuid}\n" +
+                                "readCharacteristic:${readCharacteristic.uuid}\n" +
+                                "readDescriptor:${readDescriptor.uuid}\n"
+                    )
+                    val bytes: ByteArray = ByteUtil.parseCommand("00eeabcde1239879721731")
+                    Log.d(TAG, ByteUtil.bytesToHexString(bytes))
+                    //通过gatt实体类写入值到特征类中
+                    writeCharacteristic.value = bytes
+                    mBluetoothGatt.writeCharacteristic(writeCharacteristic)
+
+                    //读取从机的特征值
+                    //mBluetoothGatt.readCharacteristic(readCharacteristic)
                 } else {
                     Log.d(TAG, "发现服务失败！")
                 }
             }
         }
 
+        //当成功写入特征值时收到回调
         override fun onCharacteristicWrite(
             gatt: BluetoothGatt?,
             characteristic: BluetoothGattCharacteristic?,
             status: Int
         ) {
             super.onCharacteristicWrite(gatt, characteristic, status)
-            Log.d(TAG, "onCharacteristicWrite:" + gatt.toString())
-
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+                //获取写入到外设的特征值
+                Log.d(TAG, "onCharacteristicWrite:${characteristic?.value}")
+            }
         }
 
+        //读取到特征值回调
+        override fun onCharacteristicRead(
+            gatt: BluetoothGatt?,
+            characteristic: BluetoothGattCharacteristic?,
+            status: Int
+        ) {
+            super.onCharacteristicRead(gatt, characteristic, status)
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+                Log.d(TAG, "读取到的特征值：${characteristic?.value}")
+            }
+        }
+
+        //当成功写入特征描述值的时候回调
         override fun onDescriptorWrite(
             gatt: BluetoothGatt?,
             descriptor: BluetoothGattDescriptor?,
@@ -120,9 +157,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             super.onDescriptorWrite(gatt, descriptor, status)
             Log.d(TAG, "onCharacteristicWrite:" + gatt.toString())
         }
+
+        //当成功读取到特征描述值时触发
+        override fun onDescriptorRead(
+            gatt: BluetoothGatt?,
+            descriptor: BluetoothGattDescriptor?,
+            status: Int
+        ) {
+            super.onDescriptorRead(gatt, descriptor, status)
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+                Log.d(TAG, "onDescriptorRead:${descriptor?.value}")
+            }
+        }
     }
 
-    private lateinit var mBluetoothGatt: BluetoothGatt
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -169,7 +217,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         Handler(Looper.getMainLooper()).postDelayed({
             mBleAdapter.bluetoothLeScanner.stopScan(mScanCallback)
-        }, 30_000)
+        }, 5_000)
     }
 
     /**
@@ -179,7 +227,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         //链接可能存在失败的情况，可以在链接失败的回调里面加上3次重连的逻辑
         Log.d(TAG, "要连接的设备信息:" + bluetoothDevice.name)
         mBluetoothGatt = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            bluetoothDevice.connectGatt(this, true, mGattCallback, BluetoothDevice.TRANSPORT_LE)
+            bluetoothDevice.connectGatt(this, false, mGattCallback, BluetoothDevice.TRANSPORT_LE)
         } else {
             bluetoothDevice.connectGatt(this, true, mGattCallback)
         }
