@@ -9,6 +9,7 @@ import android.content.*
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
@@ -241,6 +242,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 Log.d(TAG, ByteUtil.toHexString(bytes))
                 //通过gatt实体类写入值到特征类中
                 val result: Boolean? = writeCharacteristic?.setValue(bytes)
+                writeDescriptor?.value = bytes
+                writeCharacteristic?.addDescriptor(writeDescriptor)
                 if (result == true) {
                     mBluetoothGatt.writeCharacteristic(writeCharacteristic)
                 }

@@ -1,7 +1,6 @@
 package com.cyq.common
 
 import android.util.Log
-import com.cyq.bluetooth.LampView
 
 /**
  * @describe 灯状态对应的16进制字符串转换
