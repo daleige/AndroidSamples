@@ -109,8 +109,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                                 "readCharacteristic:${readCharacteristic.uuid}\n" +
                                 "readDescriptor:${readDescriptor.uuid}\n"
                     )
-                    val bytes: ByteArray = ByteUtil.parseCommand("00eeabcde1239879721731")
-                    Log.d(TAG, ByteUtil.bytesToHexString(bytes))
+                    val bytes: ByteArray = ByteUtil.toByteArray("00eeabcde1239879721731")
+                    Log.d(TAG, ByteUtil.toHexString(bytes))
                     //通过gatt实体类写入值到特征类中
                     writeCharacteristic.value = bytes
                     mBluetoothGatt.writeCharacteristic(writeCharacteristic)

@@ -1,54 +1,57 @@
 package com.cyq.bluetooth.utils;
 
-import android.util.Log;
-
 /**
  * @author chenyq113@midea.com
- * @describe xxx
+ * @describe 16进制字符串和ByteArray互转工具类
  * @time 2021/4/13 18:31
  */
 public class ByteUtil {
-    /**
-     * 将十六进制的字符串转换成字节
-     *
-     * @param commandStr 7E 18 00 07 00 04 01 02 03 04 00 05 00 1A 7E
-     * @return
-     * @throws NumberFormatException
-     */
-    public static byte[] parseCommand(String commandStr) throws NumberFormatException {
-        String[] tempStr = commandStr.split(" ");
-        byte[] commands = new byte[tempStr.length];
-        for (int i = 0; i < tempStr.length; i++) {
-            try {
-                commands[i] = (byte) Integer.parseInt(tempStr[i], 16);
-            } catch (Exception o_o) {
-                commands[i] = 00;
-                Log.e("命令转换出错", tempStr[i]);
-            }
-        }
-        return commands;
+    public static boolean isEmpty(String str) {
+        return str == null || str.equals("");
     }
 
     /**
-     * 将字节转换为十六进制的字符串（）
+     * 16进制的字符串表示转成字节数组
      *
-     * @param bytesCommand
-     * @return
-     * @from 忘了
+     * @param hexString 16进制格式的字符串，注意字符之间不要有空格
+     * @return 转换后的字节数组
      */
-    public static String bytesToHexString(byte[] bytesCommand) {
-        StringBuilder stringBuilder = new StringBuilder("");
-        if (bytesCommand == null || bytesCommand.length <= 0) {
-            return null;
+    public static byte[] toByteArray(String hexString) {
+        if (isEmpty(hexString)) {
+            throw new IllegalArgumentException("this hexString must not be empty");
         }
-        for (int i = 0; i < bytesCommand.length; i++) {
-            int v = bytesCommand[i] & 0xFF;
-            String hv = Integer.toHexString(v);
-            if (hv.length() < 2) {
-                stringBuilder.append(0);
+        hexString = hexString.toLowerCase();
+        final byte[] byteArray = new byte[hexString.length() / 2];
+        int k = 0;
+        for (int i = 0; i < byteArray.length; i++) {
+            //因为是16进制，最多只会占用4位，转换成字节需要两个16进制的字符，高位在先
+            byte high = (byte) (Character.digit(hexString.charAt(k), 16) & 0xff);
+            byte low = (byte) (Character.digit(hexString.charAt(k + 1), 16) & 0xff);
+            byteArray[i] = (byte) (high << 4 | low);
+            k += 2;
+        }
+        return byteArray;
+    }
+
+
+    /**
+     * 字节数组转成16进制表示格式的字符串
+     *
+     * @param byteArray 需要转换的字节数组
+     * @return 16进制表示格式的字符串
+     */
+    public static String toHexString(byte[] byteArray) {
+        if (byteArray == null || byteArray.length < 1) {
+            throw new IllegalArgumentException("this byteArray must not be null or empty");
+        }
+        final StringBuilder hexString = new StringBuilder();
+        for (byte b : byteArray) {
+            if ((b & 0xff) < 0x10) {
+                //0~F前面不零
+                hexString.append("0");
             }
-            stringBuilder.append(hv);
+            hexString.append(Integer.toHexString(0xFF & b));
         }
-        return stringBuilder.toString();
+        return hexString.toString().toLowerCase();
     }
 }

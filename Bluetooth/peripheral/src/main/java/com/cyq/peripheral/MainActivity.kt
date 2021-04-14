@@ -193,7 +193,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                         "offset:${offset} \n" +
                         "value:${value.contentToString()} \n"
             )
-            Log.d(TAG, "接收到的数据为：${ByteUtil.bytesToHexString(value)}")
+            Log.d(TAG, "接收到的数据为：${ByteUtil.toHexString(value)}")
         }
 
         //描述读取回调
