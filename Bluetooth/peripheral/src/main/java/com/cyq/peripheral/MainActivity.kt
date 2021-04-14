@@ -64,6 +64,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         btnCloseLamp.setOnClickListener(this)
         btnYellowLamp.setOnClickListener(this)
         btnGreenLamp.setOnClickListener(this)
+        btnRedLamp.setOnClickListener(this)
         switchView.setOnCheckedChangeListener { _, isChecked -> tagger(isChecked) }
         btnOpenAdvertise.setOnClickListener(this)
         ActivityCompat.requestPermissions(this, mPermission, 100)
@@ -236,6 +237,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.btnCloseLamp -> lampView.close()
             R.id.btnGreenLamp -> lampView.setLampColor(LampView.Color.GREEN)
             R.id.btnYellowLamp -> lampView.setLampColor(LampView.Color.YELLOW)
+            R.id.btnRedLamp -> lampView.setLampColor(LampView.Color.RED)
             R.id.btnOpenAdvertise -> {
                 if (mBluetoothAdapter.isEnabled) {
                     //先关闭广播

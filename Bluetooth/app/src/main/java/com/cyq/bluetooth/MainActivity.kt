@@ -112,11 +112,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     val bytes: ByteArray = ByteUtil.toByteArray("00eeabcde1239879721731")
                     Log.d(TAG, ByteUtil.toHexString(bytes))
                     //通过gatt实体类写入值到特征类中
-                    writeCharacteristic.value = bytes
-                    mBluetoothGatt.writeCharacteristic(writeCharacteristic)
+                    val result: Boolean = writeCharacteristic.setValue(bytes)
+                    if (result) {
+                        mBluetoothGatt.writeCharacteristic(writeCharacteristic)
+                    }
 
                     //读取从机的特征值
-                    //mBluetoothGatt.readCharacteristic(readCharacteristic)
+                    mBluetoothGatt.readCharacteristic(readCharacteristic)
                 } else {
                     Log.d(TAG, "发现服务失败！")
                 }

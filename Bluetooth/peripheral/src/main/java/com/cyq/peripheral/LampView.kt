@@ -25,7 +25,7 @@ open class LampView @JvmOverloads constructor(
     private lateinit var mPorterDuffXfermode: PorterDuffXfermode
     private lateinit var mBitmapDST: Bitmap
     private lateinit var mBitmapSRT: Bitmap
-    private var mLampColor = Color.WHITE
+    private var mLampColor = Color.BLACK
     private lateinit var mRectF: RectF
     private lateinit var mPaint: Paint
 
