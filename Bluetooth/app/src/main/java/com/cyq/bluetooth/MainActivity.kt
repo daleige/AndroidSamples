@@ -18,6 +18,7 @@ import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cyq.bluetooth.MyAdapter.OnItemClickListener
 import com.cyq.bluetooth.utils.ByteUtil
+import com.cyq.bluetooth.utils.LampBean
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
@@ -54,6 +55,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private var mAdapter: MyAdapter? = null
     private var mBleService: BleService? = null
     private lateinit var mBluetoothGatt: BluetoothGatt
+    private var mLampBean: LampBean = LampBean()
 
     private var mScanCallback: ScanCallback = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult) {
@@ -69,6 +71,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
     }
+
+    var writeCharacteristic: BluetoothGattCharacteristic? = null
+    var writeDescriptor: BluetoothGattDescriptor? = null
+    var readCharacteristic: BluetoothGattCharacteristic? = null
+    var readDescriptor: BluetoothGattDescriptor? = null
 
     private val mGattCallback = object : BluetoothGattCallback() {
         override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
@@ -98,27 +105,25 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 val gattService = mBluetoothGatt.getService(UUID_SERVICE)
                 if (gattService != null) {
                     Log.d(TAG, "发现服务成功：" + gattService.uuid)
-                    val writeCharacteristic =
-                        gattService.getCharacteristic(UUID_WRITE_CHARACTERISTIC)
-                    val writeDescriptor = writeCharacteristic.getDescriptor(UUID_WRITE_DESCRIPTOR)
-                    val readCharacteristic = gattService.getCharacteristic(UUID_READ_CHARACTERISTIC)
-                    val readDescriptor = readCharacteristic.getDescriptor(UUID_READ_DESCRIPTOR)
+                    writeCharacteristic = gattService.getCharacteristic(UUID_WRITE_CHARACTERISTIC)
+                    writeDescriptor = writeCharacteristic?.getDescriptor(UUID_WRITE_DESCRIPTOR)
+                    readCharacteristic = gattService.getCharacteristic(UUID_READ_CHARACTERISTIC)
+                    readDescriptor = readCharacteristic?.getDescriptor(UUID_READ_DESCRIPTOR)
                     Log.d(
-                        TAG, "\nwriteCharacteristic:${writeCharacteristic.uuid}\n" +
-                                "writeDescriptor:${writeDescriptor.uuid}\n" +
-                                "readCharacteristic:${readCharacteristic.uuid}\n" +
-                                "readDescriptor:${readDescriptor.uuid}\n"
+                        TAG, "\nwriteCharacteristic:${writeCharacteristic?.uuid}\n" +
+                                "writeDescriptor:${writeDescriptor?.uuid}\n" +
+                                "readCharacteristic:${readCharacteristic?.uuid}\n" +
+                                "readDescriptor:${readDescriptor?.uuid}\n"
                     )
-                    val bytes: ByteArray = ByteUtil.toByteArray("00eeabcde1239879721731")
-                    Log.d(TAG, ByteUtil.toHexString(bytes))
-                    //通过gatt实体类写入值到特征类中
-                    val result: Boolean = writeCharacteristic.setValue(bytes)
-                    if (result) {
-                        mBluetoothGatt.writeCharacteristic(writeCharacteristic)
-                    }
-
-                    //读取从机的特征值
-                    mBluetoothGatt.readCharacteristic(readCharacteristic)
+                    /* val bytes: ByteArray = ByteUtil.toByteArray("00eeabcde1239879721731")
+                     Log.d(TAG, ByteUtil.toHexString(bytes))
+                     //通过gatt实体类写入值到特征类中
+                     val result: Boolean? = writeCharacteristic?.setValue(bytes)
+                     if (result == true) {
+                         mBluetoothGatt.writeCharacteristic(writeCharacteristic)
+                     }
+                     //读取从机的特征值
+                     mBluetoothGatt.readCharacteristic(readCharacteristic)*/
                 } else {
                     Log.d(TAG, "发现服务失败！")
                 }
@@ -178,6 +183,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         btnSearchBLE.setOnClickListener(this)
+        btnOpenLamp.setOnClickListener(this)
+        btnCloseLamp.setOnClickListener(this)
+        btnYellowLamp.setOnClickListener(this)
+        btnGreenLamp.setOnClickListener(this)
+        btnRedLamp.setOnClickListener(this)
         mRecyclerView.layoutManager = LinearLayoutManager(this)
         mAdapter = MyAdapter(mBluetoothDeviceList)
         mAdapter?.itemClickListener = object : OnItemClickListener {
@@ -203,6 +213,39 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btnSearchBLE -> searchBleDevice()
+            R.id.btnOpenLamp -> {
+                lampView.open()
+                mLampBean.openLamp()
+            }
+            R.id.btnCloseLamp -> {
+                lampView.close()
+                mLampBean.closeLamp()
+            }
+            R.id.btnGreenLamp -> {
+                lampView.setLampColor(LampView.Color.GREEN)
+                mLampBean.setColor(LampView.Color.GREEN)
+            }
+            R.id.btnYellowLamp -> {
+                lampView.setLampColor(LampView.Color.YELLOW)
+                mLampBean.setColor(LampView.Color.YELLOW)
+            }
+            R.id.btnRedLamp -> {
+                lampView.setLampColor(LampView.Color.RED)
+                mLampBean.setColor(LampView.Color.RED)
+            }
+        }
+        if (v?.id != R.id.btnSearchBLE) {
+            if (writeCharacteristic != null) {
+                val bytes: ByteArray = ByteUtil.toByteArray(mLampBean.getCommandStr())
+                Log.d(TAG, ByteUtil.toHexString(bytes))
+                //通过gatt实体类写入值到特征类中
+                val result: Boolean? = writeCharacteristic?.setValue(bytes)
+                if (result == true) {
+                    mBluetoothGatt.writeCharacteristic(writeCharacteristic)
+                }
+            } else {
+                Toast.makeText(this, "writeCharacteristic为空！", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -234,7 +277,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             bluetoothDevice.connectGatt(this, true, mGattCallback)
         }
     }
-
 
     override fun onDestroy() {
         super.onDestroy()

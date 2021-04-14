@@ -195,6 +195,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                         "value:${value.contentToString()} \n"
             )
             Log.d(TAG, "接收到的数据为：${ByteUtil.toHexString(value)}")
+            parseCommandData(ByteUtil.toHexString(value))
         }
 
         //描述读取回调
@@ -228,6 +229,22 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 value
             )
             Log.d(TAG, "描述写入回调")
+        }
+    }
+
+    /**
+     * 解析命令并根据解析出的命令控制设备状态
+     */
+    private fun parseCommandData(commandStr: String?) {
+        if (commandStr != null) {
+            Log.d(TAG, "收到的命令：$commandStr")
+            val lampBean = LampBean()
+            lampBean.setCommandStr(commandStr)
+            if (lampBean.isOpen) {
+                lampView.setLampColor(lampBean.mColorType)
+            } else {
+                lampView.close()
+            }
         }
     }
 

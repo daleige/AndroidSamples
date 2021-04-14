@@ -10,21 +10,23 @@ import com.cyq.bluetooth.LampView
  */
 class LampBean {
     //01-开灯  02=关灯
-    private var isOpen: Boolean = false
-
+    var isOpen: Boolean = false
     //01=默认色，02=红色，03=黄色，04=绿色
-    private var mColorType = LampView.Color.DEFAULT
+    var mColorType = LampView.Color.DEFAULT
 
     fun setColor(colorType: LampView.Color) {
         mColorType = colorType
+        isOpen = true
     }
 
     fun openLamp() {
         isOpen = true
+        mColorType = LampView.Color.DEFAULT
     }
 
     fun closeLamp() {
         isOpen = false
+        mColorType = LampView.Color.BLACK
     }
 
     /**
@@ -51,8 +53,8 @@ class LampBean {
      * 16进制命令转换成对应的实体类状态
      */
     fun setCommandStr(command: String) {
-        val strOne = command.substring(0, 1)
-        val strTow = command.substring(2, 3)
+        val strOne = command.substring(0, 2)
+        val strTow = command.substring(2, 4)
         Log.d("test", "strOne:$strOne   \bstrTow$strTow")
         isOpen = strOne == "01"
 
