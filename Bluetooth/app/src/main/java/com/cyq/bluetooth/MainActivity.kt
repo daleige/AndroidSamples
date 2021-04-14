@@ -276,7 +276,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         //链接可能存在失败的情况，可以在链接失败的回调里面加上3次重连的逻辑
         Log.d(TAG, "要连接的设备信息:" + bluetoothDevice.name)
         mBluetoothGatt = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            bluetoothDevice.connectGatt(this, false, mGattCallback, BluetoothDevice.TRANSPORT_LE)
+            bluetoothDevice.connectGatt(this, true, mGattCallback, BluetoothDevice.TRANSPORT_LE)
         } else {
             bluetoothDevice.connectGatt(this, true, mGattCallback)
         }
