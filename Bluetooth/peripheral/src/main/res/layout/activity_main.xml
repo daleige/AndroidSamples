@@ -9,7 +9,7 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <com.cyq.peripheral.LampView
+    <com.cyq.common.LampView
         android:id="@+id/lampView"
         android:layout_width="200dp"
         android:layout_height="200dp"

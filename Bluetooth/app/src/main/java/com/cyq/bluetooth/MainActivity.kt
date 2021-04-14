@@ -17,8 +17,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cyq.bluetooth.MyAdapter.OnItemClickListener
-import com.cyq.bluetooth.utils.ByteUtil
-import com.cyq.bluetooth.utils.LampBean
+import com.cyq.common.ByteUtil
+import com.cyq.common.LampBean
+import com.cyq.common.LampView
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 

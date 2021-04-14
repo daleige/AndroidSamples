@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <com.cyq.bluetooth.LampView
+    <com.cyq.common.LampView
         android:id="@+id/lampView"
         android:layout_width="150dp"
         android:layout_height="150dp"

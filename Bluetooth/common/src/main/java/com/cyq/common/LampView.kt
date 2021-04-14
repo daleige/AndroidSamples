@@ -1,4 +1,4 @@
-package com.cyq.peripheral
+package com.cyq.common
 
 import android.content.Context
 import android.graphics.*

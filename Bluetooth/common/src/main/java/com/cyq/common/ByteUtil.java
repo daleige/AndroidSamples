@@ -1,4 +1,4 @@
-package com.cyq.bluetooth.utils;
+package com.cyq.common;
 
 /**
  * @author chenyq113@midea.com

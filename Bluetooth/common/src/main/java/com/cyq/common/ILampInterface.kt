@@ -1,4 +1,6 @@
-package com.cyq.peripheral
+package com.cyq.common
+
+import com.cyq.common.LampView
 
 /**
  * @describe xxx

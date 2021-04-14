@@ -1,6 +1,7 @@
-package com.cyq.peripheral
+package com.cyq.common
 
 import android.util.Log
+import com.cyq.bluetooth.LampView
 
 /**
  * @describe 灯状态对应的16进制字符串转换
@@ -10,7 +11,6 @@ import android.util.Log
 class LampBean {
     //01-开灯  02=关灯
     var isOpen: Boolean = false
-
     //01=默认色，02=红色，03=黄色，04=绿色
     var mColorType = LampView.Color.DEFAULT
 
