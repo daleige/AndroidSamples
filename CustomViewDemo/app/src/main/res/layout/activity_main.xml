@@ -69,6 +69,14 @@
                 android:shadowRadius="5"
                 android:text="事件分发处理"
                 android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/mBtnMatrix"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:shadowRadius="5"
+                android:text="图片旋转"
+                android:textAllCaps="false" />
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

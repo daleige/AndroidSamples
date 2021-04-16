@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".image.MatrixActivity">
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="166dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/idcard" />
+
+    <Button
+        android:id="@+id/btnEditImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="50dp"
+        android:text="修正图片" />
+
+    <ImageView
+        android:id="@+id/imgResult"
+        android:layout_width="200dp"
+        android:layout_height="350dp" />
+
+
+</LinearLayout>

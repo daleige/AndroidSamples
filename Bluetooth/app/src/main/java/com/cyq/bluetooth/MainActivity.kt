@@ -178,6 +178,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 Log.d(TAG, "onDescriptorRead:${descriptor?.value}")
             }
         }
+
+        override fun onCharacteristicChanged(
+            gatt: BluetoothGatt?,
+            characteristic: BluetoothGattCharacteristic?
+        ) {
+            super.onCharacteristicChanged(gatt, characteristic)
+            Log.d(TAG, "onCharacteristicWrite:" + characteristic?.value)
+
+        }
     }
 
 
@@ -250,6 +259,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             } else {
                 Toast.makeText(this, "writeCharacteristic为空！", Toast.LENGTH_SHORT).show()
             }
+
+            //TODO 通过Read类型的特征值去发送数据
+            readCharacteristic?.value = ByteUtil.toByteArray("0101")
+            mBluetoothGatt.writeCharacteristic(readCharacteristic)
         }
     }
 
@@ -282,8 +295,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    private fun closeBle() {
+        mBluetoothGatt.close()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         mBleService = null
+        closeBle()
     }
 }
