@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import androidx.appcompat.widget.AppCompatImageView
+import com.cyq.customview.R
 import kotlin.math.sqrt
 import kotlin.properties.Delegates
 
@@ -15,7 +16,7 @@ import kotlin.properties.Delegates
  * @time 2021/4/20 14:52
  */
 class SmartCropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
-    : AppCompatImageView(context, attrs, defStyleAttr) {
+    : AppCompatImageView(context, attrs, defStyleAttr), SmartCropInterface {
     private var mBorderLinePaint = Paint()
     private var mBorderPointPaint = Paint()
     private var mCenterX: Float = 0F
@@ -26,6 +27,10 @@ class SmartCropView @JvmOverloads constructor(context: Context, attrs: Attribute
     private val mPoint3 = Point()
     private val mPoint4 = Point()
     private var mPoints = arrayOf(mPoint1, mPoint2, mPoint3, mPoint4)
+
+    private var mBitmap: Bitmap? = null
+    private var mMatrix: Matrix? = null
+    private var isCrop = false
 
     companion object {
         const val BORDER_LINE_COLOR = Color.BLUE
@@ -52,6 +57,11 @@ class SmartCropView @JvmOverloads constructor(context: Context, attrs: Attribute
         mPoint3.y = 250
         mPoint4.x = -400
         mPoint4.y = 250
+
+        mMatrix = Matrix()
+        val options = BitmapFactory.Options()
+        options.inTargetDensity = 480 / 3
+        mBitmap = BitmapFactory.decodeResource(resources, R.drawable.id_card, options)
     }
 
     private var index by Delegates.notNull<Int>()
@@ -100,6 +110,7 @@ class SmartCropView @JvmOverloads constructor(context: Context, attrs: Attribute
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
+
         mCenterX = width.toFloat() / 2F
         mCenterY = height.toFloat() / 2F
         Log.d("test", "$width-------------$height")
@@ -119,6 +130,10 @@ class SmartCropView @JvmOverloads constructor(context: Context, attrs: Attribute
 
         canvas?.drawPath(mPath, mBorderLinePaint)
         canvas?.restore()
+        if(isCrop){
+            canvas?.drawBitmap(mBitmap!!, mMatrix!!, null)
+           // canvas?.setMatrix(mMatrix)
+        }
     }
 
     /**
@@ -142,5 +157,35 @@ class SmartCropView @JvmOverloads constructor(context: Context, attrs: Attribute
             return result
         }
         return 0
+    }
+
+    override fun getPoints(): Array<Point> {
+        mPoints = arrayOf(mPoint1, mPoint2, mPoint3, mPoint4)
+        return mPoints
+    }
+
+    override fun crop() {
+        mPoints = arrayOf(mPoint1, mPoint2, mPoint3, mPoint4)
+        val src = floatArrayOf(
+                mPoint1.x.toFloat(),
+                mPoint1.y.toFloat(),
+                mPoint2.x.toFloat(),
+                mPoint2.y.toFloat(),
+                mPoint3.x.toFloat(),
+                mPoint3.y.toFloat(),
+                mPoint4.x.toFloat(),
+                mPoint4.y.toFloat())
+        val dst = floatArrayOf(0f, 0f, (260 * 3).toFloat(), 0f, (260 * 3).toFloat(), (380 * 3).toFloat(), 0f, (380 * 3).toFloat())
+        mMatrix!!.setPolyToPoly(src, 0, dst, 0, src.size shr 1)
+        isCrop = true
+        invalidate()
+    }
+
+    override fun clockwiseRotate() {
+
+    }
+
+    override fun anticlockwiseRotate() {
+
     }
 }

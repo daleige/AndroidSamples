@@ -10,5 +10,9 @@ class MatrixActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_matrix)
         mSmartCropView.setImageResource(R.drawable.id_card)
+
+        btnCrop.setOnClickListener{
+            mSmartCropView.crop()
+        }
     }
 }

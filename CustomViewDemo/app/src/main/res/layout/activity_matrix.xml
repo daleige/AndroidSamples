@@ -6,6 +6,11 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context=".image.MatrixActivity">
+    <Button
+        android:id="@+id/btnCrop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="裁剪"/>
 
     <com.cyq.customview.image.SmartCropView
         android:id="@+id/mSmartCropView"
