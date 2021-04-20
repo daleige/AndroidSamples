@@ -175,7 +175,8 @@ class SmartCropView @JvmOverloads constructor(context: Context, attrs: Attribute
                 mPoint3.y.toFloat(),
                 mPoint4.x.toFloat(),
                 mPoint4.y.toFloat())
-        val dst = floatArrayOf(0f, 0f, (260 * 3).toFloat(), 0f, (260 * 3).toFloat(), (380 * 3).toFloat(), 0f, (380 * 3).toFloat())
+        val dst = floatArrayOf(0F, 0F, (260 * 3).toFloat(), 0F, (260 * 3).toFloat(), (380 * 3)
+                .toFloat(), 0F, (380 * 3).toFloat())
         mMatrix!!.setPolyToPoly(src, 0, dst, 0, src.size shr 1)
         isCrop = true
         invalidate()
