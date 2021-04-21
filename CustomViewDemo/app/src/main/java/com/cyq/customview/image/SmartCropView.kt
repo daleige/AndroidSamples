@@ -58,10 +58,12 @@ class SmartCropView @JvmOverloads constructor(context: Context, attrs: Attribute
         mPoint4.x = -400
         mPoint4.y = 250
 
+
+
         mMatrix = Matrix()
         val options = BitmapFactory.Options()
         options.inTargetDensity = 480 / 3
-        mBitmap = BitmapFactory.decodeResource(resources, R.drawable.id_card, options)
+        mBitmap = BitmapFactory.decodeResource(resources, R.drawable.id_card, null)
     }
 
     private var index by Delegates.notNull<Int>()
@@ -116,6 +118,7 @@ class SmartCropView @JvmOverloads constructor(context: Context, attrs: Attribute
         Log.d("test", "$width-------------$height")
         canvas?.save()
         canvas?.translate(mCenterX, mCenterY)
+        canvas?.drawPoint(0F, 0F, mBorderPointPaint);
         mPath.reset()
         mPath.moveTo(mPoint1.x.toFloat(), mPoint1.y.toFloat())
         mPath.lineTo(mPoint2.x.toFloat(), mPoint2.y.toFloat())
@@ -127,12 +130,11 @@ class SmartCropView @JvmOverloads constructor(context: Context, attrs: Attribute
         canvas?.drawPoint(mPoint2.x.toFloat(), mPoint2.y.toFloat(), mBorderPointPaint)
         canvas?.drawPoint(mPoint3.x.toFloat(), mPoint3.y.toFloat(), mBorderPointPaint)
         canvas?.drawPoint(mPoint4.x.toFloat(), mPoint4.y.toFloat(), mBorderPointPaint)
-
         canvas?.drawPath(mPath, mBorderLinePaint)
         canvas?.restore()
-        if(isCrop){
+        if (isCrop) {
             canvas?.drawBitmap(mBitmap!!, mMatrix!!, null)
-           // canvas?.setMatrix(mMatrix)
+            // canvas?.setMatrix(mMatrix)
         }
     }
 
@@ -165,18 +167,28 @@ class SmartCropView @JvmOverloads constructor(context: Context, attrs: Attribute
     }
 
     override fun crop() {
-        mPoints = arrayOf(mPoint1, mPoint2, mPoint3, mPoint4)
+        //换算成bitmap中对应四个顶点的坐标
+        val n: Float = (mBitmap!!.width / width).toFloat()
+        val bitmapCenterX = mBitmap!!.width / 2F
+        val bitmapCenterY = mBitmap!!.height / 2F
+
         val src = floatArrayOf(
-                mPoint1.x.toFloat(),
-                mPoint1.y.toFloat(),
-                mPoint2.x.toFloat(),
-                mPoint2.y.toFloat(),
-                mPoint3.x.toFloat(),
-                mPoint3.y.toFloat(),
-                mPoint4.x.toFloat(),
-                mPoint4.y.toFloat())
-        val dst = floatArrayOf(0F, 0F, (260 * 3).toFloat(), 0F, (260 * 3).toFloat(), (380 * 3)
-                .toFloat(), 0F, (380 * 3).toFloat())
+                mPoint1.x.toFloat() * n + bitmapCenterX,
+                mPoint1.y.toFloat() * n + bitmapCenterY,
+                mPoint2.x.toFloat() * n + bitmapCenterX,
+                mPoint2.y.toFloat() * n + bitmapCenterY,
+                mPoint3.x.toFloat() * n + bitmapCenterX,
+                mPoint3.y.toFloat() * n + bitmapCenterY,
+                mPoint4.x.toFloat() * n + bitmapCenterX,
+                mPoint4.y.toFloat() * n + bitmapCenterY)
+
+        val xLength = 65F * 3
+        val yLength = 95F * 3
+        val dst = floatArrayOf(
+                0F, 0F,
+                xLength, 0F,
+                xLength, yLength,
+                0F, yLength)
         mMatrix!!.setPolyToPoly(src, 0, dst, 0, src.size shr 1)
         isCrop = true
         invalidate()

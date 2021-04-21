@@ -13,8 +13,9 @@
         android:text="裁剪"/>
 
     <com.cyq.customview.image.SmartCropView
+        android:background="@android:color/darker_gray"
         android:id="@+id/mSmartCropView"
-        android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center" />
 </FrameLayout>
