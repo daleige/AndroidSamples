@@ -1,2 +1,5 @@
+include ':lib_image'
+include ':lib_network'
+include ':lib_base'
 include ':app'
 rootProject.name = "GradleDemo"

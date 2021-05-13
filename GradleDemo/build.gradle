@@ -21,6 +21,20 @@ allprojects {
     }
 }
 
+project.allprojects {
+    new Action<Project>() {
+        void execute(Project p) {
+
+        }
+    }
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+//指定gradle版本，通过gradlew wrapper执行
+wrapper {
+    gradleVersion = '6.7.1'
+}
+
