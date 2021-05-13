@@ -1,10 +1,34 @@
 package src.com.cyq.thread.单例.枚举;
 
+import java.util.concurrent.Executors;
+
 public class Client {
 
     public static void main(String[] args) {
         for (int i = 0; i < 100; i++) {
-            System.out.println(MyEnum.getInstance().hashCode()+"  --   "+MyEnum.getInstance().toString());
+            Thread thread = new Thread() {
+                @Override
+                public void run() {
+                    super.run();
+                    System.out.println(MyEnum.getInstance().hashCode() + "  --   " + MyEnum.getInstance().toString());
+
+                }
+            };
+            thread.start();
+
+            thread.setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+                @Override
+                public void uncaughtException(Thread t, Throwable e) {
+                    e.printStackTrace();
+                }
+            });
+
+            Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+                @Override
+                public void uncaughtException(Thread t, Throwable e) {
+
+                }
+            });
         }
     }
 

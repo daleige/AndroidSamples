@@ -1,0 +1,15 @@
+print 'hello world'
+
+assert 3.class == Integer
+assert (3.5).class == BigDecimal
+assert 'abs' instanceof String
+
+String name = 'MSmartSDK'
+assert "Hello,${name}" == 'Hello,MSmartSDK'
+assert "Hello,$name" == 'Hello,MSmartSDK'
+
+def x = 3
+def username = 'aabbcc'
+
+def arr = [1, 2, 3, 4]
+
