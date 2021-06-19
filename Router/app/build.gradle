@@ -48,3 +48,9 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }
+
+task testTask{
+    doLast {
+        println("0000011111---111111999999")
+    }
+}
