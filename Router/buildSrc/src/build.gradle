@@ -1,0 +1,30 @@
+apply plugin: 'groovy'
+//插件发布需要使用到maven仓库
+apply plugin: 'maven'
+
+repositories {
+    jcenter()
+    google()
+}
+
+dependencies {
+    implementation gradleApi()
+    implementation localGroovy()
+}
+
+//uploadArchives是maven中的发布插件的任务
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            // 设置发布路径为 工程根目录下面的 repo 文件夹
+            repository(url: uri('../repo')) {
+                // 设置groupId，通常为包名
+                pom.groupId = 'com.chenyangqi.router'
+                // 设置artifactId，为当前插件的名称
+                pom.artifactId = 'router-gradle-plugin'
+                // 设置 插件的版本号
+                pom.version = '1.0.0'
+            }
+        }
+    }
+}
