@@ -1,2 +1,2 @@
-include ':app',':plugin-gradle-plugin'
+include ':app',':router-gradle-plugin'
 rootProject.name = "Router"
