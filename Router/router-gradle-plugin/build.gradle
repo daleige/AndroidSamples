@@ -1,6 +1,13 @@
 // 引用groovy插件，编译插件工程中的代码
 apply plugin: 'groovy'
+plugins {
+    id 'java-library'
+}
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
 // 声明仓库的地址
 repositories {
     jcenter()

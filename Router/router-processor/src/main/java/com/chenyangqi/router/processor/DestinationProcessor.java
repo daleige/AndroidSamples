@@ -5,7 +5,6 @@ import com.google.auto.service.AutoService;
 
 import java.util.Collections;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Processor;
@@ -25,6 +24,10 @@ public class DestinationProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
+        if (roundEnvironment.processingOver()) {
+            System.out.println(TAG + "  >>> processingOver...");
+            return false;
+        }
         System.out.println(TAG + "  >>> start process...");
         Set<? extends Element> elementsAnnotatedWith = roundEnvironment.getElementsAnnotatedWith(Destination.class);
         System.out.println(TAG + " >>> all elementsAnnotatedWith count size=" + elementsAnnotatedWith.size());
@@ -50,13 +53,13 @@ public class DestinationProcessor extends AbstractProcessor {
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
-        return Collections.singleton(
-                Destination.class.getCanonicalName()
-        );
+        System.out.println(TAG + " >>> run fun getSupportedAnnotationTypes() ");
+        return Collections.singleton(Destination.class.getCanonicalName());
     }
 
-//    @Override
-//    public SourceVersion getSupportedSourceVersion() {
-//        return SourceVersion.RELEASE_8;
-//    }
+    @Override
+    public SourceVersion getSupportedSourceVersion() {
+        System.out.println(TAG + " >>> run fun getSupportedSourceVersion() ");
+        return SourceVersion.RELEASE_8;
+    }
 }
