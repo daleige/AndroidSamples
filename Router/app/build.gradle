@@ -51,6 +51,6 @@ dependencies {
 
 task testTask{
     doLast {
-        println("0000011111---111111999999")
+        println("${project.name} testTask running-------")
     }
 }
