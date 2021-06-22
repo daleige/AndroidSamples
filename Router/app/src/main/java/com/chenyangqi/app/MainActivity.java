@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import com.chenyangqi.app.mapping.RouterMapping_1624341159128;
 import com.chenyangqi.router.annotations.Destination;
 
 @Destination(url = "router://home_page",description = "首页")
