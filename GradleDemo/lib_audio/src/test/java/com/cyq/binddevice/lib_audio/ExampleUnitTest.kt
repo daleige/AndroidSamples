@@ -1,6 +1,5 @@
-package com.cyq.gradle
+package com.cyq.binddevice.lib_audio
 
-import android.util.Log
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -14,10 +13,5 @@ class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
         assertEquals(4, 2 + 2)
-    }
-
-    @Test
-    fun testFun1() {
-        println("测试")
     }
 }

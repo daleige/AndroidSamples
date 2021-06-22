@@ -1,3 +1,4 @@
+include ':lib_audio'
 include ':lib_image'
 include ':lib_network'
 include ':lib_base'

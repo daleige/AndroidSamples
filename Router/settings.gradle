@@ -1,5 +1,4 @@
 include ':app'
-include ':lib_test'
 include ':router-annotations'
 include ':router-processor'
 rootProject.name = "Router"
