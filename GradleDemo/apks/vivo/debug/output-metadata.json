@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.cyq.gradle.vivo.debug",
+  "variantName": "processVivoDebugResources",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "versionCode": 1,
+      "versionName": "1.0-demo-debug",
+      "outputFile": "app-vivo-debug.apk"
+    }
+  ]
+}
