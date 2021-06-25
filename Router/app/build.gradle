@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'com.chenyangqi.router'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 router {
@@ -37,8 +39,9 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-//    implementation project(":router-annotations")
-//    annotationProcessor project(":router-processor")
-    implementation 'com.chenyangqi.router:router-annotations:1.0.0'
-    annotationProcessor 'com.chenyangqi.router:router-processor:1.0.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation project(":router-annotations")
+    kapt project(":router-processor")
+//    implementation 'com.chenyangqi.router:router-annotations:1.0.0'
+//    kapt 'com.chenyangqi.router:router-processor:1.0.0'
 }
