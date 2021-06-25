@@ -18,15 +18,18 @@ class RouterPlugin implements Plugin<Project> {
 //            Transform transform = new RouterMappingTransform()
 //            appExtension.registerTransform(transform)
 //        }
+
         //注册扩展参数
         project.getExtensions().create("router", RouterExtension)
-
+        println("root_project_dir:${project.rootProject.projectDir.absolutePath}")
         //1、自动帮用户传递路劲参数到注解处理器中
         if (project.extensions.findByName("kapt") != null) {
+            println ("kapt  ----> 不为空")
             project.extensions.findByName("kapt").arguments {
                 arg("root_project_dir", project.rootProject.projectDir.absolutePath)
-                println("step1:传递参数到注解处理器中")
             }
+        }else {
+            println ("kapt  ----> 为空")
         }
 
         //2、实现旧的构建产物自动清理

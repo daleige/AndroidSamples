@@ -2,7 +2,12 @@ package com.chenyangqi.router.processor;
 
 import com.chenyangqi.router.annotations.Destination;
 import com.google.auto.service.AutoService;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.Writer;
 import java.util.Collections;
 import java.util.Set;
@@ -32,6 +37,7 @@ public class DestinationProcessor extends AbstractProcessor {
             return false;
         }
         System.out.println(TAG + "  >>> start process...");
+
         Set<? extends Element> elementsAnnotatedWith = roundEnvironment.getElementsAnnotatedWith(Destination.class);
         System.out.println(TAG + " >>> all elementsAnnotatedWith count size=" + elementsAnnotatedWith.size());
         if (elementsAnnotatedWith.size() < 1) {
@@ -47,6 +53,8 @@ public class DestinationProcessor extends AbstractProcessor {
         builder.append("public class ").append(className).append(" {\n\n");
         builder.append("    public static Map<String, String> get() {\n");
         builder.append("        Map<String, String> mapping = new HashMap<>();\n");
+
+        final JsonArray destinationJsonArray = new JsonArray();
 
         for (Element element : elementsAnnotatedWith) {
             final TypeElement typeElement = (TypeElement) element;
@@ -68,6 +76,12 @@ public class DestinationProcessor extends AbstractProcessor {
                     .append("\"")
                     .append(realPath)
                     .append("\");\n");
+
+            JsonObject item = new JsonObject();
+            item.addProperty("url", url);
+            item.addProperty("description", description);
+            item.addProperty("realPath", realPath);
+            destinationJsonArray.add(item);
         }
 
         builder.append("        return mapping;\n");
@@ -90,6 +104,33 @@ public class DestinationProcessor extends AbstractProcessor {
             throw new RuntimeException("Error while create file:" + mappingFullClassName, e);
         }
 
+        //--------------------------------------------------------------------------------
+        //写入json到本地文件中
+        String rootDir = processingEnv.getOptions().get("root_project_dir");
+        System.out.println("rootDie:" + rootDir);
+//        if (rootDir == null) {
+//            rootDir = "E:\\StudySpace\\AndroidSamples\\Router";
+//            //throw new RuntimeException("rootDir is null!");
+//        }
+        System.out.println(" >>> rootDir:" + rootDir);
+        final File rootDirFile = new File(rootDir);
+        if (!rootDirFile.exists()) {
+            throw new RuntimeException("root_project_dir not exist");
+        }
+        //创建子目录和mapping文件
+        File routerFileDir = new File(rootDirFile, "router_mapping");
+        if (!routerFileDir.exists()) {
+            routerFileDir.mkdir();
+        }
+        File mappingFile = new File(routerFileDir, "mapping_" + System.currentTimeMillis() + ".json");
+        try {
+            BufferedWriter out = new BufferedWriter(new FileWriter(mappingFile));
+            out.write(destinationJsonArray.toString());
+            out.flush();
+            out.close();
+        } catch (Throwable throwable) {
+            throw new RuntimeException("Error when writing json", throwable);
+        }
         System.out.println(TAG + " >>> end process...");
         return false;
     }
