@@ -48,7 +48,7 @@ class RouterPlugin implements Plugin<Project> {
             RouterExtension extension = project["router"]
             println("设置的保存wikiDir路径：${extension.wikiDir}")
 
-            // 3. 在javac任务 (compileDebugJavaWithJavac) 后，汇总生成文档
+            // 3. 在javac任务 (compileDebugJavaWithJavac) 后，汇总生成markdown文档
             project.tasks.findAll { task ->
                 task.name.startsWith('compile') &&
                         task.name.endsWith('JavaWithJavac')
