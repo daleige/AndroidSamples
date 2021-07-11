@@ -1,4 +1,4 @@
-package com.chenyangqi.business_login
+package com.chenyangqi.business
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

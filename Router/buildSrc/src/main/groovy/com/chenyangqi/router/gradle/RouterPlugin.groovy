@@ -1,11 +1,11 @@
 package com.chenyangqi.router.gradle
 
+import com.android.build.api.transform.Transform
 import com.android.build.gradle.AppExtension
+import com.android.build.gradle.AppPlugin
 import groovy.json.JsonSlurper
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-
-import javax.xml.crypto.dsig.Transform
 
 class RouterPlugin implements Plugin<Project> {
 
@@ -13,23 +13,23 @@ class RouterPlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
         //注册 Transform
-//        if (project.plugins.hasPlugin(AppPlugin)) {
-//            AppExtension appExtension = project.extensions.getByType(AppExtension)
-//            Transform transform = new RouterMappingTransform()
-//            appExtension.registerTransform(transform)
-//        }
+        if (project.plugins.hasPlugin(AppPlugin)) {
+            AppExtension appExtension = project.extensions.getByType(AppExtension)
+            Transform transform = new RouterMappingTransform()
+            appExtension.registerTransform(transform)
+        }
 
         //注册扩展参数
         project.getExtensions().create("router", RouterExtension)
         println("root_project_dir:${project.rootProject.projectDir.absolutePath}")
         //1、自动帮用户传递路劲参数到注解处理器中
         if (project.extensions.findByName("kapt") != null) {
-            println ("kapt  ----> 不为空")
+            println("kapt  ----> 不为空")
             project.extensions.findByName("kapt").arguments {
                 arg("root_project_dir", project.rootProject.projectDir.absolutePath)
             }
-        }else {
-            println ("kapt  ----> 为空")
+        } else {
+            println("kapt  ----> 为空")
         }
 
         //2、实现旧的构建产物自动清理

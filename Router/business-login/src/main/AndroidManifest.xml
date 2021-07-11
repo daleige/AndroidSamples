@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.chenyangqi.business_login">
+    package="com.chenyangqi.business">
 
     <application>
         <activity android:name=".LoginActivity"></activity>
