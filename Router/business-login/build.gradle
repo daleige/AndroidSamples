@@ -5,10 +5,6 @@ plugins {
     id 'com.chenyangqi.router'
 }
 
-router {
-    wikiDir getRootDir().absolutePath
-}
-
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"

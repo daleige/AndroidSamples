@@ -53,6 +53,8 @@ class RouterMappingTransform extends Transform {
     @Override
     void transform(TransformInvocation transformInvocation) throws TransformException, InterruptedException, IOException {
         super.transform(transformInvocation)
+        RouterMappingCollector collector = new RouterMappingCollector()
+
         // 遍历所有的输入
         transformInvocation.inputs.each {
             // 把 文件夹 类型的输入，拷贝到目标目录
@@ -63,6 +65,7 @@ class RouterMappingTransform extends Transform {
                                 directoryInput.contentTypes,
                                 directoryInput.scopes,
                                 Format.DIRECTORY)
+                collector.collector(directoryInput.file)
                 FileUtils.copyDirectory(directoryInput.file, destDir)
             }
 
@@ -73,10 +76,12 @@ class RouterMappingTransform extends Transform {
                                 jarInput.name,
                                 jarInput.contentTypes,
                                 jarInput.scopes, Format.JAR)
+                collector.collectorFromJarFile(jarInput.file)
                 if (dest.exists()) {
                     FileUtils.copyFile(jarInput.file, dest)
                 }
             }
         }
+        println("${getName()} all mapping class name= " + collector)
     }
 }

@@ -41,8 +41,12 @@ class RouterPlugin implements Plugin<Project> {
             }
         }
 
-        println("int RouterPlugin,apply from ${project.name}")
+        //只有AppPlugin类型的才需要生产Wiki文件
+        if (!project.plugins.hasPlugin(AppPlugin)) {
+            return
+        }
 
+        println("int RouterPlugin,apply from ${project.name}")
         //当配置阶段结束时获取设置的wikiDir
         project.afterEvaluate {
             RouterExtension extension = project["router"]
