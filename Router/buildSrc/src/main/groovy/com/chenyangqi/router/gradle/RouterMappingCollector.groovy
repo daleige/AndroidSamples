@@ -8,29 +8,29 @@ class RouterMappingCollector {
     private static final String CLASS_NAME_PREFIX = "RouterMapping_"
     private static final String CLASS_FILE_SUFFIX = ".class"
 
-    private final Set<String> mappingClassName = new HashSet<>()
+    private final Set<String> mappingClassNames = new HashSet<>()
 
     Set<String> getMappingClassName() {
-        return mappingClassName
+        return mappingClassNames
     }
 
     /**
      * 收集目录中的RouterMapping_xxx.class文件
      * @param classFile
      */
-    void collector(File classFile) {
+    void collect(File classFile) {
         if (classFile == null || !classFile.exists()) return
         if (classFile.isFile()) {
             if (classFile.absolutePath.contains(PACKAGE_NAME)
                     && classFile.name.startsWith(CLASS_NAME_PREFIX)
                     && classFile.name.endsWith(CLASS_FILE_SUFFIX)) {
-                String className = classFile.name.replace(CLASS_FILE_SUFFIX, "")
-                mappingClassName.add(className)
+                String className =
+                        classFile.name.replace(CLASS_FILE_SUFFIX, "")
+                mappingClassNames.add(className)
             }
         } else {
-            //是目录 则递归调用
             classFile.listFiles().each {
-                collect()
+                collect(it)
             }
         }
     }
@@ -40,8 +40,9 @@ class RouterMappingCollector {
      */
     void collectorFromJarFile(File jarFile) {
         Enumeration enumeration = new JarFile(jarFile).entries()
+
         while (enumeration.hasMoreElements()) {
-            JarEntry jarEntry = (JarEntry) enumeration.nextElement()
+            JarEntry jarEntry = (JarEntry)enumeration.nextElement()
             String entryName = jarEntry.getName()
             if (entryName.contains(PACKAGE_NAME)
                     && entryName.contains(CLASS_NAME_PREFIX)
@@ -50,7 +51,8 @@ class RouterMappingCollector {
                         .replace(PACKAGE_NAME, "")
                         .replace("/", "")
                         .replace(CLASS_FILE_SUFFIX, "")
-                mappingClassName.add(className)
+
+                mappingClassNames.add(className)
             }
         }
     }

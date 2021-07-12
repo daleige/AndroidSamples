@@ -57,6 +57,7 @@ class RouterMappingTransform extends Transform {
 
         // 遍历所有的输入
         transformInvocation.inputs.each {
+
             // 把 文件夹 类型的输入，拷贝到目标目录
             it.directoryInputs.each { directoryInput ->
                 def destDir = transformInvocation.outputProvider
@@ -65,7 +66,7 @@ class RouterMappingTransform extends Transform {
                                 directoryInput.contentTypes,
                                 directoryInput.scopes,
                                 Format.DIRECTORY)
-                collector.collector(directoryInput.file)
+                collector.collect(directoryInput.file)
                 FileUtils.copyDirectory(directoryInput.file, destDir)
             }
 
@@ -77,11 +78,10 @@ class RouterMappingTransform extends Transform {
                                 jarInput.contentTypes,
                                 jarInput.scopes, Format.JAR)
                 collector.collectorFromJarFile(jarInput.file)
-                if (dest.exists()) {
-                    FileUtils.copyFile(jarInput.file, dest)
-                }
+                FileUtils.copyFile(jarInput.file, dest)
             }
         }
-        println("${getName()} all mapping class name= " + collector)
+
+        println("${getName()} all mapping class name = " + collector.mappingClassName)
     }
 }

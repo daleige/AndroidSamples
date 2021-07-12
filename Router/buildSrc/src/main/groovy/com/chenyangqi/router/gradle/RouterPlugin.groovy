@@ -19,9 +19,6 @@ class RouterPlugin implements Plugin<Project> {
             appExtension.registerTransform(transform)
         }
 
-        //注册扩展参数
-        project.getExtensions().create("router", RouterExtension)
-        println("root_project_dir:${project.rootProject.projectDir.absolutePath}")
         //1、自动帮用户传递路劲参数到注解处理器中
         if (project.extensions.findByName("kapt") != null) {
             println("kapt  ----> 不为空")
@@ -45,6 +42,9 @@ class RouterPlugin implements Plugin<Project> {
         if (!project.plugins.hasPlugin(AppPlugin)) {
             return
         }
+
+        //注册扩展参数
+        project.getExtensions().create("router", RouterExtension)
 
         println("int RouterPlugin,apply from ${project.name}")
         //当配置阶段结束时获取设置的wikiDir
