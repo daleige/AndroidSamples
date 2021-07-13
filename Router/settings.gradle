@@ -1,3 +1,4 @@
+include ':router-runtime'
 include ':business-login'
 include ':app'
 include ':router-annotations'
