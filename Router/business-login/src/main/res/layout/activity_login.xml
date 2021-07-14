@@ -20,4 +20,12 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="200dp"
         android:text="username:" />
+
+    <Button
+        android:id="@+id/btnToHome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="300dp"
+        android:text="跳转首页" />
 </FrameLayout>

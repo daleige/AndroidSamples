@@ -65,7 +65,7 @@ class RouterMappingByteCodeBuilder1 implements Opcodes{
 
             mv.visitVarInsn(ALOAD, 0)
             mv.visitMethodInsn(INVOKESTATIC,
-                    "com/chenyangqi/router/mapping/$it",
+                    "com/chenyangqi/app/mapping/$it",
                     "get", "()Ljava/util/Map;", false)
             mv.visitMethodInsn(INVOKEINTERFACE,
                     "java/util/Map",
