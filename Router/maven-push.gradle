@@ -3,8 +3,7 @@ apply plugin: 'maven'
 
 // 读取工程的配置
 Properties gradleProperties = new Properties()
-gradleProperties.load(
-        project.rootProject.file('gradle.properties').newDataInputStream())
+gradleProperties.load(project.rootProject.file('gradle.properties').newDataInputStream())
 
 def VERSION_NAME = gradleProperties.getProperty("VERSION_NAME")
 def POM_URL = gradleProperties.getProperty("POM_URL")
