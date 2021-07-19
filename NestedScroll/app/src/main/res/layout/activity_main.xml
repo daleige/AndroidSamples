@@ -9,18 +9,18 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        app:layout_behavior="com.google.android.material.transformation.FabTransformationBehavior">
+        app:layout_behavior=".coordinator.HeaderBehavior">
 
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/holo_green_dark"/>
-
+            android:background="@android:color/holo_green_dark" />
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/mRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/mRecyclerView"/>
+        app:layout_behavior=".coordinator.BelowHeaderBehavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
