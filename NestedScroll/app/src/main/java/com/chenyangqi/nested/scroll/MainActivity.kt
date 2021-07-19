@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val mData: MutableList<String> = ArrayList()
-        for (i in 1..Int.MAX_VALUE / 2) {
+        for (i in 1..10000) {
             mData.add("item = $i")
         }
 

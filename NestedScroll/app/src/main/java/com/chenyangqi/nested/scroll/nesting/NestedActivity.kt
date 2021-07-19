@@ -17,7 +17,7 @@ class NestedActivity : AppCompatActivity() {
 
         val mRecyclerView = findViewById<RecyclerView>(R.id.mRecyclerView)
         val mData: MutableList<String> = ArrayList()
-        for (i in 1..Int.MAX_VALUE / 2) {
+        for (i in 1..10000) {
             mData.add("item = $i")
         }
         val adapter = MyAdapter(mData)

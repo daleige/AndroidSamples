@@ -58,8 +58,9 @@ class MyNestedScrollPreView @JvmOverloads constructor(
         val headerScrollUp = dy > 0 && scrollY < mHeaderHeight
         val headerScrollDown = dy < 0 && scrollY > 0 && !target.canScrollVertically(-1)
         if (headerScrollUp || headerScrollDown) {
-            scrollBy(0, dy)
-            consumed[1] = dy
+            val dy1:Int = (dy * 0.5).toInt()
+            scrollBy(0, dy1)
+            consumed[1] = dy1
         }
     }
 
