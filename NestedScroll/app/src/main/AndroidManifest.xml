@@ -8,16 +8,18 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.NestedScroll">
-        <activity android:name=".nesting.NesstingScrollActivity"></activity>
-        <activity android:name=".nesting.old.NestedActivity">
+        android:theme="@style/Theme.Design.Light.NoActionBar">
+        <activity android:name=".IndexActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".nesting.NesstingScrollActivity" />
+        <activity android:name="com.chenyangqi.nested.scroll.old.NestedActivity">
+        </activity>
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>
