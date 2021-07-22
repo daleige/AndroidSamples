@@ -9,7 +9,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/header_view_height">
+        android:layout_height="@dimen/header_view_height"
+        app:layout_behavior=".demo1.HeaderViewBehavior">
 
         <ImageView
             android:layout_width="match_parent"
@@ -19,10 +20,10 @@
     </RelativeLayout>
 
     <androidx.core.widget.NestedScrollView
-        android:background="@color/white"
         android:id="@+id/mNestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         app:layout_behavior=".demo1.CoverHeaderScrollBehavior">
 
         <TextView

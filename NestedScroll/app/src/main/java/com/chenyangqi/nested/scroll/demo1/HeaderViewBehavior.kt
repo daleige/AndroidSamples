@@ -1,9 +1,11 @@
 package com.chenyangqi.nested.scroll.demo1
 
 import android.content.Context
+import android.media.Image
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
 import com.chenyangqi.nested.scroll.MyApplication
@@ -12,21 +14,42 @@ import com.chenyangqi.nested.scroll.R
 /**
  * @describe
  * @author chenyangqi
- * @time 2021/7/22 15:02
+ * @time 2021/7/22 16:07
  */
-class CoverHeaderScrollBehavior<V : View>(context: Context, attributeSet: AttributeSet?) :
+class HeaderViewBehavior<V : View>(context: Context, attributeSet: AttributeSet?) :
     CoordinatorLayout.Behavior<View>(context, attributeSet) {
+    private val TAG = "HeaderViewBehavior"
 
-    private val TAG = "CoverHeaderScrollBehavior"
-
-    override fun onLayoutChild(
+    override fun layoutDependsOn(
         parent: CoordinatorLayout,
         child: View,
-        layoutDirection: Int
+        dependency: View
     ): Boolean {
-        Log.d(TAG, "onLayoutChild----->")
-        child.translationY = getHeaderViewHeight()
-        return super.onLayoutChild(parent, child, layoutDirection)
+        val behavior: CoordinatorLayout.Behavior<*>? =
+            (dependency.layoutParams as CoordinatorLayout.LayoutParams).behavior
+        return behavior != null && behavior is CoverHeaderScrollBehavior<*>
+    }
+
+    override fun onDependentViewChanged(
+        parent: CoordinatorLayout,
+        child: View,
+        dependency: View
+    ): Boolean {
+        Log.d(
+            "test",
+            "onDependentViewChanged--->dependency.translationY=${dependency.translationY}"
+        )
+        if (dependency.translationY > 0 && dependency.translationY < getHeaderViewHeight()) {
+            child.translationY = -(getHeaderViewHeight() - dependency.translationY) * 0.5F
+            val viewGroup: ViewGroup = child as ViewGroup
+            val bgImageView = viewGroup.getChildAt(0)
+            val scale: Float =
+                ((getHeaderViewHeight() - dependency.translationY) / getHeaderViewHeight() * 0.2F + 1F)
+            Log.d(TAG, "1111--->$scale")
+            bgImageView.scaleX = scale
+            bgImageView.scaleY = scale
+        }
+        return super.onDependentViewChanged(parent, child, dependency);
     }
 
     override fun onStartNestedScroll(
@@ -50,18 +73,7 @@ class CoverHeaderScrollBehavior<V : View>(context: Context, attributeSet: Attrib
         type: Int
     ) {
         super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed, type)
-        if (dy > 0) {
-            //向上滑动
-            if (child.translationY > 0) {
-                val distanceY = child.translationY - dy
-                if (distanceY > 0) {
-                    child.translationY = distanceY
-                    consumed[1] = dy
-                }
-            } else {
-                child.translationY = 0F
-            }
-        }
+        Log.d(TAG, "onNestedPreScroll--->dy=$dy")
     }
 
     override fun onNestedScroll(
@@ -86,15 +98,8 @@ class CoverHeaderScrollBehavior<V : View>(context: Context, attributeSet: Attrib
             type,
             consumed
         )
-        Log.d(TAG, "dyUnconsumed=$dyUnconsumed    translationY=${child.translationY}")
-        if (dyUnconsumed < 0) {
-            val distanceY = child.translationY - dyUnconsumed
-            if (distanceY > 0 && distanceY < getHeaderViewHeight()) {
-                child.translationY = distanceY
-            } else {
-                child.translationY = getHeaderViewHeight()
-            }
-        }
+        Log.d(TAG, "onNestedScroll--->dyUnconsumed=$dyUnconsumed")
+
     }
 
     private fun getHeaderViewHeight(): Float {
