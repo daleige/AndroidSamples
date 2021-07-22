@@ -23,5 +23,7 @@ class NesstingScrollActivity : AppCompatActivity() {
         for (index in tabNames.indices) {
             mTabLayout.getTabAt(index)?.text = tabNames[index]
         }
+
+        mContainer.setHeaderBackground(mImgBg)
     }
 }
