@@ -10,7 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Design.Light.NoActionBar">
-        <activity android:name=".demo1.Demo1Activity"></activity>
+        <activity android:name=".dmo2.Demo2Activity"></activity>
+        <activity android:name=".demo1.Demo1Activity" />
         <activity android:name=".IndexActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".nesting.NesstingScrollActivity" />
-        <activity android:name=".old.NestedActivity"></activity>
+        <activity android:name=".old.NestedActivity" />
         <activity android:name=".coordinator.MainActivity" />
     </application>
 
