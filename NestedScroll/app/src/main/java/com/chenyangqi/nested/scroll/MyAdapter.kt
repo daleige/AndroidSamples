@@ -1,4 +1,4 @@
-package com.chenyangqi.nested.scroll.adapter
+package com.chenyangqi.nested.scroll
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.chenyangqi.nested.scroll.R
 
 /**
  * @describe 列表适配器
@@ -21,7 +20,7 @@ class MyAdapter(private val context: Context, private val data: MutableList<Stri
         return MyViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: MyAdapter.MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.tvItemContent.text = data[position]
     }
 

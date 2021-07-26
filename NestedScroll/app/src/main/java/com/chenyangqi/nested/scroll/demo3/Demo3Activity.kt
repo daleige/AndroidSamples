@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chenyangqi.nested.scroll.R
-import com.chenyangqi.nested.scroll.adapter.MyAdapter
+import com.chenyangqi.nested.scroll.MyAdapter
 import kotlinx.android.synthetic.main.activity_demo3.*
 
 class Demo3Activity : AppCompatActivity() {
