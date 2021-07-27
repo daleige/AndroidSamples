@@ -1,4 +1,4 @@
-package com.chenyangqi.nested.scroll.dmo2
+package com.chenyangqi.nested.scroll.demo2
 
 import android.content.Context
 import android.util.AttributeSet
@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
  * @author chenyangqi
  * @time 2021/7/23 10:44
  */
-class ScrollTitleBehavior<V : View>(context: Context, attributeSet: AttributeSet?) :
+class Demo2ScrollTitleBehavior<V : View>(context: Context, attributeSet: AttributeSet?) :
     CoordinatorLayout.Behavior<V>(context, attributeSet) {
 
     private var distanceY: Float = 0F

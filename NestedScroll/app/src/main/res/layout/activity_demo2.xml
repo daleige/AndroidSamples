@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".dmo2.Demo2Activity">
+    tools:context=".demo2.Demo2Activity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -44,6 +44,6 @@
         android:text="Demo 2"
         android:textColor="#ffffff"
         android:textSize="18sp"
-        app:layout_behavior=".dmo2.ScrollTitleBehavior" />
+        app:layout_behavior=".demo2.Demo2ScrollTitleBehavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

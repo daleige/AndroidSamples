@@ -1,4 +1,4 @@
-package com.chenyangqi.nested.scroll.dmo2
+package com.chenyangqi.nested.scroll.demo2
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

@@ -7,6 +7,7 @@
     tools:context=".demo3.Demo3Activity">
 
     <RelativeLayout
+        app:layout_behavior=".demo3.Demo3HeaderBehavior"
         android:layout_width="match_parent"
         android:layout_height="200dp">
 

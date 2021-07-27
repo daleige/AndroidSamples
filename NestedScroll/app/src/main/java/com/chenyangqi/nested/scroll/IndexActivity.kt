@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.chenyangqi.nested.scroll.demo1.Demo1Activity
 import com.chenyangqi.nested.scroll.demo3.Demo3Activity
-import com.chenyangqi.nested.scroll.dmo2.Demo2Activity
+import com.chenyangqi.nested.scroll.demo2.Demo2Activity
 import com.chenyangqi.nested.scroll.nesting.NesstingScrollActivity
 import kotlinx.android.synthetic.main.activity_index.*
 
