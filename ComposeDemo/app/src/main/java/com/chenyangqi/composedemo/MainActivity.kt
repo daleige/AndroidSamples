@@ -51,6 +51,9 @@ class MainActivity : ComponentActivity() {
                 )
                 Text("Davenport, California", style = typography.body2)
                 Text("December 2018", style = typography.body2)
+
+                //嵌套其他的Composable
+                NewsStory(name = "Compose")
             }
         }
     }
