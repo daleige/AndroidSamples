@@ -2,10 +2,12 @@ package com.chenyangqi.composedemo
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
@@ -42,7 +44,12 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier
                         .height(200.dp)
                         .fillMaxWidth()
-                        .clip(shape = RoundedCornerShape(4.dp)),
+                        .clip(shape = RoundedCornerShape(4.dp))
+                        .clickable {
+                            Toast
+                                .makeText(this@MainActivity, "click imageview", Toast.LENGTH_SHORT)
+                                .show()
+                        },
                     contentScale = ContentScale.Crop
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -59,8 +66,36 @@ class MainActivity : ComponentActivity() {
 
                 //嵌套其他的Composable
                 ArtistCard()
-            }
 
+                //weight使用
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(40.dp)
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .weight(1.5F)
+                            .background(Color.Red),
+                        text = "1.5 weight"
+                    )
+                    Text(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .weight(3F)
+                            .background(Color.Gray),
+                        text = " 3 weight"
+                    )
+                    Text(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .weight(4.5F)
+                            .background(Color.Green),
+                        text = " 4.5 weight"
+                    )
+                }
+            }
         }
     }
 
@@ -74,30 +109,47 @@ class MainActivity : ComponentActivity() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                contentDescription = null
+                painter = painterResource(id = R.drawable.avatar),
+                contentDescription = null,
+                contentScale = ContentScale.FillBounds,
+                modifier = Modifier
+                    .clip(shape = RoundedCornerShape(35.dp))
+                    .height(70.dp)
+                    .width(70.dp)
+                    .clickable {
+                        Toast
+                            .makeText(this@MainActivity, "click avatar", Toast.LENGTH_SHORT)
+                            .show()
+                    }
             )
             Column() {
-                Text("Alfred Sisley")
-                Text("3 minute age")
+                Text(
+                    "Alfred Sisley",
+                    modifier = Modifier.paddingFromBaseline(30.dp)
+                )
+                Text(
+                    "3 minute age",
+                    modifier = Modifier.offset(x = 30.dp)
+                )
             }
             Box(
-                modifier = Modifier
-                    .width(70.dp)
-                    .height(70.dp),
+                modifier = Modifier.size(width = 70.dp, height = 70.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = "",
+                Text(
+                    text = "",
                     Modifier
                         .background(Color.Black)
                         .fillMaxWidth()
-                        .fillMaxHeight())
-
-                Text(text = "",
+                        .fillMaxHeight()
+                )
+                Text(
+                    text = "",
                     Modifier
                         .background(Color.Blue)
                         .height(50.dp)
-                        .width(50.dp))
+                        .width(50.dp)
+                )
             }
         }
     }
