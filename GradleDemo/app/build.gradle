@@ -4,114 +4,40 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    compileSdk 30
 
     defaultConfig {
-        applicationId "com.cyq.gradle"
-        minSdkVersion 21
-        targetSdkVersion 30
+        applicationId "com.chenyangqi.gradle"
+        minSdk 19
+        targetSdk 30
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    //签名配置
-    signingConfigs {
-        release {
-            keyAlias "gradle_demo"
-            keyPassword "cyq123456"
-            storeFile file("../app_key.keystore")
-            storePassword "cyq123456"
-        }
-    }
-
-    //配置构建类型
     buildTypes {
         release {
-            //代码压缩.删除无用资源
-            minifyEnabled false
-            //开启混淆，打开资源压缩
-            shrinkResources false
-            //打开资源压缩
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-
-        debug {
-            //debug包设置不同的applicationId和versionName，便于在一台机器上测试不同环境的APP
-            applicationIdSuffix '.debug'
-            versionNameSuffix '-debug'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
-    flavorDimensions "version"
-
-    //同一个应用程序，使用不同的资源和类
-    productFlavors {
-        oppo {
-            dimension "version"
-            applicationIdSuffix '.oppo'
-            versionNameSuffix "-demo"
-            //其他可以配置的选项
-            //minSdkVersion
-            //targetSdkVersion
-            //versionCode
-            //versionName
-            //signingConfigs
-        }
-        vivo {
-            dimension "version"
-            applicationIdSuffix '.vivo'
-            versionNameSuffix "-demo"
-        }
-        huawei {
-            dimension "version"
-            applicationIdSuffix '.huawei'
-            versionNameSuffix "-demo"
-        }
-    }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
     kotlinOptions {
         jvmTarget = '1.8'
     }
-
-
-    dependencies {
-        implementation project(path: ':lib_base')
-        implementation project(path: ':lib_image')
-        implementation project(path: ':lib_network')
-        implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-        implementation 'androidx.core:core-ktx:1.3.2'
-        implementation 'androidx.appcompat:appcompat:1.2.0'
-        implementation 'com.google.android.material:material:1.3.0'
-        implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-
-        testImplementation 'junit:junit:4.+'
-        androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-        androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    }
 }
 
-task printVariantNames() {
-    doLast {
-        android.applicationVariants.all { variant ->
-            println variant.name
-        }
-    }
-}
+dependencies {
 
-task copyApks(type: Copy ) {
-    from("$buildDir/outputs/apk") {
-        //exclude '**/*unsigned.apk', '**/*unaligned.apk'
-    }
-    into '../apks'
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.3.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }
-
