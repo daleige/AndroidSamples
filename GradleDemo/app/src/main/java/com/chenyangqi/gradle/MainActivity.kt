@@ -10,4 +10,8 @@ class MainActivity : AppCompatActivity() {
 
         println("-------")
     }
+
+    private fun test(){
+        println("-------A")
+    }
 }
