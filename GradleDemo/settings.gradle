@@ -1,6 +1,10 @@
-include ':lib_audio'
-include ':lib_image'
-include ':lib_network'
-include ':lib_base'
-include ':app'
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        jcenter() // Warning: this repository is going to shut down soon
+    }
+}
 rootProject.name = "GradleDemo"
+include ':app'
