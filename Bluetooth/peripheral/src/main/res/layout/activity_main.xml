@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <com.cyq.common.LampView
+        android:id="@+id/lampView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center" />
+
+    <Switch
+        android:id="@+id/switchView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="打开/关闭蓝牙"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+    <Button
+        android:id="@+id/btnOpenAdvertise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="开启广播" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textColor="#000000"
+        android:layout_marginStart="5dp"
+        android:text="相关操控"/>
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:alignContent="stretch"
+        app:alignItems="stretch"
+        app:flexWrap="wrap">
+
+        <Button
+            android:id="@+id/btnOpenLamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:text="开灯" />
+
+        <Button
+            android:layout_marginEnd="5dp"
+            android:id="@+id/btnCloseLamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="关灯" />
+
+        <Button
+            android:layout_marginEnd="5dp"
+            android:id="@+id/btnRedLamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="红色灯光" />
+
+        <Button
+            android:layout_marginEnd="5dp"
+            android:id="@+id/btnYellowLamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="黄色灯光" />
+
+        <Button
+            android:layout_marginEnd="5dp"
+            android:id="@+id/btnGreenLamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="绿色灯光" />
+    </com.google.android.flexbox.FlexboxLayout>
+</LinearLayout>

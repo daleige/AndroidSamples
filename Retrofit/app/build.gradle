@@ -41,6 +41,13 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation project(path: ':lib_network')
+
+    compile files('providedlibs/iot-sdk-release-V3.0.jar')
+
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+
+    implementation 'com.google.code.gson:gson:2.8.6'
 //
 //    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
 //    implementation("com.squareup.okio:okio:2.9.0")

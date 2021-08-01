@@ -1,0 +1,11 @@
+include ':router-runtime'
+include ':business-login'
+include ':app'
+include ':router-annotations'
+include ':router-processor'
+rootProject.name = "Router"
+
+//打印所有gradle 任务名称
+//gradle.taskGraph.beforeTask { task ->
+//    println("[all tast]--->" + task.name)
+//}

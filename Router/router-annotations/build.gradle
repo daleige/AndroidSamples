@@ -1,0 +1,7 @@
+apply plugin: 'java'
+
+targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_1_8
+
+//引用发布仓库的maven-push.gradle
+apply from: rootProject.file("maven-push.gradle")

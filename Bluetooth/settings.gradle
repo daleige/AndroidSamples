@@ -1,0 +1,4 @@
+include ':common'
+include ':peripheral'
+include ':app'
+rootProject.name = "Bluetooth"

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.cyq.customview.blur.BlurActivity
 import com.cyq.customview.drawText.DrawTextActivity
 import com.cyq.customview.flowLayout.FlowLayoutActivity
+import com.cyq.customview.image.MatrixActivity
 import com.cyq.customview.intercept.InterceptActivity
 import com.cyq.customview.nineLayout.NineImageLayoutActivity
 import com.cyq.customview.paintView.PaintViewActivity
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         mBtnNineLayout.setOnClickListener(this)
         mBtnBlue.setOnClickListener(this)
         mBtnIntercept.setOnClickListener(this)
+        mBtnMatrix.setOnClickListener(this)
     }
 
     override fun onClick(v: View) {
@@ -60,6 +62,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
             R.id.mBtnIntercept -> {
                 intent.setClass(this, InterceptActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.mBtnMatrix ->{
+                intent.setClass(this, MatrixActivity::class.java)
                 startActivity(intent)
             }
             else -> {

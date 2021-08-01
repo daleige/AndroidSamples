@@ -1,0 +1,41 @@
+// 引用groovy插件，编译插件工程中的代码
+apply plugin: 'groovy'
+plugins {
+    id 'java-library'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+// 声明仓库的地址
+repositories {
+    jcenter()
+    google()
+}
+
+// 声明依赖的包
+dependencies {
+    implementation gradleApi()
+    implementation localGroovy()
+}
+
+// 调用maven插件，用于发布
+apply plugin: 'maven'
+
+// 配置maven插件中的uploadArchives任务
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            // 设置发布路径为 工程根目录下面的 repo 文件夹
+            repository(url: uri('../repo')) {
+                // 设置groupId，通常为包名
+                pom.groupId = 'com.chenyangqi.router'
+                // 设置artifactId，为当前插件的名称
+                pom.artifactId = 'router-gradle-plugin'
+                // 设置 插件的版本号
+                pom.version = '1.0.0'
+            }
+        }
+    }
+}

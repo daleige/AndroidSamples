@@ -216,18 +216,71 @@ public class AccountController {
     }
 
     @PostMapping("/getPersonInfo")
+<<<<<<< HEAD
     public String getPersonInfo(@RequestParam(name = "id") int id,
                                 @RequestParam(name = "name") String name) {
         Result<JSONObject> result = new Result<>();
+=======
+    public ResponseEntity<String> getPersonInfo(@RequestParam(name = "id") int id,
+                                                @RequestParam(name = "name") String name) {
+        //刷新accessToken:生成新的accessToken
+        Result<JSONObject> result = new Result<>();
+        //response
+>>>>>>> dac1f26ce0170e33e8ec8f5f6edbecd52d596fab
         result.setCode(200);
         result.setDescription("success");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("id", id);
         jsonObject.put("name", name);
+<<<<<<< HEAD
         jsonObject.put("age", 45);
         jsonObject.put("email", "766587897@qq.com");
         jsonObject.put("phone", "1763984933");
         result.setData(jsonObject);
         return new Gson().toJson(result);
+=======
+        jsonObject.put("age", 28);
+        jsonObject.put("phone", "185634523402");
+        jsonObject.put("email", "989765987@qq.com");
+        result.setData(jsonObject);
+        return ResponseEntity.status(200).body(new Gson().toJson(result));
+    }
+
+    @GetMapping("/getDeviceInfo")
+    public ResponseEntity<String> getPersonInfo(@RequestParam(name = "deviceId") String id) {
+        //刷新accessToken:生成新的accessToken
+        Result<JSONObject> result = new Result<>();
+        //response
+        result.setCode(200);
+        result.setDescription("success");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("deviceId", id);
+        jsonObject.put("name", "美的空调");
+        jsonObject.put("time", "2021年1月1日");
+        result.setData(jsonObject);
+        return ResponseEntity.status(200).body(new Gson().toJson(result));
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/postJson", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public ResponseEntity<String> postJson(@RequestBody JSONObject object) {
+        //刷新accessToken:生成新的accessToke
+        Result<JSONObject> result = new Result<>();
+        //response
+        result.setCode(200);
+        result.setDescription("success");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("deviceId", object.get("id").toString());
+        jsonObject.put("name", object.get("name").toString());
+        jsonObject.put("time", "2021年1月1日");
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        result.setData(jsonObject);
+        return ResponseEntity.status(200).body(new Gson().toJson(result));
+>>>>>>> dac1f26ce0170e33e8ec8f5f6edbecd52d596fab
     }
 }

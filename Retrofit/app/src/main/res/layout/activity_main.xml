@@ -1,16 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity">
+
     <Button
+        android:id="@+id/btnGet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="发送POST表单请求"
-        android:id="@+id/btnPostFormat"/>
+        android:text="get请求"
+        android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/btnPostFormat1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Post表单，通过BodyCallback返回"
+        android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/btnPostFormat2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Post表单，通过DefaultCallback返回"
+        android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/btnPostJson"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PostJson请求"
+        android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/btnDownLoad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="文件下载"
+        android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/btnUpload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="文件上传"
+        android:textAllCaps="false" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ProgressBar
+            android:id="@+id/progress"
+            style="?android:progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/tvProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="0%" />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:id="@+id/image"/>
 
 
 </LinearLayout>
