@@ -2,9 +2,9 @@ package com.chenyangqi.gradle
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.chenyangqi.gradle.proguard.Test1
-import com.chenyangqi.gradle.proguard.Test2
-import com.chenyangqi.gradle.proguard.TestUtils
+import com.chenyangqi.gradle.test.Test1
+import com.chenyangqi.gradle.test.Test2
+import com.chenyangqi.gradle.test.TestUtils
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
