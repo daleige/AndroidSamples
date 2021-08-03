@@ -16,6 +16,15 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release {
+            keyAlias 'chenyangqi'
+            keyPassword '123456'
+            storeFile file('../app_key.jks')
+            storePassword '123456'
+        }
+    }
+
     buildTypes {
         debug {
             minifyEnabled false
@@ -23,15 +32,40 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {
+            signingConfig signingConfigs.release
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    //设置apk划分维度
+    flavorDimensions "test", "product"
+
+    productFlavors {
+        jisu {
+            dimension "test"
+        }
+
+        sit {
+            dimension "test"
+            applicationIdSuffix ".sit"
+        }
+
+        prod {
+            dimension "product"
+        }
+
+        prod2 {
+            dimension "product"
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = '1.8'
     }
