@@ -39,25 +39,40 @@ android {
         }
     }
 
-    //设置apk划分维度
-    flavorDimensions "test", "product"
+    // 设置apk划分维度
+    // version用来表示APP版本，比如极速版，普通版，免费版付费版等
+    // environment用来表示运行环境，比如系统集成测试环境sit，和生产环境prod等
+    flavorDimensions "version", "environment"
 
     productFlavors {
-        jisu {
-            dimension "test"
+        speed {
+            dimension "version"
+            applicationIdSuffix ".speed"
+            //设置混淆文件
+            //consumerProguardFiles 'consumer-rules.pro'
+            //配置差异化的logo和appName
+            manifestPlaceholders = [
+                    logo   : "@mipmap/ic_launcher_speed",
+                    appName: "GradleDemo极速版"
+            ]
+        }
+
+        normal {
+            dimension "version"
+            //配置差异化的logo和appName
+            manifestPlaceholders = [
+                    logo   : "@mipmap/ic_launcher",
+                    appName: "GradleDemo"
+            ]
         }
 
         sit {
-            dimension "test"
+            dimension "environment"
             applicationIdSuffix ".sit"
         }
 
         prod {
-            dimension "product"
-        }
-
-        prod2 {
-            dimension "product"
+            dimension "environment"
         }
     }
 
