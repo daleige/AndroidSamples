@@ -11,7 +11,7 @@ android {
         minSdk 19
         targetSdk 30
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -42,11 +42,27 @@ android {
     // 设置apk划分维度
     // version用来表示APP版本，比如极速版，普通版，免费版付费版等
     // environment用来表示运行环境，比如系统集成测试环境sit，和生产环境prod等
-    flavorDimensions "version", "environment"
+    flavorDimensions "channel", "version", "environment"
 
     productFlavors {
+        oppo {
+            dimension "channel"
+            manifestPlaceholders = [MTA_CHANNEL_VALUE: "oppo"]
+        }
+
+        vivo {
+            dimension "channel"
+            manifestPlaceholders = [MTA_CHANNEL_VALUE: "vivo"]
+        }
+
+        xiaomi {
+            dimension "channel"
+            manifestPlaceholders = [MTA_CHANNEL_VALUE: "xiaomi"]
+        }
+
         speed {
             dimension "version"
+            versionNameSuffix ".speed"
             applicationIdSuffix ".speed"
             //设置混淆文件
             //consumerProguardFiles 'consumer-rules.pro'
@@ -55,6 +71,8 @@ android {
                     logo   : "@mipmap/ic_launcher_speed",
                     appName: "GradleDemo极速版"
             ]
+            //定义字段在BuildConfig中
+            buildConfigField('boolean', "isSpeed", 'true')
         }
 
         normal {
@@ -64,15 +82,34 @@ android {
                     logo   : "@mipmap/ic_launcher",
                     appName: "GradleDemo"
             ]
+            buildConfigField('boolean', "isSpeed", 'false')
         }
 
         sit {
             dimension "environment"
+            versionNameSuffix ".sit"
             applicationIdSuffix ".sit"
+            applicationIdSuffix ".sit"
+            buildConfigField('String', 'baseUrl', '"https://sit..."')
         }
 
         prod {
             dimension "environment"
+            buildConfigField('String', 'baseUrl', '"https://prod..."')
+        }
+    }
+
+    //修改release apk的名字
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            if (variant.buildType.name == 'release') {
+                def fileName = "GradleDemo_${variant.productFlavors[0].name}_" +
+                        "${variant.productFlavors[1].name}_" +
+                        "${variant.productFlavors[2].name}_" +
+                        "${defaultConfig.versionName}" +
+                        "_release.apk"
+                output.outputFileName = fileName
+            }
         }
     }
 

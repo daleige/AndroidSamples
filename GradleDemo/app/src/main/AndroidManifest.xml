@@ -10,6 +10,11 @@
         android:roundIcon="${logo}"
         android:supportsRtl="true"
         android:theme="@style/Theme.GradleDemo">
+
+        <meta-data
+            android:name="MTA_CHANNEL"
+            android:value="${MTA_CHANNEL_VALUE}" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
