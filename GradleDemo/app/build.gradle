@@ -3,25 +3,26 @@ plugins {
     id 'kotlin-android'
 }
 
+
 android {
-    compileSdk 30
+    compileSdk COMPILE_SDK
 
     defaultConfig {
-        applicationId "com.chenyangqi.gradle"
-        minSdk 19
-        targetSdk 30
-        versionCode 1
-        versionName "1.0.0"
+        applicationId APPLICATION_ID
+        minSdk MIN_SDK
+        targetSdk TARGET_SDK
+        versionCode VERSION_CODE
+        versionName VERSION_NAME
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
         release {
-            keyAlias 'chenyangqi'
-            keyPassword '123456'
+            keyAlias "chenyangqi"
+            keyPassword "123456"
             storeFile file('../app_key.jks')
-            storePassword '123456'
+            storePassword "123456"
         }
     }
 
@@ -103,7 +104,8 @@ android {
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
             if (variant.buildType.name == 'release') {
-                def fileName = "GradleDemo_${variant.productFlavors[0].name}_" +
+                def fileName = "GradleDemo_" +
+                        "${variant.productFlavors[0].name}_" +
                         "${variant.productFlavors[1].name}_" +
                         "${variant.productFlavors[2].name}_" +
                         "${defaultConfig.versionName}" +
@@ -119,17 +121,18 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = JVM_TARGET
     }
 }
 
 dependencies {
-    implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.core:core-ktx:1.3.2'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.3.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation MULTIDEX
+    implementation CORE_KTX
+    implementation APPCOMPAT
+    implementation ANDROID_MATERIAL
+    implementation CONSTRAINTLAYOUT
+    testImplementation TEST_JUNIT
+    androidTestImplementation ANDROID_EXT_JUNIT
+    androidTestImplementation ANDROID_TEST_ESPRESSO
 }
+
