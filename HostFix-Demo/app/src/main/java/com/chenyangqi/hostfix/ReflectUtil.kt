@@ -9,40 +9,44 @@ import java.lang.reflect.Method
  */
 object ReflectUtil {
     /**
-     * 获取某个字段，并建他设置为可访问
+     * 获取某个字段，并将它设置为可访问
      */
     fun findField(instance: Any, name: String): Field {
         var clazz = instance.javaClass
-        clazz.let {
+        while (clazz != null) {
             try {
-                val field = it.getDeclaredField(name)
+                val field = clazz.getDeclaredField(name)
                 if (!field.isAccessible) {
                     field.isAccessible = true
                 }
                 return field
-            } catch (e: NoSuchFieldError) {
-                clazz = it.superclass as Class<Any>
+            } catch (e: NoSuchFieldException) {
+                clazz = clazz.superclass as Class<Any>
             }
         }
-        throw NoSuchFieldError("Field not found:$name")
+        throw NoSuchFieldException("Field not found: $name")
     }
 
     /**
-     * 获取某个方法，并修改他的设置为可访问
+     * 反射获取某个方法，并将它设置为可访问
      */
-    fun findMethod(instance: Any, name: String, vararg paramTypes: Class<*>): Method {
+    fun findMethod(
+        instance: Any,
+        name: String,
+        vararg paramType: Class<*>?
+    ): Method {
         var clazz = instance.javaClass
-        clazz.let {
+        while (clazz != null) {
             try {
-                val method = clazz.getDeclaredMethod(name, *paramTypes)
+                val method = clazz.getDeclaredMethod(name, *paramType)
                 if (!method.isAccessible) {
                     method.isAccessible = true
-                    return method
                 }
+                return method
             } catch (e: NoSuchMethodException) {
-                clazz = it.superclass as Class<Any>
+                clazz = clazz.superclass as Class<Any>
             }
         }
-        throw NoSuchMethodException("Method not found:$name")
+        throw NoSuchMethodException("Method not found: $name")
     }
 }
