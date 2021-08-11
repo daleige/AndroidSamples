@@ -14,14 +14,11 @@ object FileInputStreamTest {
         val inputStream = FileInputStream(srcFile)
         //如果目标文件不存在会自动创建
         val outputStream = FileOutputStream(destFile)
-
         val data = ByteArray(10 * 1024)
-
         while ((inputStream.read(data, 0, data.size)) != -1) {
             outputStream.write(data)
             outputStream.flush()
         }
-
         outputStream.close()
         inputStream.close()
     }

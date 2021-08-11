@@ -1,23 +1,11 @@
-import java.io.Serializable;
+import java.io.Serializable
 
-public class Student implements Serializable {
-
-    private String username;
-    private String id;
-    private int age;
-
-    public Student(String username, String id, int age) {
-        this.username = username;
-        this.id = id;
-        this.age = age;
-    }
-
-    @Override
-    public String toString() {
+class Student(private val username: String, private val id: String, private val age: Int) : Serializable {
+    override fun toString(): String {
         return "Student{" +
                 "username='" + username + '\'' +
                 ", id='" + id + '\'' +
                 ", age=" + age +
-                '}';
+                '}'
     }
 }

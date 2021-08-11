@@ -8,9 +8,7 @@ import java.io.OutputStreamWriter
 object InputStreamReader_Test {
     @JvmStatic
     fun main(args: Array<String>) {
-
-        val ips = FileInputStream("srcFile.dat")
-        val reader = InputStreamReader(ips, "utf-8")
+        val reader = InputStreamReader(FileInputStream("srcFile.dat"), "utf-8")
         val writer = OutputStreamWriter(FileOutputStream("write.dat"))
         val data = CharArray(1024)
         var c: Int
