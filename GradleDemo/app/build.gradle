@@ -31,12 +31,16 @@ android {
             minifyEnabled false
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "BUILD_TIME", "\"${System.currentTimeMillis()}\"")
+            //resValue("String", "title", "debug首页标题")
         }
         release {
             signingConfig signingConfigs.release
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "BUILD_TIME", "\"${System.currentTimeMillis()}\"")
+            //resValue("String", "title", "release首页标题")
         }
     }
 
@@ -92,6 +96,7 @@ android {
             applicationIdSuffix ".sit"
             applicationIdSuffix ".sit"
             buildConfigField('String', 'baseUrl', '"https://sit..."')
+            minSdkVersion 26
         }
 
         prod {
@@ -131,6 +136,8 @@ dependencies {
     implementation APPCOMPAT
     implementation ANDROID_MATERIAL
     implementation CONSTRAINTLAYOUT
+    implementation project(path: ':ib_image')
+    implementation("com.squareup.okhttp3:okhttp:4.9.0")
     testImplementation TEST_JUNIT
     androidTestImplementation ANDROID_EXT_JUNIT
     androidTestImplementation ANDROID_TEST_ESPRESSO

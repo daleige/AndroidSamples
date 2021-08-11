@@ -2,11 +2,10 @@
 Properties properties = new Properties()
 properties.load(project.rootProject.file("local.properties").newDataInputStream())
 
-def keyAlias = properties.getProperty('keyAlias')
-def keyPassword = properties.getProperty('keyPassword')
-def storePassword = properties.getProperty('storePassword')
+def username = properties.getProperty('username')
+def password = properties.getProperty('password')
 
-println("$keyAlias | $keyPassword | $storePassword")
+println("$username | $password ")
 
 ext {
     COMPILE_SDK = 30

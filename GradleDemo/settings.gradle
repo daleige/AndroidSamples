@@ -8,3 +8,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "GradleDemo"
 include ':app'
+include ':ib_image'

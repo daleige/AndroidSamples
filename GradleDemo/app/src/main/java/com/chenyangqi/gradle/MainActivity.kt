@@ -7,6 +7,7 @@ import android.util.Log
 import com.chenyangqi.gradle.test.Test1
 import com.chenyangqi.gradle.test.Test2
 import com.chenyangqi.gradle.test.TestUtils
+import okhttp3.OkHttpClient
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,6 +21,8 @@ class MainActivity : AppCompatActivity() {
         Log.d("test", "BaseUrl=${BuildConfig.baseUrl}")
         Log.d("test", "isSpeed=${BuildConfig.isSpeed}")
         Log.d("test", "MTA_CHANNEL=${getChannelInfo()}")
+
+        OkHttpClient().newBuilder()
     }
 
     private fun getChannelInfo(): String? {
