@@ -2,4 +2,4 @@
 <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/itemImage"
     android:layout_width="1080px"
-    android:layout_height="1920px" />
+    android:layout_height="1530px" />

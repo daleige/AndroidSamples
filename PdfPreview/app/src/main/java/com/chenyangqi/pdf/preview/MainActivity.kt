@@ -1,6 +1,7 @@
 package com.chenyangqi.pdf.preview
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.os.Bundle
@@ -25,27 +26,30 @@ class MainActivity : AppCompatActivity() {
 
         Thread {
             val filePath = copyFileToSdcard(this)
-            filePath?.let {
-                val odfFile = File(it)
-                val pdfDescriptor =
-                    ParcelFileDescriptor.open(odfFile, ParcelFileDescriptor.MODE_READ_ONLY)
-                val pdfRender = PdfRenderer(pdfDescriptor)
-                val pageCount = pdfRender.pageCount
-                Log.d("test", "总页数：$pageCount")
-                val bitmapArr = arrayOfNulls<Bitmap>(pageCount)
-                for (i in 0 until pageCount) {
-                    val page: PdfRenderer.Page = pdfRender.openPage(i)
-                    Log.d("test", "page width= ${page.width}  height=${page.height}")
-                    val bitmap = Bitmap.createBitmap(1080, 1920, Bitmap.Config.ARGB_8888)
-                    page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
-                    bitmapArr[i] = bitmap
-                    page.close()
-                }
-                adapter = MyAdapter(this, pdfRender, bitmapArr)
-                runOnUiThread(Runnable {
-                    mRecyclerView.adapter = adapter
-                })
-            }
+            startActivity(Intent(this,TestActivity::class.java))
+//            filePath?.let {
+//                val odfFile = File(it)
+//                val pdfDescriptor =
+//                    ParcelFileDescriptor.open(odfFile, ParcelFileDescriptor.MODE_READ_ONLY)
+//                val pdfRender = PdfRenderer(pdfDescriptor)
+//                val pageCount = pdfRender.pageCount
+//                Log.d("test", "总页数：$pageCount")
+//                val bitmapArr = arrayOfNulls<Bitmap>(pageCount)
+//                val start = System.currentTimeMillis()
+//                for (i in 0 until pageCount) {
+//                    val page: PdfRenderer.Page = pdfRender.openPage(i)
+//                    Log.d("test","width=${page.width} height=${page.height}")
+//                    val bitmap = Bitmap.createBitmap(page.width, page.height, Bitmap.Config.ARGB_8888)
+//                    page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+//                    bitmapArr[i] = bitmap
+//                    page.close()
+//                }
+//                Log.d("test", "生产${pageCount}张 Bitmap耗时=${System.currentTimeMillis() - start}")
+//                adapter = MyAdapter(this, pdfRender, bitmapArr)
+//                runOnUiThread(Runnable {
+//                    mRecyclerView.adapter = adapter
+//                })
+//            }
         }.start()
     }
 

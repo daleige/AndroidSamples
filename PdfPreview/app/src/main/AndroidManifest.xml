@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PdfPreview">
         <activity
+            android:name=".TestActivity"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
