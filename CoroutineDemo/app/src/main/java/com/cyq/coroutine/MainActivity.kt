@@ -8,6 +8,7 @@ import androidx.lifecycle.liveData
 import io.reactivex.internal.schedulers.IoScheduler
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
+import java.time.Year
 import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
@@ -58,6 +59,7 @@ class MainActivity : AppCompatActivity() {
 
         val kFunction0 = ::mainFun2
 
+        initEvent()
     }
 
     /**
@@ -96,8 +98,32 @@ class MainActivity : AppCompatActivity() {
         return arrayListOf()
     }
 
+    private val mainScope by lazy { MainScope() }
+
+    private fun initEvent() {
+        btnGlobalScope.setOnClickListener {
+            GlobalScope.launch {
+                btnGlobalScope.text="测试按钮"
+            }
+        }
+
+        btnGlobalScope2.setOnClickListener {
+            mainScope.launch {
+                btnGlobalScope2.text="测试按钮2"
+            }
+        }
+
+        btnAutoDisposal.setOnClickListener {
+            lifecycleScope.launch {
+                btnAutoDisposal.text="测试lifeCycleScope"
+            }
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         scope.cancel()
+        //用完销毁
+        mainScope.cancel()
     }
 }
