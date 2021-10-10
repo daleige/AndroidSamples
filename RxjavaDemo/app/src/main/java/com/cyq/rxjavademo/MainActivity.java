@@ -81,11 +81,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
 
-                Log.d(TAG, "上游 subscribe : 开始发射...");
+                Log.d(TAG, "step2:上游 subscribe : 开始发射...");
                 emitter.onNext("RxJavaStudy");// todo 2
 
                 emitter.onComplete();//todo 4
-                Log.d(TAG, "上游 subscribe : 发射完成...");
+                Log.d(TAG, "step5:上游 subscribe : 发射完成...");
             }
         }).subscribe(
                 //下游 Observer 观察者
@@ -93,12 +93,12 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSubscribe(Disposable d) {
                         //弹出加载框
-                        Log.d(TAG, "上游和下游订阅成功 onSubscribe 1");//todo 1
+                        Log.d(TAG, "step1:上游和下游订阅成功 onSubscribe 1");//todo 1
                     }
 
                     @Override
                     public void onNext(String s) {
-                        Log.d(TAG, "下游接收 onNext " + s); //todo 3
+                        Log.d(TAG, "step3:下游接收 onNext " + s); //todo 3
                     }
 
                     @Override
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete() {
                         //关闭加载框
-                        Log.d(TAG, "下游接收完成 onComplete "); //todo 5
+                        Log.d(TAG, "step4:下游接收完成 onComplete "); //todo 5
                     }
                 });
     }
