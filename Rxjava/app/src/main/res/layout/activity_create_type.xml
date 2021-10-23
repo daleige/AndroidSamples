@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".创建型操作符.CreateTypeActivity">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnCreate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="create操作符"
+        android:textAllCaps="false" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnJust"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="just操作符"
+        android:textAllCaps="false" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="empty操作符"
+        android:textAllCaps="false" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnFormArray"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="formArray操作符"
+        android:textAllCaps="false" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnRange"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="range操作符"
+        android:textAllCaps="false" />
+
+</LinearLayout>
