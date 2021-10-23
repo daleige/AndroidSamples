@@ -9,9 +9,16 @@
     tools:context=".MainActivity">
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnCreateType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/btnCreateType"
-        android:textAllCaps="false"
-        android:text="create操作符"/>
+        android:text="创建型操作符"
+        android:textAllCaps="false" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnTransfType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="装换型操作符"
+        android:textAllCaps="false" />
 </LinearLayout>
