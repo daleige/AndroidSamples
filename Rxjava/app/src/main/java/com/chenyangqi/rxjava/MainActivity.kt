@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.chenyangqi.rxjava.创建型操作符.CreateTypeActivity
 import com.chenyangqi.rxjava.变换型操作符.TransfActivity
+import com.chenyangqi.rxjava.合并型操作符.MeginActivity
 import com.chenyangqi.rxjava.条件型操作符.ConditionActivity
 import com.chenyangqi.rxjava.过滤型操作符.FilterActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -26,6 +27,9 @@ class MainActivity : AppCompatActivity() {
         btnConditionType.setOnClickListener {
             startActivity(Intent(this, ConditionActivity::class.java))
 
+        }
+        btnMegerType.setOnClickListener {
+            startActivity(Intent(this, MeginActivity::class.java))
         }
     }
 }
