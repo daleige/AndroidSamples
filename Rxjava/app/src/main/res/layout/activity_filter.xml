@@ -1,38 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="10dp"
-    tools:context=".MainActivity">
+    tools:context=".过滤型操作符.FilterActivity">
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnCreateType"
+        android:id="@+id/btnFilterOption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="创建型操作符"
+        android:text="filter操作符"
         android:textAllCaps="false" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnTransfType"
+        android:id="@+id/btnTakeOption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="装换型操作符"
+        android:text="take操作符"
         android:textAllCaps="false" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnFilterType"
+        android:id="@+id/btnDistinctOption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="过滤型操作符"
+        android:text="distinct操作符"
         android:textAllCaps="false" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnConditionType"
+        android:id="@+id/btnElementAtOption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="过滤型操作符"
+        android:text="elementAt操作符"
         android:textAllCaps="false" />
 </LinearLayout>

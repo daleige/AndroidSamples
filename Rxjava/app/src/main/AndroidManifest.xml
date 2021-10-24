@@ -10,6 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Rxjava">
         <activity
+            android:name=".合并型操作符.MeginActivity"
+            android:exported="true" />
+        <activity
+            android:name=".条件型操作符.ConditionActivity"
+            android:exported="true" />
+        <activity
+            android:name=".过滤型操作符.FilterActivity"
+            android:exported="true" />
+        <activity
             android:name=".变换型操作符.TransfActivity"
             android:exported="true" />
         <activity
