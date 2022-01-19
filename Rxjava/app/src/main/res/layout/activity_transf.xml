@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".变换型操作符.TransfActivity">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnMapOption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="map操作符"
+        android:textAllCaps="false" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnFlatMapOption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="flatMap操作符"
+        android:textAllCaps="false" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnConcatMapOption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="concatMap操作符"
+        android:textAllCaps="false" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnGroupByOption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="groupBy操作符"
+        android:textAllCaps="false" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnBufferOption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="buffer操作符"
+        android:textAllCaps="false" />
+
+
+</LinearLayout>

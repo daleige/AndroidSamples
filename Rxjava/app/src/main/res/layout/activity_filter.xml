@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".过滤型操作符.FilterActivity">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnFilterOption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="filter操作符"
+        android:textAllCaps="false" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnTakeOption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="take操作符"
+        android:textAllCaps="false" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnDistinctOption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="distinct操作符"
+        android:textAllCaps="false" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnElementAtOption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="elementAt操作符"
+        android:textAllCaps="false" />
+</LinearLayout>
