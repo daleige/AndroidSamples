@@ -2,6 +2,10 @@ package com.cyq.coroutine
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -20,5 +24,18 @@ class ExampleInstrumentedTest {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("com.cyq.coroutine", appContext.packageName)
+    }
+
+    @Test
+    fun testWithContext() {
+        runBlocking {
+            val result = withContext(Dispatchers.IO) {
+                delay(2000)
+                "this result value = 5"
+            }
+            withContext(Dispatchers.Main) {
+                println(Thread.currentThread().toString() + "=${result}")
+            }
+        }
     }
 }

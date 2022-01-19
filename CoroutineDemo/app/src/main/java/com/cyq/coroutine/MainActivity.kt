@@ -118,6 +118,16 @@ class MainActivity : AppCompatActivity() {
                 btnAutoDisposal.text="测试lifeCycleScope"
             }
         }
+
+        runBlocking {
+            val result = withContext(Dispatchers.IO) {
+                delay(2000)
+                "this result value = 5"
+            }
+            withContext(Dispatchers.Main) {
+                println(Thread.currentThread().toString() + "=${result}")
+            }
+        }
     }
 
     override fun onDestroy() {

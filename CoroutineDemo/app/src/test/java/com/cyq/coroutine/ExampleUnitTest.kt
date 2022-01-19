@@ -86,7 +86,7 @@ class ExampleUnitTest {
     fun testCoroutineScope() {
         suspend fun f() = coroutineScope {
             launch {
-                test()
+                test1()
             }
         }
         GlobalScope.launch {
@@ -95,7 +95,23 @@ class ExampleUnitTest {
         Thread.sleep(1000)
     }
 
-    private fun test() {
-        println("----------")
+    private suspend fun test1() {
+        println("-----begin test1-----")
+        delay(1100)
+        println("-----end test1-----")
+    }
+
+    private suspend fun test2() {
+        println("-----begin test2-----")
+        delay(1000)
+        println("-----end test2-----")
+    }
+
+    @Test
+    fun testWithContext() {
+        runBlocking {
+            test1()
+            test2()
+        }
     }
 }
