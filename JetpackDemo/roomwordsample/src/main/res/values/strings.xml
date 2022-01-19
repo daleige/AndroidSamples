@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">RoomWordSample</string>
     <string name="add_word">添加Word</string>
+    <string name="hint_word">Word...</string>
+    <string name="button_save">保存</string>
+    <string name="empty_not_saved">Word not saved because it is empty.</string>
 </resources>
