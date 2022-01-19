@@ -1,6 +1,8 @@
-package com.chenyangqi.roomword.sample
+package com.chenyangqi.roomword.sample.viewmodels
 
 import androidx.lifecycle.*
+import com.chenyangqi.roomword.sample.data.Word
+import com.chenyangqi.roomword.sample.data.WordRepository
 import kotlinx.coroutines.launch
 
 /**

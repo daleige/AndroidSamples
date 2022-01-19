@@ -1,4 +1,4 @@
-package com.chenyangqi.roomword.sample
+package com.chenyangqi.roomword.sample.data
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

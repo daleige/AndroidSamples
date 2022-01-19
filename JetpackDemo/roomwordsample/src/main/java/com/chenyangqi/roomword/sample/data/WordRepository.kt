@@ -1,4 +1,4 @@
-package com.chenyangqi.roomword.sample
+package com.chenyangqi.roomword.sample.data
 
 import androidx.annotation.WorkerThread
 import com.chenyangqi.roomword.sample.dao.WordDao
