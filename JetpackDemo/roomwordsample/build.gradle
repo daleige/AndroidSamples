@@ -37,9 +37,13 @@ android {
 
 }
 
-dependencies {
-    implementation 'androidx.core:core:1.6.0'
+configurations.all {
+    resolutionStrategy {
+        force 'androidx.core:core-ktx:1.6.0'
+    }
+}
 
+dependencies {
     // Dependencies for working with Architecture components
     // You'll probably have to update the version numbers in build.gradle (Project)
 
