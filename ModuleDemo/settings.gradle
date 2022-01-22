@@ -1,5 +1,0 @@
-include ':common'
-include ':personal'
-include ':order'
-include ':app'
-rootProject.name = "ModuleDemo"
