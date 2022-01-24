@@ -6,7 +6,14 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,5 +34,26 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            makeFlow().collect { value ->
+                when (value) {
+                    "str1" -> {
+                        Log.d("test", "collect str1")
+                    }
+                    "str2" -> {
+                        Log.d("test", "collect str2")
+                    }
+                }
+            }
+        }
+    }
+
+    private fun makeFlow() = flow {
+        Log.d("test", "emit str1")
+        emit("str1")
+
+        Log.d("test", "emit str2")
+        emit("str2")
     }
 }
