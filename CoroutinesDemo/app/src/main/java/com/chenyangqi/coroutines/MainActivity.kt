@@ -10,9 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -35,25 +33,46 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch {
             makeFlow().collect { value ->
                 when (value) {
                     "str1" -> {
-                        Log.d("test", "collect str1")
+                        Log.d("test", "${Thread.currentThread().name} collect str1")
                     }
                     "str2" -> {
-                        Log.d("test", "collect str2")
+                        Log.d("test", "${Thread.currentThread().name} collect str2")
                     }
                 }
             }
         }
+
+        simple()
+    }
+
+    /**
+     * flowOn切换线程是切换的collect前面的线程
+     */
+    private fun simple() {
+        lifecycleScope.launch(Dispatchers.Main) {
+            flow {
+                for (i in 1..5) {
+                    delay(100)
+                    emit(i)
+                }
+            }.map {
+                it * it
+            }.flowOn(Dispatchers.IO)//flowOn切换线程
+                .collect {
+                    Log.d("test", "${Thread.currentThread().name}: $it")
+                }
+        }
     }
 
     private fun makeFlow() = flow {
-        Log.d("test", "emit str1")
+        Log.d("test", "${Thread.currentThread().name}emit str1")
         emit("str1")
 
-        Log.d("test", "emit str2")
+        Log.d("test", "${Thread.currentThread().name}emit str2")
         emit("str2")
-    }
+    }.flowOn(Dispatchers.IO)
 }
