@@ -1,6 +1,7 @@
 package com.chenyangqi.event.dispatch
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
@@ -16,9 +17,8 @@ class SlideConflictActivity : AppCompatActivity() {
         views.add(layoutInflater.inflate(R.layout.pager_container, null))
         views.add(layoutInflater.inflate(R.layout.pager_container, null))
         findViewById<MyViewPager>(R.id.viewPage).adapter = MyPagerAdapter(views)
-
-
-        val listView2 = findViewById<ListView>(R.id.listView2)
+        Log.d("test_y", "----0")
+        val listView2 = findViewById<MyListView>(R.id.listView2)
         val strList: MutableList<String> = ArrayList()
         for (i in 0..99) {
             strList.add("listView2 item $i")

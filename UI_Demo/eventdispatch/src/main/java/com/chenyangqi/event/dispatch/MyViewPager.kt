@@ -16,6 +16,9 @@ class MyViewPager : ViewPager {
     constructor(context: Context) : super(context) {}
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {}
 
+    /**
+     * 外部拦截处理滑动冲突
+     */
     override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
         val actionMasked = ev.actionMasked
         if (actionMasked == MotionEvent.ACTION_DOWN || actionMasked == MotionEvent.ACTION_UP) {

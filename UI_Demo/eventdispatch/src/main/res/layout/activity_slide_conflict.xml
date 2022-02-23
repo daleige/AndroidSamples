@@ -27,7 +27,7 @@
         android:gravity="center"
         android:text="内部拦截" />
 
-    <HorizontalScrollView
+    <com.chenyangqi.event.dispatch.MyScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -35,22 +35,30 @@
         android:background="@android:color/holo_blue_bright">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <ListView
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:background="@color/purple_500">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="这是头部控件"
+                    android:textColor="@color/white"
+                    android:textSize="30sp" />
+            </FrameLayout>
+
+            <com.chenyangqi.event.dispatch.MyListView
                 android:id="@+id/listView2"
-                android:layout_width="300dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="200dp"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
                 android:background="@color/white" />
 
         </LinearLayout>
-
-        <!--        <Button-->
-        <!--            android:layout_width="300dp"-->
-        <!--            android:layout_height="match_parent"-->
-        <!--            android:layout_marginStart="200dp"-->
-        <!--            android:background="@android:color/white" />-->
-    </HorizontalScrollView>
+    </com.chenyangqi.event.dispatch.MyScrollView>
 </LinearLayout>
