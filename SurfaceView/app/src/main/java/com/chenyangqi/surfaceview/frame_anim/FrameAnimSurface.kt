@@ -1,6 +1,7 @@
 package com.chenyangqi.surfaceview.frame_anim
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Handler
 import android.os.HandlerThread
@@ -27,6 +28,14 @@ class FrameAnimSurface @JvmOverloads constructor(
     private var mIsDrawing = false
     private var mHandler: Handler? = null
 
+    //当前播放图片的下标
+    private var mCurrentIndex = 0
+
+    //一张图片执行的时长
+    private var mODuration = 60
+
+    //复用的bitmap
+    private var mBitmap: Bitmap? = null
 
     init {
         val hThread = HandlerThread(this.javaClass.simpleName + "_" + UUID.randomUUID())
@@ -51,7 +60,6 @@ class FrameAnimSurface @JvmOverloads constructor(
         mHandler?.sendEmptyMessage(1)
     }
 
-
     override fun surfaceDestroyed(p0: SurfaceHolder) {
         mIsDrawing = false
     }
@@ -69,4 +77,8 @@ class FrameAnimSurface @JvmOverloads constructor(
     }
 
     override fun surfaceChanged(p0: SurfaceHolder, p1: Int, p2: Int, p3: Int) {}
+
+    private fun createBitmap() {
+
+    }
 }
