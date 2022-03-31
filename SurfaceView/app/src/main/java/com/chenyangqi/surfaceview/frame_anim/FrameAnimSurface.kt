@@ -1,8 +1,7 @@
 package com.chenyangqi.surfaceview.frame_anim
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
+import android.graphics.*
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.Message
@@ -32,10 +31,20 @@ class FrameAnimSurface @JvmOverloads constructor(
     private var mCurrentIndex = 0
 
     //一张图片执行的时长
-    private var mODuration = 60
+    private var mDuration = 60
 
     //复用的bitmap
     private var mBitmap: Bitmap? = null
+
+    private var mResources = Util.getSourceId()
+
+    private var mBitmapRect = Rect()
+
+    private var mViewRect: Rect = Rect()
+
+    private var mPaint: Paint = Paint()
+
+    private var mOptions: BitmapFactory.Options
 
     init {
         val hThread = HandlerThread(this.javaClass.simpleName + "_" + UUID.randomUUID())
@@ -43,11 +52,22 @@ class FrameAnimSurface @JvmOverloads constructor(
         mHandler = Handler(hThread.looper, object : Handler.Callback {
             override fun handleMessage(msg: Message): Boolean {
                 while (mIsDrawing) {
-                    draw()
+                    for (resourceId in mResources) {
+                        val beginTime = System.currentTimeMillis()
+                        createBitmap(resourceId)
+                        draw()
+                        val userTime = System.currentTimeMillis() - beginTime
+                        if (userTime < mDuration) {
+                            Thread.sleep(mDuration - userTime)
+                        }
+                    }
                 }
                 return true
             }
         })
+        mOptions = BitmapFactory.Options()
+        //bitmap复用需设置可变类型
+        mOptions.inMutable = true
 
         mSurfaceHolder.addCallback(this)
         isFocusable = true
@@ -56,8 +76,13 @@ class FrameAnimSurface @JvmOverloads constructor(
     }
 
     override fun surfaceCreated(p0: SurfaceHolder) {
+        mViewRect.set(0, 0, width, height)
         mIsDrawing = true
-        mHandler?.sendEmptyMessage(1)
+
+        mHandler?.let {
+            it.removeCallbacksAndMessages(null)
+            it.sendEmptyMessage(1)
+        }
     }
 
     override fun surfaceDestroyed(p0: SurfaceHolder) {
@@ -66,8 +91,10 @@ class FrameAnimSurface @JvmOverloads constructor(
 
     private fun draw() {
         try {
-            Thread.sleep(1000)
             mCanvas = mSurfaceHolder.lockCanvas()
+            mBitmap?.let { bmp ->
+                mCanvas.drawBitmap(bmp, mBitmapRect, mViewRect, mPaint)
+            }
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -78,7 +105,12 @@ class FrameAnimSurface @JvmOverloads constructor(
 
     override fun surfaceChanged(p0: SurfaceHolder, p1: Int, p2: Int, p3: Int) {}
 
-    private fun createBitmap() {
-
+    private fun createBitmap(resourceId: Int) {
+        mBitmap = BitmapFactory.decodeResource(resources, resourceId, mOptions)
+        //复用bitmap
+        mOptions.inBitmap = mBitmap
+        mBitmap?.let {
+            mBitmapRect.set(0, 0, it.width, it.height)
+        }
     }
 }
