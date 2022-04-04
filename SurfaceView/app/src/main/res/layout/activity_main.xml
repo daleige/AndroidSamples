@@ -11,51 +11,52 @@
         android:layout_height="100dp"
         android:visibility="gone" />
 
-    <com.chenyangqi.surfaceview.MyTextureView
-        android:id="@+id/mTextureView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="100dp"
-        android:visibility="gone" />
+<!--    <com.chenyangqi.surfaceview.MyTextureView-->
+<!--        android:id="@+id/mTextureView"-->
+<!--        android:layout_width="100dp"-->
+<!--        android:layout_height="100dp"-->
+<!--        android:layout_marginStart="100dp"-->
+<!--        android:visibility="gone" />-->
 
-    <ImageView
-        android:id="@+id/frameImgView"
-        android:layout_width="240dp"
-        android:layout_height="426dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="120dp"
-        android:scaleType="centerCrop"
-        android:visibility="gone" />
+<!--    <ImageView-->
+<!--        android:id="@+id/frameImgView"-->
+<!--        android:layout_width="240dp"-->
+<!--        android:layout_height="426dp"-->
+<!--        android:layout_gravity="center_horizontal"-->
+<!--        android:layout_marginTop="120dp"-->
+<!--        android:scaleType="centerCrop"-->
+<!--        android:visibility="gone" />-->
 
     <com.chenyangqi.surfaceview.frame_anim.FrameAnimSurface
+        android:visibility="visible"
         android:id="@+id/FragmentContainerView"
         android:layout_width="240dp"
         android:layout_height="426dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="120dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:orientation="vertical">
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="bottom"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginEnd="20dp"-->
+<!--        android:orientation="vertical">-->
 
-        <Button
-            android:id="@+id/btnStart"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:text="开始帧动画" />
+<!--        <Button-->
+<!--            android:id="@+id/btnStart"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="bottom"-->
+<!--            android:text="开始帧动画" />-->
 
-        <Button
-            android:id="@+id/btnStart2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:text="开始SurfaceView帧动画" />
-    </LinearLayout>
+<!--        <Button-->
+<!--            android:id="@+id/btnStart2"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="bottom"-->
+<!--            android:text="开始SurfaceView帧动画" />-->
+<!--    </LinearLayout>-->
 
 
 </FrameLayout>

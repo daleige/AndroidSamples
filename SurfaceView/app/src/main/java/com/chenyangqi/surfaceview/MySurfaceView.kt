@@ -28,6 +28,7 @@ class MySurfaceView @JvmOverloads constructor(
         intArrayOf(Color.RED, Color.BLACK, Color.BLUE, Color.DKGRAY, Color.GREEN, Color.YELLOW)
 
     init {
+        setWillNotDraw(true)
         mSurfaceHolder.addCallback(this)
         isFocusable = true
         isFocusableInTouchMode = true

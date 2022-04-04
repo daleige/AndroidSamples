@@ -13,20 +13,20 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val frameImgView = findViewById<ImageView>(R.id.frameImgView)
-
-        findViewById<Button>(R.id.btnStart).setOnClickListener {
-            val duration = 60
-            val animationDrawable = AnimationDrawable()
-            val intArray = Util.getSourceId()
-            for (sourceId in intArray) {
-                ContextCompat.getDrawable(this, sourceId)?.let {
-                    animationDrawable.addFrame(it, duration)
-                }
-            }
-
-            frameImgView.setImageDrawable(animationDrawable)
-            animationDrawable.start()
-        }
+//        val frameImgView = findViewById<ImageView>(R.id.frameImgView)
+//
+//        findViewById<Button>(R.id.btnStart).setOnClickListener {
+//            val duration = 60
+//            val animationDrawable = AnimationDrawable()
+//            val intArray = Util.getSourceId()
+//            for (sourceId in intArray) {
+//                ContextCompat.getDrawable(this, sourceId)?.let {
+//                    animationDrawable.addFrame(it, duration)
+//                }
+//            }
+//
+//            frameImgView.setImageDrawable(animationDrawable)
+//            animationDrawable.start()
+//        }
     }
 }

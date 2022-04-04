@@ -2,14 +2,9 @@ package com.chenyangqi.surfaceview.frame_anim
 
 import android.content.Context
 import android.graphics.*
-import android.os.Handler
-import android.os.HandlerThread
-import android.os.Message
 import android.util.AttributeSet
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import java.lang.Exception
-import java.util.*
 
 /**
  * @author ChenYangQi
@@ -25,7 +20,6 @@ class FrameAnimSurface @JvmOverloads constructor(
     private var mSurfaceHolder: SurfaceHolder = holder
     private lateinit var mCanvas: Canvas
     private var mIsDrawing = false
-    private var mHandler: Handler? = null
 
     //当前播放图片的下标
     private var mCurrentIndex = 0
@@ -44,30 +38,17 @@ class FrameAnimSurface @JvmOverloads constructor(
 
     private var mPaint: Paint = Paint()
 
-    private var mOptions: BitmapFactory.Options
+    private var mOptions: BitmapFactory.Options = BitmapFactory.Options()
 
     init {
-        val hThread = HandlerThread(this.javaClass.simpleName + "_" + UUID.randomUUID())
-        hThread.start()
-        mHandler = Handler(hThread.looper, object : Handler.Callback {
-            override fun handleMessage(msg: Message): Boolean {
-                while (mIsDrawing) {
-                    for (resourceId in mResources) {
-                        val beginTime = System.currentTimeMillis()
-                        createBitmap(resourceId)
-                        draw()
-                        val userTime = System.currentTimeMillis() - beginTime
-                        if (userTime < mDuration) {
-                            Thread.sleep(mDuration - userTime)
-                        }
-                    }
-                }
-                return true
-            }
-        })
-        mOptions = BitmapFactory.Options()
         //bitmap复用需设置可变类型
         mOptions.inMutable = true
+        mOptions.inPreferredConfig = Bitmap.Config.RGB_565
+
+        val options = BitmapFactory.Options()
+        options.inJustDecodeBounds = true
+        BitmapFactory.decodeResource(resources, mResources[0], options)
+        mBitmapRect.set(0, 0, options.outWidth, options.outHeight)
 
         mSurfaceHolder.addCallback(this)
         isFocusable = true
@@ -78,11 +59,19 @@ class FrameAnimSurface @JvmOverloads constructor(
     override fun surfaceCreated(p0: SurfaceHolder) {
         mViewRect.set(0, 0, width, height)
         mIsDrawing = true
-
-        mHandler?.let {
-            it.removeCallbacksAndMessages(null)
-            it.sendEmptyMessage(1)
-        }
+        Thread {
+            while (mIsDrawing) {
+                for (resourceId in mResources) {
+                    val beginTime = System.currentTimeMillis()
+                    createBitmap(resourceId)
+                    draw()
+                    val userTime = System.currentTimeMillis() - beginTime
+                    if (userTime < mDuration) {
+                        Thread.sleep(mDuration - userTime)
+                    }
+                }
+            }
+        }.start()
     }
 
     override fun surfaceDestroyed(p0: SurfaceHolder) {
@@ -109,8 +98,5 @@ class FrameAnimSurface @JvmOverloads constructor(
         mBitmap = BitmapFactory.decodeResource(resources, resourceId, mOptions)
         //复用bitmap
         mOptions.inBitmap = mBitmap
-        mBitmap?.let {
-            mBitmapRect.set(0, 0, it.width, it.height)
-        }
     }
 }
