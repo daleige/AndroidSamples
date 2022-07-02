@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ConstraintLayoutDemo</string>
+    <string name="tv_content">尊敬的用户，欢迎使用中国联通，欢迎使用中国联通欢迎使用中国联通欢迎使用中国联通欢迎使用中国联通</string>
+    <string name="china_net">中国联通</string>
+</resources>
