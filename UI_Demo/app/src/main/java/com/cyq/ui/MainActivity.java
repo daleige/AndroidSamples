@@ -8,6 +8,7 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.cyq.ui.button.ButtonActivity;
 import com.cyq.ui.dialog.DialogListActivity;
 import com.cyq.ui.dialog.constraintlayout.TestConstraintActivity;
 
@@ -16,6 +17,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mBtnDialog;
     private Button mBtnBanner;
     private Button mBtnConstraintLayout;
+    private Button mBtnButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +30,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBtnDialog = findViewById(R.id.btn_dialog);
         mBtnBanner = findViewById(R.id.btn_banner);
         mBtnConstraintLayout = findViewById(R.id.btnConstraintLayout);
+        mBtnButton = findViewById(R.id.btnButton);
         mBtnDialog.setOnClickListener(this);
         mBtnBanner.setOnClickListener(this);
         mBtnConstraintLayout.setOnClickListener(this);
+        mBtnButton.setOnClickListener(this);
     }
 
     @Override
@@ -46,6 +50,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnConstraintLayout:
                 Intent btnConstraintLayoutIntent = new Intent(this, TestConstraintActivity.class);
                 startActivity(btnConstraintLayoutIntent);
+                break;
+            case R.id.btnButton:
+                Intent btnButtonIntent = new Intent(this, ButtonActivity.class);
+                startActivity(btnButtonIntent);
                 break;
             default:
         }

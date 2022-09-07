@@ -3,6 +3,7 @@ package com.chenyangqi.surfaceview.frame_anim
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 
@@ -25,7 +26,7 @@ class FrameAnimSurface @JvmOverloads constructor(
     private var mCurrentIndex = 0
 
     //一张图片执行的时长
-    private var mDuration = 60
+    private var mDuration = 16
 
     //复用的bitmap
     private var mBitmap: Bitmap? = null
@@ -66,9 +67,11 @@ class FrameAnimSurface @JvmOverloads constructor(
                     createBitmap(resourceId)
                     draw()
                     val userTime = System.currentTimeMillis() - beginTime
-                    if (userTime < mDuration) {
-                        Thread.sleep(mDuration - userTime)
-                    }
+                    Log.d("test", "总共耗时$userTime")
+//                    if (userTime < mDuration) {
+//                        Log.d("test", "----------------------------》$userTime")
+//                        Thread.sleep(mDuration - userTime)
+//                    }
                 }
             }
         }.start()
@@ -79,24 +82,33 @@ class FrameAnimSurface @JvmOverloads constructor(
     }
 
     private fun draw() {
+        val beginTime = System.currentTimeMillis()
         try {
             mCanvas = mSurfaceHolder.lockCanvas()
+            Log.d("test", "drawBitmap--0--耗时" + (System.currentTimeMillis() - beginTime))
             mBitmap?.let { bmp ->
-                mCanvas.drawBitmap(bmp, mBitmapRect, mViewRect, mPaint)
-            }
 
+                //mCanvas.drawBitmap(bmp, mBitmapRect, mViewRect, mPaint)
+                mCanvas.drawBitmap(bmp, (width - bmp.width) / 2F, 0F, mPaint)
+                Log.d("test", "drawBitmap--1--耗时" + (System.currentTimeMillis() - beginTime))
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         } finally {
+            Log.d("test", "drawBitmap--2--耗时" + (System.currentTimeMillis() - beginTime))
             mSurfaceHolder.unlockCanvasAndPost(mCanvas)
+            Log.d("test", "drawBitmap--3--耗时" + (System.currentTimeMillis() - beginTime))
         }
     }
 
     override fun surfaceChanged(p0: SurfaceHolder, p1: Int, p2: Int, p3: Int) {}
 
+    @Synchronized
     private fun createBitmap(resourceId: Int) {
+        val beginTime = System.currentTimeMillis()
         mBitmap = BitmapFactory.decodeResource(resources, resourceId, mOptions)
         //复用bitmap
         mOptions.inBitmap = mBitmap
+        Log.d("test", "createBimap耗时=" + (System.currentTimeMillis() - beginTime))
     }
 }

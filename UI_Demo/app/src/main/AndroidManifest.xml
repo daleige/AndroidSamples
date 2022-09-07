@@ -9,7 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".dialog.constraintlayout.TestConstraintActivity"></activity>
+        <activity
+            android:name=".ButtonActivity"
+            android:exported="false" />
+        <activity android:name=".dialog.constraintlayout.TestConstraintActivity" />
         <activity android:name=".dialog.DialogListActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
