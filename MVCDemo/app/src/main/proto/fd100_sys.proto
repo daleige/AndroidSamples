@@ -1,0 +1,480 @@
+syntax = "proto3";
+
+// proto 文件包名
+package sys;
+
+/*********************************************
+* 描述：EMS系统工作模式
+*********************************************/
+enum WorkMode {
+	WORKMODE_SELFUSE = 0;			//自发自用模式
+	WORKMODE_TOU = 1;				//Tou模式
+	WORKMODE_BACKUP = 2;			//备用模式
+	WORKMODE_DBG = 3;				//调试模式
+};
+
+/*********************************************
+* 描述：时间信息
+*********************************************/
+message TimeInfo {
+	uint32		hour = 1;
+	uint32		min = 2;
+	uint32		sec = 3;
+};
+
+/*********************************************
+* 描述：自发自用参数项
+*********************************************/
+message SelfUsedParam {
+};
+
+/*********************************************
+* 描述：TOU模式参数项
+*********************************************/
+message TouParam {
+	TimeInfo	start_time = 1;		//开始时间
+	TimeInfo	end_time = 2;		//结束时间
+	uint32		chg_dsg_mode = 3;	//充放电模式。0-不充不放; 1: 充电; 2: 放电
+};
+
+/*********************************************
+* 描述：备电模式参数项
+*********************************************/
+message BackupParam {
+	uint32		backup_soc = 1;		//备电Soc
+};
+
+/*********************************************
+* 描述：能量流详情项
+* 备注：
+*	能量计算公式：负载 = 电网 + 太阳能 - 电池
+*********************************************/
+message EnergyStreamItem {
+	float		load_pwr = 1;		//负载功率。消耗电能为正。无负的情况。
+	float		grid_pwr = 2;		//电网功率。电网取电为正；向电网发电为负
+	float		mppt_pwr = 3;		//太阳能模块功率。发电为正；无负的情况
+	float		pack_pwr = 4;		//电池组功率。充电为正；放电为负。
+	uint32		timestamp = 5;		//时间戳。
+	sint32		timezone = 6;		//时区信息。以刻为单位，以便支持小数时区。如32表示东8区；-4表示西1区。
+};
+
+/***********************************************************************
+* 协议定义。EMS <--> App/Server
+***********************************************************************/
+
+/*********************************************
+* 描述：心跳包
+* 指令集：cmd.EMS_CMD_SETS
+* 指令ID: cmd.EMS_CMD_ID_HEARTBEAT_REPORT
+
+* 方    向：EMS --> App/Server
+* 行    为：EMS主动上报
+* 触发条件：定时触发，1S
+* 是否应答：无需应答
+* 工作流程：
+	EMS开机后，定时上报
+*********************************************/
+message HeartbeatReport {
+	optional uint32			sys_work_sta = 1;			//系统工作状态：0-正常；1-异常
+	optional uint32			sys_grid_sta = 2;			//系统电网状态：0-并网；1-离网
+	optional WorkMode		ems_word_mode = 3;			//EMS工作模式
+	optional uint32			ems_backup_event = 4;		//EMS备电事件: 0-无任何事件。1：恶劣天气备电
+	optional uint32			bp_chg_dsg_sta = 5;			//电池充放电状态
+	optional float			bp_remain_watth = 6;		//电池剩余能量，单位wh
+	optional uint32			bp_soc = 7;					//电池soc
+	optional uint32			bp_dsg_time = 8;			//电池可放电时间（预估），单位min
+	optional uint32			ems_err_code = 9;			//ems错误码
+	optional uint32			sys_err_code = 10;			//sys错误码
+};
+
+/*********************************************
+* 描述：能量流推送开关控制
+* 指令集：cmd.EMS_CMD_SETS
+* 指令ID: cmd.EMS_CMD_ID_ENERGY_STREAM_SWITCH
+
+* 方    向：App/Server --> EMS
+* 行    为：App/Server下发
+* 触发条件：单次触发，定时触发（10S一次）
+* 是否应答：无需应答
+* 工作流程：
+	App需要显示能量流图时，打开能量流开关。App无需显示能量流时，关闭能量流开关。
+
+* 备    注：
+*********************************************/
+message EnergyStreamSwitch {
+	bool					ems_open_energy_stream = 1;	//打开能量流推送
+};
+
+/*********************************************
+* 描述：能量流上报
+* 指令集：cmd.EMS_CMD_SETS
+* 指令ID: cmd.EMS_CMD_ID_ENERGY_STREAM_REPORT
+
+* 方    向：EMS --> App/Server
+* 行    为：EMS上报
+* 触发条件：定时触发（1S）
+* 是否应答：无需应答
+* 工作流程：
+	能量流开关打开后，EMS定时推送能量流数据到IOT或者Server。
+	EMS超30S未收到能量流推送开关打开指令，自动停止推送。
+	
+* 备    注：
+	支持App能量流图显示。
+	能量计算公式：负载 = 电网 + 太阳能 - 电池
+*********************************************/
+message EnergyStreamReport {
+	float		sys_load_pwr = 1;	//负载功率。消耗电能为正。
+	float		sys_grid_pwr = 2;	//电网功率。电网取电为正；向电网发电为负
+	float		mppt_pwr = 3;		//太阳能模块功率。发电为正；无负的情况
+	float		bp_pwr = 4;			//电池组功率。充电为正；放电为负。
+	uint32		bp_soc = 5;			//电池组Soc。
+};
+
+/*********************************************
+* 描述：能量流详情
+* 指令集：cmd.EMS_CMD_SETS
+* 指令ID: cmd.EMS_CMD_ID_ENERGY_STREAM_DETAIL
+
+* 方    向：EMS --> App/Server
+* 行    为：EMS上报
+* 触发条件：定时触发（5min）、正确应答触发（历史数据）
+* 是否应答：需要应答
+* 工作流程：
+	EMS会将能量流详情数据存储在内部flash中，每分钟存储，最多24h数据。
+	EMS与IOT Server或App建立连接后，若有历史能量流详细数据，则推送历史数据，若无，则推送当前数据。
+
+* 备    注：
+	支持App查看当日电量统计。
+*********************************************/
+message EnergyStreamDetail {
+	repeated	EnergyStreamItem	sys_energy_stream = 1;	//能量流数据，一次最多10项。
+	uint32							sys_seq = 2;			//推送序号
+};
+
+message EnergyStreamDetailAck {
+	uint32		sys_seq = 1;			//推送序号。需与上报的一致。
+};
+
+/*********************************************
+* 描述：系统工作模式设置
+* 指令集：cmd.EMS_CMD_SETS
+* 指令ID: cmd.EMS_CMD_ID_SYS_WORKMODE_SET
+
+* 方    向：App/Server --> EMS
+* 行    为：App/Server下发
+* 触发条件：App设置触发
+* 是否应答：需要应答
+* 工作流程：
+	用户选择系统工作模式后，App下发用户选择的工作模式。
+
+* 备    注：
+*********************************************/
+message SysWorkModeSet {
+	WorkMode	ems_word_mode = 1;					//工作模式
+	optional SelfUsedParam ems_selfused_param = 2;	//自发自用参数
+	repeated TouParam	ems_tou_param = 3;			//tou模式参数。设置为tou模式时，必选此项
+	optional BackupParam ems_backup_param = 4;		//备电模式参数。设置为备电模式时，必选此项。
+};
+
+message SysWorkModeSetAck {
+	sint32		result = 1;			//应答。0：收到指令。
+};
+
+/*********************************************
+* 描述：备电事件下发
+* 指令集：cmd.EMS_CMD_SETS
+* 指令ID: cmd.EMS_CMD_ID_SYS_BACKUP_EVENT_SET
+
+* 方    向：App/Server --> EMS
+* 行    为：App/Server下发
+* 触发条件：
+	打开：App风暴检测打开，且从当地气象局获取到可能导致停电的恶劣天气事件时，下发恶劣天气备电事件。
+	关闭：App风暴检测关闭，或者气象局发布恶劣天气恢复正常时，下发紧恶劣天气电关闭事件。
+* 是否应答：需要应答
+* 工作流程：
+
+* 备    注：
+*********************************************/
+message SysBackupEventSet {
+	uint32		ems_backup_event = 1;	//备电事件: 0-无任何事件/关闭备电事件。1：恶劣天气备电
+};
+
+message SysBackupEventSetAck {
+	sint32		result = 1;				//应答。0：收到指令。
+};
+
+/*********************************************
+* 描述：保电Soc设置
+* 指令集：cmd.EMS_CMD_SETS
+* 指令ID: cmd.EMS_CMD_ID_SYS_KEEP_SOC_SET
+
+* 方    向：App/Server --> EMS
+* 行    为：App/Server下发
+* 触发条件：App设置触发
+* 是否应答：需要应答
+* 工作流程：
+	App用户设置保电Soc后，下发此设置值。
+
+* 备    注：
+	并网情况下，电池放电不会低于此值。
+*********************************************/
+message SysKeepSocSet {
+	uint32		ems_keep_soc = 1;		//保电Soc设置
+};
+
+message SysKeepSocSetAck {
+	sint32		result = 1;				//应答。0：收到指令。
+};
+
+/*********************************************
+* 描述：馈网最大功率设置
+* 指令集：cmd.EMS_CMD_SETS
+* 指令ID: cmd.EMS_CMD_ID_SYS_MAX_FEED_POWER_SET
+
+* 方    向：App/Server --> EMS
+* 行    为：App/Server下发
+* 触发条件：App设置触发
+* 是否应答：需要应答
+* 工作流程：
+
+* 备    注：
+	S1设备往电网送的功率，不会超过此功率。
+*********************************************/
+message SysMaxFeedPowerSet {
+	float			ems_max_feed_pwr = 1;		//最大馈网功率，单位w
+};
+
+message SysMaxFeedPowerSetAck {
+	sint32		result = 1;						//应答。0：收到指令。-1：当前模式不支持。
+};
+
+/*********************************************
+* 描述：纯离网模式
+* 指令集：cmd.EMS_CMD_SETS
+* 指令ID: cmd.EMS_CMD_ID_SYS_OFF_GRID_SET
+
+* 方    向：App/Server --> EMS
+* 行    为：App/Server下发
+* 触发条件：App设置触发
+* 是否应答：需要应答
+* 工作流程：
+
+* 备    注：
+	默认纯离网模式关闭。
+	纯离网模式打开后，S1将和电网断开，独立运行；
+	纯离网模式关闭后，S1将在电网有电后自动并网运行；在电网停电后自动离网；
+*********************************************/
+message SysOffGridSet {
+	bool			sys_grid_disconnect_mode = 1;		//纯离网模式使能。0：关闭纯离网模式；1：开启纯离网模式		
+};
+
+message SysOffGridSetAck {
+	sint32			result = 1;							//应答。0：收到指令。-1：当前模式不支持。
+};
+
+/*********************************************
+* 描述：设置参数返回
+* 指令集：cmd.EMS_CMD_SETS
+* 指令ID: cmd.EMS_CMD_ID_SYS_PARAM_GET
+
+* 方    向：App/Server --> EMS
+* 行    为：App/Server下发
+* 触发条件：App读取
+* 是否应答：需要应答
+* 工作流程：
+	App需要时读取
+
+* 备    注：
+	返回设置的参数
+*********************************************/
+message SysParamGet {
+};
+
+message SysParamGetAck {
+	WorkMode	ems_work_mode = 1;				//工作模式
+	uint32		ems_backup_event = 2;			//备电事件
+	uint32		ems_keep_soc = 3;				//保电Soc设置
+	float		ems_max_feed_pwr = 4;			//最大馈网功率，单位w
+	bool		sys_grid_disconnect_mode = 5;	//纯离网模式使能开关。
+};
+
+/*********************************************
+* 描述：同步时间信息
+* 指令集：cmd.EMS_CMD_SETS
+* 指令ID: cmd.EMS_CMD_ID_SYS_RTC_SYNC
+
+* 方    向：EMS --> App/Server
+* 行    为：EMS请求
+* 触发条件：定时触发（1h）
+* 是否应答：需要应答
+* 工作流程：
+	EMS定时向服务器同步时间信息
+
+* 备    注：
+	返回设置的参数
+*********************************************/
+message SysRTCSync {
+};
+
+message SysRTCSyncAck {
+	uint32		sys_utc_time = 1;			//utc时间。1970/1/1至现在的秒数
+	sint32		sys_timezone = 2;			//时区信息。以刻为单位，以便支持小数时区。如32表示东8区；-4表示西1区。
+};
+
+
+/*********************************************
+* 描述：能量统计上报
+* 指令集：0xFE
+* 指令ID: 0x20
+
+* 方    向：EMS --> App/Server
+* 行    为：EMS上报
+* 触发条件：沿用原有设计
+* 是否应答：需要应答
+* 工作流程：
+	EMS定时向服务器同步时间信息
+
+* 备    注：
+	裸数据流，沿用原有流程
+	参看：https://ecoflow.yuque.com/app_platform/protocols/ctxduk?#gKni6
+*********************************************/
+
+/*********************************************
+* 描述：事件上报
+* 指令集：0xFE
+* 指令ID: 0x10
+
+* 方    向：EMS --> App/Server
+* 行    为：EMS上报
+* 触发条件：沿用原有设计
+* 是否应答：需要应答
+* 工作流程：
+	EMS定时向服务器同步时间信息
+
+* 备    注：
+	裸数据流，沿用原有流程
+	参看：https://ecoflow.yuque.com/app_platform/protocols/ctxduk?#gKni6
+*********************************************/
+
+/***********************************************************************
+* 通用类型定义
+***********************************************************************/
+/*********************************************
+* 描述：运行状态
+*********************************************/
+enum RunStaDef {
+	RUNSTA_STANDBY = 0;						//待机
+	RUNSTA_RUN = 1;							//运行
+	RUNSTA_STOP = 2;						//停机
+};
+
+/*********************************************
+* 描述：MPPT PV模块信息
+*********************************************/
+message MpptPVInfo {
+	float					vol = 1;				//PV电压
+	float					amp = 2;				//PV电流
+	float					pwr = 3;				//PV功率
+	bool					light_sta = 4;			//是否有光
+};
+
+/*********************************************
+* 描述：相位信息
+*********************************************/
+message PhaseInfo {
+	float					vol = 1;				//电压
+	float					amp = 2;				//电流
+};
+
+/*********************************************
+* 描述：母线信息
+*********************************************/
+message DCBusInfo {
+	float					vol = 1;				//电压
+	float					amp = 2;				//电流
+};
+
+/***********************************************************************
+* 协议定义。Mppt <--> App/Server
+***********************************************************************/
+
+/*********************************************
+* 描述：mppt信息上报
+* 指令集：cmd.MPPT_CMD_SETS
+* 指令ID: cmd.MPPT_CMD_ID_STA_REPORT
+
+* 方    向：MPPT --> Server
+* 行    为：MPPT上报
+* 触发条件：定时触发（5S）
+* 是否应答：无需应答
+* 工作流程：
+	MPPT定时向服务器上报自己信息，用于向iot后台报告自身状态
+
+* 备    注：
+	该指令主要用于上报mppt本身的信息，用于通过web后台查看相关数据。
+*********************************************/
+message MpptStaReport {
+	repeated MpptPVInfo		mppt_pv = 1;				//pv信息
+	optional uint32			mppt_err_code = 2;			//错误码
+};
+
+/*********************************************
+* 描述：pcs信息上报
+* 指令集：cmd.PCS_CMD_SETS
+* 指令ID: cmd.PCS_CMD_ID_STA_REPORT
+
+* 方    向：PCS --> Server
+* 行    为：PCS上报
+* 触发条件：定时触发（5S）
+* 是否应答：无需应答
+* 工作流程：
+	PCS定时向服务器上报自己信息，用于向iot后台报告自身状态
+
+* 备    注：
+	该指令主要用于上报mppt本身的信息，用于通过web后台查看相关数据。
+*********************************************/
+message PcsStaReport {
+	optional float		pcs_act_pwr = 1;			//有功功率
+	optional uint32		pcs_ac_freq = 2;			//交流频率
+	optional uint32		sys_grid_sta = 3;			//电网状态：0-并网；1-离网
+	optional RunStaDef	pcs_run_sta = 4;			//运行状态
+	optional PhaseInfo	pcs_a_phase = 5;			//A相
+	optional PhaseInfo	pcs_b_phase = 6;			//B相
+	optional PhaseInfo	pcs_c_phase = 7;			//C相
+	optional uint32		pcs_ac_err_code = 8;		//交流侧错误码
+	optional uint32		pcs_dc_err_code = 9;		//直流侧错误码
+};
+
+/*********************************************
+* 描述：bp信息上报
+* 指令集：cmd.BP_CMD_SETS
+* 指令ID: cmd.BP_CMD_ID_STA_REPORT
+
+* 方    向：PCS --> Server
+* 行    为：PCS上报
+* 触发条件：定时触发（5S）
+* 是否应答：无需应答
+* 工作流程：
+	PCS定时向服务器上报自己信息，用于向iot后台报告自身状态
+
+* 备    注：
+	该指令主要用于上报mppt本身的信息，用于通过web后台查看相关数据。
+*********************************************/
+message BpStaReport {
+	optional float		bp_pwr = 1;					//电池组功率。充电为正；放电为负。
+	optional uint32		bp_soc = 2;					//电池组soc
+	optional uint32		bp_soh = 3;					//电池组soh
+	optional uint32		bp_sop = 4;					//电池组sop
+	repeated float		bp_temp = 5;				//器件温度
+	optional float		bp_cell_max_vol = 6;		//单电芯最高电压
+	optional float		bp_cell_min_vol = 7;		//单电芯最低电压
+	optional RunStaDef	bp_run_sta = 8;				//运行状态
+	optional uint32		sys_grid_sta = 9;			//电网状态：0-并网；1-离网
+	optional float		bp_vol = 10;				//电池包电压
+	optional float		bp_amp = 11;				//电池包电流
+	optional float		bp_bus_vol = 12;			//母线电压
+	optional float		bp_bus_amp = 13;			//母线电流
+	optional uint32		bp_err_code = 14;			//错误码
+};
+
+

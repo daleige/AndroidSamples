@@ -1,0 +1,105 @@
+syntax = "proto3";
+
+package cmd;
+
+/*********************************************
+* 描述：指令集定义
+* 说明：指令集及指令ID定义需满足文档规定范围：
+	https://ecoflow.feishu.cn/wiki/wikcn405iCOcnkzXOpSmbd1vavb
+*********************************************/
+enum CmdSets {
+	NONE_CMD_SETS = 0;			//未使用指令集
+	BASIC_CMD_SETS = 0x01;		//通用指令集
+	EXT_CMD_SETS = 0xFE;		//扩展通用指令集
+	BP_CMD_SETS = 0x03;			//BP指令集
+	PCS_CMD_SETS = 0x04;		//PCS指令集
+	EMS_CMD_SETS = 0x60;		//EMS指令集
+	MPPT_CMD_SETS = 0x61;		//MPPT指令集
+	IOT_CMD_SETS = 0x35;		//IOT指令集
+};
+
+/*********************************************
+* 描述：EMS指令ID定义
+*********************************************/
+enum EmsCmdId {
+	EMS_CMD_ID_NONE = 0;					//未使用指令ID
+	
+	//外部指令
+	EMS_CMD_ID_HEARTBEAT_REPORT = 0x01;		//心跳包
+	
+	//下行
+	EMS_CMD_ID_ENERGY_STREAM_SWITCH = 0x61;
+	EMS_CMD_ID_SYS_WORKMODE_SET = 0x62;
+	EMS_CMD_ID_SYS_BACKUP_EVENT_SET = 0x63;
+	EMS_CMD_ID_SYS_KEEP_SOC_SET = 0x64;
+	EMS_CMD_ID_SYS_MAX_FEED_POWER_SET = 0x65;
+	EMS_CMD_ID_SYS_OFF_GRID_SET = 0x66;
+	EMS_CMD_ID_SYS_PARAM_GET = 0x67;
+	
+	//上行
+	EMS_CMD_ID_ENERGY_STREAM_REPORT = 0x21;
+	EMS_CMD_ID_ENERGY_STREAM_DETAIL = 0x22;
+	EMS_CMD_ID_SYS_RTC_SYNC = 0x23;
+	
+	//内部指令
+	EMS_CMD_ID_MODULE_CHG_DSG_MAX_GET = 0xA1;
+	EMS_CMD_ID_MODULE_CHG_DSG_PWR_SET = 0xA2;
+	
+	EMS_CMD_ID_STA_SYNC = 0xB1;
+};
+
+/*********************************************
+* 描述：MPPT指令ID定义
+*********************************************/
+enum MpptCmdId {
+	MPPT_CMD_ID_NONE = 0;					//未使用指令ID
+	
+	//外部指令
+	MPPT_CMD_ID_STA_REPORT = 0x01;			//Mppt状态上报
+	
+	//内部指令
+	MPPT_CMD_ID_HEARTBEAT = 0xB1;
+};
+
+/*********************************************
+* 描述：PCS指令ID定义
+*********************************************/
+enum PCSCmdId {
+	PCS_CMD_ID_NONE = 0;					//未使用指令ID
+	
+	//外部指令
+	PCS_CMD_ID_STA_REPORT = 0x01;			//PCS状态上报
+	
+	//内部指令
+	PCS_CMD_ID_HEARTBEAT = 0xB1;			//心跳包
+	PCS_CMD_ID_GRID_STA_SYNC = 0xB2;		//电网状态（离并网状态）同步
+	PCS_CMD_ID_RLY_STA_SET = 0xB3;			//PCS控制EMS侧继电器
+};
+
+/*********************************************
+* 描述：BP指令ID定义
+*********************************************/
+enum BpCmdId {
+	BP_CMD_ID_NONE = 0;						//未使用指令ID
+	
+	//外部指令
+	BP_CMD_ID_STA_REPORT = 0x01;			//BP状态上报
+	
+	//内部指令
+	BP_CMD_ID_HEARTBEAT = 0xB1;
+	BP_CMD_ID_RUN_STA_SET = 0xB2;
+};
+
+/*********************************************
+* 描述：IOT指令ID定义
+*********************************************/
+enum IotCmdId {
+	IOT_CMD_ID_NONE = 0;					//未使用指令ID
+	
+	//外部指令
+
+	
+	//内部指令
+	IOT_CMD_ID_ONLINE_HEARTBEAT = 0xA1;
+	IOT_CMD_ID_IOT_CONNECT_STA_SYNC = 0xA2;
+};

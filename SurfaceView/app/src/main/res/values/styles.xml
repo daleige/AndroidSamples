@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="text_desc">
+        <item name="android:fontFamily">@font/alibaba_puhuiti_regular</item>
+    </style>
+</resources>

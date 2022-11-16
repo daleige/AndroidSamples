@@ -5,11 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-<!--    <com.chenyangqi.surfaceview.MySurfaceView-->
-<!--        android:id="@+id/mSurfaceView"-->
-<!--        android:layout_width="100dp"-->
-<!--        android:layout_height="100dp"-->
-<!--        android:visibility="gone" />-->
+    <!--    <com.chenyangqi.surfaceview.MySurfaceView-->
+    <!--        android:id="@+id/mSurfaceView"-->
+    <!--        android:layout_width="100dp"-->
+    <!--        android:layout_height="100dp"-->
+    <!--        android:visibility="gone" />-->
 
     <!--    <com.chenyangqi.surfaceview.MyTextureView-->
     <!--        android:id="@+id/mTextureView"-->
@@ -27,13 +27,13 @@
     <!--        android:scaleType="centerCrop"-->
     <!--        android:visibility="gone" />-->
 
-<!--    <com.chenyangqi.surfaceview.frame_anim.FrameAnimSurface-->
-<!--        android:id="@+id/FragmentContainerView"-->
-<!--        android:layout_width="300dp"-->
-<!--        android:layout_height="426dp"-->
-<!--        android:layout_gravity="center_horizontal"-->
-<!--        android:layout_marginTop="120dp"-->
-<!--        android:visibility="visible" />-->
+    <!--    <com.chenyangqi.surfaceview.frame_anim.FrameAnimSurface-->
+    <!--        android:id="@+id/FragmentContainerView"-->
+    <!--        android:layout_width="300dp"-->
+    <!--        android:layout_height="426dp"-->
+    <!--        android:layout_gravity="center_horizontal"-->
+    <!--        android:layout_marginTop="120dp"-->
+    <!--        android:visibility="visible" />-->
 
     <!--    <LinearLayout-->
     <!--        android:layout_width="match_parent"-->
@@ -70,8 +70,14 @@
         android:paddingVertical="0dp"
         android:progress="0"
         android:progressDrawable="@drawable/seekbar"
-        android:splitTrack="false"
         android:rotation="-90"
-        android:thumb="@drawable/ic_baseline_add_circle_24"
-        />
+        android:splitTrack="false"
+        android:thumb="@drawable/ic_baseline_add_circle_24" />
+
+    <TextView
+        android:textSize="30sp"
+        style="@style/text_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lorem ipsum dolor sit amet" />
 </FrameLayout>

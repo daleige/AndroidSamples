@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.protobuf'
 
 android {
     compileSdkVersion 28
@@ -16,6 +17,38 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    sourceSets {
+        main {
+            //实际测试指不指定无所谓，不影响 Java 文件生成
+//            proto {
+//                srcDir 'src/main/proto'
+//            }
+            proto {
+                srcDir 'src/main/proto'
+                include '*.proto'
+            }
+            java {
+                srcDir 'src/main/java'
+            }
+        }
+    }
+
+}
+
+protobuf {
+    //配置 protoc 编译器
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.8.0'
+    }
+    //配置生成目录，编译后会在 build 的目录下生成对应的java文件
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                java {option "lite"}
+            }
+        }
+    }
 }
 
 dependencies {
@@ -25,4 +58,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    implementation 'com.google.protobuf:protobuf-javalite:3.9.1'
 }
