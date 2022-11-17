@@ -31,13 +31,13 @@ message Header{
   int32           product_id  = 15;   ///<PRODUCT_INFO,设备信息
   int32           version     = 16;   ///< VER协议版本，通信协议版本。默认值是3， v2填2，v3填3
   int32           payload_ver = 17;   //区分payload类型，0-原始数据， 1-protobuf
-   int32  time_snap   = 18;   ///<V2、V3未使用，
-   int32  is_rw_cmd   = 19;   ///<V2、V3未使用，
-   int32  is_queue    = 20;   ///<V2、V3未使用，
-   int32  ack_type    = 21;   ///<V2、V3未使用，
-   string code        = 22;   ///<状态码，用于后台和app的业务交互状态码
-   string from        = 23;   ///<来源 用于区分app消息来源，ios/android
-   string module_sn   = 24;   ///模块sn
+  optional int32  time_snap   = 18;   ///<V2、V3未使用，
+  optional int32  is_rw_cmd   = 19;   ///<V2、V3未使用，
+  optional int32  is_queue    = 20;   ///<V2、V3未使用，
+  optional int32  ack_type    = 21;   ///<V2、V3未使用，
+  optional string code        = 22;   ///<状态码，用于后台和app的业务交互状态码
+  optional  string from        = 23;   ///<来源 用于区分app消息来源，ios/android
+  optional string module_sn   = 24;   ///模块sn
 }
 /**********************************Public_Message-End**********************************/
 
