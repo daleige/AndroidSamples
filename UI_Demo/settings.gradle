@@ -1,3 +1,0 @@
-include ':eventdispatch'
-rootProject.name='UI_Demo'
-include ':app'

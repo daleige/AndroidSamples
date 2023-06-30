@@ -1,7 +1,0 @@
-<resources>
-    <string name="app_name">lib_statelayout</string>
-    <string name="empty_state_tip">数据为空</string>
-    <string name="error_state_tip">网络请求出错了~</string>
-    <string name="retry">点击重试</string>
-    <string name="loading_state_tip">正在加载...</string>
-</resources>
